@@ -1,0 +1,10 @@
+(
+  name:    "cs-performance-environment",
+  path:    "cs-performance-environment",
+  summary:    "Colin's performance environment",
+  author:    "Colin Sullivan",
+  version:    0.01,
+//  helpdoc:    "",
+  url:      "https://github.com/colinsullivan/cs-performance-environment",
+  dependencies:  #["awakening-sequencers@tags/0.7.7"]
+)
