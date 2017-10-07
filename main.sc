@@ -12,6 +12,7 @@
  (
    var store, sequencers;
 
+MIDIClient.init;
    API.mountDuplexOSC();
   s.options.inDevice = "JackRouter";
   s.options.outDevice = "JackRouter";

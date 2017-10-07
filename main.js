@@ -20,12 +20,18 @@ import awakeningSequencers from "awakening-sequencers"
 
 const EXTERNAL_SC = process.env.EXTERNAL_SC;
 
+function create_outboard_sequencer (name) {
+  return Object.assign(awakeningSequencers.create_default_sequencer(name), {
+    midiOutDeviceName: "(in) SuperCollider",
+    midiOutPortName: "(in) SuperCollider",
+    dur: 0.5
+  });
+}
+
 function create_default_state () {
   return {
     sequencers: {
-      'outboardTest': awakeningSequencers.create_default_sequencer(
-        'outboardTest'
-      )
+      'outboardTest': create_outboard_sequencer('outboardTest')
     }
   }
 }
