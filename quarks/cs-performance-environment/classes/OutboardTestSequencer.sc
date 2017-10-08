@@ -54,6 +54,8 @@ OutboardTestSequencer : AwakenedSequencer {
       \midinote, Pseq([96, 84, 84, 84], inf),
       // rhythmic values
       \dur, Pseq([Pfuncn({
+        // TODO: maybe this mapping should happen somewhere else,
+        // only when state is chagned
         specs['dur'].map(currentState.dur)
       }, 4)], inf)
     );
