@@ -9,11 +9,13 @@
     "react-dom": "^16.0.0",
     "react-scripts": "1.0.14"
   },
+  "main": "src/start_electron.js",
   "scripts": {
-    "start": "react-scripts start",
+    "start_react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start_electron": "NODE_ENV=development electron ."
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -36,5 +38,9 @@
       "no-use-before-define": "error",
       "block-scoped-var": "error"
     }
-  }
+  },
+  "devDependencies": {
+    "electron": "^1.7.10"
+  },
+  "homepage": "./"
 }
