@@ -1,3 +1,16 @@
+/**
+ *  @file       Piano.jsx
+ *
+ *	@desc       A piano component for clicking or tapping, sends which note
+ *	and the height (can be a proxy for velocity) of the click.  Modeled after
+ *	a common Max/MSP object.
+ *
+ *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
+ *
+ *  @copyright  2017 Colin Sullivan
+ *  @license    Licensed under the GPLv3 license.
+ **/
+
 import React from 'react';
 import { parse as parseNote } from 'note-parser';
 

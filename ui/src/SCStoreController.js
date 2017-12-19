@@ -25,6 +25,7 @@ class SCStoreController {
     
     this.actionListenerSocket = new osc.Server(3334, "127.0.0.1");
     this.actionListenerSocket.on("message", (msg, rinfo) => {
+      //console.log("SCStoreController.on(message)");
       //console.log("msg");
       //console.log(msg);
       //console.log("rinfo");
@@ -67,19 +68,18 @@ class SCStoreController {
     this.store.dispatch(supercolliderRedux.actions.supercolliderInitStarted());
     
     // reads config file located at: ./.supercollider.yaml
+    console.log("Reading ./.supercollider.yaml...");
     var api = new sc.scapi();
-
     this.scapi = api;
-    api.log.echo = true;
 
     api.on("error", function (err) {
       console.log("API ERROR: ");
       console.log(err);
     });
 
-    //console.log("sc api connecting...");
+    console.log("sc api connecting...");
     api.connect();
-    //console.log("connect.");
+    console.log("connect.");
 
     // send init message to the sc process
     this.call("StateStore.init", [this.store.getState()]);

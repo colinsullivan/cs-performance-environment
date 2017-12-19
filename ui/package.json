@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "awakening-sequencers": "^0.7.7",
     "bootstrap": "^3.3.7",
     "note-parser": "^2.0.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14"
+    "react-scripts": "1.0.14",
+    "supercolliderjs": "^0.14.2"
   },
   "main": "src/start_electron.js",
   "scripts": {
@@ -15,7 +17,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start_electron": "NODE_ENV=development electron ."
+    "start_electron": "NODE_ENV=development electron -r babel-register .",
+    "rebuild_electron": "electron-rebuild",
+    "build_electron": "babel --out-dir ./build/ src/start_electron.js"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -39,8 +43,25 @@
       "block-scoped-var": "error"
     }
   },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
   "devDependencies": {
-    "electron": "^1.7.10"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "electron": "^1.7.10",
+    "electron-rebuild": "^1.6.0"
   },
   "homepage": "./"
 }

@@ -11,14 +11,11 @@
  **/
 
 import { createStore } from "redux"
-import sc from 'supercolliderjs';
 import supercolliderRedux from "supercollider-redux"
 import abletonLinkRedux from "abletonlink-redux"
-import SCStoreController from "./SCStoreController"
-import AbletonLinkController from "./AbletonLinkController"
+import SCStoreController from "./ui/src/SCStoreController"
+import AbletonLinkController from "./ui/src/AbletonLinkController"
 import awakeningSequencers from "awakening-sequencers"
-
-const EXTERNAL_SC = process.env.EXTERNAL_SC;
 
 function create_outboard_sequencer (name) {
   return Object.assign(awakeningSequencers.create_default_sequencer(name), {
@@ -50,11 +47,18 @@ var rootReducer = function (state = create_default_state(), action) {
 console.log("Creating store...");
 var store = createStore(rootReducer);
 
-console.log("Creating SCStoreController...");
-var scStoreController = new SCStoreController(store);
+console.log("Creating SCController...");
+var scController = new SCController();
+scController.boot().then(() => {
+  console.log("Creating SCStoreController...");
+  var scStoreController = new SCStoreController(store);
+
+  //scBooted();
+});
+
 
 console.log("Creating AbletonLinkController...");
-var abletonLinkController = new AbletonLinkController(store, 'abletonlink');
+//var abletonLinkController = new AbletonLinkController(store, 'abletonlink');
 
 var scBooted = function () {
   let state = store.getState();
@@ -83,25 +87,5 @@ var scBooted = function () {
   });
 }
 
-if (EXTERNAL_SC) {
-  scBooted();
-} else {
-  console.log("Booting SuperCollider...");
-  var sclangInstance = null;
-  sc.lang.boot().then((sclang) => {
-    console.log("sclang booted.");
-    sclangInstance = sclang;
-
-    scBooted();
-
-    sclangInstance.executeFile(__dirname + '/main.sc').catch((err) => {
-      if (err) {
-        console.log("ERROR while executing main.sc");
-        console.log("err");
-        console.log(err);
-      }
-    });
-  });
-}
 
 

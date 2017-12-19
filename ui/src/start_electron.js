@@ -1,3 +1,11 @@
+import { createStore } from "redux"
+import supercolliderRedux from "supercollider-redux"
+import abletonLinkRedux from "abletonlink-redux"
+import SCController from './SCController';
+import SCStoreController from "./SCStoreController"
+import AbletonLinkController from "./AbletonLinkController"
+import awakeningSequencers from "awakening-sequencers"
+
 const electron = require('electron')
 // Module to control application life.
 const app = electron.app
@@ -42,7 +50,7 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+//app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -57,9 +65,83 @@ app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow()
+    //createWindow()
   }
 })
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+function create_outboard_sequencer (name) {
+  return Object.assign(awakeningSequencers.create_default_sequencer(name), {
+    midiOutDeviceName: "(in) SuperCollider",
+    midiOutPortName: "(in) SuperCollider",
+    dur: 0.5
+  });
+}
+
+function create_default_state () {
+  return {
+    sequencers: {
+      'outboardTest': create_outboard_sequencer('outboardTest')
+    }
+  }
+}
+
+var rootReducer = function (state = create_default_state(), action) {
+  state.abletonlink = abletonLinkRedux.reducer(state.abletonlink, action);
+  state.supercolliderRedux = supercolliderRedux.reducer(
+    state.supercolliderRedux, 
+    action
+  );
+  state.sequencers = awakeningSequencers.reducer(state.sequencers, action);
+
+  return state;
+}
+
+console.log("Creating store...");
+var store = createStore(rootReducer);
+
+console.log("Creating SCController...");
+var scController = new SCController();
+scController.boot().then(() => {
+  console.log("Creating SCStoreController...");
+  var scStoreController = new SCStoreController(store);
+
+  let state = store.getState();
+  var lastState = {
+    sequencers: {
+      outboardTest: {
+        isReady: state.sequencers.outboardTest.isReady
+      }
+    }
+  };
+
+  store.subscribe(() => {
+    let state = store.getState();
+    let outboardTest = state.sequencers.outboardTest;
+
+    if (
+      outboardTest.isReady != lastState.sequencers.outboardTest.isReady
+    ) {
+      lastState.sequencers.outboardTest.isReady = outboardTest.isReady;
+      console.log("Queuing outboardTest sequencer...");
+
+      store.dispatch(
+        awakeningSequencers.actions.sequencerQueued('outboardTest')
+      );
+    }
+  });
+  
+  console.log("Creating AbletonLinkController...");
+  var abletonLinkController = new AbletonLinkController(store, 'abletonlink');
+});
+
+store.subscribe(() => {
+  let state = store.getState();
+  console.log("state");
+  console.log(state);
+});
+
+
+
