@@ -27,7 +27,7 @@ class AbletonLinkController {
     this.link = new abletonlink();
 
     var lastBpm = null;
-    this.link.startUpdate(20, (beat, phase, bpm) => {
+    this.link.startUpdate((process.env.NODE_ENV == "development" ? 500 : 20), (beat, phase, bpm) => {
       if (bpm != lastBpm) {
         this.store.dispatch(abletonlinkRedux.actions.linkBPMChanged(bpm));
         lastBpm = bpm;
