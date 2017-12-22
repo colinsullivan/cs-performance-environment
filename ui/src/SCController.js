@@ -13,10 +13,6 @@ import sc from 'supercolliderjs';
 const EXTERNAL_SC = process.env.EXTERNAL_SC;
 
 class SCController {
-  constructor(options) {
-
-  }
-
   boot() {
     
     return new Promise((resolve, reject) => {
