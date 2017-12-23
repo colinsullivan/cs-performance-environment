@@ -6,5 +6,5 @@
   version:    0.01,
 //  helpdoc:    "",
   url:      "https://github.com/colinsullivan/cs-performance-environment",
-  dependencies:  #["awakening-sequencers@tags/0.7.7"]
+  dependencies:  #["awakening-sequencers@tags/0.8.0"]
 )

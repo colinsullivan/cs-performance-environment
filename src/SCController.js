@@ -39,9 +39,6 @@ s.options.outDevice = "JackRouter";
       sequencerFactory.setStore(store);
 
    });
-
-   "s.latency:".postln;
-   s.latency.postln;
           `).then(resolve);
           
 

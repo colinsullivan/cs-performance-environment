@@ -100,30 +100,34 @@ scController.boot().then(() => {
   var scStoreController = new SCStoreController(store);
 
   let state = store.getState();
-  var lastState = {
-    sequencers: {
-      outboardTest: {
-        isReady: state.sequencers.outboardTest.isReady
-      }
-    }
-  };
+  //var lastState = {
+    //sequencers: {
+      //outboardTest: {
+        //isReady: state.sequencers.outboardTest.isReady
+      //}
+    //}
+  //};
 
-  store.subscribe(() => {
-    let state = store.getState();
-    let outboardTest = state.sequencers.outboardTest;
+  //store.subscribe(() => {
+    //let state = store.getState();
+    //let outboardTest = state.sequencers.outboardTest;
 
-    if (
-      outboardTest.isReady != lastState.sequencers.outboardTest.isReady
-    ) {
-      lastState.sequencers.outboardTest.isReady = outboardTest.isReady;
-      console.log("Queuing outboardTest sequencer...");
+    //if (
+      //outboardTest.isReady != lastState.sequencers.outboardTest.isReady
+    //) {
+      //lastState.sequencers.outboardTest.isReady = outboardTest.isReady;
+      //console.log("Queuing outboardTest sequencer...");
 
-      store.dispatch(
-        awakeningSequencers.actions.sequencerQueued('outboardTest')
-      );
-    }
-  });
+      //store.dispatch(
+        //awakeningSequencers.actions.sequencerQueued('outboardTest')
+      //);
+    //}
+  //});
   
   console.log("Creating AbletonLinkController...");
-  var abletonLinkController = new AbletonLinkController(store, 'abletonlink', 250);
+  var abletonLinkController = new AbletonLinkController(
+    store,
+    abletonLinkRedux.DEFAULT_MOUNT_POINT,
+    250
+  );
 });
