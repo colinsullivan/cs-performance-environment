@@ -15,7 +15,7 @@ export function create_default_state () {
   return {
     abletonlink: abletonLinkRedux.create_default_state(),
     sequencers: {
-      'outboardTest': create_outboard_sequencer('outboardTest')
+      'outboardTest': create_outboard_sequencer('outboardTest', 'OutboardTestSequencer')
     }
   }
 }

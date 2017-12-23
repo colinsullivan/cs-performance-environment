@@ -27,7 +27,7 @@ class SCController {
         return sc.lang.boot(sclangOptions).then((sclang) => {
           console.log("sclang booted.");
           return sclang.interpret(`
-   var store, sequencers;
+   var store, sequencerFactory;
 MIDIClient.init;
 API.mountDuplexOSC();
 s.options.inDevice = "JackRouter";
@@ -35,17 +35,9 @@ s.options.outDevice = "JackRouter";
 
    s.waitForBoot({
       store = StateStore.getInstance();
+      sequencerFactory = AwakenedSequencerFactory.getInstance();
+      sequencerFactory.setStore(store);
 
-      sequencers = IdentityDictionary.new();
-
-      // TODO: move this to a SequencerFactory
-      store.subscribe({
-        var state = store.getState();
-
-        if ((state.sequencers != nil) && (state.sequencers.outboardTest != nil) && (sequencers['outboardTest'] == nil), {
-          sequencers['outboardTest'] = OutboardTestSequencer.new((store: store, sequencerId: 'outboardTest'));
-        });
-      });
    });
 
    "s.latency:".postln;

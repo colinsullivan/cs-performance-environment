@@ -1,33 +1,27 @@
 {
-  "name": "cs-performance-environment",
-  "version": "0.0.1",
-  "description": "Colin's music performance environment",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev_start": "babel-node main.js"
-  },
-  "author": "Colin Sullivan <colin@colin-sullivan.net>",
-  "license": "GPLv3",
+  "name": "ui",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "awakening-sequencers": "^0.7.7",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.0"
+    "abletonlink-redux": "0.0.7",
+    "awakening-sequencers": "^0.8.0",
+    "bootstrap": "^3.3.7",
+    "note-parser": "^2.0.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "react-scripts": "1.0.14",
+    "supercolliderjs": "^0.14.2"
   },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ],
-      [
-        "stage-3"
-      ]
-    ]
+  "main": "src/start_electron.js",
+  "scripts": {
+    "start_react": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "start_electron": "NODE_ENV=development electron -r babel-register .",
+    "rebuild_electron": "electron-rebuild",
+    "build_electron": "babel --out-dir ./build/ src/start_electron.js"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -39,10 +33,11 @@
       }
     },
     "env": {
-      "browser": false,
+      "browser": true,
       "node": true,
       "es6": true,
-      "mocha": true
+      "mocha": false,
+      "jsx": true
     },
     "rules": {
       "no-console": 0,
@@ -50,7 +45,25 @@
       "block-scoped-var": "error"
     }
   },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
   "devDependencies": {
-    "babel-preset-stage-3": "^6.24.1"
-  }
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "electron": "^1.7.10",
+    "electron-rebuild": "^1.6.0"
+  },
+  "homepage": "./"
 }
