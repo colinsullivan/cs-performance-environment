@@ -89,6 +89,10 @@ var store = createStore(
   applyMiddleware(dispatcherMiddleware)
 );
 
+ipcMain.on('getState', function (e) {
+  e.returnValue = store.getState();
+});
+
 ipcMain.on("dispatch", function (e, action) {
   action.fromRenderer = true;
   store.dispatch(action);

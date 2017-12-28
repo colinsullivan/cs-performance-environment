@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import App from './App.jsx';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from "redux"
-import rootReducer, {create_default_state} from './reducers';
+import rootReducer from './reducers';
 //import registerServiceWorker from './registerServiceWorker';
 
 const electron = window.require('electron');
@@ -20,7 +20,7 @@ var dispatcherMiddleware = store => next => action => {
 };
 var store = createStore(
   rootReducer,
-  create_default_state(),
+  ipcRenderer.sendSync('getState'),
   applyMiddleware(dispatcherMiddleware)
 );
 
