@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import Piano from './Piano';
 import Transport from './Transport';
+import Synkopater from './Synkopater';
 
 
 class App extends React.Component {
@@ -11,11 +11,7 @@ class App extends React.Component {
         <div className="row">
           <Transport />
         </div>
-        <div className="row">
-          <div className="col-xs-12">
-            <Piano />
-          </div>
-        </div>
+        <Synkopater sequencerId='synkopaterA'/>
       </div>
     );
   }

@@ -8,9 +8,6 @@ const AbletonLinkController = abletonLinkRedux.AbletonLinkController;
 import rootReducer, {create_default_state} from './reducers';
 import * as actionTypes from './actionTypes'
 
-console.log("actionTypes");
-console.log(actionTypes);
-
 const electron = require('electron')
 // Module to control application life.
 const app = electron.app
@@ -23,7 +20,7 @@ const url = require('url')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 function createWindow () {
   // Create the browser window.
@@ -78,12 +75,11 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-
-
-
 console.log("Creating store...");
 var dispatcherMiddleware = store => next => action => {
-  mainWindow.webContents.send('dispatch', action);
+  if (!action.fromRenderer) {
+    mainWindow.webContents.send('dispatch', action);
+  }
   let result = next(action);
   return result;
 };
@@ -92,6 +88,11 @@ var store = createStore(
   create_default_state(),
   applyMiddleware(dispatcherMiddleware)
 );
+
+ipcMain.on("dispatch", function (e, action) {
+  action.fromRenderer = true;
+  store.dispatch(action);
+});
 
 console.log("Creating SCController...");
 var scController = new SCController();

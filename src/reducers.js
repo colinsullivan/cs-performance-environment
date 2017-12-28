@@ -5,8 +5,8 @@ import supercolliderRedux from "supercollider-redux"
 
 function create_outboard_sequencer (id, type) {
   return Object.assign(awakeningSequencers.create_default_sequencer(id, type), {
-    midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider",
+    midiOutDeviceName: "minilogue",
+    midiOutPortName: "SOUND",
     dur: 0.5
   });
 }
