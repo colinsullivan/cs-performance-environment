@@ -54,9 +54,16 @@ class WhitePianoKey extends React.Component {
       pointerEvents: 'all'
     };
 
-    if (this.props.active) {
-      containerStyle.backgroundColor = this.props.activeColor || 'green';
+    if (this.props.selected || this.props.active) {
+      if (this.props.selected) {
+        containerStyle.backgroundColor = this.props.selectedColor || 'green';
+      }
+
+      if (this.props.active) {
+        containerStyle.backgroundColor = this.props.activeColor || 'pink';
+      }
     }
+
 
     return (
       <div style={containerStyle} onClick={keyClickHandler.bind(this)}>
@@ -77,11 +84,19 @@ class BlackPianoKey extends React.Component {
       pointerEvents: 'all'
       //position: 'relative'
     };
-    
-    if (this.props.active) {
-      containerStyle.backgroundColor = this.props.activeColor || 'green';
+
+    if (this.props.selected || this.props.active) {
       containerStyle.border = '1px solid black';
+      
+      if (this.props.selected) {
+        containerStyle.backgroundColor = this.props.selectedColor || 'green';
+      }
+
+      if (this.props.active) {
+        containerStyle.backgroundColor = this.props.activeColor || 'pink';
+      }
     }
+    
 
     if (this.props.index > 0) {
       if ([1, 6].includes(this.props.note.chroma)) {
@@ -143,19 +158,31 @@ class Piano extends React.Component {
           {notes.filter((note) => {
             return note.alt === 0;
           }).map((note, i) => {
+            let noteIsSelected = this.props.selectedNotes.includes(note.midi);
             let noteIsActive = this.props.activeNotes.includes(note.midi);
-            return <WhitePianoKey note={note} key={i} handleKeyClicked={this.handleKeyClicked.bind(this)} active={noteIsActive} />
+            return <WhitePianoKey
+              note={note}
+              key={i}
+              handleKeyClicked={this.handleKeyClicked.bind(this)}
+              selected={noteIsSelected}
+              active={noteIsActive}
+            />;
           })}
         </div>
         <div style={blackKeyLayerStyle}>
           {notes.filter((note) => {
             return note.alt !== 0;
           }).map((note, i) => {
+            let noteIsSelected = this.props.selectedNotes.includes(note.midi);
             let noteIsActive = this.props.activeNotes.includes(note.midi);
-            return <BlackPianoKey note={note} key={i} index={i}
+            return <BlackPianoKey
+              note={note}
+              key={i}
+              index={i}
               handleKeyClicked={this.handleKeyClicked.bind(this)}
+              selected={noteIsSelected}
               active={noteIsActive}
-            />
+            />;
           })}
         </div>
       </div>

@@ -32,7 +32,12 @@ class Synkopater extends React.Component {
 
     var playPauseIcon;
     var playPauseOnClick;
-    var activeNotes = this.props.sequencer.arp_notes;
+    var selectedNotes = this.props.sequencer.arp_notes;
+    var activeNotes = [];
+
+    if (this.props.sequencer.event) {
+      activeNotes.push(this.props.sequencer.event.midinote);
+    }
 
     if (this.props.sequencer.playingState === PLAYING_STATES.STOPPED) {
       playPauseIcon = <PlayArrow />;
@@ -49,6 +54,7 @@ class Synkopater extends React.Component {
             handleNoteClicked={this.handleNoteClicked.bind(this)}
             startingOctave={5}
             numOctaves={5}
+            selectedNotes={selectedNotes}
             activeNotes={activeNotes}
           />
         </div>
