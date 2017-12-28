@@ -10,7 +10,15 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
       \midiout, this.midiOut,
       //\midicmd, \noteOn,
       \chan, 0,
-      \midinote, Pseq([96, 84, 84, 84], inf),
+      \midinote, Pfunc({
+        /**
+         *  state.beat increments from 0 to numBeats - 1
+         *  use it to iterate through the arp_notes list
+         **/
+        var state = this.getStateSlice();
+        // TODO: use arp_mode to change arpeggiation pattern
+        state.arp_notes[state.beat];
+      }),
       // rhythmic values
       \dur, 1
     );
