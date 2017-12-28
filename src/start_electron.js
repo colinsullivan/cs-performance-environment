@@ -78,7 +78,9 @@ app.on('activate', function () {
 console.log("Creating store...");
 var dispatcherMiddleware = store => next => action => {
   if (!action.fromRenderer) {
-    mainWindow.webContents.send('dispatch', action);
+    if (mainWindow) {
+      mainWindow.webContents.send('dispatch', action);
+    }
   }
   let result = next(action);
   return result;
