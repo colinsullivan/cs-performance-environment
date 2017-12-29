@@ -13,9 +13,11 @@ import { connect } from 'react-redux';
 import Button from 'material-ui/Button';
 import PlayArrow from 'material-ui-icons/PlayArrow';
 import Pause from 'material-ui-icons/Pause';
+import Select from 'material-ui/Select';
 
 import awakeningSequencers from 'awakening-sequencers';
 import * as actions from './actions';
+import { ARP_MODES } from './reducers';
 import Piano from './Piano';
 
 const PLAYING_STATES = awakeningSequencers.PLAYING_STATES;
@@ -27,6 +29,9 @@ class Synkopater extends React.Component {
     } else {
       this.props.addNote(note.midi);
     }
+  }
+  handleModeChange (e) {
+    this.props.changeMode(e.target.value);
   }
   render () {
 
@@ -59,9 +64,24 @@ class Synkopater extends React.Component {
           />
         </div>
         <div className="col-xs-12">
-          <Button fab mini onClick={playPauseOnClick}>
-            {playPauseIcon}
-          </Button>
+          <div className="row">
+            <div className="col-xs-2">
+              <Button fab mini onClick={playPauseOnClick}>
+                {playPauseIcon}
+              </Button>
+            </div>
+            <div className="col-xs-2">
+							<Select
+								native
+								value={this.props.sequencer.arp_mode}
+								onChange={this.handleModeChange.bind(this)}
+							>
+                {Object.keys(ARP_MODES).map((arpMode) => {
+                  return <option value={arpMode}>{arpMode}</option>;
+                })};
+							</Select>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -98,7 +118,15 @@ function mapDispatchToProps (dispatch, ownProps) {
           ownProps.sequencerId,
           note
         )
-      )
+      );
+    },
+    changeMode: (mode) => {
+      dispatch(
+        actions.synkopater_arp_change_mode(
+          ownProps.sequencerId,
+          mode
+        )
+      );
     }
   };
 }

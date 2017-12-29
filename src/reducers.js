@@ -6,6 +6,12 @@ import supercolliderRedux from "supercollider-redux"
 
 import * as actionTypes from './actionTypes';
 
+export const ARP_MODES = {
+  UP: "UP",
+  DOWN: "DOWN",
+  UPDOWN: "UPDOWN"
+};
+
 // TODO: move these create methods into a model file
 function create_synkopater_sequencer (id, type) {
   return Object.assign(awakeningSequencers.create_default_sequencer(id, type), {
@@ -16,6 +22,9 @@ function create_synkopater_sequencer (id, type) {
     arp_dur: 0.5,
     arp_notes: [96, 84, 86, 87],
     arp_vels: [1.0, 1.0, 1.0, 1.0],
+    arp_mode: ARP_MODES.UP,
+    arp_updown_current_direction: 1,
+    arp_note_index: 0,
     numBeats: 4
   });
 }
@@ -56,6 +65,45 @@ function sequencers (state, action) {
       seq.numBeats = seq.arp_notes.length;
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
+      break;
+
+    case actionTypes.SYNKOPATER_ARP_CHANGE_MODE:
+      seq = Object.assign({}, state[action.payload.sequencerId]);
+      seq.arp_mode = action.payload.arp_mode;
+      state[action.payload.sequencerId] = seq;
+      state = Object.assign({}, state);
+      break;
+
+    case supercolliderRedux.actionTypes.SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT:
+      seq = Object.assign({}, state[action.payload.id]);
+      if (action.payload.id === seq.sequencerId) {
+        switch (seq.arp_mode) {
+          case ARP_MODES.UP:
+            seq.arp_note_index = seq.beat;
+            break;
+
+          case ARP_MODES.DOWN:
+            seq.arp_note_index = seq.numBeats - 1 - seq.beat;
+            break;
+
+          case ARP_MODES.UPDOWN:
+            if (seq.arp_note_index === seq.numBeats - 1) {
+              seq.arp_updown_current_direction = -1;
+            } else if (seq.arp_note_index === 0) {
+              seq.arp_updown_current_direction = 1;
+            }
+            seq.arp_note_index += seq.arp_updown_current_direction;
+
+            break;
+          
+          default:
+            break;
+          
+        }
+        state[seq.sequencerId] = seq;
+        state = Object.assign({}, state);
+      }
+      
       break;
     
     default:

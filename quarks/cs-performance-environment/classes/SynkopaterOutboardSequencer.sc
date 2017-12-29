@@ -1,7 +1,6 @@
 SynkopaterOutboardSequencer : AwakenedSequencer {
   var pat,
-    patStream,
-    patchSynth;
+    arp_direction = 1.0;
 
   initStream {
 
@@ -16,8 +15,7 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
          *  use it to iterate through the arp_notes list
          **/
         var state = this.getStateSlice();
-        // TODO: use arp_mode to change arpeggiation pattern
-        state.arp_notes[state.beat];
+        state.arp_notes[state.arp_note_index];
       }),
       // rhythmic values
       \dur, 1

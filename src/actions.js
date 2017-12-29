@@ -19,3 +19,13 @@ export function synkopater_arp_remove_note (sequencerId, note) {
     }
   };
 }
+
+export function synkopater_arp_change_mode (sequencerId, arp_mode) {
+  return {
+    type: actionTypes.SYNKOPATER_ARP_CHANGE_MODE,
+    payload: {
+      sequencerId,
+      arp_mode
+    }
+  };
+}
