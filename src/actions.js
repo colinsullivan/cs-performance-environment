@@ -29,3 +29,14 @@ export function synkopater_arp_change_mode (sequencerId, arp_mode) {
     }
   };
 }
+
+export function synkopater_change_param (sequencerId, param, value) {
+  return {
+    type: actionTypes.SYNKOPATER_CHANGE_PARAM,
+    payload: {
+      sequencerId,
+      param,
+      value
+    }
+  };
+}

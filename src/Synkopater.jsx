@@ -14,6 +14,8 @@ import Button from 'material-ui/Button';
 import PlayArrow from 'material-ui-icons/PlayArrow';
 import Pause from 'material-ui-icons/Pause';
 import Select from 'material-ui/Select';
+import TextField from 'material-ui/TextField';
+
 
 import awakeningSequencers from 'awakening-sequencers';
 import * as actions from './actions';
@@ -33,12 +35,25 @@ class Synkopater extends React.Component {
   handleModeChange (e) {
     this.props.changeMode(e.target.value);
   }
+  handleParamChanged (e) {
+    if (e.target.type === 'number') {
+      let val = parseFloat(e.target.value);
+      if (val && val > 0) {
+        this.props.changeParam(e.target.id, val);
+      }
+    }
+  }
   render () {
 
     var playPauseIcon;
     var playPauseOnClick;
     var selectedNotes = this.props.sequencer.arp_notes;
     var activeNotes = [];
+    var numberParams = {
+      inputProps: {
+        step: 1.0 / 32.0
+      }
+    };
 
     if (this.props.sequencer.event) {
       activeNotes.push(this.props.sequencer.event.midinote);
@@ -80,6 +95,39 @@ class Synkopater extends React.Component {
                   return <option value={arpMode}>{arpMode}</option>;
                 })};
 							</Select>
+            </div>
+            <div className="col-xs-2">
+              <TextField
+                id="dur"
+                label="dur"
+                value={this.props.sequencer.dur}
+                onChange={this.handleParamChanged.bind(this)}
+                type="number"
+                margin="normal"
+                InputProps={numberParams}
+              />
+            </div>
+            <div className="col-xs-2">
+              <TextField
+                id="stretch"
+                label="stretch"
+                value={this.props.sequencer.stretch}
+                onChange={this.handleParamChanged.bind(this)}
+                type="number"
+                margin="normal"
+                InputProps={numberParams}
+              />
+            </div>
+            <div className="col-xs-2">
+              <TextField
+                id="legato"
+                label="legato"
+                value={this.props.sequencer.legato}
+                onChange={this.handleParamChanged.bind(this)}
+                type="number"
+                margin="normal"
+                InputProps={numberParams}
+              />
             </div>
           </div>
         </div>
@@ -125,6 +173,15 @@ function mapDispatchToProps (dispatch, ownProps) {
         actions.synkopater_arp_change_mode(
           ownProps.sequencerId,
           mode
+        )
+      );
+    },
+    changeParam: (param, val) => {
+      dispatch(
+        actions.synkopater_change_param(
+          ownProps.sequencerId,
+          param,
+          val
         )
       );
     }

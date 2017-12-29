@@ -19,7 +19,9 @@ function create_synkopater_sequencer (id, type) {
     midiOutPortName: "(in) SuperCollider",
     //midiOutDeviceName: "minilogue",
     //midiOutPortName: "SOUND",
-    arp_dur: 0.5,
+    dur: 0.5,
+    stretch: 1.0,
+    legato: 1.0,
     arp_notes: [96, 84, 86, 87],
     arp_vels: [1.0, 1.0, 1.0, 1.0],
     arp_mode: ARP_MODES.UP,
@@ -104,6 +106,13 @@ function sequencers (state, action) {
         state = Object.assign({}, state);
       }
       
+      break;
+
+    case actionTypes.SYNKOPATER_CHANGE_PARAM:
+      seq = Object.assign({}, state[action.payload.sequencerId]);
+      seq[action.payload.param] = action.payload.value;
+      state[action.payload.sequencerId] = seq;
+      state = Object.assign({}, state);
       break;
     
     default:

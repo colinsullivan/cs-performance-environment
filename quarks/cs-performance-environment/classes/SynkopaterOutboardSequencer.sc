@@ -1,6 +1,5 @@
 SynkopaterOutboardSequencer : AwakenedSequencer {
-  var pat,
-    arp_direction = 1.0;
+  var pat;
 
   initStream {
 
@@ -18,7 +17,15 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
         state.arp_notes[state.arp_note_index];
       }),
       // rhythmic values
-      \dur, 1
+      \dur, Pfunc({
+        this.getStateSlice().dur;
+      }),
+      \stretch, Pfunc({
+        this.getStateSlice().stretch;
+      }),
+      \legato, Pfunc({
+        this.getStateSlice().legato;
+      })
     );
 
     ^pat.asStream();
