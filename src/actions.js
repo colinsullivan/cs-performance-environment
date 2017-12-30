@@ -40,3 +40,24 @@ export function synkopater_change_param (sequencerId, param, value) {
     }
   };
 }
+
+export function midi_controller_cc (controllerId, name, value) {
+  return {
+    type: actionTypes.MIDI_CONTROLLER_CC,
+    payload: {
+      controllerId,
+      name,
+      value
+    }
+  };
+}
+
+export function midi_controller_init (controllerId, mappings) {
+  return {
+    type: actionTypes.MIDI_CONTROLLER_INIT,
+    payload: {
+      controllerId,
+      mappings
+    }
+  };
+}

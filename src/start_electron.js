@@ -3,6 +3,7 @@ import SCController from './SCController';
 import SCStoreController from "./SCStoreController"
 import abletonLinkRedux from "abletonlink-redux"
 import awakeningSequencers from "awakening-sequencers"
+import LaunchControlXLDispatcher from './LaunchControlXLDispatcher';
 const AbletonLinkController = abletonLinkRedux.AbletonLinkController;
 
 import rootReducer, {create_default_state} from './reducers';
@@ -85,10 +86,29 @@ var dispatcherMiddleware = store => next => action => {
   let result = next(action);
   return result;
 };
+var loggerMiddleware = function ({ getState }) {
+  return next => action => {
+    console.log('will dispatch', action)
+
+    // Call the next dispatch method in the middleware chain.
+    let returnValue = next(action)
+
+    console.log('state after dispatch', getState())
+
+    // This will likely be the action itself, unless
+    // a middleware further in chain changed it.
+    return returnValue
+  }
+}
+var middleware = [];
+
+middleware.push(loggerMiddleware);
+middleware.push(dispatcherMiddleware);
+
 var store = createStore(
   rootReducer,
   create_default_state(),
-  applyMiddleware(dispatcherMiddleware)
+  applyMiddleware(...middleware)
 );
 
 ipcMain.on('getState', function (e) {
@@ -136,5 +156,10 @@ scController.boot().then(() => {
     store,
     abletonLinkRedux.DEFAULT_MOUNT_POINT,
     250
+  );
+
+  var launchControlXLDispatcher = new LaunchControlXLDispatcher(
+    store,
+    'launchcontrol'
   );
 });

@@ -31,6 +31,12 @@ function create_synkopater_sequencer (id, type) {
   });
 }
 
+function create_performance_component (id) {
+  return {
+    id
+  };
+}
+
 export function create_default_state () {
   return {
     abletonlink: abletonLinkRedux.create_default_state(),
@@ -38,6 +44,11 @@ export function create_default_state () {
       'synkopaterA': create_synkopater_sequencer(
         'synkopaterA',
         'SynkopaterOutboardSequencer'
+      )
+    },
+    components: {
+      'synkopaterA': create_performance_component(
+        'synkopaterA',
       )
     }
   }
@@ -121,8 +132,37 @@ function sequencers (state, action) {
   return state;
 }
 
+function controllers (state = {}, action) {
+  switch (action.type) {
+    case actionTypes.MIDI_CONTROLLER_INIT:
+      let controller = {};
+      let mappings = action.payload.mappings;
+      let controlName;
+      for (const channel in mappings) {
+        for (const cc in mappings[channel]) {
+          controlName = mappings[channel][cc];
+          controller[controlName] = 0;
+        }
+      }
+      state[action.payload.controllerId] = controller;
+      state = Object.assign({}, state);
+      break;
+
+    case actionTypes.MIDI_CONTROLLER_CC:
+      state[action.payload.controllerId][action.payload.name] = action.payload.value;
+      state = Object.assign({}, state);
+      break;
+    
+    default:
+      break
+  }
+  return state;
+}
+
+
 export default combineReducers({
   [abletonLinkRedux.DEFAULT_MOUNT_POINT]: abletonLinkRedux.reducer,
   [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
-  sequencers: sequencers
+  controllers: controllers,
+  sequencers: sequencers,
 });

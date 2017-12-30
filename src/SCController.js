@@ -37,7 +37,6 @@ s.options.outDevice = "JackRouter";
       store = StateStore.getInstance();
       sequencerFactory = AwakenedSequencerFactory.getInstance();
       sequencerFactory.setStore(store);
-
    });
           `).then(resolve);
           
