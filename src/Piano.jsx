@@ -29,7 +29,7 @@ const diatonicNoteNames = [
   'b'
 ];
 
-var keyBaseWidth = 2.0;
+var keyBaseWidth = 1.5;
 var blackKeyBaseWidthRatio = 0.5;
 
 var keyClickHandler = function (e) {
@@ -140,7 +140,7 @@ class Piano extends React.Component {
     }
 
     var containerStyle = {
-      height: '10em',
+      height: '6em',
       border: '1px solid black',
       position: 'relative'
     };

@@ -73,8 +73,8 @@ class Synkopater extends React.Component {
         <div className="col-xs-12">
           <Piano
             handleNoteClicked={this.handleNoteClicked.bind(this)}
-            startingOctave={5}
-            numOctaves={5}
+            startingOctave={3}
+            numOctaves={8}
             selectedNotes={selectedNotes}
             activeNotes={activeNotes}
           />

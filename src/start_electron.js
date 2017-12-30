@@ -40,7 +40,7 @@ function createWindow () {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -102,7 +102,7 @@ var loggerMiddleware = function ({ getState }) {
 }
 var middleware = [];
 
-middleware.push(loggerMiddleware);
+//middleware.push(loggerMiddleware);
 middleware.push(dispatcherMiddleware);
 
 var store = createStore(
