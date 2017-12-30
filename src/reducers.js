@@ -125,6 +125,17 @@ function sequencers (state, action) {
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
       break;
+
+    case actionTypes.MIDI_CONTROLLER_CC:
+      if (action.payload.controllerId === 'launchcontrol') {
+        if (action.payload.name === 'knu2') {
+          state.synkopaterA.dur = action.payload.value;
+          state = Object.assign({}, state);
+          console.log("state");
+          console.log(state);
+        }
+      }
+      break;
     
     default:
       break;
