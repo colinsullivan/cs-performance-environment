@@ -51,7 +51,8 @@ class Synkopater extends React.Component {
     var activeNotes = [];
     var numberParams = {
       inputProps: {
-        step: 1.0 / 32.0
+        step: 0.001,
+        min: 0.0
       }
     };
 
@@ -92,7 +93,7 @@ class Synkopater extends React.Component {
 								onChange={this.handleModeChange.bind(this)}
 							>
                 {Object.keys(ARP_MODES).map((arpMode) => {
-                  return <option value={arpMode}>{arpMode}</option>;
+                  return <option key={arpMode} value={arpMode}>{arpMode}</option>;
                 })};
 							</Select>
             </div>

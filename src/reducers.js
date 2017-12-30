@@ -6,6 +6,8 @@ import supercolliderRedux from "supercollider-redux"
 
 import * as actionTypes from './actionTypes';
 
+const durChoices = [1.0/128.0, 1.0/64.0, 1.0/32.0, 1.0/16.0, 1.0/8.0, 1.0/4.0, 1.0/2.0, 1.0, 2.0, 4.0, 8.0];
+
 export const ARP_MODES = {
   UP: "UP",
   DOWN: "DOWN",
@@ -128,11 +130,15 @@ function sequencers (state, action) {
 
     case actionTypes.MIDI_CONTROLLER_CC:
       if (action.payload.controllerId === 'launchcontrol') {
-        if (action.payload.name === 'knu2') {
-          state.synkopaterA.dur = action.payload.value;
+        if (action.payload.name === 'knu1') {
+          let seq = Object.assign({}, state.synkopaterA);
+          let knobVal = action.payload.value;
+          let selectedDurIndex = Math.round(
+            knobVal * (durChoices.length - 1)
+          );
+          seq.dur = durChoices[selectedDurIndex];
+          state.synkopaterA = seq;
           state = Object.assign({}, state);
-          console.log("state");
-          console.log(state);
         }
       }
       break;
