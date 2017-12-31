@@ -27,16 +27,14 @@ class SCController {
         return sc.lang.boot(sclangOptions).then((sclang) => {
           console.log("sclang booted.");
           return sclang.interpret(`
-   var store, sequencerFactory;
 MIDIClient.init;
 API.mountDuplexOSC();
 s.options.inDevice = "JackRouter";
 s.options.outDevice = "JackRouter";
 
    s.waitForBoot({
-      store = StateStore.getInstance();
-      sequencerFactory = AwakenedSequencerFactory.getInstance();
-      sequencerFactory.setStore(store);
+      var performanceEnvironment;
+      performanceEnvironment = CSPerformanceEnvironment.new();
    });
           `).then(resolve);
           
