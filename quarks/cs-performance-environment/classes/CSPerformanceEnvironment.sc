@@ -38,6 +38,12 @@ CSPerformanceEnvironment {
       inputBus: 10,
       outputBus: 10
     ));
+    synkopaterDelay = SynkopaterDelay.new((
+      store: store,
+      sequencerId: 'synkopaterB',
+      inputBus: 12,
+      outputBus: 12
+    ));
     
   }
 }

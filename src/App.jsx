@@ -12,6 +12,7 @@ class App extends React.Component {
           <Transport />
         </div>
         <Synkopater sequencerId='synkopaterA'/>
+        <Synkopater sequencerId='synkopaterB'/>
       </div>
     );
   }

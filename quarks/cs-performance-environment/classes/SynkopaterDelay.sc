@@ -22,6 +22,10 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
 
   }
 
+  gui_window_title {
+    ^sequencerId.asString() ++ " delay";
+  }
+
   init_tracks {
     arg params;
     super.init_tracks(params);

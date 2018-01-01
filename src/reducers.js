@@ -33,11 +33,11 @@ function create_synkopater_sequencer (id, type) {
   });
 }
 
-function create_performance_component (id) {
-  return {
-    id
-  };
-}
+//function create_performance_component (id) {
+  //return {
+    //id
+  //};
+//}
 
 export function create_default_state () {
   return {
@@ -46,13 +46,17 @@ export function create_default_state () {
       'synkopaterA': create_synkopater_sequencer(
         'synkopaterA',
         'SynkopaterOutboardSequencer'
+      ),
+      'synkopaterB': create_synkopater_sequencer(
+        'synkopaterB',
+        'SynkopaterOutboardSequencer'
       )
     },
-    components: {
-      'synkopaterA': create_performance_component(
-        'synkopaterA',
-      )
-    }
+    //components: {
+      //'synkopaterA': create_performance_component(
+        //'synkopaterA',
+      //)
+    //}
   }
 }
 
