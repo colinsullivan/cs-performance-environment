@@ -17,10 +17,6 @@ export const ARP_MODES = {
 // TODO: move these create methods into a model file
 function create_synkopater_sequencer (id, type) {
   return Object.assign(awakeningSequencers.create_default_sequencer(id, type), {
-    midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider",
-    //midiOutDeviceName: "minilogue",
-    //midiOutPortName: "SOUND",
     dur: 0.5,
     stretch: 1.0,
     legato: 1.0,
@@ -40,7 +36,7 @@ function create_synkopater_sequencer (id, type) {
 //}
 
 export function create_default_state () {
-  return {
+  let initialState = {
     abletonlink: abletonLinkRedux.create_default_state(),
     sequencers: {
       'synkopaterA': create_synkopater_sequencer(
@@ -51,13 +47,23 @@ export function create_default_state () {
         'synkopaterB',
         'SynkopaterOutboardSequencer'
       )
-    },
-    //components: {
-      //'synkopaterA': create_performance_component(
-        //'synkopaterA',
-      //)
-    //}
-  }
+    }
+  };
+  Object.assign(initialState.sequencers.synkopaterA, {
+  //midiOutDeviceName: "minilogue",
+  //midiOutPortName: "SOUND",
+    midiOutDeviceName: "(in) SuperCollider",
+    midiOutPortName: "(in) SuperCollider"
+  });
+  Object.assign(initialState.sequencers.synkopaterB, {
+    midiOutDeviceName: "(in) SuperCollider",
+    midiOutPortName: "(in) SuperCollider"
+  });
+
+  console.log("initialState");
+  console.log(initialState);
+
+  return initialState;
 }
 
 function sequencers (state, action) {
