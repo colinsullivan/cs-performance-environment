@@ -158,8 +158,11 @@ scController.boot().then(() => {
     250
   );
 
-  var launchControlXLDispatcher = new LaunchControlXLDispatcher(
-    store,
-    'launchcontrol'
-  );
-});
+  //var launchControlXLDispatcher = new LaunchControlXLDispatcher(
+    //store,
+    //'launchcontrol'
+  //);
+}).catch(function (err) {
+  console.log("error while starting up...");
+  throw err;
+})

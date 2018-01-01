@@ -15,7 +15,8 @@ PerformanceEnvironmentComponent : Object {
     <>outputChannel,
     // number
     <>outputBus,
-    <>playing;
+    <>playing,
+    <>store;
 
   *new {
     arg params;
@@ -36,6 +37,8 @@ PerformanceEnvironmentComponent : Object {
     arg params;
     var me = this;
 
+    this.store = params['store'];
+
     this.playing = false;
 
     if (params['outputBus'] == nil, {
@@ -54,7 +57,7 @@ PerformanceEnvironmentComponent : Object {
 
       // when samples are finished, load interface
       me.interface = Interface({
-        me.load_environment();
+        me.load_environment(params);
       }).onPlay_({
         me.on_play();
       }).onStop_({
@@ -106,8 +109,9 @@ PerformanceEnvironmentComponent : Object {
   }
 
   load_environment {
-    this.init_tracks();
-    this.init_patches();
+    arg params;
+    this.init_tracks(params);
+    this.init_patches(params);
     {
       this.play_patches_on_tracks();
     }.defer(1);
@@ -137,6 +141,7 @@ PerformanceEnvironmentComponent : Object {
     this.playing = false;
   }
 
+  // TODO: Move instantiation of controllers out of here
   init_external_controller_mappings {
     var uc33Port,
       softStepPort,

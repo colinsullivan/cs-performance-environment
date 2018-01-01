@@ -3,7 +3,8 @@ CSPerformanceEnvironment {
     sequencerFactory,
     randomHarpEnvironment,
     runningWaterEnvironment,
-    granularChaosEnvironment;
+    granularChaosEnvironment,
+    synkopaterDelay;
 
   *new {
     ^super.new.init();
@@ -17,15 +18,25 @@ CSPerformanceEnvironment {
     sequencerFactory.setStore(store);
 
     randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
+      store: store,
       outputBus: 26
     ));
 
     runningWaterEnvironment = RunningWaterEnvironment.new((
+      store: store,
       outputBus: 18
     ));
 
     granularChaosEnvironment = GranularChaosEnvironment.new((
+      store: store,
       outputBus: 20
+    ));
+
+    synkopaterDelay = SynkopaterDelay.new((
+      store: store,
+      sequencerId: 'synkopaterA',
+      inputBus: 10,
+      outputBus: 10
     ));
     
   }
