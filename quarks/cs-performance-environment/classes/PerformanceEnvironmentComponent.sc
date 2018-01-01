@@ -1,4 +1,14 @@
 /**
+ *  @file       PerformanceEnvironmentComponent.sc
+ *
+ *
+ *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
+ *
+ *  @copyright  2017 Colin Sullivan
+ *  @license    Licensed under the GPLv3 license.
+ **/
+
+/**
  *  @class  PerformanceEnvironmentComponent   A component of a performance
  *  environment that has a GUI window.
  **/

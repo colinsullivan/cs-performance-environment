@@ -1,3 +1,13 @@
+/**
+ *  @file       start_electron.js
+ *
+ *
+ *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
+ *
+ *  @copyright  2017 Colin Sullivan
+ *  @license    Licensed under the GPLv3 license.
+ **/
+
 import { createStore, applyMiddleware } from "redux"
 import SCController from './SCController';
 import SCStoreController from "./SCStoreController"

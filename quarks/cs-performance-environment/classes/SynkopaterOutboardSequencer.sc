@@ -1,3 +1,13 @@
+/**
+ *  @file       SynkopaterOutboardSequencer.sc
+ *
+ *
+ *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
+ *
+ *  @copyright  2017 Colin Sullivan
+ *  @license    Licensed under the GPLv3 license.
+ **/
+
 SynkopaterOutboardSequencer : AwakenedSequencer {
   var pat;
 
