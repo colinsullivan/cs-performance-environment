@@ -11,25 +11,16 @@
 import easymidi from 'easymidi';
 import midi from 'midi';
 
+import {list_midi_ports} from './src/utils';
+
 var input = new midi.input();
 var output = new midi.output();
 
-function list_ports (inOrOut) {
-  var portCount = inOrOut.getPortCount();
-
-  console.log("portCount");
-  console.log(portCount);
-
-  let i;
-  for (i = 0; i < portCount; i++) {
-    let portName = inOrOut.getPortName(i);
-    console.log("portName");
-    console.log(portName);
-  }
-}
-
 console.log("Input ports:");
-list_ports(input);
+list_midi_ports(input);
 
 console.log("Output ports:");
-list_ports(output);
+list_midi_ports(output);
+
+input.closePort();
+output.closePort();
