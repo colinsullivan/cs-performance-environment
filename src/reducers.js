@@ -39,11 +39,26 @@ function create_synkopater_sequencer (id, type) {
   });
 }
 
-//function create_performance_component (id) {
-  //return {
-    //id
-  //};
-//}
+function create_performance_component (id) {
+  return {
+    id,
+    controllerMappings: {}
+  };
+}
+
+function create_synkopater_component (id, ampSlider) {
+  let comp = create_performance_component(id);
+
+  comp.sequencerId = id;
+  comp.controllerMappings.launchControl = Object.assign({
+    knl1: 'delayFeedbackControl',
+    knl2: 'delayFactorControl',
+    [ampSlider]: 'ampAndToggleSlider'
+  });
+
+  return comp;
+
+}
 
 export function create_default_state () {
   let initialState = {
@@ -57,17 +72,21 @@ export function create_default_state () {
         'synkopaterB',
         'SynkopaterOutboardSequencer'
       )
+    },
+    components: {
+      synkopaterA: create_synkopater_component('synkopaterA', 'sl1'),
+      synkopaterB: create_synkopater_component('synkopaterB', 'sl2')
     }
   };
   Object.assign(initialState.sequencers.synkopaterA, {
   //midiOutDeviceName: "minilogue",
   //midiOutPortName: "SOUND",
     midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider"
+    midiOutPortName: "(in) SuperCollider",
   });
   Object.assign(initialState.sequencers.synkopaterB, {
     midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider"
+    midiOutPortName: "(in) SuperCollider",
   });
 
   console.log("initialState");
@@ -150,7 +169,7 @@ function sequencers (state, action) {
 
     case actionTypes.MIDI_CONTROLLER_CC:
       if (action.payload.controllerId === 'launchcontrol') {
-        if (action.payload.name === 'knu1') {
+        if (action.payload.name === 'knu3') {
           let seq = Object.assign({}, state.synkopaterA);
           let knobVal = action.payload.value;
           let selectedDurIndex = Math.round(
@@ -196,10 +215,15 @@ function controllers (state = {}, action) {
   return state;
 }
 
+function components (state = {}, action) {
+  return state;
+}
+
 
 export default combineReducers({
   [abletonLinkRedux.DEFAULT_MOUNT_POINT]: abletonLinkRedux.reducer,
   [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
   controllers: controllers,
   sequencers: sequencers,
+  components: components
 });

@@ -44,13 +44,13 @@ CSPerformanceEnvironment {
 
     synkopaterDelay = SynkopaterDelay.new((
       store: store,
-      sequencerId: 'synkopaterA',
+      componentId: 'synkopaterA',
       inputBus: 10,
       outputBus: 10
     ));
     synkopaterDelay = SynkopaterDelay.new((
       store: store,
-      sequencerId: 'synkopaterB',
+      componentId: 'synkopaterB',
       inputBus: 12,
       outputBus: 12
     ));

@@ -28,6 +28,7 @@ class SCController {
           console.log("sclang booted.");
           return sclang.interpret(`
 MIDIClient.init;
+MIDIIn.connectAll;
 API.mountDuplexOSC();
 s.options.inDevice = "JackRouter";
 s.options.outDevice = "JackRouter";

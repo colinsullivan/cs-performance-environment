@@ -26,6 +26,10 @@ PerformanceEnvironmentComponent : Object {
     // number
     <>outputBus,
     <>playing,
+    // id of component for looking up in state store
+    <>componentId,
+    // save state of controllerMappings and rerun mapping method when changed
+    controllerMappings,
     <>store;
 
   *new {
@@ -45,9 +49,22 @@ PerformanceEnvironmentComponent : Object {
 
   init {
     arg params;
-    var me = this;
+    var me = this,
+      state;
+
+    componentId = params['componentId'];
 
     this.store = params['store'];
+
+    state = this.store.getState();
+    if ((componentId != nil) && (state.components != nil), {
+      if (state.components[componentId] != nil, {
+        controllerMappings = state.components[componentId].controllerMappings;
+      });
+    });
+    state.subscribe({
+      this.handle_state_change();
+    });
 
     this.playing = false;
 
@@ -88,6 +105,19 @@ PerformanceEnvironmentComponent : Object {
         me.interface.gui();
         me.init_done_callback.value();
       }.defer(1);
+    });
+  }
+
+  handle_state_change {
+    var state = this.store.getState();
+    // if controller mappings changed
+    if ((componentId != nil) && (state.components != nil), {
+      if (state.components[componentId] != nil, {
+        if (controllerMappings != state.components[componentId].controllerMappings, {
+          controllerMappings = state.components[componentId].controllerMappings;
+          this.init_external_controller_mappings();
+        });
+      });
     });
   }
 

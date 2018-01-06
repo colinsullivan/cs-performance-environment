@@ -15,13 +15,10 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     <>delayPatch,
     <>delayFactorControl,
     <>delayFeedbackControl,
-    <>ampAndToggleSlider,
-    sequencerId;
+    <>ampAndToggleSlider;
 
   init {
     arg params;
-
-    sequencerId = params['sequencerId'];
     
     this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 2, \linear, (1.0 / 4.0)));
     this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
@@ -33,7 +30,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   }
 
   gui_window_title {
-    ^sequencerId.asString() ++ " delay";
+    ^componentId.asString() ++ " delay";
   }
 
   init_tracks {
@@ -80,9 +77,11 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   handle_synkopation_control_changed {
     var currentBeatsPerSecond,
       sequencerDur,
+      sequencerId,
       state;
 
     state = this.store.getState();
+    sequencerId = state.components[componentId].sequencerId;
     currentBeatsPerSecond = state.abletonlink.bpm * 60.0;
     sequencerDur = state.sequencers[sequencerId].dur;
 
@@ -151,7 +150,40 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
 
     });
   }
-  
+  init_external_controller_mappings {
+    super.init_external_controller_mappings();
+
+    if (controllerMappings != nil, {
+        controllerMappings.keysValuesDo({
+          arg controller, mappings;
+
+          switch(controller,
+            \launchControl, {
+              if (this.launchControlController != nil, {
+                "Mapping launchControl".postln();
+                mappings.keysValuesDo({
+                  arg controlName, property;
+                  ("mapping `" + controlName + "` to this." + property).postln();
+                  this.map_controller_to_property(
+                    this.launchControlController,
+                    controlName.asSymbol(),
+                    property.asSymbol()
+                  );
+                });
+              }, {
+                "Skipping launchcontrol mappings because controller disconnected".postln();
+              });
+            },
+            {
+              ("No mapping for " + controller).postln();
+            }
+          );
+
+        });
+    });
+    
+
+  }
   init_launchcontrol_mappings {
 
   }
