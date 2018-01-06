@@ -11,6 +11,7 @@
 CSPerformanceEnvironment {
   var store,
     sequencerFactory,
+    componentFactory,
     randomHarpEnvironment,
     runningWaterEnvironment,
     granularChaosEnvironment,
@@ -27,6 +28,9 @@ CSPerformanceEnvironment {
     sequencerFactory = AwakenedSequencerFactory.getInstance();
     sequencerFactory.setStore(store);
 
+    componentFactory = PerformanceComponentFactory.getInstance();
+    componentFactory.setStore(store);
+
     randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
       store: store,
       outputBus: 26
@@ -42,18 +46,5 @@ CSPerformanceEnvironment {
       outputBus: 20
     ));
 
-    synkopaterDelay = SynkopaterDelay.new((
-      store: store,
-      componentId: 'synkopaterA',
-      inputBus: 10,
-      outputBus: 10
-    ));
-    synkopaterDelay = SynkopaterDelay.new((
-      store: store,
-      componentId: 'synkopaterB',
-      inputBus: 12,
-      outputBus: 12
-    ));
-    
   }
 }

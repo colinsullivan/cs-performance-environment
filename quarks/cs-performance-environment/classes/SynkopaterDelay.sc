@@ -55,7 +55,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     // something gets through to the fx stage.  I tried rewriting the
     // SynkopaterDelay patch to be the "primary" patch but it was weird...
     inputPatch = Patch("cs.utility.Passthrough", (
-      inputChannelNums: [params['inputBus'], params['inputBus'] + 1]
+      inputChannelNums: [componentState.inputBus, componentState.inputBus + 1]
     ));
 
     delayPatch = FxPatch("cs.Synkopater.SynkopaterDelay", (

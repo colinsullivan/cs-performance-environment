@@ -39,17 +39,20 @@ function create_synkopater_sequencer (id, type) {
   });
 }
 
-function create_performance_component (id) {
+function create_performance_component (id, type) {
   return {
     id,
+    type,
     controllerMappings: {}
   };
 }
 
-function create_synkopater_component (id, ampSlider) {
-  let comp = create_performance_component(id);
+function create_synkopater_component (id, ampSlider, bus) {
+  let comp = create_performance_component(id, 'SynkopaterDelay');
 
   comp.sequencerId = id;
+  comp.inputBus = bus;
+  comp.outputBus = bus;
   comp.controllerMappings.launchControl = Object.assign({
     knl1: 'delayFeedbackControl',
     knl2: 'delayFactorControl',
@@ -74,8 +77,8 @@ export function create_default_state () {
       )
     },
     components: {
-      synkopaterA: create_synkopater_component('synkopaterA', 'sl1'),
-      synkopaterB: create_synkopater_component('synkopaterB', 'sl2')
+      synkopaterA: create_synkopater_component('synkopaterA', 'sl1', 10),
+      synkopaterB: create_synkopater_component('synkopaterB', 'sl2', 12)
     }
   };
   Object.assign(initialState.sequencers.synkopaterA, {

@@ -28,6 +28,7 @@ PerformanceEnvironmentComponent : Object {
     <>playing,
     // id of component for looking up in state store
     <>componentId,
+    componentState,
     // save state of controllerMappings and rerun mapping method when changed
     controllerMappings,
     <>store;
@@ -57,22 +58,29 @@ PerformanceEnvironmentComponent : Object {
     this.store = params['store'];
 
     state = this.store.getState();
-    if ((componentId != nil) && (state.components != nil), {
-      if (state.components[componentId] != nil, {
-        controllerMappings = state.components[componentId].controllerMappings;
+    if ((componentId != nil), {
+      componentState = state.components[componentId];
+      controllerMappings = componentState.controllerMappings;
+      state.subscribe({
+        componentState = state.components[componentId];
+        this.handle_state_change();
       });
-    });
-    state.subscribe({
-      this.handle_state_change();
     });
 
     this.playing = false;
 
-    if (params['outputBus'] == nil, {
-      this.outputBus = 0;
+    if (componentState != nil, {
+      if (componentState.outputBus != nil, {
+        this.outputBus = componentState.outputBus;
+      });
     }, {
-      this.outputBus = params['outputBus'];
+      if (params['outputBus'] == nil, {
+        this.outputBus = 0;
+      }, {
+        this.outputBus = params['outputBus'];
+      });
     });
+
     
     this.outputChannel = this.create_output_channel();
 
