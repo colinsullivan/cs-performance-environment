@@ -10,7 +10,6 @@
 
 import _ from 'lodash';
 import {combineReducers} from 'redux'
-import abletonLinkRedux from "abletonlink-redux"
 import awakeningSequencers from "awakening-sequencers"
 import supercolliderRedux from "supercollider-redux"
 
@@ -65,7 +64,6 @@ function create_synkopater_component (id, ampSlider, bus) {
 
 export function create_default_state () {
   let initialState = {
-    abletonlink: abletonLinkRedux.create_default_state(),
     sequencers: {
       'synkopaterA': create_synkopater_sequencer(
         'synkopaterA',
@@ -224,7 +222,6 @@ function components (state = {}, action) {
 
 
 export default combineReducers({
-  [abletonLinkRedux.DEFAULT_MOUNT_POINT]: abletonLinkRedux.reducer,
   [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
   controllers: controllers,
   sequencers: sequencers,

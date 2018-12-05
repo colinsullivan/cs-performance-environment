@@ -3,29 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "abletonlink-redux": "0.0.7",
-    "awakening-sequencers": "^0.8.0",
+    "@material-ui/core": "^3.6.1",
+    "@material-ui/icons": "^3.0.1",
+    "awakening-sequencers": "^0.8.8",
     "bootstrap": "^3.3.7",
     "easymidi": "0.0.4",
-    "lodash": "^4.17.4",
-    "material-ui": "^1.0.0-beta.25",
-    "material-ui-icons": "^1.0.0-beta.17",
+    "lodash": "^4.17.11",
+    "node-osc": "^3.0.0",
     "note-parser": "^2.0.1",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-redux": "^5.0.6",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-redux": "^5.1.1",
     "react-scripts": "1.0.14",
     "supercolliderjs": "^0.14.2"
   },
   "main": "src/start_electron.js",
   "scripts": {
     "start_react": "react-scripts start",
-    "build": "react-scripts build",
+    "build_react": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start_electron": "NODE_ENV=development electron -r babel-register .",
+    "start_electron": "NODE_ENV=development electron -r @babel/register .",
     "rebuild_electron": "electron-rebuild",
-    "build_electron": "babel --out-dir ./build/ src/start_electron.js"
+    "build_electron": "babel --out-dir ./build/ src/start_electron.js",
+    "build": "npm run build_react && npm run build_electron"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -52,7 +53,7 @@
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "targets": {
             "node": "current"
@@ -62,13 +63,13 @@
     ]
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2017": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "electron": "^1.7.10",
-    "electron-react-devtools": "^0.5.2",
-    "electron-rebuild": "^1.6.0"
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/register": "^7.0.0",
+    "electron": "^1.8.8",
+    "electron-react-devtools": "^0.5.3",
+    "electron-rebuild": "^1.8.2"
   },
   "homepage": "./"
 }

@@ -46,7 +46,7 @@ s.waitForBoot({
   mBounds.left = 1440;
   mBounds.top = 900;
   m.window.setTopLeftBounds(mBounds);
-  performanceEnvironment = CSPerformanceEnvironment.new();
+  //performanceEnvironment = CSPerformanceEnvironment.new();
 });
           `).then(resolve);
           

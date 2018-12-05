@@ -10,7 +10,6 @@
 
 import { connect } from 'react-redux';
 import React from 'react';
-import Transport from './Transport';
 import Synkopater from './Synkopater';
 
 
@@ -19,7 +18,6 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <Transport />
         </div>
         <Synkopater sequencerId='synkopaterA'/>
         <Synkopater sequencerId='synkopaterB'/>

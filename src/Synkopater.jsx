@@ -10,11 +10,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Button from 'material-ui/Button';
-import PlayArrow from 'material-ui-icons/PlayArrow';
-import Pause from 'material-ui-icons/Pause';
-import Select from 'material-ui/Select';
-import TextField from 'material-ui/TextField';
+import Button from '@material-ui/core/Button';
+import PlayArrow from '@material-ui/icons/PlayArrow';
+import Pause from '@material-ui/icons/Pause';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 
 
 import awakeningSequencers from 'awakening-sequencers';

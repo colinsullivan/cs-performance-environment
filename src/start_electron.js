@@ -11,10 +11,8 @@
 import { createStore, applyMiddleware } from "redux"
 import SCController from './SCController';
 import SCStoreController from "./SCStoreController"
-import abletonLinkRedux from "abletonlink-redux"
 import awakeningSequencers from "awakening-sequencers"
 import LaunchControlXLDispatcher from './LaunchControlXLDispatcher';
-const AbletonLinkController = abletonLinkRedux.AbletonLinkController;
 
 import rootReducer, {create_default_state} from './reducers';
 import * as actionTypes from './actionTypes'
@@ -161,13 +159,6 @@ scController.boot().then(() => {
     //}
   //});
   
-  console.log("Creating AbletonLinkController...");
-  var abletonLinkController = new AbletonLinkController(
-    store,
-    abletonLinkRedux.DEFAULT_MOUNT_POINT,
-    250
-  );
-
   //var launchControlXLDispatcher = new LaunchControlXLDispatcher(
     //store,
     //'launchcontrol'
