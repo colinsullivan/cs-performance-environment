@@ -12,6 +12,7 @@ CSPerformanceEnvironment {
   var store,
     sequencerFactory,
     componentFactory,
+    clockController,
     randomHarpEnvironment,
     runningWaterEnvironment,
     granularChaosEnvironment,
@@ -25,8 +26,14 @@ CSPerformanceEnvironment {
     arg params;
 
     store = StateStore.getInstance();
+
+    clockController = ReduxTempoClockController.new((
+      store: store
+    ));
+
     sequencerFactory = AwakenedSequencerFactory.getInstance();
     sequencerFactory.setStore(store);
+    sequencerFactory.setClockController(clockController);
 
     componentFactory = PerformanceComponentFactory.getInstance();
     componentFactory.setStore(store);
