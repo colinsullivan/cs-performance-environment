@@ -10,12 +10,14 @@
 
 import { createStore, applyMiddleware } from "redux"
 import SCController from './SCController';
-import SCStoreController from "./SCStoreController"
+import supercolliderRedux from 'supercollider-redux';
 import awakeningSequencers from "awakening-sequencers"
 import LaunchControlXLDispatcher from './LaunchControlXLDispatcher';
 
 import rootReducer, {create_default_state} from './reducers';
 import * as actionTypes from './actionTypes'
+
+const SCStoreController = supercolliderRedux.SCStoreController;
 
 const electron = require('electron')
 // Module to control application life.
@@ -110,7 +112,7 @@ var loggerMiddleware = function ({ getState }) {
 }
 var middleware = [];
 
-//middleware.push(loggerMiddleware);
+middleware.push(loggerMiddleware);
 middleware.push(dispatcherMiddleware);
 
 var store = createStore(

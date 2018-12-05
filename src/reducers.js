@@ -34,7 +34,9 @@ function create_synkopater_sequencer (id, type) {
     arp_mode: ARP_MODES.UP,
     arp_updown_current_direction: 1,
     arp_note_index: 0,
-    numBeats: 4
+    numBeats: 4,
+    playQuant: [4, 4],
+    stopQuant: [4, 4]
   });
 }
 
