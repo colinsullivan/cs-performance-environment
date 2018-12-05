@@ -9,23 +9,25 @@
  **/
 
 SynkopaterOutboardSequencer : AwakenedSequencer {
-  var pat;
+  var pat,
+    last_arp_notes = nil,
+    midinoteProxy;
+
+  initPatch {
+    midinoteProxy = PatternProxy.new;
+    midinoteProxy.quant = currentState.playQuant;
+  }
 
   initStream {
+
+    midinoteProxy.source = Pseq(currentState.arp_notes, inf);
 
     pat = Pbind(
       \type, \midi,
       \midiout, this.midiOut,
       //\midicmd, \noteOn,
       \chan, 0,
-      \midinote, Pfunc({
-        /**
-         *  state.beat increments from 0 to numBeats - 1
-         *  use it to iterate through the arp_notes list
-         **/
-        var state = this.getStateSlice();
-        state.arp_notes[state.arp_note_index];
-      }),
+      \midinote, midinoteProxy,
       // rhythmic values
       \dur, Pfunc({
         this.getStateSlice().dur;
@@ -40,5 +42,15 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
 
     ^pat.asStream();
   }
-}
 
+  handleStateChange {
+    super.handleStateChange();
+
+    if (last_arp_notes != currentState.arp_notes, {
+      last_arp_notes = currentState.arp_notes;
+      midinoteProxy.quant = currentState.playQuant;
+      midinoteProxy.source = Pseq(currentState.arp_notes, inf);
+    });
+
+  }
+}
