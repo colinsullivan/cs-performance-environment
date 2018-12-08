@@ -31,7 +31,8 @@ PerformanceEnvironmentComponent : Object {
     componentState,
     // save state of controllerMappings and rerun mapping method when changed
     controllerMappings,
-    <>store;
+    <>store,
+    <>clockController;
 
   *new {
     arg params;
@@ -48,6 +49,12 @@ PerformanceEnvironmentComponent : Object {
     );
   }
 
+  getComponentState {
+    var state = this.store.getState();
+
+    ^state.components[componentId];
+  }
+
   init {
     arg params;
     var me = this,
@@ -56,13 +63,11 @@ PerformanceEnvironmentComponent : Object {
     componentId = params['componentId'];
 
     this.store = params['store'];
+    this.clockController = params['clockController'];
 
-    state = this.store.getState();
     if ((componentId != nil), {
-      componentState = state.components[componentId];
-      controllerMappings = componentState.controllerMappings;
-      state.subscribe({
-        componentState = state.components[componentId];
+      componentState = this.getComponentState();
+      this.store.subscribe({
         this.handle_state_change();
       });
     });
@@ -117,15 +122,11 @@ PerformanceEnvironmentComponent : Object {
   }
 
   handle_state_change {
-    var state = this.store.getState();
-    // if controller mappings changed
-    if ((componentId != nil) && (state.components != nil), {
-      if (state.components[componentId] != nil, {
-        if (controllerMappings != state.components[componentId].controllerMappings, {
-          controllerMappings = state.components[componentId].controllerMappings;
-          this.init_external_controller_mappings();
-        });
-      });
+    var prevComponentState = componentState;
+    componentState = this.getComponentState();
+    if (controllerMappings != componentState.controllerMappings, {
+      controllerMappings = componentState.controllerMappings;
+      this.init_external_controller_mappings();
     });
   }
 

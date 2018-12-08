@@ -24,8 +24,8 @@ export const ARP_MODES = {
 };
 
 // TODO: move these create methods into a model file
-function create_synkopater_sequencer (id, type) {
-  return Object.assign(awakeningSequencers.create_default_sequencer(id, type), {
+function create_synkopater_sequencer (id, type, midiChan) {
+  return {...awakeningSequencers.create_default_sequencer(id, type), ...{
     dur: 0.5,
     stretch: 1.0,
     legato: 1.0,
@@ -36,8 +36,9 @@ function create_synkopater_sequencer (id, type) {
     arp_note_index: 0,
     numBeats: 4,
     playQuant: [4, 4],
-    stopQuant: [4, 4]
-  });
+    stopQuant: [4, 4],
+    midiChan
+  }};
 }
 
 function create_performance_component (id, type) {
@@ -49,19 +50,21 @@ function create_performance_component (id, type) {
 }
 
 function create_synkopater_component (id, ampSlider, bus) {
-  let comp = create_performance_component(id, 'SynkopaterDelay');
-
-  comp.sequencerId = id;
-  comp.inputBus = bus;
-  comp.outputBus = bus;
-  comp.controllerMappings.launchControl = Object.assign({
-    knl1: 'delayFeedbackControl',
-    knl2: 'delayFactorControl',
-    [ampSlider]: 'ampAndToggleSlider'
-  });
-
-  return comp;
-
+  return {
+    ...create_performance_component(id, 'SynkopaterDelay'),
+    ...{
+      sequencerId: id,
+      inputBus: bus,
+      outputBus: bus,
+      controllerMappings: {
+        launchControl: {
+          knl1: 'delayFeedbackControl',
+          knl2: 'delayFactorControl',
+          [ampSlider]: 'ampAndToggleSlider'
+        }
+      }
+    }
+  };
 }
 
 export function create_default_state () {
@@ -69,16 +72,18 @@ export function create_default_state () {
     sequencers: {
       'synkopaterA': create_synkopater_sequencer(
         'synkopaterA',
-        'SynkopaterOutboardSequencer'
+        'SynkopaterOutboardSequencer',
+        0
       ),
       'synkopaterB': create_synkopater_sequencer(
         'synkopaterB',
-        'SynkopaterOutboardSequencer'
+        'SynkopaterOutboardSequencer',
+        1
       )
     },
     components: {
-      synkopaterA: create_synkopater_component('synkopaterA', 'sl1', 10),
-      synkopaterB: create_synkopater_component('synkopaterB', 'sl2', 12)
+      synkopaterA: create_synkopater_component('synkopaterA', 'sl1', 12),
+      synkopaterB: create_synkopater_component('synkopaterB', 'sl2', 14)
     }
   };
   Object.assign(initialState.sequencers.synkopaterA, {

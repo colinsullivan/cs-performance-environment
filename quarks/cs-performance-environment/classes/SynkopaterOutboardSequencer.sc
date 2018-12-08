@@ -26,7 +26,7 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
       \type, \midi,
       \midiout, this.midiOut,
       //\midicmd, \noteOn,
-      \chan, 0,
+      \chan, this.getStateSlice().midiChan,
       \midinote, midinoteProxy,
       // rhythmic values
       \dur, Pfunc({

@@ -9,7 +9,8 @@ PerformanceComponentFactory : Object {
   var store,
     bufManager,
     // our list of components (PerformanceComponent instances / subclasses)
-    components;
+    components,
+    clockController;
 
   *new {
     ^super.new.init();
@@ -35,6 +36,11 @@ PerformanceComponentFactory : Object {
     bufManager = theBufManager;
   }
 
+  setClockController {
+    arg theClockController;
+    clockController = theClockController;
+  }
+
   init {
     components = IdentityDictionary.new();
   }
@@ -54,7 +60,8 @@ PerformanceComponentFactory : Object {
           components[componentId] = componentClass.new((
             store: store,
             componentId: componentId,
-            bufManager: bufManager
+            bufManager: bufManager,
+            clockController: clockController
           ));
         });
 

@@ -37,6 +37,7 @@ CSPerformanceEnvironment {
 
     componentFactory = PerformanceComponentFactory.getInstance();
     componentFactory.setStore(store);
+    componentFactory.setClockController(clockController);
 
     randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
       store: store,

@@ -20,7 +20,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   init {
     arg params;
     
-    this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 2, \linear, (1.0 / 4.0)));
+    this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 2, \linear, (1.0 / 16.0)));
     this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
 
     this.ampAndToggleSlider = KrNumberEditor.new(0.0, \amp);
@@ -81,9 +81,9 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
       state;
 
     state = this.store.getState();
-    sequencerId = state.components[componentId].sequencerId;
-    currentBeatsPerSecond = state.abletonlink.bpm * 60.0;
-    sequencerDur = state.sequencers[sequencerId].dur;
+    sequencerId = componentState.sequencerId.asSymbol();
+    currentBeatsPerSecond = this.clockController.clock.tempo;
+    sequencerDur = state.sequencers.at(sequencerId)['dur'];
 
     this.delayPatch.delaySecs.value = (
       this.delayFactorControl.value() * (
