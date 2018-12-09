@@ -49,6 +49,13 @@ PerformanceEnvironmentComponent : Object {
     );
   }
 
+  getComponentStatePath {
+    ^("components." ++ componentId);
+  }
+  getComponentStatePathArray {
+    ^["components", componentId];
+  }
+
   getComponentState {
     var state = this.store.getState();
 
@@ -316,8 +323,8 @@ PerformanceEnvironmentComponent : Object {
       });
 
     });
-  
   }
+
   /**
    *  Map a property of the component (member variable) to a UC-33 controller
    *  knob or slider.
@@ -346,7 +353,6 @@ PerformanceEnvironmentComponent : Object {
       });
 
     });
-  
   }
 
   /**

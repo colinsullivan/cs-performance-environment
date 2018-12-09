@@ -39,7 +39,7 @@ class Synkopater extends React.Component {
     if (e.target.type === 'number') {
       let val = parseFloat(e.target.value);
       if (val && val > 0) {
-        this.props.changeParam(e.target.id, val);
+        this.props.changeSequencerParam(e.target.id, val);
       }
     }
   }
@@ -102,7 +102,7 @@ class Synkopater extends React.Component {
                 id="dur"
                 label="dur"
                 value={this.props.sequencer.dur}
-                onChange={this.handleParamChanged.bind(this)}
+                onChange={this.props.changeSequencerParam}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -113,7 +113,7 @@ class Synkopater extends React.Component {
                 id="stretch"
                 label="stretch"
                 value={this.props.sequencer.stretch}
-                onChange={this.handleParamChanged.bind(this)}
+                onChange={this.props.changeSequencerParam}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -124,7 +124,18 @@ class Synkopater extends React.Component {
                 id="legato"
                 label="legato"
                 value={this.props.sequencer.legato}
-                onChange={this.handleParamChanged.bind(this)}
+                onChange={this.props.changeSequencerParam}
+                type="number"
+                margin="normal"
+                InputProps={numberParams}
+              />
+            </div>
+            <div className="col-xs-2">
+              <TextField
+                id="delayFactor"
+                label="delayFactor"
+                value={this.props.parameters.delayFactor}
+                onChange={this.props.changeInstrumentParam}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -138,7 +149,8 @@ class Synkopater extends React.Component {
 }
 function mapStateToProps (state, ownProps) {
   return {
-    sequencer: state.sequencers[ownProps.sequencerId]    
+    sequencer: state.sequencers[ownProps.sequencerId],
+    parameters: state.components[ownProps.componentId].parameters
   };
 }
 function mapDispatchToProps (dispatch, ownProps) {
@@ -177,10 +189,29 @@ function mapDispatchToProps (dispatch, ownProps) {
         )
       );
     },
-    changeParam: (param, val) => {
+    changeSequencerParam: (e) => {
+      let val = e.target.value;
+      let param = e.target.id;
+      if (e.target.type === 'number') {
+        val = parseFloat(val);
+      }
       dispatch(
-        actions.synkopater_change_param(
+        actions.sequencer_update_param(
           ownProps.sequencerId,
+          param,
+          val
+        )
+      );
+    },
+    changeInstrumentParam: (e) => {
+      let val = e.target.value;
+      let param = e.target.id;
+      if (e.target.type === 'number') {
+        val = parseFloat(val);
+      }
+      dispatch(
+        actions.instrument_parameter_updated(
+          ownProps.componentId,
           param,
           val
         )

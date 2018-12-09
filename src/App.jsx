@@ -19,8 +19,14 @@ class App extends React.Component {
       <div className="container-fluid">
         <div className="row">
         </div>
-        <Synkopater sequencerId='synkopaterA'/>
-        <Synkopater sequencerId='synkopaterB'/>
+        <Synkopater
+          componentId='synkopaterA'
+          sequencerId='synkopaterA'
+        />
+        <Synkopater
+          componentId='synkopaterA'
+          sequencerId='synkopaterB'
+        />
       </div>
     );
   }

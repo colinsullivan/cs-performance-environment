@@ -14,6 +14,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     //<>delayTrack,
     <>delayPatch,
     <>delayFactorControl,
+    <>delayFactorParam,
     <>delayFeedbackControl,
     <>ampAndToggleSlider;
 
@@ -26,6 +27,14 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     this.ampAndToggleSlider = KrNumberEditor.new(0.0, \amp);
 
     super.init(params);
+    
+    this.delayFactorParam = InstrumentParameter.new((
+      store: params['store'],
+      statePath: this.getComponentStatePath() ++ ".parameters.delayFactor",
+      numberEditor: this.delayFactorControl,
+      componentId: this.componentId,
+      parameterId: 'delayFactor'
+    ));
 
   }
 
@@ -136,9 +145,9 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     layout.flow({
       arg layout;
       
-      ArgNameLabel("delayFactor", layout, labelWidth);
-      this.delayFactorControl.gui(layout);
-      layout.startRow();
+      //ArgNameLabel("delayFactor", layout, labelWidth);
+      //this.delayFactorControl.gui(layout);
+      //layout.startRow();
       
       ArgNameLabel("delayFeedback", layout, labelWidth);
       this.delayFeedbackControl.gui(layout);

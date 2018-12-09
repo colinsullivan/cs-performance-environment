@@ -40,9 +40,9 @@ export function synkopater_arp_change_mode (sequencerId, arp_mode) {
   };
 }
 
-export function synkopater_change_param (sequencerId, param, value) {
+export function sequencer_update_param (sequencerId, param, value) {
   return {
-    type: actionTypes.SYNKOPATER_CHANGE_PARAM,
+    type: actionTypes.SEQUENCER_STATE_UPDATED,
     payload: {
       sequencerId,
       param,
@@ -68,6 +68,17 @@ export function midi_controller_init (controllerId, mappings) {
     payload: {
       controllerId,
       mappings
+    }
+  };
+}
+
+export function instrument_parameter_updated (componentId, parameterId, newValue) {
+  return {
+    type: actionTypes.INSTRUMENT_PARAMETER_UPDATED,
+    payload: {
+      componentId,
+      parameterId,
+      newValue
     }
   };
 }

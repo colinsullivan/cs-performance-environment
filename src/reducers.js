@@ -56,6 +56,10 @@ function create_synkopater_component (id, ampSlider, bus) {
       sequencerId: id,
       inputBus: bus,
       outputBus: bus,
+      parameters: {
+        delayFactor: 1.0,
+        delayFeedback: 0.0
+      },
       controllerMappings: {
         launchControl: {
           knl1: 'delayFeedbackControl',
@@ -168,7 +172,7 @@ function sequencers (state, action) {
       
       break;
 
-    case actionTypes.SYNKOPATER_CHANGE_PARAM:
+    case actionTypes.SEQUENCER_STATE_UPDATED:
       seq = Object.assign({}, state[action.payload.sequencerId]);
       seq[action.payload.param] = action.payload.value;
       state[action.payload.sequencerId] = seq;
@@ -224,7 +228,35 @@ function controllers (state = {}, action) {
 }
 
 function components (state = {}, action) {
-  return state;
+  switch (action.type) {
+    case actionTypes.INSTRUMENT_PARAMETER_UPDATED:
+      const payload = action.payload;
+      const instr = state[payload.componentId];
+      if (
+        instr.parameters[payload.parameterId] !== payload.newValue
+      ) {
+        return {
+          ...state,
+          ...{
+          [action.payload.componentId]: {
+            ...state[action.payload.componentId],
+            ...{
+              parameters: {
+                ...state[action.payload.componentId].parameters,
+                ...{
+                  [action.payload.parameterId]: action.payload.newValue
+                }
+              }
+            }
+          }
+        }};
+      } else {
+        return state;
+      }
+    
+    default:
+      return state;
+  }
 }
 
 
