@@ -10,41 +10,61 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from "redux"
+import { Provider } from 'react-redux';
+import axios from 'axios';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-import App from './App.jsx';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from "redux"
+import WebsocketDispatcher from './WebsocketDispatcher';
+import App from './App';
 import rootReducer from './reducers';
 //import registerServiceWorker from './registerServiceWorker';
 
-const electron = window.require('electron');
-const ipcRenderer  = electron.ipcRenderer;
+//const electron = window.require('electron');
+//const ipcRenderer  = electron.ipcRenderer;
 
-var dispatcherMiddleware = store => next => action => {
-  if (!action.fromMain) {
-    ipcRenderer.send('dispatch', action);
-  }
-  return next(action);
-};
+const middleware = [];
+
+let port;
+if (process.env.NODE_ENV === 'development') {
+  port = 3001;
+}
+
+const wsDispatcher = new WebsocketDispatcher({
+  port
+});
+middleware.push(wsDispatcher.middleware);
+
+//var dispatcherMiddleware = store => next => action => {
+  //if (!action.fromMain) {
+    //ipcRenderer.send('dispatch', action);
+  //}
+  //return next(action);
+//};
+
+// get initial state then render
+axios.get(`${window.location.protocol}//${window.location.hostname}:${port}/getState`).then(function (resp) {
+  console.log("resp");
+  console.log(resp);
+});
 var store = createStore(
   rootReducer,
-  ipcRenderer.sendSync('getState'),
-  applyMiddleware(dispatcherMiddleware)
+  //ipcRenderer.sendSync('getState'),
+  applyMiddleware(...middleware)
 );
 
-ReactDOM.render((
-    <Provider store={store}>
-      <App />
-    </Provider>
-), document.getElementById('root'));
+//ReactDOM.render((
+    //<Provider store={store}>
+      //<App />
+    //</Provider>
+//), document.getElementById('root'));
 //registerServiceWorker();
 
-ipcRenderer.on('dispatch', function (e, action) {
-  action.fromMain = true;
-  store.dispatch(action);
-});
+//ipcRenderer.on('dispatch', function (e, action) {
+  //action.fromMain = true;
+  //store.dispatch(action);
+//});
 
 
 //var lastlink = null;

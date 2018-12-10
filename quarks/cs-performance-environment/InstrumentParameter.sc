@@ -8,6 +8,11 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
+/**
+ *  @class        InstrumentParameter
+ *
+ *  @classdesc    Parameter for an instrument, takes state from StateStore.
+ */
 InstrumentParameter : Object {
   var store, // the StateStore
     statePath, // the dot.path to the state to bind to

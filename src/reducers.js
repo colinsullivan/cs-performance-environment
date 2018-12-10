@@ -9,6 +9,7 @@
  **/
 
 import _ from 'lodash';
+import { READY_STATES } from './constants'
 import {combineReducers} from 'redux'
 import awakeningSequencers from "awakening-sequencers"
 import supercolliderRedux from "supercollider-redux"
@@ -259,10 +260,20 @@ function components (state = {}, action) {
   }
 }
 
+export function websocketReadyState (state = READY_STATES.CLOSED, action) {
+  switch (action.type) {
+    case actionTypes.WS_READYSTATE_UPDATE:
+      return action.payload.readyState;
+    default:
+      return state;
+  }
+}
+
 
 export default combineReducers({
   [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
-  controllers: controllers,
-  sequencers: sequencers,
-  components: components
+  controllers,
+  sequencers,
+  components,
+  websocketReadyState
 });

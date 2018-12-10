@@ -8,7 +8,12 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
+import path from 'path';
+import url from 'url';
+import electron from 'electron';
 import { createStore, applyMiddleware } from "redux"
+import express from 'express';
+import expressWebsocket from 'express-ws';
 import SCController from './SCController';
 import supercolliderRedux from 'supercollider-redux';
 import awakeningSequencers from "awakening-sequencers"
@@ -19,15 +24,15 @@ import * as actionTypes from './actionTypes'
 
 const SCStoreController = supercolliderRedux.SCStoreController;
 
-const electron = require('electron')
+//const electron = require('electron');
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 
-const path = require('path')
-const url = require('url')
+//const path = require('path');
+//const url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -137,35 +142,34 @@ scController.boot().then(() => {
   var scStoreController = new SCStoreController(store);
 
   let state = store.getState();
-  //var lastState = {
-    //sequencers: {
-      //outboardTest: {
-        //isReady: state.sequencers.outboardTest.isReady
-      //}
-    //}
-  //};
-
-  //store.subscribe(() => {
-    //let state = store.getState();
-    //let outboardTest = state.sequencers.outboardTest;
-
-    //if (
-      //outboardTest.isReady != lastState.sequencers.outboardTest.isReady
-    //) {
-      //lastState.sequencers.outboardTest.isReady = outboardTest.isReady;
-      //console.log("Queuing outboardTest sequencer...");
-
-      //store.dispatch(
-        //awakeningSequencers.actions.sequencerQueued('outboardTest')
-      //);
-    //}
-  //});
-  
-  //var launchControlXLDispatcher = new LaunchControlXLDispatcher(
-    //store,
-    //'launchcontrol'
-  //);
 }).catch(function (err) {
   console.log("error while starting up...");
   throw err;
-})
+});
+
+const server = express();
+expressWebsocket(server);
+
+if (process.env.NODE_ENV === 'development') {
+  server.use(express.static('public'));
+  server.all('/', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    return next();
+  });
+}
+
+
+server.get('/getState', function (req, res, next) {
+  res.json(store.getState());
+});
+server.ws('/', function (ws, req) {
+  ws.on('message', function (msg) {
+    console.log("msg");
+    console.log(msg);
+  });
+});
+
+if (process.env.NODE_ENV === 'development') {
+  server.listen(3001);
+}

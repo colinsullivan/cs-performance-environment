@@ -82,3 +82,10 @@ export function instrument_parameter_updated (componentId, parameterId, newValue
     }
   };
 }
+
+export function websocketReadyStateChanged (readyState) {
+  return {
+    type: actionTypes.WS_READYSTATE_UPDATE,
+    payload: { readyState }
+  };
+}

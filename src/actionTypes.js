@@ -17,3 +17,4 @@ export const MIDI_CONTROLLER_CC = "MIDI_CONTROLLER_CC";
 // when instrument's parameter is updated from within (via SC's MIDI
 // controller, perhaps)
 export const INSTRUMENT_PARAMETER_UPDATED = "INSTRUMENT_PARAMETER_UPDATED";
+export const WS_READYSTATE_UPDATE = 'WS_READYSTATE_UPDATE';
