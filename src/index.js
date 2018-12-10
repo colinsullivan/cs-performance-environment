@@ -13,6 +13,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from "redux"
 import { Provider } from 'react-redux';
 import axios from 'axios';
+import uuid from 'uuid/v4';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -26,13 +27,15 @@ import rootReducer from './reducers';
 
 const middleware = [];
 
+const clientId = uuid();
 let port;
 if (process.env.NODE_ENV === 'development') {
   port = 3001;
 }
 
 const wsDispatcher = new WebsocketDispatcher({
-  port
+  port,
+  clientId
 });
 middleware.push(wsDispatcher.middleware);
 
@@ -44,21 +47,24 @@ middleware.push(wsDispatcher.middleware);
 //};
 
 // get initial state then render
-axios.get(`${window.location.protocol}//${window.location.hostname}:${port}/getState`).then(function (resp) {
-  console.log("resp");
-  console.log(resp);
+axios.get(
+  `${window.location.protocol}//${window.location.hostname}:${port}/getState`
+).then(function (resp) {
+  const initialState = resp.data;
+  const store = createStore(
+    rootReducer,
+    initialState,
+    applyMiddleware(...middleware)
+  );
+  wsDispatcher.setStore(store);
+  ReactDOM.render((
+      <Provider store={store}>
+        <App />
+      </Provider>
+  ), document.getElementById('root'));
 });
-var store = createStore(
-  rootReducer,
-  //ipcRenderer.sendSync('getState'),
-  applyMiddleware(...middleware)
-);
 
-//ReactDOM.render((
-    //<Provider store={store}>
-      //<App />
-    //</Provider>
-//), document.getElementById('root'));
+
 //registerServiceWorker();
 
 //ipcRenderer.on('dispatch', function (e, action) {

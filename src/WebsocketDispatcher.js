@@ -5,7 +5,7 @@
  *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
  *
  *  @copyright  2018 Colin Sullivan
- *  @license    Licensed under the MIT license.
+ *  @license    Licensed under the GPLv3 license.
  **/
 
 import { websocketReadyStateChanged } from './actions';
@@ -19,7 +19,10 @@ import { websocketReadyStateChanged } from './actions';
 class WebsocketDispatcher {
   constructor(props) {
 
-    this.url = `ws://${window.location.hostname}:${props.port}`;
+    this.props = props;
+    this.url = (
+      `ws://${window.location.hostname}:${props.port}/${props.clientId}`
+    );
     this.store = null;
     this.ws = null;
 
@@ -45,9 +48,15 @@ class WebsocketDispatcher {
    **/
   handle_middleware (store, next, action) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify({
-        action
-      }));
+      // only send actions originating here
+      if (!action.clientId) {
+        this.ws.send(JSON.stringify({
+            ...action,
+            ...{
+              clientId: this.props.clientId
+            }
+        }));
+      }
     }
     return next(action);
   }
@@ -66,16 +75,17 @@ class WebsocketDispatcher {
    *  When a new message comes in, if it is an action, dispatch that action.
    **/
   handle_message (message) {
-    let msgObj = JSON.parse(message.data);
-
-    if (msgObj && msgObj.hasOwnProperty('action')) {
-      this.store.dispatch(msgObj.action);
+    let action = JSON.parse(message.data);
+    // ignore actions just dispatched from this client
+    if (!action.clientId || action.clientId !== this.props.clientId) {
+      this.store.dispatch(action);
     }
   }
 
   update_readystate () {
     this.store.dispatch(websocketReadyStateChanged(
-        this.ws.readyState
+        this.ws.readyState,
+        this.props.clientId
     ));
   }
 

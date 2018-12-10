@@ -18,6 +18,7 @@ import SCController from './SCController';
 import supercolliderRedux from 'supercollider-redux';
 import awakeningSequencers from "awakening-sequencers"
 import LaunchControlXLDispatcher from './LaunchControlXLDispatcher';
+import WebsocketServerDispatcher from './WebsocketServerDispatcher';
 
 import rootReducer, {create_default_state} from './reducers';
 import * as actionTypes from './actionTypes'
@@ -40,12 +41,12 @@ let mainWindow;
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 1440, height: 900})
 
   // and load the index.html of the app.
   if (process.env.NODE_ENV == "development") {
     console.log("development");
-    mainWindow.loadURL("http://localhost:3000");
+    mainWindow.loadURL("http://cosmic-compersion.local:3000");
   } else {
     mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, 'index.html'),
@@ -55,7 +56,7 @@ function createWindow () {
   }
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -91,34 +92,33 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
-var dispatcherMiddleware = store => next => action => {
-  if (!action.fromRenderer) {
-    if (mainWindow) {
-      mainWindow.webContents.send('dispatch', action);
-    }
-  }
-  let result = next(action);
-  return result;
+//var dispatcherMiddleware = store => next => action => {
+  //if (!action.fromRenderer) {
+    //if (mainWindow) {
+      //mainWindow.webContents.send('dispatch', action);
+    //}
+  //}
+  //let result = next(action);
+  //return result;
+//};
+var loggerMiddleware = store => next => action => {
+  console.log('will dispatch', action)
+
+  // Call the next dispatch method in the middleware chain.
+  let returnValue = next(action)
+
+  console.log('state after dispatch', store.getState())
+
+  // This will likely be the action itself, unless
+  // a middleware further in chain changed it.
+  return returnValue
 };
-var loggerMiddleware = function ({ getState }) {
-  return next => action => {
-    console.log('will dispatch', action)
+var middleware = [wsServerDispatcher.middleware];
 
-    // Call the next dispatch method in the middleware chain.
-    let returnValue = next(action)
-
-    console.log('state after dispatch', getState())
-
-    // This will likely be the action itself, unless
-    // a middleware further in chain changed it.
-    return returnValue
-  }
-}
-var middleware = [];
-
-middleware.push(loggerMiddleware);
-middleware.push(dispatcherMiddleware);
+//middleware.push(loggerMiddleware);
+//middleware.push(dispatcherMiddleware);
 
 var store = createStore(
   rootReducer,
@@ -126,14 +126,14 @@ var store = createStore(
   applyMiddleware(...middleware)
 );
 
-ipcMain.on('getState', function (e) {
-  e.returnValue = store.getState();
-});
+//ipcMain.on('getState', function (e) {
+  //e.returnValue = store.getState();
+//});
 
-ipcMain.on("dispatch", function (e, action) {
-  action.fromRenderer = true;
-  store.dispatch(action);
-});
+//ipcMain.on("dispatch", function (e, action) {
+  //action.fromRenderer = true;
+  //store.dispatch(action);
+//});
 
 console.log("Creating SCController...");
 var scController = new SCController();
@@ -151,23 +151,33 @@ const server = express();
 expressWebsocket(server);
 
 if (process.env.NODE_ENV === 'development') {
-  server.use(express.static('public'));
-  server.all('/', function (req, res, next) {
+  server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    return next();
+    next();
   });
+  server.use(express.static('public'));
 }
 
 
 server.get('/getState', function (req, res, next) {
   res.json(store.getState());
 });
-server.ws('/', function (ws, req) {
+server.ws('/:clientId', function (ws, req) {
+  const clientId = req.params.clientId;
+  //const unsubscribe = store.subscribe(function () {
+    //ws.send(JSON.stringify(store.getState()));
+  //});
+  console.log(`client ${clientId} connected.`);
   ws.on('message', function (msg) {
-    console.log("msg");
-    console.log(msg);
+    const action = JSON.parse(msg);
+    store.dispatch(action);
   });
+  ws.on('close', function () {
+    wsServerDispatcher.removeClient(clientId);
+    //unsubscribe();
+  });
+  wsServerDispatcher.addClient(clientId, ws);
 });
 
 if (process.env.NODE_ENV === 'development') {

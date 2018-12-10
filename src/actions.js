@@ -83,9 +83,9 @@ export function instrument_parameter_updated (componentId, parameterId, newValue
   };
 }
 
-export function websocketReadyStateChanged (readyState) {
+export function websocketReadyStateChanged (readyState, clientId) {
   return {
     type: actionTypes.WS_READYSTATE_UPDATE,
-    payload: { readyState }
+    payload: { readyState, clientId }
   };
 }

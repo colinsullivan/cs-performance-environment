@@ -82,7 +82,7 @@ class Synkopater extends React.Component {
         <div className="col-xs-12">
           <div className="row">
             <div className="col-xs-2">
-              <Button fab mini onClick={playPauseOnClick}>
+              <Button mini onClick={playPauseOnClick}>
                 {playPauseIcon}
               </Button>
             </div>

@@ -19,7 +19,8 @@
     "react-redux": "^5.1.1",
     "react-scripts": "1.0.14",
     "supercollider-redux": "0.0.94",
-    "supercolliderjs": "^0.14.2"
+    "supercolliderjs": "^0.14.2",
+    "uuid": "^3.3.2"
   },
   "main": "src/start_electron.js",
   "scripts": {
