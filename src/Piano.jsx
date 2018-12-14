@@ -29,7 +29,7 @@ const diatonicNoteNames = [
   'b'
 ];
 
-var keyBaseWidth = 1.5;
+var keyBaseWidth = 3;
 var blackKeyBaseWidthRatio = 0.5;
 
 var keyClickHandler = function (e) {
@@ -116,6 +116,9 @@ class BlackPianoKey extends React.Component {
   }
 }
 
+const isWhiteNote = (note) => note.alt === 0;
+const isBlackNote = (note) => note.alt !== 0;
+
 class Piano extends React.Component {
   handleKeyClicked(keyComponent, eventHeight) {
     if (this.props.handleNoteClicked) {
@@ -141,23 +144,26 @@ class Piano extends React.Component {
 
     var containerStyle = {
       height: '6em',
-      border: '1px solid black',
-      position: 'relative'
+      border: '0',
+      position: 'relative',
+      width: '100%',
+      overflowX: 'scroll',
+      overflowY: 'hidden'
     };
     var keyLayerStyle = {
       height: '100%',
+      width: `${notes.filter(isWhiteNote).length * keyBaseWidth}em`,
       position: 'absolute',
       pointerEvents: 'none'
     };
     var blackKeyLayerStyle = Object.assign({
-      left: `${0.5 * keyBaseWidth}em`
+      left: `${blackKeyBaseWidthRatio * keyBaseWidth}em`
     }, keyLayerStyle);
+
     return (
       <div style={containerStyle}>
         <div style={keyLayerStyle}>
-          {notes.filter((note) => {
-            return note.alt === 0;
-          }).map((note, i) => {
+          {notes.filter(isWhiteNote).map((note, i) => {
             let noteIsSelected = this.props.selectedNotes.includes(note.midi);
             let noteIsActive = this.props.activeNotes.includes(note.midi);
             return <WhitePianoKey
@@ -170,9 +176,7 @@ class Piano extends React.Component {
           })}
         </div>
         <div style={blackKeyLayerStyle}>
-          {notes.filter((note) => {
-            return note.alt !== 0;
-          }).map((note, i) => {
+          {notes.filter(isBlackNote).map((note, i) => {
             let noteIsSelected = this.props.selectedNotes.includes(note.midi);
             let noteIsActive = this.props.activeNotes.includes(note.midi);
             return <BlackPianoKey
