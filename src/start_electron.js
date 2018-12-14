@@ -46,7 +46,7 @@ function createWindow () {
   // and load the index.html of the app.
   if (process.env.NODE_ENV == "development") {
     console.log("development");
-    mainWindow.loadURL("http://cosmic-compersion.local:3000");
+    mainWindow.loadURL("http://localhost:3000");
   } else {
     mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, 'index.html'),

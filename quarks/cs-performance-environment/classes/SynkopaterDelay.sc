@@ -14,27 +14,28 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     //<>delayTrack,
     <>delayPatch,
     <>delayFactorControl,
-    <>delayFactorParam,
+    //<>delayFactorParam,
     <>delayFeedbackControl,
-    <>ampAndToggleSlider;
+    <>ampAndToggleSlider,
+    prevSequencerDur;
 
   init {
     arg params;
     
-    this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 2, \linear, (1.0 / 16.0)));
+    this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 8, \linear, (1.0 / 16.0)));
     this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
 
     this.ampAndToggleSlider = KrNumberEditor.new(0.0, \amp);
 
     super.init(params);
     
-    this.delayFactorParam = InstrumentParameter.new((
-      store: params['store'],
-      statePath: this.getComponentStatePath() ++ ".parameters.delayFactor",
-      numberEditor: this.delayFactorControl,
-      componentId: this.componentId,
-      parameterId: 'delayFactor'
-    ));
+    //this.delayFactorParam = InstrumentParameter.new((
+      //store: params['store'],
+      //statePath: this.getComponentStatePath() ++ ".parameters.delayFactor",
+      //numberEditor: this.delayFactorControl,
+      //componentId: this.componentId,
+      //parameterId: 'delayFactor'
+    //));
 
   }
 
@@ -83,22 +84,35 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     inputTrack.play(inputPatch);
   }
 
-  handle_synkopation_control_changed {
-    var currentBeatsPerSecond,
-      sequencerDur,
-      sequencerId,
-      state;
-
-    state = this.store.getState();
-    sequencerId = componentState.sequencerId.asSymbol();
+  update_delay_time {
+    var currentBeatsPerSecond;
     currentBeatsPerSecond = this.clockController.clock.tempo;
-    sequencerDur = state.sequencers.at(sequencerId)['dur'];
-
     this.delayPatch.delaySecs.value = (
-      this.delayFactorControl.value() * (
-        currentBeatsPerSecond * (1 + sequencerDur)
+      componentState.parameters.delayFactor * (
+        currentBeatsPerSecond / prevSequencerDur
       )
     );
+  }
+
+  handle_state_change {
+    var sequencerId,
+      state,
+      sequencerDur,
+      prevComponentState = componentState;
+    super.handle_state_change();
+    
+    sequencerId = componentState.sequencerId.asSymbol();
+    state = this.store.getState();
+    sequencerDur = state.sequencers.at(sequencerId)['dur'];
+
+    if (sequencerDur != prevSequencerDur, {
+      prevSequencerDur = sequencerDur;
+      this.update_delay_time();
+    }, {
+      if (componentState.parameters.delayFactor != prevComponentState.parameters.delayFactor, {
+        this.update_delay_time();    
+      });
+    });
 
   }
 
@@ -111,7 +125,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     
     this.delayFactorControl.action = {
       arg val;
-      me.handle_synkopation_control_changed();
+      me.update_delay_time();
     };
 
     // when amplitude and toggle slider is changed

@@ -24,7 +24,7 @@ class App extends React.Component {
           sequencerId='synkopaterA'
         />
         <Synkopater
-          componentId='synkopaterA'
+          componentId='synkopaterB'
           sequencerId='synkopaterB'
         />
       </div>

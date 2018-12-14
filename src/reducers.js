@@ -239,18 +239,19 @@ function components (state = {}, action) {
         return {
           ...state,
           ...{
-          [action.payload.componentId]: {
-            ...state[action.payload.componentId],
-            ...{
-              parameters: {
-                ...state[action.payload.componentId].parameters,
-                ...{
-                  [action.payload.parameterId]: action.payload.newValue
+            [payload.componentId]: {
+              ...instr,
+              ...{
+                parameters: {
+                  ...instr.parameters,
+                  ...{
+                    [payload.parameterId]: payload.newValue
+                  }
                 }
               }
             }
           }
-        }};
+        };
       } else {
         return state;
       }
