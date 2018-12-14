@@ -35,8 +35,9 @@ function create_synkopater_sequencer (id, type, midiChan) {
     arpMode: ARP_MODES.UP,
     //arp_updown_current_direction: 1,
     //arp_note_index: 0,
-    numBeats: 4,
+    //numBeats: 4,
     euclideanNumHits: 4,
+    euclideanTotalNumHits: 4,
     playQuant: [4, 4],
     stopQuant: [4, 4],
     midiChan
@@ -117,7 +118,7 @@ function sequencers (state, action) {
       seq = Object.assign({}, state[action.payload.sequencerId]);
 
       seq.notes = _.without(seq.notes, action.payload.note);
-      seq.numBeats = seq.notes.length;
+      //seq.numBeats = seq.notes.length;
 
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
@@ -130,7 +131,7 @@ function sequencers (state, action) {
         0,
         action.payload.note
       );
-      seq.numBeats = seq.notes.length;
+      //seq.numBeats = seq.notes.length;
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
       break;

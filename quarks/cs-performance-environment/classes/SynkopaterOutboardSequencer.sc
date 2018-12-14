@@ -10,7 +10,10 @@
 
 SynkopaterOutboardSequencer : AwakenedSequencer {
   var pat,
-    lastNotes = nil,
+    notes = nil,
+    euclideanNumHits = nil,
+    euclideanTotalNumHits = nil,
+    dur = nil,
     midinoteProxy,
     durProxy;
 
@@ -32,9 +35,7 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
       \chan, this.getStateSlice().midiChan,
       \midinote, midinoteProxy,
       // rhythmic values
-      \dur, Pfunc({
-        this.getStateSlice().dur;
-      }),
+      \dur, durProxy,
       \stretch, Pfunc({
         this.getStateSlice().stretch;
       }),
@@ -49,11 +50,31 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
   handleStateChange {
     super.handleStateChange();
 
-    if (lastNotes != currentState.notes, {
-      lastNotes = currentState.notes;
+    if (notes != currentState.notes, {
+      notes = currentState.notes;
       midinoteProxy.quant = currentState.playQuant;
       midinoteProxy.source = Pseq(currentState.notes, inf);
     });
+
+    if ((
+      euclideanNumHits != currentState.euclideanNumHits
+    ).or(
+      euclideanTotalNumHits != currentState.euclideanTotalNumHits
+    ).or(
+      dur != currentState.dur
+    ), {
+      euclideanNumHits = currentState.euclideanNumHits;
+      euclideanTotalNumHits = currentState.euclideanTotalNumHits;
+      dur = currentState.dur;
+      durProxy.quant = currentState.playQuant;
+      durProxy.source = dur * Pbjorklund2.new(
+        euclideanNumHits,
+        euclideanTotalNumHits,
+        inf
+      );
+
+    });
+
 
   }
 }

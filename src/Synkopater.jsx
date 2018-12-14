@@ -141,6 +141,28 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
+            <div className="col-xs-2">
+              <TextField
+                id="euclideanNumHits"
+                label="euclideanNumHits"
+                value={this.props.sequencer.euclideanNumHits}
+                onChange={this.props.changeSequencerParam}
+                type="number"
+                margin="normal"
+                InputProps={numberParams}
+              />
+            </div>
+            <div className="col-xs-2">
+              <TextField
+                id="euclideanTotalNumHits"
+                label="euclideanTotalNumHits"
+                value={this.props.sequencer.euclideanTotalNumHits}
+                onChange={this.props.changeSequencerParam}
+                type="number"
+                margin="normal"
+                InputProps={numberParams}
+              />
+            </div>
           </div>
         </div>
       </div>
