@@ -195,13 +195,15 @@ function mapDispatchToProps (dispatch, ownProps) {
       if (e.target.type === 'number') {
         val = parseFloat(val);
       }
-      dispatch(
-        actions.sequencer_update_param(
-          ownProps.sequencerId,
-          param,
-          val
-        )
-      );
+      if (!isNaN(val)) {
+        dispatch(
+          actions.sequencer_update_param(
+            ownProps.sequencerId,
+            param,
+            val
+          )
+        );
+      }
     },
     changeInstrumentParam: (e) => {
       let val = e.target.value;
@@ -209,13 +211,15 @@ function mapDispatchToProps (dispatch, ownProps) {
       if (e.target.type === 'number') {
         val = parseFloat(val);
       }
-      dispatch(
-        actions.instrument_parameter_updated(
-          ownProps.componentId,
-          param,
-          val
-        )
-      );
+      if (!isNaN(val)) {
+        dispatch(
+          actions.instrument_parameter_updated(
+            ownProps.componentId,
+            param,
+            val
+          )
+        );
+      }
     }
   };
 }
