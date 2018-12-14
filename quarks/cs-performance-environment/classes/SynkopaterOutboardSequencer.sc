@@ -10,17 +10,20 @@
 
 SynkopaterOutboardSequencer : AwakenedSequencer {
   var pat,
-    last_arp_notes = nil,
-    midinoteProxy;
+    lastNotes = nil,
+    midinoteProxy,
+    durProxy;
 
   initPatch {
     midinoteProxy = PatternProxy.new;
     midinoteProxy.quant = currentState.playQuant;
+    durProxy = PatternProxy.new;
+    durProxy.quant = currentState.playQuant;
   }
 
   initStream {
 
-    midinoteProxy.source = Pseq(currentState.arp_notes, inf);
+    midinoteProxy.source = Pseq(currentState.notes, inf);
 
     pat = Pbind(
       \type, \midi,
@@ -46,10 +49,10 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
   handleStateChange {
     super.handleStateChange();
 
-    if (last_arp_notes != currentState.arp_notes, {
-      last_arp_notes = currentState.arp_notes;
+    if (lastNotes != currentState.notes, {
+      lastNotes = currentState.notes;
       midinoteProxy.quant = currentState.playQuant;
-      midinoteProxy.source = Pseq(currentState.arp_notes, inf);
+      midinoteProxy.source = Pseq(currentState.notes, inf);
     });
 
   }

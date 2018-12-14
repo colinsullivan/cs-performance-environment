@@ -26,7 +26,7 @@ const PLAYING_STATES = awakeningSequencers.PLAYING_STATES;
 
 class Synkopater extends React.Component {
   handleNoteClicked (note, height) {
-    if (this.props.sequencer.arp_notes.includes(note.midi)) {
+    if (this.props.sequencer.notes.includes(note.midi)) {
       this.props.removeNote(note.midi);
     } else {
       this.props.addNote(note.midi);
@@ -47,7 +47,7 @@ class Synkopater extends React.Component {
 
     var playPauseIcon;
     var playPauseOnClick;
-    var selectedNotes = this.props.sequencer.arp_notes;
+    var selectedNotes = this.props.sequencer.notes;
     var activeNotes = [];
     var numberParams = {
       inputProps: {
@@ -89,7 +89,7 @@ class Synkopater extends React.Component {
             <div className="col-xs-2">
 							<Select
 								native
-								value={this.props.sequencer.arp_mode}
+								value={this.props.sequencer.arpMode}
 								onChange={this.handleModeChange.bind(this)}
 							>
                 {Object.keys(ARP_MODES).map((arpMode) => {

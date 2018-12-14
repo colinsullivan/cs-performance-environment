@@ -30,12 +30,13 @@ function create_synkopater_sequencer (id, type, midiChan) {
     dur: 0.5,
     stretch: 1.0,
     legato: 1.0,
-    arp_notes: [96, 84, 86, 87],
-    arp_vels: [1.0, 1.0, 1.0, 1.0],
-    arp_mode: ARP_MODES.UP,
-    arp_updown_current_direction: 1,
-    arp_note_index: 0,
+    notes: [96, 84, 86, 87],
+    //arp_vels: [1.0, 1.0, 1.0, 1.0],
+    arpMode: ARP_MODES.UP,
+    //arp_updown_current_direction: 1,
+    //arp_note_index: 0,
     numBeats: 4,
+    euclideanNumHits: 4,
     playQuant: [4, 4],
     stopQuant: [4, 4],
     midiChan
@@ -115,8 +116,8 @@ function sequencers (state, action) {
     case actionTypes.SYNKOPATER_ARP_REMOVE_NOTE:
       seq = Object.assign({}, state[action.payload.sequencerId]);
 
-      seq.arp_notes = _.without(seq.arp_notes, action.payload.note);
-      seq.numBeats = seq.arp_notes.length;
+      seq.notes = _.without(seq.notes, action.payload.note);
+      seq.numBeats = seq.notes.length;
 
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
@@ -124,54 +125,54 @@ function sequencers (state, action) {
 
     case actionTypes.SYNKOPATER_ARP_ADD_NOTE:
       seq = Object.assign({}, state[action.payload.sequencerId]);
-      seq.arp_notes.splice(
-        _.sortedIndex(seq.arp_notes, action.payload.note),
+      seq.notes.splice(
+        _.sortedIndex(seq.notes, action.payload.note),
         0,
         action.payload.note
       );
-      seq.numBeats = seq.arp_notes.length;
+      seq.numBeats = seq.notes.length;
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
       break;
 
     case actionTypes.SYNKOPATER_ARP_CHANGE_MODE:
       seq = Object.assign({}, state[action.payload.sequencerId]);
-      seq.arp_mode = action.payload.arp_mode;
+      seq.arpMode = action.payload.arpMode;
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
       break;
 
-    case supercolliderRedux.actionTypes.SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT:
-      seq = Object.assign({}, state[action.payload.id]);
-      if (action.payload.id === seq.sequencerId) {
-        switch (seq.arp_mode) {
-          case ARP_MODES.UP:
-            seq.arp_note_index = seq.beat;
-            break;
+    //case supercolliderRedux.actionTypes.SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT:
+      //seq = Object.assign({}, state[action.payload.id]);
+      //if (action.payload.id === seq.sequencerId) {
+        //switch (seq.arpMode) {
+          //case ARP_MODES.UP:
+            //seq.arp_note_index = seq.beat;
+            //break;
 
-          case ARP_MODES.DOWN:
-            seq.arp_note_index = seq.numBeats - 1 - seq.beat;
-            break;
+          //case ARP_MODES.DOWN:
+            //seq.arp_note_index = seq.numBeats - 1 - seq.beat;
+            //break;
 
-          case ARP_MODES.UPDOWN:
-            if (seq.arp_note_index === seq.numBeats - 1) {
-              seq.arp_updown_current_direction = -1;
-            } else if (seq.arp_note_index === 0) {
-              seq.arp_updown_current_direction = 1;
-            }
-            seq.arp_note_index += seq.arp_updown_current_direction;
+          //case ARP_MODES.UPDOWN:
+            //if (seq.arp_note_index === seq.numBeats - 1) {
+              //seq.arp_updown_current_direction = -1;
+            //} else if (seq.arp_note_index === 0) {
+              //seq.arp_updown_current_direction = 1;
+            //}
+            //seq.arp_note_index += seq.arp_updown_current_direction;
 
-            break;
+            //break;
           
-          default:
-            break;
+          //default:
+            //break;
           
-        }
-        state[seq.sequencerId] = seq;
-        state = Object.assign({}, state);
-      }
+        //}
+        //state[seq.sequencerId] = seq;
+        //state = Object.assign({}, state);
+      //}
       
-      break;
+      //break;
 
     case actionTypes.SEQUENCER_STATE_UPDATED:
       seq = Object.assign({}, state[action.payload.sequencerId]);
