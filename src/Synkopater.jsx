@@ -10,7 +10,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import * as _ from 'lodash';
 import Button from '@material-ui/core/Button';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import Pause from '@material-ui/icons/Pause';
@@ -21,25 +20,12 @@ import TextField from '@material-ui/core/TextField';
 import awakeningSequencers from 'awakening-sequencers';
 import * as actions from './actions';
 import { ARP_MODES } from './reducers';
-import Piano from './Piano';
+import SynkopaterPiano from './SynkopaterPiano.jsx';
 
 const PLAYING_STATES = awakeningSequencers.PLAYING_STATES;
 
 
 class Synkopater extends React.Component {
-  handleNoteClicked (note, height) {
-    if (this.props.sequencer.notes.includes(note.midi)) {
-      this.props.changeSequencerParam('notes', _.without(
-          this.props.sequencer.notes,
-          note.midi
-      ));
-    } else {
-      this.props.changeSequencerParam('notes', _.concat(
-          this.props.sequencer.notes,
-          note.midi
-      ));
-    }
-  }
   handleModeChange (e) {
     this.props.changeMode(e.target.value);
   }
@@ -59,7 +45,6 @@ class Synkopater extends React.Component {
 
     var playPauseIcon;
     var playPauseOnClick;
-    var selectedNotes = this.props.sequencer.notes;
     var activeNotes = [];
     var numberParams = {
       inputProps: {
@@ -83,12 +68,9 @@ class Synkopater extends React.Component {
     return (
       <div className="row">
         <div className="col-xs-12">
-          <Piano
-            handleNoteClicked={this.handleNoteClicked.bind(this)}
-            startingOctave={3}
-            numOctaves={8}
-            selectedNotes={selectedNotes}
-            activeNotes={activeNotes}
+          <SynkopaterPiano
+            sequencerId={this.props.sequencerId}
+            keyBaseWidth={1.5}
           />
         </div>
         <div className="col-xs-12">

@@ -1,9 +1,20 @@
 import React from 'react';
 
+import TouchSynkopater from './TouchSynkopater';
+
 class TabletView extends React.Component {
   render() {
     return (
-      <div><p>hello</p></div>
+      <div>
+        <TouchSynkopater
+          componentId='synkopaterA'
+          sequencerId='synkopaterA'
+        />
+        <TouchSynkopater
+          componentId='synkopaterB'
+          sequencerId='synkopaterB'
+        />
+      </div>
     );
   }
 };
