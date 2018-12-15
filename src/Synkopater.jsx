@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import * as _ from 'lodash';
 import Button from '@material-ui/core/Button';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import Pause from '@material-ui/icons/Pause';
@@ -24,23 +25,34 @@ import Piano from './Piano';
 
 const PLAYING_STATES = awakeningSequencers.PLAYING_STATES;
 
+
 class Synkopater extends React.Component {
   handleNoteClicked (note, height) {
     if (this.props.sequencer.notes.includes(note.midi)) {
-      this.props.removeNote(note.midi);
+      this.props.changeSequencerParam('notes', _.without(
+          this.props.sequencer.notes,
+          note.midi
+      ));
     } else {
-      this.props.addNote(note.midi);
+      this.props.changeSequencerParam('notes', _.concat(
+          this.props.sequencer.notes,
+          note.midi
+      ));
     }
   }
   handleModeChange (e) {
     this.props.changeMode(e.target.value);
   }
-  handleParamChanged (e) {
-    if (e.target.type === 'number') {
-      let val = parseFloat(e.target.value);
-      if (val && val > 0) {
-        this.props.changeSequencerParam(e.target.id, val);
-      }
+  handleFloatSequencerParamChanged (e) {
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val)) {
+      this.props.changeSequencerParam(e.target.id, val);
+    }
+  }
+  handleFloatInstrParamChanged (e) {
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val)) {
+      this.props.changeInstrumentParam(e.target.id, val);
     }
   }
   render () {
@@ -102,7 +114,7 @@ class Synkopater extends React.Component {
                 id="dur"
                 label="dur"
                 value={this.props.sequencer.dur}
-                onChange={this.props.changeSequencerParam}
+                onChange={this.props.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -113,7 +125,7 @@ class Synkopater extends React.Component {
                 id="stretch"
                 label="stretch"
                 value={this.props.sequencer.stretch}
-                onChange={this.props.changeSequencerParam}
+                onChange={this.props.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -124,7 +136,7 @@ class Synkopater extends React.Component {
                 id="legato"
                 label="legato"
                 value={this.props.sequencer.legato}
-                onChange={this.props.changeSequencerParam}
+                onChange={this.props.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -146,7 +158,7 @@ class Synkopater extends React.Component {
                 id="euclideanNumHits"
                 label="euclideanNumHits"
                 value={this.props.sequencer.euclideanNumHits}
-                onChange={this.props.changeSequencerParam}
+                onChange={this.props.handleFloatInstrParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -157,7 +169,7 @@ class Synkopater extends React.Component {
                 id="euclideanTotalNumHits"
                 label="euclideanTotalNumHits"
                 value={this.props.sequencer.euclideanTotalNumHits}
-                onChange={this.props.changeSequencerParam}
+                onChange={this.props.handleFloatInstrParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -211,37 +223,23 @@ function mapDispatchToProps (dispatch, ownProps) {
         )
       );
     },
-    changeSequencerParam: (e) => {
-      let val = e.target.value;
-      let param = e.target.id;
-      if (e.target.type === 'number') {
-        val = parseFloat(val);
-      }
-      if (!isNaN(val)) {
-        dispatch(
-          actions.sequencer_update_param(
-            ownProps.sequencerId,
-            param,
-            val
-          )
-        );
-      }
+    changeSequencerParam: (param, val) => {
+      dispatch(
+        actions.sequencer_update_param(
+          ownProps.sequencerId,
+          param,
+          val
+        )
+      );
     },
-    changeInstrumentParam: (e) => {
-      let val = e.target.value;
-      let param = e.target.id;
-      if (e.target.type === 'number') {
-        val = parseFloat(val);
-      }
-      if (!isNaN(val)) {
-        dispatch(
-          actions.instrument_parameter_updated(
-            ownProps.componentId,
-            param,
-            val
-          )
-        );
-      }
+    changeInstrumentParam: (param, val) => {
+      dispatch(
+        actions.instrument_parameter_updated(
+          ownProps.componentId,
+          param,
+          val
+        )
+      );
     }
   };
 }

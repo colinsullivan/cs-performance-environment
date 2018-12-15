@@ -29,21 +29,29 @@ const diatonicNoteNames = [
   'b'
 ];
 
-var keyBaseWidth = 3;
-var blackKeyBaseWidthRatio = 0.5;
 
-var keyClickHandler = function (e) {
+var keyClickHandler = function (e, note, handler) {
   var keyHeight = e.target.clientHeight;
   var clickHeight = e.nativeEvent.offsetY;
 
   var clickHeightPercent = 1.0 - (clickHeight / keyHeight);
 
-  this.props.handleKeyClicked(this, clickHeightPercent);
+  handler(note, clickHeightPercent);
 };
 
 class WhitePianoKey extends React.Component {
-  render () {
-    var containerStyle = {
+  render() {
+    const {
+      note,
+      handleKeyClicked,
+      selected,
+      active,
+      keyBaseWidth,
+      selectedColor = 'green',
+      activeColor = 'pink'
+    } = this.props;
+
+    const containerStyle = {
       borderRight: '1px solid black',
       borderBottom: 'none',
       position: 'relative',
@@ -54,27 +62,39 @@ class WhitePianoKey extends React.Component {
       pointerEvents: 'all'
     };
 
-    if (this.props.selected || this.props.active) {
-      if (this.props.selected) {
-        containerStyle.backgroundColor = this.props.selectedColor || 'green';
+    if (selected || active) {
+      if (selected) {
+        containerStyle.backgroundColor = selectedColor || 'green';
       }
 
-      if (this.props.active) {
-        containerStyle.backgroundColor = this.props.activeColor || 'pink';
+      if (active) {
+        containerStyle.backgroundColor = activeColor || 'pink';
       }
     }
 
-
     return (
-      <div style={containerStyle} onClick={keyClickHandler.bind(this)}>
+      <div
+        style={containerStyle}
+        onClick={(e) => keyClickHandler(e, note, handleKeyClicked)}
+      >
       </div>
-    )
+    );
   }
-}
+};
 
 class BlackPianoKey extends React.Component {
-  render () {
-
+  render() {
+    const {
+      note,
+      index,
+      handleKeyClicked,
+      selected,
+      active,
+      blackKeyBaseWidthRatio,
+      keyBaseWidth,
+      selectedColor='green',
+      activeColor='pink'
+    } = this.props;
     var containerStyle = {
       backgroundColor: 'black',
       width: `${blackKeyBaseWidthRatio * keyBaseWidth}em`,
@@ -85,21 +105,21 @@ class BlackPianoKey extends React.Component {
       //position: 'relative'
     };
 
-    if (this.props.selected || this.props.active) {
+    if (selected || active) {
       containerStyle.border = '1px solid black';
-      
-      if (this.props.selected) {
-        containerStyle.backgroundColor = this.props.selectedColor || 'green';
+
+      if (selected) {
+        containerStyle.backgroundColor = selectedColor || 'green';
       }
 
-      if (this.props.active) {
-        containerStyle.backgroundColor = this.props.activeColor || 'pink';
+      if (active) {
+        containerStyle.backgroundColor = activeColor || 'pink';
       }
     }
-    
 
-    if (this.props.index > 0) {
-      if ([1, 6].includes(this.props.note.chroma)) {
+
+    if (index > 0) {
+      if ([1, 6].includes(note.chroma)) {
         containerStyle.marginLeft = `${blackKeyBaseWidthRatio * keyBaseWidth + keyBaseWidth}em`;
       } else {
         containerStyle.marginLeft = `${blackKeyBaseWidthRatio * keyBaseWidth}em`;
@@ -110,39 +130,47 @@ class BlackPianoKey extends React.Component {
 
 
     return (
-      <div style={containerStyle} onClick={keyClickHandler.bind(this)}>
+      <div
+        style={containerStyle}
+        onClick={(e) => keyClickHandler(e, note, handleKeyClicked)}
+      >
       </div>
     );
   }
-}
+};
 
 const isWhiteNote = (note) => note.alt === 0;
 const isBlackNote = (note) => note.alt !== 0;
 
 class Piano extends React.Component {
-  handleKeyClicked(keyComponent, eventHeight) {
+  handleKeyClicked(note, eventHeight) {
     if (this.props.handleNoteClicked) {
-      this.props.handleNoteClicked(keyComponent.props.note, eventHeight);
+      this.props.handleNoteClicked(note, eventHeight);
     }
   }
   render () {
     var notes = [];
 
-    var startingOctave = this.props.startingOctave || 3;
-    var numOctaves = this.props.numOctaves || 3;
+    const {
+      startingOctave = 3,
+      numOctaves = 3,
+      keyBaseWidth = 1.5
+    } = this.props;
+
 
     // TODO: This could probably be done once for all notes
     let oi;
     for (oi = startingOctave; oi < startingOctave + numOctaves; oi++) {
       let ni;
       for (ni = 0; ni < diatonicNoteNames.length; ni++) {
-        let noteName = `${diatonicNoteNames[ni]}${oi}`;
-        let note = parseNote(noteName);
+        const noteName = `${diatonicNoteNames[ni]}${oi}`;
+        const note = parseNote(noteName);
         notes.push(note);
       }
     }
 
-    var containerStyle = {
+    const blackKeyBaseWidthRatio = 0.5;
+    const containerStyle = {
       height: '6em',
       border: '0',
       position: 'relative',
@@ -150,13 +178,13 @@ class Piano extends React.Component {
       overflowX: 'scroll',
       overflowY: 'hidden'
     };
-    var keyLayerStyle = {
+    const keyLayerStyle = {
       height: '100%',
       width: `${notes.filter(isWhiteNote).length * keyBaseWidth}em`,
       position: 'absolute',
       pointerEvents: 'none'
     };
-    var blackKeyLayerStyle = Object.assign({
+    const blackKeyLayerStyle = Object.assign({
       left: `${blackKeyBaseWidthRatio * keyBaseWidth}em`
     }, keyLayerStyle);
 
@@ -164,21 +192,22 @@ class Piano extends React.Component {
       <div style={containerStyle}>
         <div style={keyLayerStyle}>
           {notes.filter(isWhiteNote).map((note, i) => {
-            let noteIsSelected = this.props.selectedNotes.includes(note.midi);
-            let noteIsActive = this.props.activeNotes.includes(note.midi);
+            const noteIsSelected = this.props.selectedNotes.includes(note.midi);
+            const noteIsActive = this.props.activeNotes.includes(note.midi);
             return <WhitePianoKey
               note={note}
               key={i}
               handleKeyClicked={this.handleKeyClicked.bind(this)}
               selected={noteIsSelected}
               active={noteIsActive}
+              keyBaseWidth={keyBaseWidth}
             />;
           })}
         </div>
         <div style={blackKeyLayerStyle}>
           {notes.filter(isBlackNote).map((note, i) => {
-            let noteIsSelected = this.props.selectedNotes.includes(note.midi);
-            let noteIsActive = this.props.activeNotes.includes(note.midi);
+            const noteIsSelected = this.props.selectedNotes.includes(note.midi);
+            const noteIsActive = this.props.activeNotes.includes(note.midi);
             return <BlackPianoKey
               note={note}
               key={i}
@@ -186,6 +215,8 @@ class Piano extends React.Component {
               handleKeyClicked={this.handleKeyClicked.bind(this)}
               selected={noteIsSelected}
               active={noteIsActive}
+              keyBaseWidth={keyBaseWidth}
+              blackKeyBaseWidthRatio={blackKeyBaseWidthRatio}
             />;
           })}
         </div>

@@ -10,24 +10,20 @@
 
 import { connect } from 'react-redux';
 import React from 'react';
-import Synkopater from './Synkopater';
+import { BrowserRouter, Route } from 'react-router-dom';
+import TabletView from './TabletView';
+import LaptopView from './LaptopView';
 
 
 class App extends React.Component {
   render() {
     return (
-      <div className="container-fluid">
-        <div className="row">
+      <BrowserRouter>
+        <div className="container-fluid">
+          <Route path="/laptop" component={LaptopView} />
+          <Route path="/tablet" component={TabletView} />
         </div>
-        <Synkopater
-          componentId='synkopaterA'
-          sequencerId='synkopaterA'
-        />
-        <Synkopater
-          componentId='synkopaterB'
-          sequencerId='synkopaterB'
-        />
-      </div>
+      </BrowserRouter>
     );
   }
 }
