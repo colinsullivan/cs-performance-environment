@@ -54,22 +54,22 @@ class Synkopater extends React.Component {
 
     return (
       <div className="row">
-        <div className="col-xs-12">
+        <div className="col-12">
           <SynkopaterPiano
             sequencerId={this.props.sequencerId}
             keyBaseWidth={1.5}
           />
         </div>
-        <div className="col-xs-12">
+        <div className="col-12">
           <div className="row">
-            <div className="col-xs-2">
+            <div className="col-2">
               <QueueSequencerButton
                 sequencerId={this.props.sequencerId}
                 playButtonComponent={PlayButtonSmall}
                 stopButtonComponent={StopButtonSmall}
               />
             </div>
-            <div className="col-xs-2">
+            <div className="col-2">
 							<Select
 								native
 								value={this.props.sequencer.arpMode}
@@ -80,7 +80,7 @@ class Synkopater extends React.Component {
                 })};
 							</Select>
             </div>
-            <div className="col-xs-2">
+            <div className="col-2">
               <TextField
                 id="dur"
                 label="dur"
@@ -91,7 +91,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-xs-2">
+            <div className="col-2">
               <TextField
                 id="stretch"
                 label="stretch"
@@ -102,7 +102,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-xs-2">
+            <div className="col-2">
               <TextField
                 id="legato"
                 label="legato"
@@ -113,7 +113,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-xs-2">
+            <div className="col-2">
               <TextField
                 id="delayFactor"
                 label="delayFactor"
@@ -124,7 +124,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-xs-2">
+            <div className="col-2">
               <TextField
                 id="euclideanNumHits"
                 label="euclideanNumHits"
@@ -135,7 +135,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-xs-2">
+            <div className="col-2">
               <TextField
                 id="euclideanTotalNumHits"
                 label="euclideanTotalNumHits"
