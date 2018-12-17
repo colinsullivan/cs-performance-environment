@@ -10,19 +10,16 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
-import PlayArrow from '@material-ui/icons/PlayArrow';
-import Pause from '@material-ui/icons/Pause';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 
-import awakeningSequencers from 'awakening-sequencers';
 import * as actions from './actions';
 import { ARP_MODES } from './reducers';
-import SynkopaterPiano from './SynkopaterPiano.jsx';
-
-const PLAYING_STATES = awakeningSequencers.PLAYING_STATES;
+import SynkopaterPiano from './SynkopaterPiano';
+import PlayButtonSmall from './PlayButtonSmall';
+import StopButtonSmall from './StopButtonSmall';
+import QueueSequencerButton from './QueueSequencerButton';
 
 
 class Synkopater extends React.Component {
@@ -43,8 +40,6 @@ class Synkopater extends React.Component {
   }
   render () {
 
-    var playPauseIcon;
-    var playPauseOnClick;
     var activeNotes = [];
     var numberParams = {
       inputProps: {
@@ -55,14 +50,6 @@ class Synkopater extends React.Component {
 
     if (this.props.sequencer.event) {
       activeNotes.push(this.props.sequencer.event.midinote);
-    }
-
-    if (this.props.sequencer.playingState === PLAYING_STATES.STOPPED) {
-      playPauseIcon = <PlayArrow />;
-      playPauseOnClick = this.props.queue;
-    } else {
-      playPauseIcon = <Pause />;
-      playPauseOnClick = this.props.stop;
     }
 
     return (
@@ -76,9 +63,11 @@ class Synkopater extends React.Component {
         <div className="col-xs-12">
           <div className="row">
             <div className="col-xs-2">
-              <Button mini onClick={playPauseOnClick}>
-                {playPauseIcon}
-              </Button>
+              <QueueSequencerButton
+                sequencerId={this.props.sequencerId}
+                playButtonComponent={PlayButtonSmall}
+                stopButtonComponent={StopButtonSmall}
+              />
             </div>
             <div className="col-xs-2">
 							<Select
@@ -171,16 +160,6 @@ function mapStateToProps (state, ownProps) {
 }
 function mapDispatchToProps (dispatch, ownProps) {
   return {
-    queue: () => {
-      dispatch(
-        awakeningSequencers.actions.sequencerQueued(ownProps.sequencerId)
-      )
-    },
-    stop: () => {
-      dispatch(
-        awakeningSequencers.actions.sequencerStopQueued(ownProps.sequencerId)
-      )
-    },
     removeNote: (note) => {
       dispatch(
         actions.synkopater_arp_remove_note(
