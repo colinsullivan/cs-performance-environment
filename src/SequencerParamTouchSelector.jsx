@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Hammer from 'react-hammerjs';
 import { DIRECTION_UP, DIRECTION_DOWN } from 'hammerjs';
+import * as _ from 'lodash';
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -47,7 +48,9 @@ class SequencerParamTouchSelector extends React.Component {
     super(props);
 
     this.state = {
-      open: false
+      open: false,
+      panning: false,
+      panAmount: 0
     };
   }
   handleClose = () => {
@@ -62,30 +65,72 @@ class SequencerParamTouchSelector extends React.Component {
   };
 
   handlePanStart = e => {
-    console.log("panstart");
-    console.log("e");
-    console.log(e);
+    this.setState({
+      panning: true,
+      panAmount: 0,
+      open: true
+    });
   };
 
   handlePanEnd = e => {
-    console.log("panend");
-    console.log("e");
-    console.log(e);
+    this.setState({
+      panning: false,
+      open: false
+    });
+  };
+
+  getCurrentValueIndex = () => {
+    return _.findIndex(
+      this.props.options,
+      opt => opt.value === this.props.value
+    );
   };
 
   handlePan = e => {
+    const panCallbackAmount = 5;
+    const valueChangeThreshold = 5 * 15;
+    let panAmount = this.state.panAmount;
     switch (e.direction) {
       case DIRECTION_UP:
-        console.log("up");
+        panAmount -= panCallbackAmount;
+
+        if (panAmount < -1.0 * valueChangeThreshold) {
+          this.setState({
+            panAmount: 0
+          });
+          const currentIndex = this.getCurrentValueIndex();
+          const newIndex = Math.max(currentIndex - 1, 0);
+          this.props.changeSequencerParam(this.props.options[newIndex].value);
+        } else {
+          this.setState({
+            panAmount
+          });
+        }
         break;
 
       case DIRECTION_DOWN:
-        console.log("down");
+        panAmount += panCallbackAmount;
+        if (panAmount > valueChangeThreshold) {
+          this.setState({
+            panAmount: 0
+          });
+          const currentIndex = this.getCurrentValueIndex();
+          const newIndex = Math.min(
+            this.props.options.length - 1,
+            currentIndex + 1
+          );
+          this.props.changeSequencerParam(this.props.options[newIndex].value);
+        } else {
+          this.setState({
+            panAmount
+          });
+        }
         break;
       
       default:
         break;
     }
+
   }
 
   render() {
