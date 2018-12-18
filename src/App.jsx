@@ -21,7 +21,7 @@ class App extends React.Component {
       <BrowserRouter>
         <div className="container-fluid">
           <Route path="/laptop" component={LaptopView} />
-          <Route path="/tablet" component={TabletView} />
+          <Route path="/" component={TabletView} />
         </div>
       </BrowserRouter>
     );
