@@ -41,7 +41,7 @@ class TouchSynkopater extends React.Component {
                 sequencerId={sequencerId}
               />
             </div>
-            <div className="col-1">
+            <div className="col-2">
               <SequencerParamTouchSelector
                 sequencerId={sequencerId}
                 param='dur'

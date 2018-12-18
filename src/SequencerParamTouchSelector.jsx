@@ -12,11 +12,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Hammer from 'react-hammerjs';
+import { DIRECTION_UP, DIRECTION_DOWN } from 'hammerjs';
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { turquoiseLight } from './colors';
 //import Button from '@material-ui/core/Button';
 
 import { sequencer_update_param } from './actions';
@@ -28,8 +30,15 @@ const styles = theme => ({
   },
   formControl: {
     margin: theme.spacing.unit,
+    display: 'inline-block'
     //minWidth: 120,
   },
+  touchAreaContainer: {
+    width: '48px',
+    height: '48px',
+    backgroundColor: `#${turquoiseLight.toString(16)}`,
+    display: 'inline-block'
+  }
 });
 
 
@@ -65,71 +74,65 @@ class SequencerParamTouchSelector extends React.Component {
   };
 
   handlePan = e => {
-    console.log("pan");
-    console.log("e");
-    console.log(e);
+    switch (e.direction) {
+      case DIRECTION_UP:
+        console.log("up");
+        break;
+
+      case DIRECTION_DOWN:
+        console.log("down");
+        break;
+      
+      default:
+        break;
+    }
   }
-
-  handlePanCancel = e => {
-    console.log("cancel");
-    console.log("e");
-    console.log(e);
-  }
-
-  handlePanUp = e => {
-    console.log("up");
-    console.log("e");
-    console.log(e);
-  };
-
-  handlePanDown = e => {
-    console.log("down");
-    console.log("e");
-    console.log(e);
-  };
 
   render() {
     const { classes, sequencerId, param, options, value } = this.props;
 
     const hammerOptions = {
+      touchAction: 'compute',
       recognizers: {
         pan: {
-          direction: 'DIRECTION_VERTICAL'
+          threshold: 1
         }
       }
     };
 
     return (
-      <Hammer
-        options={hammerOptions}
-        onPan={this.handlePan}
-        onPanCancel={this.handlePanCancel}
-        onPanEnd={this.handlePanEnd}
-        onPanStart={this.handlePanStart}
-      >
-        <div style={{width: '500px'}}>
-          <FormControl className={classes.formControl}>
-            <InputLabel>{param}</InputLabel>
-            <Select
-              open={this.state.open}
-              onClose={this.handleClose}
-              onOpen={this.handleOpen}
-              value={value}
-              onChange={this.handleChange}
-              inputProps={{
-                name: `sequencer_${sequencerId}_${param}`
-              }}
-            >
-              {options.map(option => (
-                  <MenuItem
-                    value={option.value}
-                    key={option.label}
-                  >{option.label}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-      </Hammer>
+      <div>
+        <Hammer
+          options={hammerOptions}
+          onPan={this.handlePan}
+          onPanCancel={this.handlePanCancel}
+          onPanEnd={this.handlePanEnd}
+          onPanStart={this.handlePanStart}
+        >
+          <div className={classes.touchAreaContainer}>
+          </div>
+        </Hammer>
+        <FormControl className={classes.formControl}>
+          <InputLabel>{param}</InputLabel>
+          <Select
+            open={this.state.open}
+            onClose={this.handleClose}
+            onOpen={this.handleOpen}
+            value={value}
+            onChange={this.handleChange}
+            inputProps={{
+              name: `sequencer_${sequencerId}_${param}`
+            }}
+          >
+            {options.map(option => (
+                <MenuItem
+                  value={option.value}
+                  key={option.label}
+                >{option.label}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
     );
   }
 };
