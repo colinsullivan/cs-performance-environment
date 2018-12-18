@@ -13,16 +13,15 @@ import * as PIXI from 'pixi.js';
 import { turquoise, orange } from './colors';
 
 
-const EUCLIDEAN_CIRCLE_RADIUS = 100;
-const OUTER_CIRCLE_LINE_WIDTH = 3;
-const OUTER_CIRCLE_RADIUS = 6 + OUTER_CIRCLE_LINE_WIDTH;
-const INNER_CIRCLE_RADIUS = 6;
+const OUTER_CIRCLE_LINE_WIDTH = 2;
+const OUTER_CIRCLE_RADIUS = 3 + OUTER_CIRCLE_LINE_WIDTH;
+const INNER_CIRCLE_RADIUS = 3;
 const OUTER_CIRCLE_COLOR = turquoise;
 const INNER_CIRCLE_COLOR = orange;
 const POLYGON_COLOR = orange;
-const POLYGON_LINE_WIDTH = 3;
+const POLYGON_LINE_WIDTH = 2;
 function generateTexture (renderer, texture) {
-  return renderer.generateTexture(texture, PIXI.SCALE_MODES.LINEAR, 4);
+  return renderer.generateTexture(texture, PIXI.SCALE_MODES.LINEAR, 8);
 }
 function createEmptyCircleTexture (renderer) {
   const emptyCircle = new PIXI.Graphics();
@@ -62,14 +61,13 @@ class EuclideanVisualizerRenderer {
     this.props = props;
 
     const {
-      height,
-      width,
+      size,
       canvasEl
     } = props;
 
     this.pixiApp = new PIXI.Application({
-      height,
-      width,
+      height: size,
+      width: size,
       view: canvasEl,
       transparent: true,
       resolution: 1,
@@ -104,13 +102,19 @@ class EuclideanVisualizerRenderer {
       stage
     } = this.pixiApp;
 
+    const {
+      size
+    } = this.props;
+
+    const euclideanCircleRadius = 0.5 * size - OUTER_CIRCLE_RADIUS;
+
     stage.removeChildren();
 
     const circleContainer = new PIXI.Container();
 
     circleContainer.position.set(
-      EUCLIDEAN_CIRCLE_RADIUS + OUTER_CIRCLE_RADIUS,
-      EUCLIDEAN_CIRCLE_RADIUS + OUTER_CIRCLE_RADIUS
+      euclideanCircleRadius + OUTER_CIRCLE_RADIUS,
+      euclideanCircleRadius + OUTER_CIRCLE_RADIUS
     );
 
     //const pattern = bjorklund(euclideanTotalNumHits, euclideanNumHits);
@@ -125,8 +129,8 @@ class EuclideanVisualizerRenderer {
     for (i = 0; i < pattern.length; i++) {
       // calculate dot position
       const dotPosition = {
-        x: EUCLIDEAN_CIRCLE_RADIUS * Math.cos(segmentAngle * i),
-        y: EUCLIDEAN_CIRCLE_RADIUS * Math.sin(segmentAngle * i)
+        x: euclideanCircleRadius * Math.cos(segmentAngle * i),
+        y: euclideanCircleRadius * Math.sin(segmentAngle * i)
       };
 
       // create a container for the dots in that position

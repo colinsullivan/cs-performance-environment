@@ -14,12 +14,35 @@ import { connect } from 'react-redux';
 import { sequencer_update_param } from './actions';
 import EuclideanVisualizerRenderer from './EuclideanVisualizerRenderer';
 
-const size = 240;
+const size = 150;
 const styles = {
   container: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  innerNumberContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: '-0.5em'
+  },
+  outerNumberContainer: {
+    display: 'inline-block',
+    height: '100%',
+    flex: '1 0 auto',
+    textAlign: 'left',
+    paddingLeft: '1em'
+  },
+  visualizationCanvasContainer: {
     height: size,
     width: size,
-    margin: 'auto'
+    display: 'inline-block',
+    flex: `0 0 ${size}px`,
+    position: 'relative'
+  },
+  visualizationCanvas: {
+    height: size,
+    width: size,
   }
 };
 
@@ -34,8 +57,7 @@ class EuclideanTouchControl extends React.Component {
   }
   componentDidMount () {
     this.euclideanVisualizerRenderer = new EuclideanVisualizerRenderer({
-      height: styles.container.height,
-      width: styles.container.width,
+      size,
       canvasEl: this.canvasRef.current
     });
     this.euclideanVisualizerRenderer.render(this.props);
@@ -47,9 +69,17 @@ class EuclideanTouchControl extends React.Component {
     }
   }
   render() {
+    const {
+      euclideanNumHits,
+      euclideanTotalNumHits
+    } = this.props;
     return (
       <div style={styles.container}>
-        <canvas ref={this.canvasRef}></canvas>
+        <div style={styles.visualizationCanvasContainer}>
+          <div style={styles.innerNumberContainer}>{euclideanNumHits}</div>
+          <canvas style={styles.visualizationCanvas} ref={this.canvasRef}></canvas>
+        </div>
+        <div style={styles.outerNumberContainer}>{euclideanTotalNumHits}</div>
       </div>
     );
   }
