@@ -11,8 +11,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import Hammer from 'react-hammerjs';
-import { DIRECTION_UP, DIRECTION_DOWN } from 'hammerjs';
 import * as _ from 'lodash';
 
 import InputLabel from '@material-ui/core/InputLabel';
@@ -20,6 +18,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { turquoiseLight } from './colors';
+import TouchPanParameter from 'components/TouchPanParameter';
 //import Button from '@material-ui/core/Button';
 
 import { sequencer_update_param } from './actions';
@@ -35,8 +34,6 @@ const styles = theme => ({
     //minWidth: 120,
   },
   touchAreaContainer: {
-    width: '48px',
-    height: '48px',
     backgroundColor: `#${turquoiseLight.toString(16)}`,
     display: 'inline-block'
   }
@@ -49,8 +46,6 @@ class SequencerParamTouchSelector extends React.Component {
 
     this.state = {
       open: false,
-      panning: false,
-      panAmount: 0
     };
   }
   handleClose = () => {
@@ -64,20 +59,6 @@ class SequencerParamTouchSelector extends React.Component {
     this.props.changeSequencerParam(event.target.value);
   };
 
-  handlePanStart = e => {
-    this.setState({
-      panning: true,
-      panAmount: 0,
-      open: true
-    });
-  };
-
-  handlePanEnd = e => {
-    this.setState({
-      panning: false,
-      open: false
-    });
-  };
 
   getCurrentValueIndex = () => {
     return _.findIndex(
@@ -86,77 +67,51 @@ class SequencerParamTouchSelector extends React.Component {
     );
   };
 
-  handlePan = e => {
-    const panCallbackAmount = 5;
-    const valueChangeThreshold = 5 * 15;
-    let panAmount = this.state.panAmount;
-    switch (e.direction) {
-      case DIRECTION_UP:
-        panAmount -= panCallbackAmount;
+  handleTouchParamUp = () => {
+    const currentIndex = this.getCurrentValueIndex();
+    const newIndex = Math.max(currentIndex - 1, 0);
+    this.props.changeSequencerParam(
+      this.props.options[newIndex].value
+    )
+  };
 
-        if (panAmount < -1.0 * valueChangeThreshold) {
-          this.setState({
-            panAmount: 0
-          });
-          const currentIndex = this.getCurrentValueIndex();
-          const newIndex = Math.max(currentIndex - 1, 0);
-          this.props.changeSequencerParam(this.props.options[newIndex].value);
-        } else {
-          this.setState({
-            panAmount
-          });
-        }
-        break;
+  handleTouchParamDown = () => {
+    const currentIndex = this.getCurrentValueIndex();
+    const newIndex = Math.min(
+      this.props.options.length - 1,
+      currentIndex + 1
+    );
+    this.props.changeSequencerParam(
+      this.props.options[newIndex].value
+    )
+  };
 
-      case DIRECTION_DOWN:
-        panAmount += panCallbackAmount;
-        if (panAmount > valueChangeThreshold) {
-          this.setState({
-            panAmount: 0
-          });
-          const currentIndex = this.getCurrentValueIndex();
-          const newIndex = Math.min(
-            this.props.options.length - 1,
-            currentIndex + 1
-          );
-          this.props.changeSequencerParam(this.props.options[newIndex].value);
-        } else {
-          this.setState({
-            panAmount
-          });
-        }
-        break;
-      
-      default:
-        break;
-    }
+  handlePanStart = () => {
+    this.setState({
+      open: true
+    });
+  };
 
-  }
+  handlePanEnd = () => {
+    this.setState({
+      open: false
+    });
+  };
+
 
   render() {
     const { classes, sequencerId, param, options, value } = this.props;
 
-    const hammerOptions = {
-      touchAction: 'compute',
-      recognizers: {
-        pan: {
-          threshold: 1
-        }
-      }
-    };
-
     return (
       <div>
-        <Hammer
-          options={hammerOptions}
-          onPan={this.handlePan}
-          onPanCancel={this.handlePanCancel}
-          onPanEnd={this.handlePanEnd}
-          onPanStart={this.handlePanStart}
-        >
-          <div className={classes.touchAreaContainer}>
-          </div>
-        </Hammer>
+        <div className={classes.touchAreaContainer}>
+          <TouchPanParameter
+            panStart={this.handlePanStart}
+            tickUp={this.handleTouchParamUp}
+            tickDown={this.handleTouchParamDown}
+            panEnd={this.handlePanEnd}
+          />
+        </div>
         <FormControl className={classes.formControl}>
           <InputLabel>{param}</InputLabel>
           <Select
