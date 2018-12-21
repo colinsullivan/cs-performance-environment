@@ -12,6 +12,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { sequencer_update_param } from 'actions';
+import EuclideanTouchParameter from 'components/EuclideanTouchControl/EuclideanTouchParameter';
 import EuclideanVisualizerRenderer from './EuclideanVisualizerRenderer';
 
 const size = 150;
@@ -24,7 +25,8 @@ const styles = {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    marginTop: '-0.5em'
+    marginTop: '-24px',
+    marginLeft: '-24px'
   },
   outerNumberContainer: {
     display: 'inline-block',
@@ -76,10 +78,18 @@ class EuclideanTouchControl extends React.Component {
     return (
       <div style={styles.container}>
         <div style={styles.visualizationCanvasContainer}>
-          <div style={styles.innerNumberContainer}>{euclideanNumHits}</div>
+          <div style={styles.innerNumberContainer}>
+            <EuclideanTouchParameter
+              value={euclideanNumHits}
+              onChange={this.props.changeNumHits}
+            />
+          </div>
           <canvas style={styles.visualizationCanvas} ref={this.canvasRef}></canvas>
         </div>
-        <div style={styles.outerNumberContainer}>{euclideanTotalNumHits}</div>
+        <EuclideanTouchParameter
+          value={euclideanTotalNumHits}
+          onChange={this.props.changeTotalNumHits}
+        />
       </div>
     );
   }

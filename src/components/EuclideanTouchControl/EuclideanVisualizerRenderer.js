@@ -9,16 +9,17 @@
  **/
 
 import * as PIXI from 'pixi.js';
+import * as _ from 'lodash';
 import bjorklund from 'bjorklund-js';
-import { turquoise, orange } from 'colors';
+import { turquoiseLight, darkBlue } from 'colors';
 
 
 const OUTER_CIRCLE_LINE_WIDTH = 2;
 const OUTER_CIRCLE_RADIUS = 3 + OUTER_CIRCLE_LINE_WIDTH;
 const INNER_CIRCLE_RADIUS = 3;
-const OUTER_CIRCLE_COLOR = turquoise;
-const INNER_CIRCLE_COLOR = orange;
-const POLYGON_COLOR = orange;
+const OUTER_CIRCLE_COLOR = turquoiseLight;
+const INNER_CIRCLE_COLOR = darkBlue;
+const POLYGON_COLOR = turquoiseLight;
 const POLYGON_LINE_WIDTH = 2;
 function generateTexture (renderer, texture) {
   return renderer.generateTexture(texture, PIXI.SCALE_MODES.LINEAR, 8);
@@ -121,7 +122,9 @@ class EuclideanVisualizerRenderer {
     console.log(euclideanTotalNumHits);
     console.log("euclideanNumHits");
     console.log(euclideanNumHits);
-    const pattern = bjorklund(euclideanTotalNumHits, euclideanNumHits);
+    const pattern = _.flatten(
+      Array(2).fill(bjorklund(euclideanTotalNumHits, euclideanNumHits))
+    ).slice(0, euclideanTotalNumHits);
     console.log("pattern");
     console.log(pattern);
     //const pattern = [1, 1, 1, 1];

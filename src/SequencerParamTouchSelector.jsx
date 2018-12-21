@@ -17,7 +17,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { turquoiseLight } from './colors';
+import { turquoiseTransparentColor, getRGBAString } from 'constants/colors';
 import TouchPanParameter from 'components/TouchPanParameter';
 //import Button from '@material-ui/core/Button';
 
@@ -34,7 +34,7 @@ const styles = theme => ({
     //minWidth: 120,
   },
   touchAreaContainer: {
-    backgroundColor: `#${turquoiseLight.toString(16)}`,
+    backgroundColor: getRGBAString(turquoiseTransparentColor),
     display: 'inline-block'
   }
 });

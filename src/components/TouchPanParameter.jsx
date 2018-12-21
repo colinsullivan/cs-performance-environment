@@ -1,21 +1,32 @@
 import React from 'react';
 import Hammer from 'react-hammerjs';
 import { DIRECTION_UP, DIRECTION_DOWN } from 'hammerjs';
+import {
+  turquoiseTransparentColor,
+  orangeTransparentColor,
+  getRGBAString
+} from 'constants/colors';
 
 const styles = {
   containerStyle: {
-    width: '48px',
-    height: '48px'
+    minWidth: '48px',
+    minHeight: '48px'
+  },
+  panningStyle: {
+    backgroundColor: getRGBAString(turquoiseTransparentColor)
+  },
+  notPanningStyle: {
+    backgroundColor: getRGBAString(orangeTransparentColor)
   }
 };
 
 const hammerOptions = {
-      touchAction: 'compute',
-      recognizers: {
-        pan: {
-          threshold: 1
-        }
-      }
+  touchAction: 'compute',
+  recognizers: {
+    pan: {
+      threshold: 1
+    }
+  }
 };
 
 const noop = function () {};
@@ -101,7 +112,14 @@ class TouchPanParameter extends React.Component {
         onPanEnd={this.handlePanEnd}
         onPanStart={this.handlePanStart}
       >
-        <div style={styles.containerStyle}></div>
+        <div style={{
+          ...styles.containerStyle,
+          ...(
+            this.state.panning ? styles.panningStyle : styles.notPanningStyle
+          )
+        }}>
+          {this.props.children}
+        </div>
       </Hammer>
     );
   }
