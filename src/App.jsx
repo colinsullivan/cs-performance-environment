@@ -10,7 +10,7 @@
 
 import { connect } from 'react-redux';
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import TabletView from './TabletView';
 import LaptopView from './LaptopView';
 
@@ -20,8 +20,10 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <div className="container-fluid">
-          <Route path="/laptop" component={LaptopView} />
-          <Route path="/" component={TabletView} />
+          <Switch>
+            <Route exact path="/laptop" component={LaptopView} />
+            <Route path="" component={TabletView} />
+          </Switch>
         </div>
       </BrowserRouter>
     );

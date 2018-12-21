@@ -26,13 +26,13 @@ class Synkopater extends React.Component {
   handleModeChange (e) {
     this.props.changeMode(e.target.value);
   }
-  handleFloatSequencerParamChanged (e) {
+  handleFloatSequencerParamChanged = (e) => {
     const val = parseFloat(e.target.value);
     if (!isNaN(val)) {
       this.props.changeSequencerParam(e.target.id, val);
     }
   }
-  handleFloatInstrParamChanged (e) {
+  handleFloatInstrParamChanged = (e) => {
     const val = parseFloat(e.target.value);
     if (!isNaN(val)) {
       this.props.changeInstrumentParam(e.target.id, val);
@@ -85,7 +85,7 @@ class Synkopater extends React.Component {
                 id="dur"
                 label="dur"
                 value={this.props.sequencer.dur}
-                onChange={this.props.handleFloatSequencerParamChanged}
+                onChange={this.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -96,7 +96,7 @@ class Synkopater extends React.Component {
                 id="stretch"
                 label="stretch"
                 value={this.props.sequencer.stretch}
-                onChange={this.props.handleFloatSequencerParamChanged}
+                onChange={this.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -107,7 +107,7 @@ class Synkopater extends React.Component {
                 id="legato"
                 label="legato"
                 value={this.props.sequencer.legato}
-                onChange={this.props.handleFloatSequencerParamChanged}
+                onChange={this.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -129,7 +129,7 @@ class Synkopater extends React.Component {
                 id="euclideanNumHits"
                 label="euclideanNumHits"
                 value={this.props.sequencer.euclideanNumHits}
-                onChange={this.props.handleFloatInstrParamChanged}
+                onChange={this.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}
@@ -140,7 +140,7 @@ class Synkopater extends React.Component {
                 id="euclideanTotalNumHits"
                 label="euclideanTotalNumHits"
                 value={this.props.sequencer.euclideanTotalNumHits}
-                onChange={this.props.handleFloatInstrParamChanged}
+                onChange={this.handleFloatSequencerParamChanged}
                 type="number"
                 margin="normal"
                 InputProps={numberParams}

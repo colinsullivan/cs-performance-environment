@@ -11,7 +11,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { sequencer_update_param } from './actions';
+import { sequencer_update_param } from 'actions';
 import EuclideanVisualizerRenderer from './EuclideanVisualizerRenderer';
 
 const size = 150;

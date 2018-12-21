@@ -9,8 +9,8 @@
  **/
 
 import * as PIXI from 'pixi.js';
-//import bjorklund from 'bjorklund-js';
-import { turquoise, orange } from './colors';
+import bjorklund from 'bjorklund-js';
+import { turquoise, orange } from 'colors';
 
 
 const OUTER_CIRCLE_LINE_WIDTH = 2;
@@ -93,10 +93,10 @@ class EuclideanVisualizerRenderer {
   }
 
   render(props) {
-    //const {
-      //euclideanNumHits,
-      //euclideanTotalNumHits
-    //} = props;
+    const {
+      euclideanNumHits,
+      euclideanTotalNumHits
+    } = props;
 
     const {
       stage
@@ -117,10 +117,16 @@ class EuclideanVisualizerRenderer {
       euclideanCircleRadius + OUTER_CIRCLE_RADIUS
     );
 
-    //const pattern = bjorklund(euclideanTotalNumHits, euclideanNumHits);
+    console.log("euclideanTotalNumHits");
+    console.log(euclideanTotalNumHits);
+    console.log("euclideanNumHits");
+    console.log(euclideanNumHits);
+    const pattern = bjorklund(euclideanTotalNumHits, euclideanNumHits);
+    console.log("pattern");
+    console.log(pattern);
     //const pattern = [1, 1, 1, 1];
     //const pattern = [ 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0  ];
-    const pattern = [ 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0  ];
+    //const pattern = [ 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0  ];
 
     const segmentAngle = Math.PI * 2.0 / pattern.length;
 

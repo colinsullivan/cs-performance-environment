@@ -5,7 +5,7 @@ import PlayButtonTouch from './PlayButtonTouch';
 import StopButtonTouch from './StopButtonTouch';
 import QueueSequencerButton from './QueueSequencerButton';
 import SequencerParamTouchSelector from './SequencerParamTouchSelector';
-import EuclideanTouchControl from './EuclideanTouchControl';
+import EuclideanTouchControl from './components/EuclideanTouchControl/EuclideanTouchControl';
 
 class TouchSynkopater extends React.Component {
   render() {
