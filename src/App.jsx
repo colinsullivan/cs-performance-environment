@@ -20,6 +20,7 @@ import { theme } from 'constants/colors';
 const styles = {
   containerStyle: {
     backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
     minHeight: '100%'
   }
 };
