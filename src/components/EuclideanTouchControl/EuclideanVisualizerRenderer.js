@@ -11,21 +11,23 @@
 import * as PIXI from 'pixi.js';
 import * as _ from 'lodash';
 import bjorklund from 'bjorklund-js';
-import { turquoiseLight, darkBlue } from 'constants/colors';
-
+import { turquoiseLightColor, asHexNumber } from 'constants/colors';
 
 const OUTER_CIRCLE_LINE_WIDTH = 2;
 const OUTER_CIRCLE_RADIUS = 3 + OUTER_CIRCLE_LINE_WIDTH;
 const INNER_CIRCLE_RADIUS = 3;
-const OUTER_CIRCLE_COLOR = turquoiseLight;
-const INNER_CIRCLE_COLOR = darkBlue;
-const POLYGON_COLOR = turquoiseLight;
+const OUTER_CIRCLE_COLOR = asHexNumber(turquoiseLightColor);
+const INNER_CIRCLE_COLOR = asHexNumber(turquoiseLightColor);
+const POLYGON_COLOR = asHexNumber(turquoiseLightColor);
 const POLYGON_LINE_WIDTH = 2;
+
 function generateTexture (renderer, texture) {
   return renderer.generateTexture(texture, PIXI.SCALE_MODES.LINEAR, 8);
 }
+
 function createEmptyCircleTexture (renderer) {
   const emptyCircle = new PIXI.Graphics();
+  emptyCircle.alpha = 0.5;
   emptyCircle.lineStyle(
     OUTER_CIRCLE_LINE_WIDTH,
     OUTER_CIRCLE_COLOR,
@@ -43,7 +45,7 @@ function createEmptyCircleTexture (renderer) {
 }
 function createInnerCircleTexture (renderer) {
   const centerCircle = new PIXI.Graphics();
-  centerCircle.beginFill(INNER_CIRCLE_COLOR, 0.8);
+  centerCircle.beginFill(INNER_CIRCLE_COLOR, 1.0);
   centerCircle.drawCircle(
     0,
     0,

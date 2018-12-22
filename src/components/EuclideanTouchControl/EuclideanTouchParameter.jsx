@@ -12,7 +12,6 @@ import React from 'react';
 
 import TouchPanParameter from 'components/TouchPanParameter';
 
-
 const styles = {
   containerStyle: {
   },
