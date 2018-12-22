@@ -13,10 +13,10 @@ const styles = {
     minHeight: '48px'
   },
   panningStyle: {
-    backgroundColor: getRGBAString(turquoiseTransparentColor)
+    backgroundColor: getRGBAString(orangeTransparentColor)
   },
   notPanningStyle: {
-    backgroundColor: getRGBAString(orangeTransparentColor)
+    backgroundColor: getRGBAString(turquoiseTransparentColor)
   }
 };
 

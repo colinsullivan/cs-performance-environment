@@ -11,7 +11,7 @@
 import * as PIXI from 'pixi.js';
 import * as _ from 'lodash';
 import bjorklund from 'bjorklund-js';
-import { turquoiseLight, darkBlue } from 'colors';
+import { turquoiseLight, darkBlue } from 'constants/colors';
 
 
 const OUTER_CIRCLE_LINE_WIDTH = 2;

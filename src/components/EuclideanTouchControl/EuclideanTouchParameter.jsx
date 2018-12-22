@@ -10,13 +10,11 @@
 
 import React from 'react';
 
-import { turquoiseTransparentColor, getRGBAString } from 'constants/colors';
 import TouchPanParameter from 'components/TouchPanParameter';
 
 
 const styles = {
   containerStyle: {
-    //backgroundColor: getRGBAString(turquoiseTransparentColor)
   },
   numberContainer: {
     height: '48px',
