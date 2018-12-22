@@ -14,12 +14,12 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 
-import * as actions from './actions';
-import { ARP_MODES } from './reducers';
-import SynkopaterPiano from './SynkopaterPiano';
-import PlayButtonSmall from './PlayButtonSmall';
-import StopButtonSmall from './StopButtonSmall';
-import QueueSequencerButton from './QueueSequencerButton';
+import * as actions from 'actions';
+import { ARP_MODES } from 'reducers';
+import SynkopaterPiano from 'components/SynkopaterPiano';
+import PlayButtonSmall from 'components/PlayButtonSmall';
+import StopButtonSmall from 'components/StopButtonSmall';
+import QueueSequencerButton from 'components/QueueSequencerButton';
 
 
 class Synkopater extends React.Component {

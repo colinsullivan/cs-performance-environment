@@ -19,9 +19,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { turquoiseTransparentColor, getRGBAString } from 'constants/colors';
 import TouchPanParameter from 'components/TouchPanParameter';
-//import Button from '@material-ui/core/Button';
 
-import { sequencer_update_param } from './actions';
+import { sequencer_update_param } from 'actions';
 
 const styles = theme => ({
   button: {

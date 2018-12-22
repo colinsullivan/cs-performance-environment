@@ -1,11 +1,11 @@
 import React from 'react';
 
-import SynkopaterPiano from './SynkopaterPiano';
-import PlayButtonTouch from './PlayButtonTouch';
-import StopButtonTouch from './StopButtonTouch';
-import QueueSequencerButton from './QueueSequencerButton';
-import SequencerParamTouchSelector from './SequencerParamTouchSelector';
-import EuclideanTouchControl from './components/EuclideanTouchControl/EuclideanTouchControl';
+import PlayButtonTouch from 'components/PlayButtonTouch';
+import StopButtonTouch from 'components/StopButtonTouch';
+import QueueSequencerButton from 'components/QueueSequencerButton';
+import SequencerParamTouchSelector from 'components/SequencerParamTouchSelector';
+import EuclideanTouchControl from 'components/EuclideanTouchControl/EuclideanTouchControl';
+import TouchSynkopaterPiano from 'components/TouchSynkopaterPiano';
 
 class TouchSynkopater extends React.Component {
   render() {
@@ -27,9 +27,8 @@ class TouchSynkopater extends React.Component {
     return (
       <div className="row">
         <div className="col-12">
-          <SynkopaterPiano
+          <TouchSynkopaterPiano
             sequencerId={sequencerId}
-            keyBaseWidth={3}
           />
         </div>
         <div className="col-12">

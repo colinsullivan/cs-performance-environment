@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as _ from 'lodash';
 
-import Piano from './Piano';
-import { sequencer_update_param } from './actions';
+import Piano from 'components/Piano';
+import { sequencer_update_param } from 'actions';
 
 class SynkopaterPiano extends React.Component {
   handleNoteClicked (note, height) {
@@ -25,13 +25,15 @@ class SynkopaterPiano extends React.Component {
       sequencer: {
         notes,
         event
-      }
+      },
+      startingOctave = 3,
+      numOctaves = 8
     } = this.props;
     return (
       <Piano
         handleNoteClicked={this.handleNoteClicked.bind(this)}
-        startingOctave={3}
-        numOctaves={8}
+        startingOctave={startingOctave}
+        numOctaves={numOctaves}
         selectedNotes={notes}
         activeNotes={event ? [event.midinote] : []}
         keyBaseWidth={keyBaseWidth}
