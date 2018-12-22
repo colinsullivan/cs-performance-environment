@@ -47,7 +47,7 @@ PerformanceComponentFactory : Object {
 
   handleStateChange {
     var state = store.getState();
-    
+
     if ((state.components != nil), {
       // for each sequencer in state
       state.components.keysValuesDo({

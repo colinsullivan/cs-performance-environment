@@ -87,11 +87,13 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   update_delay_time {
     var currentBeatsPerSecond;
     currentBeatsPerSecond = this.clockController.clock.tempo;
-    this.delayPatch.delaySecs.value = (
-      componentState.parameters.delayFactor * (
-        currentBeatsPerSecond / prevSequencerDur
-      )
-    );
+    if (delayPatch != nil, {
+      delayPatch.delaySecs.value = (
+        componentState.parameters.delayFactor * (
+          currentBeatsPerSecond / prevSequencerDur
+        )
+      );
+    });
   }
 
   handle_state_change {

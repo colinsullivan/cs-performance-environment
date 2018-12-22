@@ -27,7 +27,7 @@ CSPerformanceEnvironment {
 
     store = StateStore.getInstance();
 
-    clockController = ReduxTempoClockController.new((
+    clockController = ReduxLinkClockController.new((
       store: store
     ));
 
