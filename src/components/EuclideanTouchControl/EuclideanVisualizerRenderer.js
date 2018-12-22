@@ -120,15 +120,9 @@ class EuclideanVisualizerRenderer {
       euclideanCircleRadius + OUTER_CIRCLE_RADIUS
     );
 
-    console.log("euclideanTotalNumHits");
-    console.log(euclideanTotalNumHits);
-    console.log("euclideanNumHits");
-    console.log(euclideanNumHits);
     const pattern = _.flatten(
       Array(2).fill(bjorklund(euclideanTotalNumHits, euclideanNumHits))
     ).slice(0, euclideanTotalNumHits);
-    console.log("pattern");
-    console.log(pattern);
     //const pattern = [1, 1, 1, 1];
     //const pattern = [ 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0  ];
     //const pattern = [ 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0  ];

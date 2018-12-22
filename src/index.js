@@ -19,22 +19,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import WebsocketDispatcher from './WebsocketDispatcher';
 import App from './App';
-import rootReducer from './reducers';
+import rootReducer from 'common/reducers';
+import { PORT } from 'common/constants';
 //import registerServiceWorker from './registerServiceWorker';
 
 //const electron = window.require('electron');
 //const ipcRenderer  = electron.ipcRenderer;
+//
 
 const middleware = [];
 
 const clientId = uuid();
-let port;
-if (process.env.NODE_ENV === 'development') {
-  port = 3001;
-}
 
 const wsDispatcher = new WebsocketDispatcher({
-  port,
+  port: PORT,
   clientId
 });
 middleware.push(wsDispatcher.middleware);
@@ -48,7 +46,7 @@ middleware.push(wsDispatcher.middleware);
 
 // get initial state then render
 axios.get(
-  `${window.location.protocol}//${window.location.hostname}:${port}/getState`
+  `${window.location.protocol}//${window.location.hostname}:${PORT}/getState`
 ).then(function (resp) {
   const initialState = resp.data;
   const store = createStore(

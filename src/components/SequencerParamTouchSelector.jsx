@@ -20,7 +20,7 @@ import Select from '@material-ui/core/Select';
 import { turquoiseTransparentColor, getRGBAString } from 'constants/colors';
 import TouchPanParameter from 'components/TouchPanParameter';
 
-import { sequencer_update_param } from 'actions';
+import { sequencer_update_param } from 'common/actions';
 
 const styles = theme => ({
   button: {

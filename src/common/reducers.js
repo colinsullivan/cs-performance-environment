@@ -9,12 +9,13 @@
  **/
 
 import _ from 'lodash';
-import { READY_STATES } from './constants'
 import {combineReducers} from 'redux'
 import awakeningSequencers from "awakening-sequencers"
 import supercolliderRedux from "supercollider-redux"
 
-import * as actionTypes from './actionTypes';
+import { READY_STATES } from '../common/constants'
+
+import * as actionTypes from '../common/actionTypes';
 
 const durChoices = [1.0/128.0, 1.0/64.0, 1.0/32.0, 1.0/16.0, 1.0/8.0, 1.0/4.0, 1.0/2.0, 1.0, 2.0, 4.0, 8.0];
 

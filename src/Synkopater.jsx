@@ -14,8 +14,8 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 
-import * as actions from 'actions';
-import { ARP_MODES } from 'reducers';
+import * as actions from 'common/actions';
+import { ARP_MODES } from 'common/reducers';
 import SynkopaterPiano from 'components/SynkopaterPiano';
 import PlayButtonSmall from 'components/PlayButtonSmall';
 import StopButtonSmall from 'components/StopButtonSmall';

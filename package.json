@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-transform-spread": "^7.2.2",
     "@material-ui/core": "^3.6.1",
     "@material-ui/icons": "^3.0.1",
     "awakening-sequencers": "^0.8.8",
     "axios": "^0.18.0",
     "babel-eslint": "9.x",
-    "bjorklund-js": "file:../patches/bjorklund-js",
+    "bjorklund-js": "colinsullivan/bjorklund-js#bugfixes",
     "bootstrap": "^4.1.3",
     "easymidi": "0.0.4",
     "eslint": "^5.10.0",
@@ -36,7 +37,7 @@
     "supercolliderjs": "^0.14.2",
     "uuid": "^3.3.2"
   },
-  "main": "src/start_electron.js",
+  "main": "src/server/index.js",
   "scripts": {
     "start_react": "react-scripts start",
     "build_react": "react-scripts build",
@@ -44,7 +45,8 @@
     "eject": "react-scripts eject",
     "start_electron": "NODE_ENV=development electron -r @babel/register .",
     "rebuild_electron": "electron-rebuild",
-    "build_electron": "babel --out-dir ./build/ src/start_electron.js",
+    "build_electron": "babel --out-dir ./build/server/ src/server/*.js && babel --out-dir ./build/common/ src/common/*.js",
+    "start": "electron build/server/",
     "build": "npm run build_react && npm run build_electron"
   },
   "eslintConfig": {
@@ -54,12 +56,16 @@
     }
   },
   "babel": {
+    "plugins": [
+      "@babel/plugin-transform-spread",
+      "@babel/plugin-proposal-object-rest-spread"
+    ],
     "presets": [
       [
         "@babel/preset-env",
         {
           "targets": {
-            "node": "current"
+            "node": "8.14.1"
           }
         }
       ]
@@ -68,6 +74,7 @@
   "devDependencies": {
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
     "@babel/register": "^7.0.0",
     "electron": "^1.8.8",

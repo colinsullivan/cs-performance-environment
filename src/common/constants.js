@@ -4,3 +4,5 @@ export const READY_STATES = {
   CLOSING: 2,
   CLOSED: 3
 };
+
+export const PORT = 3001;

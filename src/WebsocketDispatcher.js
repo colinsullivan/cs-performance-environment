@@ -8,7 +8,7 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import { websocketReadyStateChanged } from './actions';
+import { websocketReadyStateChanged } from 'common/actions';
 
 /**
  *  @class        WebsocketDispatcher
@@ -75,7 +75,7 @@ class WebsocketDispatcher {
    *  When a new message comes in, if it is an action, dispatch that action.
    **/
   handle_message (message) {
-    let action = JSON.parse(message.data);
+    const action = JSON.parse(message.data);
     // ignore actions just dispatched from this client
     if (!action.clientId || action.clientId !== this.props.clientId) {
       this.store.dispatch(action);

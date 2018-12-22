@@ -9,19 +9,17 @@
  **/
 
 import path from 'path';
-import url from 'url';
 import electron from 'electron';
 import { createStore, applyMiddleware } from "redux"
 import express from 'express';
 import expressWebsocket from 'express-ws';
-import SCController from './SCController';
 import supercolliderRedux from 'supercollider-redux';
-import awakeningSequencers from "awakening-sequencers"
-import LaunchControlXLDispatcher from './LaunchControlXLDispatcher';
+
+import SCController from './SCController';
 import WebsocketServerDispatcher from './WebsocketServerDispatcher';
 
-import rootReducer, {create_default_state} from './reducers';
-import * as actionTypes from './actionTypes'
+import rootReducer, {create_default_state} from '../common/reducers';
+import { PORT } from '../common/constants';
 
 const SCStoreController = supercolliderRedux.SCStoreController;
 
@@ -30,7 +28,6 @@ const SCStoreController = supercolliderRedux.SCStoreController;
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
-const ipcMain = electron.ipcMain;
 
 //const path = require('path');
 //const url = require('url');
@@ -44,15 +41,11 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 1440, height: 900})
 
   // and load the index.html of the app.
-  if (process.env.NODE_ENV == "development") {
+  if (process.env.NODE_ENV === "development") {
     console.log("development");
     mainWindow.loadURL("http://localhost:3000/laptop");
   } else {
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
-      protocol: 'file:',
-      slashes: true
-    }))
+    mainWindow.loadURL("http://localhost:3001/laptop");
   }
 
   // Open the DevTools.
@@ -94,20 +87,11 @@ app.on('activate', function () {
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
-//var dispatcherMiddleware = store => next => action => {
-  //if (!action.fromRenderer) {
-    //if (mainWindow) {
-      //mainWindow.webContents.send('dispatch', action);
-    //}
-  //}
-  //let result = next(action);
-  //return result;
-//};
 var loggerMiddleware = store => next => action => {
   console.log('will dispatch', action)
 
   // Call the next dispatch method in the middleware chain.
-  let returnValue = next(action)
+  const returnValue = next(action)
 
   console.log('state after dispatch', store.getState())
 
@@ -117,8 +101,9 @@ var loggerMiddleware = store => next => action => {
 };
 var middleware = [wsServerDispatcher.middleware];
 
-//middleware.push(loggerMiddleware);
-//middleware.push(dispatcherMiddleware);
+if (process.env.NODE_ENV === 'development') {
+  middleware.push(loggerMiddleware);
+}
 
 var store = createStore(
   rootReducer,
@@ -126,22 +111,12 @@ var store = createStore(
   applyMiddleware(...middleware)
 );
 
-//ipcMain.on('getState', function (e) {
-  //e.returnValue = store.getState();
-//});
-
-//ipcMain.on("dispatch", function (e, action) {
-  //action.fromRenderer = true;
-  //store.dispatch(action);
-//});
-
 console.log("Creating SCController...");
 var scController = new SCController();
+var scStoreController;
 scController.boot().then(() => {
   console.log("Creating SCStoreController...");
-  var scStoreController = new SCStoreController(store);
-
-  let state = store.getState();
+  scStoreController = new SCStoreController(store);
 }).catch(function (err) {
   console.log("error while starting up...");
   throw err;
@@ -157,17 +132,14 @@ if (process.env.NODE_ENV === 'development') {
     next();
   });
   server.use(express.static('public'));
+} else {
+  server.use(express.static('build'));
 }
-
-
 server.get('/getState', function (req, res, next) {
   res.json(store.getState());
 });
 server.ws('/:clientId', function (ws, req) {
   const clientId = req.params.clientId;
-  //const unsubscribe = store.subscribe(function () {
-    //ws.send(JSON.stringify(store.getState()));
-  //});
   console.log(`client ${clientId} connected.`);
   ws.on('message', function (msg) {
     const action = JSON.parse(msg);
@@ -175,11 +147,13 @@ server.ws('/:clientId', function (ws, req) {
   });
   ws.on('close', function () {
     wsServerDispatcher.removeClient(clientId);
-    //unsubscribe();
   });
   wsServerDispatcher.addClient(clientId, ws);
 });
-
-if (process.env.NODE_ENV === 'development') {
-  server.listen(3001);
+if (process.env.NODE_ENV !== 'development') {
+  server.get('*', function (req, res) {
+    res.sendFile(path.join(`${__dirname}/../index.html`));
+  });
 }
+
+server.listen(PORT);
