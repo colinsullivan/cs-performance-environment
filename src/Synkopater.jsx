@@ -80,7 +80,7 @@ class Synkopater extends React.Component {
                 })};
 							</Select>
             </div>
-            <div className="col-2">
+            <div className="col-1">
               <TextField
                 id="dur"
                 label="dur"
@@ -91,7 +91,18 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-2">
+            <div className="col-1">
+              <TextField
+                id="offset"
+                label="offset"
+                value={this.props.sequencer.offset}
+                onChange={this.handleFloatSequencerParamChanged}
+                type="number"
+                margin="normal"
+                InputProps={numberParams}
+              />
+            </div>
+            <div className="col-1">
               <TextField
                 id="stretch"
                 label="stretch"
@@ -102,7 +113,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-2">
+            <div className="col-1">
               <TextField
                 id="legato"
                 label="legato"
@@ -113,7 +124,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-2">
+            <div className="col-1">
               <TextField
                 id="delayFactor"
                 label="delayFactor"
@@ -124,7 +135,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-2">
+            <div className="col-1">
               <TextField
                 id="euclideanNumHits"
                 label="euclideanNumHits"
@@ -135,7 +146,7 @@ class Synkopater extends React.Component {
                 InputProps={numberParams}
               />
             </div>
-            <div className="col-2">
+            <div className="col-1">
               <TextField
                 id="euclideanTotalNumHits"
                 label="euclideanTotalNumHits"

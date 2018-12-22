@@ -14,6 +14,7 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
     euclideanNumHits = nil,
     euclideanTotalNumHits = nil,
     dur = nil,
+    offset = nil,
     midinoteProxy,
     durProxy;
 
@@ -48,12 +49,10 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
   }
 
   handleStateChange {
+    var noteSeq, durSeq;
     super.handleStateChange();
 
     if (notes != currentState.notes, {
-      notes = currentState.notes;
-      midinoteProxy.quant = currentState.playQuant;
-      midinoteProxy.source = Pseq(currentState.notes, inf);
     });
 
     if ((
@@ -62,16 +61,33 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
       euclideanTotalNumHits != currentState.euclideanTotalNumHits
     ).or(
       dur != currentState.dur
+    ).or(
+      offset != currentState.offset
+    ).or(
+      notes != currentState.notes
     ), {
       euclideanNumHits = currentState.euclideanNumHits;
       euclideanTotalNumHits = currentState.euclideanTotalNumHits;
       dur = currentState.dur;
+      offset = currentState.offset;
+      notes = currentState.notes;
+
+      midinoteProxy.quant = currentState.playQuant;
       durProxy.quant = currentState.playQuant;
-      durProxy.source = dur * Pbjorklund2.new(
+      
+      noteSeq = currentState.notes;
+      durSeq = dur * Bjorklund2.new(
         euclideanNumHits,
         euclideanTotalNumHits,
-        inf
       );
+
+      if (offset > 0, {
+        noteSeq = [\rest] ++ noteSeq;
+        durSeq = [offset] ++ durSeq;
+      });
+
+      midinoteProxy.source = Pseq(noteSeq, inf);
+      durProxy.source = Pseq(durSeq, inf);
 
     });
 

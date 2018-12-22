@@ -30,6 +30,7 @@ function create_synkopater_sequencer (id, type, midiChan) {
     dur: 0.5,
     stretch: 1.0,
     legato: 1.0,
+    offset: 0,
     notes: [96, 84, 86, 87],
     //arp_vels: [1.0, 1.0, 1.0, 1.0],
     arpMode: ARP_MODES.UP,

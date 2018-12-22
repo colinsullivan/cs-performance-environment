@@ -15,6 +15,7 @@ class TouchSynkopater extends React.Component {
       {value: 8, label: "8"},
       {value: 4, label: "4"},
       {value: 2, label: "2"},
+      {value: 1.5, label: "1 1/2"},
       {value: 1, label: "1"},
       {value: 3/4, label: "3/4"},
       {value: 1/2, label: "1/2"},
@@ -24,6 +25,13 @@ class TouchSynkopater extends React.Component {
       {value: 1/16, label: "1/16"},
       {value: 1/32, label: "1/32"}
     ];
+
+    const offsetOptions = durOptions.slice();
+    offsetOptions.push({
+      value: 0, label: "0"
+    });
+    console.log("offsetOptions");
+    console.log(offsetOptions);
 
     const legatoOptions = [
       {value: 1, label: "1"},
@@ -57,6 +65,11 @@ class TouchSynkopater extends React.Component {
                 sequencerId={sequencerId}
                 param='dur'
                 options={durOptions}
+              />
+              <SequencerParamTouchSelector
+                sequencerId={sequencerId}
+                param='offset'
+                options={offsetOptions}
               />
               <SequencerParamTouchSelector
                 sequencerId={sequencerId}
