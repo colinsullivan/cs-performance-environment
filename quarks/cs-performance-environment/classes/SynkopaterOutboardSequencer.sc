@@ -27,8 +27,6 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
 
   initStream {
 
-    midinoteProxy.source = Pseq(currentState.notes, inf);
-
     pat = Pbind(
       \type, \midi,
       \midiout, this.midiOut,
@@ -48,12 +46,25 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
     ^pat.asStream();
   }
 
-  handleStateChange {
+  generatePatterns {
     var noteSeq, durSeq;
-    super.handleStateChange();
+    noteSeq = currentState.notes;
+    durSeq = dur * Bjorklund2.new(
+      euclideanNumHits,
+      euclideanTotalNumHits,
+    );
 
-    if (notes != currentState.notes, {
+    if (offset > 0, {
+      noteSeq = [\rest] ++ noteSeq;
+      durSeq = [offset] ++ durSeq;
     });
+
+    midinoteProxy.source = Pseq(noteSeq, inf);
+    durProxy.source = Pseq(durSeq, inf);
+  }
+
+  handleStateChange {
+    super.handleStateChange();
 
     if ((
       euclideanNumHits != currentState.euclideanNumHits
@@ -74,23 +85,9 @@ SynkopaterOutboardSequencer : AwakenedSequencer {
 
       midinoteProxy.quant = currentState.playQuant;
       durProxy.quant = currentState.playQuant;
-      
-      noteSeq = currentState.notes;
-      durSeq = dur * Bjorklund2.new(
-        euclideanNumHits,
-        euclideanTotalNumHits,
-      );
 
-      if (offset > 0, {
-        noteSeq = [\rest] ++ noteSeq;
-        durSeq = [offset] ++ durSeq;
-      });
-
-      midinoteProxy.source = Pseq(noteSeq, inf);
-      durProxy.source = Pseq(durSeq, inf);
+      this.generatePatterns();
 
     });
-
-
   }
 }

@@ -27,7 +27,9 @@ CSPerformanceEnvironment {
 
     store = StateStore.getInstance();
 
-    clockController = ReduxLinkClockController.new((
+    Server.default.latency = 0;
+
+    clockController = LinkClockController.new((
       store: store
     ));
 

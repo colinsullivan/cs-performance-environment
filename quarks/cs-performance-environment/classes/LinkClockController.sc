@@ -31,9 +31,6 @@ LinkClockController : Object {
 
     //store = params['store'];
 
-    // TODO: consider this might be better somewhere else... 
-    Server.default.latency = nil;
-
     clock = LinkClock();
   }
   isReady {

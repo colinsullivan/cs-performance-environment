@@ -185,7 +185,6 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
           switch(controller,
             \launchControl, {
               if (this.launchControlController != nil, {
-                "Mapping launchControl".postln();
                 mappings.keysValuesDo({
                   arg controlName, property;
                   ("mapping `" + controlName + "` to this." + property).postln();

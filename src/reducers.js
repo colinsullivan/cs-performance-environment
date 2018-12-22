@@ -76,7 +76,7 @@ function create_synkopater_component (id, ampSlider, bus) {
 }
 
 export function create_default_state () {
-  let initialState = {
+  const initialState = {
     sequencers: {
       'synkopaterA': create_synkopater_sequencer(
         'synkopaterA',
@@ -90,13 +90,11 @@ export function create_default_state () {
       )
     },
     components: {
-      synkopaterA: create_synkopater_component('synkopaterA', 'sl1', 12),
-      synkopaterB: create_synkopater_component('synkopaterB', 'sl2', 14)
+      synkopaterA: create_synkopater_component('synkopaterA', 'sl1', 14),
+      synkopaterB: create_synkopater_component('synkopaterB', 'sl2', 16)
     }
   };
   Object.assign(initialState.sequencers.synkopaterA, {
-  //midiOutDeviceName: "minilogue",
-  //midiOutPortName: "SOUND",
     midiOutDeviceName: "(in) SuperCollider",
     midiOutPortName: "(in) SuperCollider",
   });
@@ -186,9 +184,9 @@ function sequencers (state, action) {
     case actionTypes.MIDI_CONTROLLER_CC:
       if (action.payload.controllerId === 'launchcontrol') {
         if (action.payload.name === 'knu3') {
-          let seq = Object.assign({}, state.synkopaterA);
-          let knobVal = action.payload.value;
-          let selectedDurIndex = Math.round(
+          const seq = Object.assign({}, state.synkopaterA);
+          const knobVal = action.payload.value;
+          const selectedDurIndex = Math.round(
             knobVal * (durChoices.length - 1)
           );
           seq.dur = durChoices[selectedDurIndex];
@@ -207,8 +205,8 @@ function sequencers (state, action) {
 function controllers (state = {}, action) {
   switch (action.type) {
     case actionTypes.MIDI_CONTROLLER_INIT:
-      let controller = {};
-      let mappings = action.payload.mappings;
+      const controller = {};
+      const mappings = action.payload.mappings;
       let controlName;
       for (const channel in mappings) {
         for (const cc in mappings[channel]) {
