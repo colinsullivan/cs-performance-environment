@@ -76,6 +76,11 @@ class TouchSynkopater extends React.Component {
                 param='legato'
                 options={legatoOptions}
               />
+              <SequencerParamTouchSelector
+                sequencerId={sequencerId}
+                param='delayFactor'
+                options={legatoOptions}
+              />
             </div>
             <div className="col-3">
               <EuclideanTouchControl

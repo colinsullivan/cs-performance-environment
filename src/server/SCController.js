@@ -20,9 +20,8 @@ class SCController {
         resolve();
       } else {
         console.log("Booting SuperCollider...");
-        var sclangInstance = null;
         var sclangOptions = {
-          debug: process.env.NODE_ENV == "development"
+          debug: process.env.NODE_ENV === "development"
         };
         return sc.lang.boot(sclangOptions).then((sclang) => {
           console.log("sclang booted.");
@@ -46,7 +45,7 @@ s.waitForBoot({
   mBounds.left = 1440;
   mBounds.top = 900;
   m.window.setTopLeftBounds(mBounds);
-  //performanceEnvironment = CSPerformanceEnvironment.new();
+  performanceEnvironment = CSPerformanceEnvironment.new();
 });
           `).then(resolve);
           
