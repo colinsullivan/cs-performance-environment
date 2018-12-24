@@ -1,5 +1,5 @@
 /**
- *  @file       SequencerParamTouchSelector.jsx
+ *  @file       InstrParamTouchSelector.jsx
  *
  *
  *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
@@ -12,35 +12,35 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import ParamTouchSelector from 'components/ParamTouchSelector';
-import { sequencer_update_param } from 'common/actions';
+import { instrument_parameter_updated } from 'common/actions';
 
-const SequencerParamTouchSelector = ({changeSequencerParam, ...props}) => (
+const InstrParamTouchSelector = ({changeInstrumentParam, ...props}) => (
   <ParamTouchSelector
-    onChange={changeSequencerParam}
+    onChange={changeInstrumentParam}
     {...props}
   />
 );
 
 function mapStateToProps (state, ownProps) {
   return {
-    value: state.sequencers[ownProps.sequencerId][ownProps.param]
+    value: state.components[ownProps.componentId].parameters[ownProps.param]
   };
 }
 function mapDispatchToProps (dispatch, ownProps) {
   return {
-    changeSequencerParam: (val) => {
+    changeInstrumentParam: (val) => {
       dispatch(
-        sequencer_update_param(
-          ownProps.sequencerId,
+        instrument_parameter_updated(
+          ownProps.componentId,
           ownProps.param,
           val
         )
       );
     }
-  };
+  }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SequencerParamTouchSelector);
+)(InstrParamTouchSelector);

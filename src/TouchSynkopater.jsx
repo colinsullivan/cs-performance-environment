@@ -6,10 +6,11 @@ import QueueSequencerButton from 'components/QueueSequencerButton';
 import SequencerParamTouchSelector from 'components/SequencerParamTouchSelector';
 import EuclideanTouchControl from 'components/EuclideanTouchControl/EuclideanTouchControl';
 import TouchSynkopaterPiano from 'components/TouchSynkopaterPiano';
+import InstrParamTouchSelector from 'components/InstrParamTouchSelector';
 
 class TouchSynkopater extends React.Component {
   render() {
-    const { sequencerId } = this.props;
+    const { sequencerId, componentId } = this.props;
 
     const durOptions = [
       {value: 8, label: "8"},
@@ -76,15 +77,17 @@ class TouchSynkopater extends React.Component {
                 param='legato'
                 options={legatoOptions}
               />
-              <SequencerParamTouchSelector
-                sequencerId={sequencerId}
-                param='delayFactor'
-                options={legatoOptions}
-              />
             </div>
             <div className="col-3">
               <EuclideanTouchControl
                 sequencerId={sequencerId}
+              />
+            </div>
+            <div className="col-2">
+              <InstrParamTouchSelector
+                componentId={componentId}
+                param='delayFactor'
+                options={durOptions}
               />
             </div>
           </div>

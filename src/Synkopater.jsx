@@ -14,7 +14,13 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 
-import * as actions from 'common/actions';
+import {
+  instrument_parameter_updated,
+  synkopater_arp_remove_note,
+  synkopater_arp_add_note,
+  sequencer_update_param,
+  synkopater_arp_change_mode
+} from 'common/actions';
 import { ARP_MODES } from 'common/reducers';
 import SynkopaterPiano from 'components/SynkopaterPiano';
 import PlayButtonSmall from 'components/PlayButtonSmall';
@@ -173,7 +179,7 @@ function mapDispatchToProps (dispatch, ownProps) {
   return {
     removeNote: (note) => {
       dispatch(
-        actions.synkopater_arp_remove_note(
+        synkopater_arp_remove_note(
           ownProps.sequencerId,
           note
         )
@@ -181,7 +187,7 @@ function mapDispatchToProps (dispatch, ownProps) {
     },
     addNote: (note) => {
       dispatch(
-        actions.synkopater_arp_add_note(
+        synkopater_arp_add_note(
           ownProps.sequencerId,
           note
         )
@@ -189,7 +195,7 @@ function mapDispatchToProps (dispatch, ownProps) {
     },
     changeMode: (mode) => {
       dispatch(
-        actions.synkopater_arp_change_mode(
+        synkopater_arp_change_mode(
           ownProps.sequencerId,
           mode
         )
@@ -197,7 +203,7 @@ function mapDispatchToProps (dispatch, ownProps) {
     },
     changeSequencerParam: (param, val) => {
       dispatch(
-        actions.sequencer_update_param(
+        sequencer_update_param(
           ownProps.sequencerId,
           param,
           val
@@ -206,7 +212,7 @@ function mapDispatchToProps (dispatch, ownProps) {
     },
     changeInstrumentParam: (param, val) => {
       dispatch(
-        actions.instrument_parameter_updated(
+        instrument_parameter_updated(
           ownProps.componentId,
           param,
           val
