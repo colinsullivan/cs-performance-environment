@@ -68,7 +68,6 @@ function create_synkopater_component (id, ampSlider, bus) {
       controllerMappings: {
         launchControl: {
           knl1: 'delayFeedbackControl',
-          knl2: 'delayFactorControl',
           [ampSlider]: 'ampAndToggleSlider'
         }
       }

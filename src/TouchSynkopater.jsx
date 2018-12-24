@@ -31,8 +31,6 @@ class TouchSynkopater extends React.Component {
     offsetOptions.push({
       value: 0, label: "0"
     });
-    console.log("offsetOptions");
-    console.log(offsetOptions);
 
     const legatoOptions = [
       {value: 1, label: "1"},
@@ -43,6 +41,27 @@ class TouchSynkopater extends React.Component {
       {value: 1/8, label: "1/8"},
       {value: 1/16, label: "1/16"},
       {value: 1/32, label: "1/32"}
+    ];
+
+    const factorOptions = [
+      {value: 4, label: "4"},
+      {value: 3, label: "3"},
+      {value: 2 + 3/4, label: "2 3/4"},
+      {value: 2 + 1/2, label: "2 1/2"},
+      {value: 2 + 2/3, label: "2 2/3"},
+      {value: 2 + 1/3, label: "2 1/3"},
+      {value: 2 + 1/8, label: "2 1/8"},
+      {value: 2 + 1/16, label: "2 1/16"},
+      {value: 2 + 1/32, label: "2 1/32"},
+      {value: 2, label: "2"},
+      {value: 1 + 3/4, label: "1 3/4"},
+      {value: 1 + 1/2, label: "1 1/2"},
+      {value: 1 + 2/3, label: "1 2/3"},
+      {value: 1 + 1/3, label: "1 1/3"},
+      {value: 1 + 1/8, label: "1 1/8"},
+      {value: 1 + 1/16, label: "1 1/16"},
+      {value: 1 + 1/32, label: "1 1/32"},
+      {value: 1, label: "1"},
     ];
 
     return (
@@ -87,7 +106,7 @@ class TouchSynkopater extends React.Component {
               <InstrParamTouchSelector
                 componentId={componentId}
                 param='delayFactor'
-                options={durOptions}
+                options={factorOptions}
               />
             </div>
           </div>
