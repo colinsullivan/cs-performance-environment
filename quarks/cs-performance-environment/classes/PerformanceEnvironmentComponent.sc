@@ -236,13 +236,18 @@ PerformanceEnvironmentComponent : Object {
       this.abletonController = nil;
     });
     
-    launchControlPort = MIDIIn.findPort("Launch Control XL", "Launch Control XL");
-    if (launchControlPort != nil, {
-      this.launchControlController = LaunchControlXLKtl.new(launchControlPort.uid);
-      this.init_launchcontrol_mappings();
-    }, {
-      this.launchControlController = nil;
-    });
+    //launchControlPort = MIDIIn.findPort("Launch Control XL", "Launch Control XL");
+    this.launchControlController = MKtl(
+      'CSLaunchControlXL',
+      "novation-launchcontrol-xl",
+      multiIndex: 0
+    );
+    this.init_launchcontrol_mappings();
+    //if (launchControlPort != nil, {
+      ////this.launchControlController = LaunchControlXLKtl.new(launchControlPort.uid);
+    //}, {
+      //this.launchControlController = nil;
+    //});
   }
 
   /**
@@ -298,8 +303,8 @@ PerformanceEnvironmentComponent : Object {
    *  Map a property of the component (member variable) to any controller
    *  knob or slider.
    *
-   *  @param  {MIDIKtl}  controller - The JITKtl controller instance
-   *  @param  Symbol  The key used to identify the knob or slider on the 
+   *  @param  {MKtlDevice}  controller - The controller instance.
+   *  @param  Symbol  elementKey - The key used to identify the knob or slider on the 
    *  controller.  Ex. \sl1
    *  @param  Symbol|Array  Used as a key to identify the property of the
    *  component to control with the aforementioned controller knob.
@@ -308,20 +313,18 @@ PerformanceEnvironmentComponent : Object {
    *  mapping controller to member variables.
    **/
   map_controller_to_property {
-    arg controller, controllerComponent, propertyKeys, mapTo = this;
+    arg controller, elementKey, propertyKeys, mapTo = this;
     var properties;
 
     properties = this.pr_get_properties_from_keys(propertyKeys, mapTo);
 
-    controller.mapCCS(1, controllerComponent, {
-      arg ccval;
-
+    controller.dictAt(elementKey).addAction({
+      arg element;
       properties.do({
         arg property;
 
-        property.set(property.spec.map(ccval / 127));
+        property.set(property.spec.map(element.value));
       });
-
     });
   }
 
