@@ -54,7 +54,7 @@ function create_performance_component (id, type) {
   };
 }
 
-function create_synkopater_component (id, ampSlider, bus) {
+function create_synkopater_component (id, bus) {
   return {
     ...create_performance_component(id, 'SynkopaterDelay'),
     ...{
@@ -66,9 +66,8 @@ function create_synkopater_component (id, ampSlider, bus) {
         delayFeedback: 0.0
       },
       controllerMappings: {
-        launchControl: {
-          knl1: 'delayFeedbackControl',
-          [ampSlider]: 'ampAndToggleSlider'
+        launchControlController: {
+          pg0_kn_pan_1: 'delayFeedbackControl',
         }
       }
     }
@@ -90,8 +89,8 @@ export function create_default_state () {
       )
     },
     components: {
-      synkopaterA: create_synkopater_component('synkopaterA', 'sl1', 14),
-      synkopaterB: create_synkopater_component('synkopaterB', 'sl2', 16)
+      synkopaterA: create_synkopater_component('synkopaterA', 14),
+      synkopaterB: create_synkopater_component('synkopaterB', 16)
     }
   };
   Object.assign(initialState.sequencers.synkopaterA, {

@@ -204,37 +204,37 @@ PerformanceEnvironmentComponent : Object {
       launchControlPort,
       abletonPort;
     
-    uc33Port = MIDIIn.findPort("UC-33 USB MIDI Controller", "Port 1");
+    //uc33Port = MIDIIn.findPort("UC-33 USB MIDI Controller", "Port 1");
 
-    if (uc33Port != nil, {
-      // sub-classes should use this UC33Ktl instance to assign knobs and such.
-      this.uc33Controller = UC33Ktl.new(
-        uc33Port.uid
-      );
+    //if (uc33Port != nil, {
+      //// sub-classes should use this UC33Ktl instance to assign knobs and such.
+      //this.uc33Controller = UC33Ktl.new(
+        //uc33Port.uid
+      //);
 
-      this.init_uc33_mappings();
-    }, {
-      // sub-classes should check to see if uc33Controller is nil to determine
-      // if it is currently connected.
-      this.uc33Controller = nil;
-    });
+      //this.init_uc33_mappings();
+    //}, {
+      //// sub-classes should check to see if uc33Controller is nil to determine
+      //// if it is currently connected.
+      //this.uc33Controller = nil;
+    //});
 
-    softStepPort = MIDIIn.findPort("SoftStep Share", "SoftStep Share");
+    //softStepPort = MIDIIn.findPort("SoftStep Share", "SoftStep Share");
     
-    if (softStepPort != nil, {
-      this.softStepController = SoftStepKtl.new(softStepPort.uid);
-      this.init_softStep_mappings();
-    }, {
-      this.softStepController = nil;
-    });
+    //if (softStepPort != nil, {
+      //this.softStepController = SoftStepKtl.new(softStepPort.uid);
+      //this.init_softStep_mappings();
+    //}, {
+      //this.softStepController = nil;
+    //});
     
-    abletonPort = MIDIIn.findPort("(out) SuperCollider", "(out) SuperCollider");
-    if (abletonPort != nil, {
-      this.abletonController = AbletonKtl.new(abletonPort.uid);
-      this.init_ableton_mappings();
-    }, {
-      this.abletonController = nil;
-    });
+    //abletonPort = MIDIIn.findPort("(out) SuperCollider", "(out) SuperCollider");
+    //if (abletonPort != nil, {
+      //this.abletonController = AbletonKtl.new(abletonPort.uid);
+      //this.init_ableton_mappings();
+    //}, {
+      //this.abletonController = nil;
+    //});
     
     //launchControlPort = MIDIIn.findPort("Launch Control XL", "Launch Control XL");
     this.launchControlController = MKtl(
@@ -242,6 +242,34 @@ PerformanceEnvironmentComponent : Object {
       "novation-launchcontrol-xl",
       multiIndex: 0
     );
+
+
+    if (controllerMappings != nil, {
+        controllerMappings.keysValuesDo({
+          arg controllerName, mappings;
+          var controller;
+
+          controller = this.performMsg([controllerName]);
+          if (controller != nil, {
+            mappings.keysValuesDo({
+              arg controlName, property;
+              ("mapping `" ++ controlName ++ "` to this." ++ property).postln();
+              this.map_controller_to_property(
+                controller,
+                controlName.asSymbol(),
+                property.asSymbol()
+              );
+            });
+          },
+          {
+            ("No controller named:  " + controllerName).postln();
+          });
+
+        });
+    });
+
+
+
     this.init_launchcontrol_mappings();
     //if (launchControlPort != nil, {
       ////this.launchControlController = LaunchControlXLKtl.new(launchControlPort.uid);
@@ -314,16 +342,27 @@ PerformanceEnvironmentComponent : Object {
    **/
   map_controller_to_property {
     arg controller, elementKey, propertyKeys, mapTo = this;
-    var properties;
+    var properties, controllerElement;
 
     properties = this.pr_get_properties_from_keys(propertyKeys, mapTo);
 
-    controller.dictAt(elementKey).addAction({
-      arg element;
-      properties.do({
-        arg property;
+    controllerElement = controller.dictAt(elementKey);
+    if (controllerElement == nil, {
+      (
+        "No element `"
+        ++ elementKey
+        ++ "` not found in controller `"
+        ++ controller
+        ++ "`"
+      ).postln();
+    }, {
+      controllerElement.addAction({
+        arg element;
+        properties.do({
+          arg property;
 
-        property.set(property.spec.map(element.value));
+          property.set(property.spec.map(element.value));
+        });
       });
     });
   }

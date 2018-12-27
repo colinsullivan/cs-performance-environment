@@ -175,47 +175,11 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
 
     });
   }
-  init_external_controller_mappings {
-    super.init_external_controller_mappings();
-
-    if (controllerMappings != nil, {
-        controllerMappings.keysValuesDo({
-          arg controller, mappings;
-
-          switch(controller,
-            \launchControl, {
-              if (this.launchControlController != nil, {
-                mappings.keysValuesDo({
-                  arg controlName, property;
-                  ("mapping `" + controlName + "` to this." + property).postln();
-                  this.map_controller_to_property(
-                    this.launchControlController,
-                    controlName.asSymbol(),
-                    property.asSymbol()
-                  );
-                });
-              }, {
-                "Skipping launchcontrol mappings because controller disconnected".postln();
-              });
-            },
-            {
-              ("No mapping for " + controller).postln();
-            }
-          );
-
-        });
-    });
-    
-
-  }
-  init_launchcontrol_mappings {
-
-  }
-  init_uc33_mappings {
-    //this.map_uc33_to_property(\knu1, \synkopationControlOne);
-    //this.map_uc33_to_property(\knm1, \synkopationControlTwo);
-    //this.map_uc33_to_property(\knl1, \delayFactorControl);
-    //this.map_uc33_to_property(\knu2, \delayFeedbackControl);
-    //this.map_uc33_to_property(\sl1, \ampAndToggleSlider);
-  }
+  //init_uc33_mappings {
+    ////this.map_uc33_to_property(\knu1, \synkopationControlOne);
+    ////this.map_uc33_to_property(\knm1, \synkopationControlTwo);
+    ////this.map_uc33_to_property(\knl1, \delayFactorControl);
+    ////this.map_uc33_to_property(\knu2, \delayFeedbackControl);
+    ////this.map_uc33_to_property(\sl1, \ampAndToggleSlider);
+  //}
 }
