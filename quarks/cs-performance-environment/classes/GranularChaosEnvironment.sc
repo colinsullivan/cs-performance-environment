@@ -25,8 +25,8 @@ GranularChaosEnvironment : PatchEnvironmentComponent {
     });
   }
 
-  load_patch {
-    super.load_patch();
+  init_patches {
+    super.init_patches();
 
     /*"GranularChaosEnvironment.load_patch".postln;*/
 

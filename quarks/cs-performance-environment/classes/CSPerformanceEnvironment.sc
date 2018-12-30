@@ -16,7 +16,7 @@ CSPerformanceEnvironment {
     randomHarpEnvironment,
     runningWaterEnvironment,
     granularChaosEnvironment,
-    synkopaterDelay;
+    shakerTextureInstr;
 
   *new {
     ^super.new.init();
@@ -54,6 +54,11 @@ CSPerformanceEnvironment {
     granularChaosEnvironment = GranularChaosEnvironment.new((
       store: store,
       outputBus: 20
+    ));
+
+    shakerTextureInstr = ShakerTextureInstrument.new((
+      store: store,
+      outputBus: 22
     ));
 
   }

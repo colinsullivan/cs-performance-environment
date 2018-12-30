@@ -20,15 +20,6 @@ PatchEnvironmentComponent : PerformanceEnvironmentComponent {
     /*this.patch.playToMixer(this.outputChannel);*/
   }
 
-  load_environment {
-    this.load_patch();
-  }
-
-  load_patch {
-    /*"PatchEnvironmentComponent.load_samples".postln;*/
-    // subclasses should instantiate Patch objects here and call prepareForPlay
-  }
-
   /**
    *  Map a property of the patch to a controller knob or slider.
    *

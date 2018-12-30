@@ -28,8 +28,8 @@ RunningWaterEnvironment : PatchEnvironmentComponent {
     });
   }
 
-  load_patch {
-    super.load_patch();
+  init_patches {
+    super.init_patches();
 
     this.patch = Patch(Instr.at("cs.sfx.RunningWaterStream.RunningWaterStreamAutomated"), (
       buffer: this.buf,
