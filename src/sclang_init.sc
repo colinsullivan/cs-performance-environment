@@ -17,6 +17,10 @@ s.waitForBoot({
   mBounds.left = 1440;
   mBounds.top = 900;
   m.window.setTopLeftBounds(mBounds);
+
+  // debugging
+  s.plotTree();
+  
   performanceEnvironment = CSPerformanceEnvironment.new();
 });
 
