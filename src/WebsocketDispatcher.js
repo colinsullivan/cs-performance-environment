@@ -49,7 +49,7 @@ class WebsocketDispatcher {
   handle_middleware (store, next, action) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       // only send actions originating here
-      if (!action.clientId) {
+      if (!action.clientId && !action.serverId) {
         this.ws.send(JSON.stringify({
             ...action,
             ...{

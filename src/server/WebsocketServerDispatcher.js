@@ -9,6 +9,9 @@
  **/
 
 import _ from 'lodash';
+import uuid from 'uuid/v4';
+
+const serverId = uuid();
 
 class WebsocketServerDispatcher {
   constructor(props) {
@@ -41,7 +44,9 @@ class WebsocketServerDispatcher {
     }
     for (i = 0; i < clientIds.length; i++) {
       if (this.wsByClientId[clientIds[i]].readyState === 1) {
-        this.wsByClientId[clientIds[i]].send(JSON.stringify(action));
+        this.wsByClientId[clientIds[i]].send(
+          JSON.stringify({serverId, ...action})
+        );
       }
     }
     return next(action);
