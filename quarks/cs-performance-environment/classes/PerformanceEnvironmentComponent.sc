@@ -160,17 +160,10 @@ PerformanceEnvironmentComponent : Object {
   
   }
 
-  play_patches_on_tracks {
-  
-  }
-
   load_environment {
     arg params;
     this.init_tracks(params);
     this.init_patches(params);
-    {
-      this.play_patches_on_tracks();
-    }.defer(1);
   }
 
 

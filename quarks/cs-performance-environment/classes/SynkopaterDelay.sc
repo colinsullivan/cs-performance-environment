@@ -27,6 +27,8 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
 
     this.ampAndToggleSlider = KrNumberEditor.new(0.0, \amp);
 
+    "SynkopaterDelay.init".postln();
+
     super.init(params);
     
     //this.delayFactorParam = InstrumentParameter.new((
@@ -46,6 +48,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   init_tracks {
     arg params;
     super.init_tracks(params);
+    "SynkopaterDelay.initTracks".postln();
 
     this.inputTrack = MixerChannel.new(
       "synkopaterDelayInput",
@@ -60,6 +63,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   init_patches {
     arg params;
     super.init_patches(params);
+    "SynkopaterDelay.initPatches".postln();
 
     // because of the way MixerChannel works, we need a passthrough so
     // something gets through to the fx stage.  I tried rewriting the
@@ -76,12 +80,9 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
 
   }
 
-  play_patches_on_tracks {
-    this.inputTrack.playfx(this.delayPatch);
-  }
-
   on_play {
     inputTrack.play(inputPatch);
+    inputTrack.playfx(delayPatch);
   }
 
   update_delay_time {
@@ -102,6 +103,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
       sequencerDur,
       prevComponentState = componentState;
     super.handle_state_change();
+    "SynkopaterDelay.handle_state_change".postln();
     
     sequencerId = componentState.sequencerId.asSymbol();
     state = this.store.getState();
