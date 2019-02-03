@@ -45,7 +45,17 @@ s.waitForBoot({
   mBounds.left = 1440;
   mBounds.top = 900;
   m.window.setTopLeftBounds(mBounds);
+
+  // debugging
+  //s.plotTree();
+
   performanceEnvironment = CSPerformanceEnvironment.new();
+  StateStore.getInstance().dispatch((
+    type: 'SCSYNTH_READYSTATE_UPDATE',
+    payload: (
+      readyState: 1
+    )
+  ));
 });
           `).then(resolve);
           

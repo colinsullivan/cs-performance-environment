@@ -270,11 +270,21 @@ export function websocketReadyState (state = READY_STATES.CLOSED, action) {
   }
 }
 
+export function scsynthReadyState (state = READY_STATES.CLOSED, action) {
+  switch (action.type) {
+    case actionTypes.SCSYNTH_READYSTATE_UPDATE:
+      return action.payload.readyState;
+    default:
+      return state;
+  }
+}
+
 
 export default combineReducers({
   [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
   controllers,
   sequencers,
   components,
-  websocketReadyState
+  websocketReadyState,
+  scsynthReadyState
 });
