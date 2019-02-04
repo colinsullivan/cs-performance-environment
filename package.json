@@ -9,7 +9,7 @@
     "awakening-sequencers": "^0.8.8",
     "axios": "^0.18.0",
     "babel-eslint": "9.x",
-    "bjorklund-js": "colinsullivan/bjorklund-js#bugfixes",
+    "bjorklund-js": "^0.1.2",
     "bootstrap": "^4.1.3",
     "easymidi": "0.0.4",
     "eslint": "^5.10.0",
@@ -33,7 +33,8 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.0.14",
-    "supercollider-redux": "0.0.94",
+    "reselect": "^4.0.0",
+    "supercollider-redux": "0.0.95",
     "supercolliderjs": "^0.14.2",
     "uuid": "^3.3.2"
   },
