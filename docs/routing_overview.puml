@@ -1,0 +1,62 @@
+@startuml
+
+!include styles.iuml
+
+[Ableton Live] as live
+[Dreadbox Erebus] as erebus
+[Pittsburgh Microvolt] as microvolt
+[Electron] as electron
+[SuperCollider] as sc
+[Novation LaunchControl XL] as launchControlXL
+[iPad] as ipad
+[Audio / MIDI Interface] as audioif
+
+note as n1
+  Dashed lines are MIDI / control messages,
+  solid lines are audio
+end note
+
+interface "MidiPipe (SuperCollider Out)" as scmidi
+interface "JackRouter" as jack
+interface "USB MIDI" as usb
+interface "HTTP" as http
+interface "OSC" as osc
+interface "Audio In" as audioIn
+interface "MIDI Out" as midiOut
+interface "\nThunderbolt (audio)" as thunderboltAudio
+interface "Thunderbolt (midi)" as thunderboltMIDI
+
+erebus -> audioIn
+microvolt -> audioIn
+midiOut ..> erebus
+midiOut ..> microvolt
+
+audioIn -> audioif
+audioif ..> midiOut
+
+thunderboltMIDI ..> audioif
+audioif -> thunderboltAudio
+live ..> thunderboltMIDI
+thunderboltAudio -> jack
+jack -> thunderboltAudio
+thunderboltAudio -> audioif
+
+jack -> live
+live -> jack
+
+launchControlXL ..> usb
+usb ..> live
+
+
+ipad ..> http : GUI control messages
+http ..> electron : GUI control messages
+electron ..> osc : state updates
+
+osc ..> sc
+sc ..> scmidi
+scmidi ..> live
+
+sc -> jack
+
+
+@enduml

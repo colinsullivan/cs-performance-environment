@@ -1,0 +1,46 @@
+skinparam backgroundColor #1d1f21
+skinparam defaultFontName Monaco
+skinparam defaultFontColor #c5c8c6
+skinparam defaultFontSize 16
+skinparam shadowing false
+hide circle
+skinparam componentStyle uml2
+skinparam class {
+  backgroundColor #1d1f21
+  fontColor #b294bb
+  borderColor #b294bb
+  arrowColor #c5c8c6
+}
+skinparam object {
+  backgroundColor #1d1f21
+  fontColor #f0c674
+  borderColor #b294bb
+  arrowColor #c5c8c6
+}
+skinparam state {
+  backgroundColor #1d1f21
+  borderColor #b294bb
+  arrowColor #c5c8c6
+}
+skinparam sequenceParticipant {
+  backgroundColor #1d1f21
+  borderColor #c5c8c6
+}
+skinparam sequenceLifeLine {
+  borderColor #c5c8c6
+}
+skinparam sequence {
+  arrowColor #c5c8c6
+}
+skinparam component {
+  backgroundColor #1d1f21
+  borderColor #b294bb
+}
+skinparam interface {
+  backgroundColor #1d1f21
+  borderColor #b294bb
+}
+skinparam note {  
+  backgroundColor #1d1f21
+  borderColor #c5c8c6
+}
