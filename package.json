@@ -38,7 +38,7 @@
     "supercolliderjs": "^0.14.2",
     "uuid": "^3.3.2"
   },
-  "main": "src/server/index.js",
+  "main": "build/server/index.js",
   "scripts": {
     "start_react": "react-scripts start",
     "build_react": "react-scripts build",
@@ -49,7 +49,8 @@
     "build_electron": "babel --out-dir ./build/server/ src/server/*.js && babel --out-dir ./build/common/ src/common/*.js",
     "start": "electron build/server/",
     "build": "npm run build_react && npm run build_electron",
-    "build_docs": "plantuml -progress -tpng ./docs/*.puml"
+    "build_docs": "plantuml -progress -tpng ./docs/*.puml",
+    "package": "electron-packager . cs-performance-environment --platform darwin --overwrite"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -80,9 +81,9 @@
     "@babel/preset-env": "^7.2.0",
     "@babel/register": "^7.0.0",
     "electron": "^1.8.8",
+    "electron-packager": "^13.1.1",
     "electron-react-devtools": "^0.5.3",
     "electron-rebuild": "^1.8.2",
     "eslint-config-react-app": "^3.0.5"
-  },
-  "homepage": "./"
+  }
 }

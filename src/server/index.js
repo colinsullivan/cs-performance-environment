@@ -112,11 +112,10 @@ var store = createStore(
 );
 
 console.log("Creating SCController...");
-var scController = new SCController();
-var scStoreController;
+const scController = new SCController();
 scController.boot().then(() => {
   console.log("Creating SCStoreController...");
-  scStoreController = new SCStoreController(store);
+  const scStoreController = new SCStoreController(store);
 }).catch(function (err) {
   console.log("error while starting up...");
   throw err;
@@ -133,7 +132,7 @@ if (process.env.NODE_ENV === 'development') {
   });
   server.use(express.static('public'));
 } else {
-  server.use(express.static('build'));
+  server.use(express.static(path.join(__dirname, '..')));
 }
 server.get('/getState', function (req, res, next) {
   res.json(store.getState());
@@ -151,7 +150,10 @@ server.ws('/:clientId', function (ws, req) {
   wsServerDispatcher.addClient(clientId, ws);
 });
 if (process.env.NODE_ENV !== 'development') {
-  server.get('*', function (req, res) {
+  server.get('/', function (req, res) {
+    res.sendFile(path.join(`${__dirname}/../index.html`));
+  });
+  server.get('/laptop', function (req, res) {
     res.sendFile(path.join(`${__dirname}/../index.html`));
   });
 }

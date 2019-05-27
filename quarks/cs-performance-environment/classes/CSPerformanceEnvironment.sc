@@ -16,7 +16,9 @@ CSPerformanceEnvironment {
     randomHarpEnvironment,
     runningWaterEnvironment,
     granularChaosEnvironment,
-    shakerTextureInstr;
+    shakerTextureInstr,
+    vileKickEnvironment,
+    wideBassEnvironment;
 
   *new {
     ^super.new.init();
@@ -27,7 +29,7 @@ CSPerformanceEnvironment {
 
     store = StateStore.getInstance();
 
-    Server.default.latency = 0;
+    Server.default.latency = 0.0;
 
     clockController = LinkClockController.new((
       store: store
@@ -60,6 +62,15 @@ CSPerformanceEnvironment {
       store: store,
       outputBus: 22
     ));
+    vileKickEnvironment = VileKickEnvironment.new((
+      inChannel: 6,
+      outputBus: 24
+    ));
+    wideBassEnvironment = WideBassVoicerEnvironment.new((
+      inChannel: 5,
+      outputBus: 28
+    )
+  );
 
   }
 }

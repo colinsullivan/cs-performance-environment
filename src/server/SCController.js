@@ -20,12 +20,12 @@ class SCController {
         resolve();
       } else {
         console.log("Booting SuperCollider...");
-        var sclangOptions = {
+        sc.resolveOptions('.supercollider.yml', {
           debug: process.env.NODE_ENV === "development"
-        };
-        return sc.lang.boot(sclangOptions).then((sclang) => {
-          console.log("sclang booted.");
-          return sclang.interpret(`
+        }).then((sclangOptions) => {
+          return sc.lang.boot(sclangOptions).then((sclang) => {
+            console.log("sclang booted.");
+            return sclang.interpret(`
 MIDIClient.init;
 MIDIIn.connectAll;
 API.mountDuplexOSC();
@@ -58,12 +58,13 @@ s.waitForBoot({
   ));
 });
           `).then(resolve);
-          
 
-        }).catch((err) => {
-          console.log("ERROR while booting SC");
-          console.log("err");
-          console.log(err);
+
+          }).catch((err) => {
+            console.log("ERROR while booting SC");
+            console.log("err");
+            console.log(err);
+          })
         });
       }
       
