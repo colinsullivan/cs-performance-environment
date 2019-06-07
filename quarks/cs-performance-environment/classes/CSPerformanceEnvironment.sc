@@ -18,7 +18,8 @@ CSPerformanceEnvironment {
     granularChaosEnvironment,
     shakerTextureInstr,
     vileKickEnvironment,
-    wideBassEnvironment;
+    wideBassEnvironment,
+    lazersEnvironment;
 
   *new {
     ^super.new.init();
@@ -69,8 +70,10 @@ CSPerformanceEnvironment {
     wideBassEnvironment = WideBassVoicerEnvironment.new((
       inChannel: 5,
       outputBus: 28
-    )
-  );
-
+    ));
+    lazersEnvironment = RandomizedLazersEnvironment.new((
+      inChannel: 7,
+      outputBus: 32
+    ));
   }
 }
