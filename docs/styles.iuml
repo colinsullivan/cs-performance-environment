@@ -40,7 +40,7 @@ skinparam interface {
   backgroundColor #1d1f21
   borderColor #b294bb
 }
-skinparam note {  
+skinparam note {
   backgroundColor #1d1f21
   borderColor #c5c8c6
 }

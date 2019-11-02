@@ -30,11 +30,14 @@ CSPerformanceEnvironment {
 
     store = StateStore.getInstance();
 
-    Server.default.latency = 0.0;
+    //Server.default.latency = 0.9;
+    Server.default.latency = 0.05;
 
     clockController = LinkClockController.new((
       store: store
     ));
+
+    clockController.clock.latency = Server.default.latency;
 
     sequencerFactory = AwakenedSequencerFactory.getInstance();
     sequencerFactory.setStore(store);
