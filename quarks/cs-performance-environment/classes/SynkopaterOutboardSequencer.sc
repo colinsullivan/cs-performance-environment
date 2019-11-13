@@ -8,7 +8,7 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-SynkopaterOutboardSequencer : AwakenedSequencer {
+SynkopaterOutboardSequencer : SCReduxSequencer {
   var pat,
     notes = nil,
     euclideanNumHits = nil,

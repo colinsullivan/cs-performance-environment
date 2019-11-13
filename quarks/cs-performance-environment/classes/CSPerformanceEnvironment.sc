@@ -39,7 +39,7 @@ CSPerformanceEnvironment {
 
     clockController.clock.latency = Server.default.latency;
 
-    sequencerFactory = AwakenedSequencerFactory.getInstance();
+    sequencerFactory = SCReduxSequencerFactory.getInstance();
     sequencerFactory.setStore(store);
     sequencerFactory.setClockController(clockController);
 
