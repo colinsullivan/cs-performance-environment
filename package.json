@@ -3,20 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/plugin-transform-spread": "^7.2.2",
     "@material-ui/core": "^3.6.1",
     "@material-ui/icons": "^3.0.1",
-    "awakening-sequencers": "^0.8.8",
     "axios": "^0.18.0",
-    "babel-eslint": "9.x",
     "bjorklund-js": "^0.1.2",
     "bootstrap": "^4.1.3",
     "easymidi": "0.0.4",
-    "eslint": "^5.10.0",
-    "eslint-plugin-flowtype": "2.x",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint": "^6.6.0",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
     "hammerjs": "^2.0.8",
@@ -32,10 +25,11 @@
     "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.0.14",
+    "react-scripts": "^3.2.0",
+    "redux": "^4.0.4",
     "reselect": "^4.0.0",
-    "supercollider-redux": "0.0.95",
-    "supercolliderjs": "^0.14.2",
+    "supercollider-redux": "file:../supercollider-redux",
+    "supercollider-redux-sequencers": "file:../supercollider-redux-sequencers",
     "uuid": "^3.3.2"
   },
   "main": "build/server/index.js",
@@ -53,37 +47,57 @@
     "package": "electron-packager . cs-performance-environment --platform darwin --overwrite"
   },
   "eslintConfig": {
-    "extends": "react-app",
+    "extends": "eslint:recommended",
+    "parser": "babel-eslint",
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true,
+      "mocha": true
+    },
     "rules": {
-      "prefer-const": 2
+      "no-console": 0,
+      "no-use-before-define": "error",
+      "block-scoped-var": "error",
+      "no-case-declarations": 0,
+      "prefer-const": "error"
     }
   },
   "babel": {
-    "plugins": [
-      "@babel/plugin-transform-spread",
-      "@babel/plugin-proposal-object-rest-spread"
-    ],
+    "sourceMaps": true,
     "presets": [
       [
         "@babel/preset-env",
         {
           "targets": {
-            "node": "8.14.1"
+            "node": true
           }
         }
       ]
     ]
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.0",
-    "@babel/core": "^7.2.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
-    "@babel/preset-env": "^7.2.0",
-    "@babel/register": "^7.0.0",
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "babel-plugin-istanbul": "^5.2.0",
     "electron": "^1.8.8",
     "electron-packager": "^13.1.1",
     "electron-react-devtools": "^0.5.3",
-    "electron-rebuild": "^1.8.2",
-    "eslint-config-react-app": "^3.0.5"
+    "electron-rebuild": "^1.8.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

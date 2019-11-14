@@ -10,8 +10,8 @@
 
 import _ from 'lodash';
 import {combineReducers} from 'redux'
-import awakeningSequencers from "awakening-sequencers"
-import supercolliderRedux from "supercollider-redux"
+import SCReduxSequencers from "supercollider-redux-sequencers"
+import SCRedux from "supercollider-redux"
 
 import { READY_STATES } from '../common/constants'
 
@@ -27,7 +27,7 @@ export const ARP_MODES = {
 
 // TODO: move these create methods into a model file
 function create_synkopater_sequencer (id, type, midiChan) {
-  return {...awakeningSequencers.create_default_sequencer(id, type), ...{
+  return {...SCReduxSequencers.create_default_sequencer(id, type), ...{
     dur: 0.5,
     stretch: 1.0,
     legato: 1.0,
@@ -109,7 +109,7 @@ export function create_default_state () {
 }
 
 function sequencers (state, action) {
-  state = awakeningSequencers.reducer(state, action);
+  state = SCReduxSequencers.reducer(state, action);
   let seq;
   switch (action.type) {
     case actionTypes.SYNKOPATER_ARP_REMOVE_NOTE:
@@ -141,7 +141,7 @@ function sequencers (state, action) {
       state = Object.assign({}, state);
       break;
 
-    //case supercolliderRedux.actionTypes.SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT:
+    //case SCRedux.actionTypes.SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT:
       //seq = Object.assign({}, state[action.payload.id]);
       //if (action.payload.id === seq.sequencerId) {
         //switch (seq.arpMode) {
@@ -270,21 +270,10 @@ export function websocketReadyState (state = READY_STATES.CLOSED, action) {
   }
 }
 
-export function scsynthReadyState (state = READY_STATES.CLOSED, action) {
-  switch (action.type) {
-    case actionTypes.SCSYNTH_READYSTATE_UPDATE:
-      return action.payload.readyState;
-    default:
-      return state;
-  }
-}
-
-
 export default combineReducers({
-  [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
+  [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
   controllers,
   sequencers,
   components,
-  websocketReadyState,
-  scsynthReadyState
+  websocketReadyState
 });

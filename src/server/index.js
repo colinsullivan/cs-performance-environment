@@ -13,15 +13,12 @@ import electron from 'electron';
 import { createStore, applyMiddleware } from "redux"
 import express from 'express';
 import expressWebsocket from 'express-ws';
-import supercolliderRedux from 'supercollider-redux';
+import SCRedux from 'supercollider-redux';
 
-import SCController from './SCController';
 import WebsocketServerDispatcher from './WebsocketServerDispatcher';
 
 import rootReducer, {create_default_state} from '../common/reducers';
 import { PORT } from '../common/constants';
-
-const SCStoreController = supercolliderRedux.SCStoreController;
 
 //const electron = require('electron');
 // Module to control application life.
@@ -111,11 +108,38 @@ var store = createStore(
   applyMiddleware(...middleware)
 );
 
-console.log("Creating SCController...");
-const scController = new SCController();
-scController.boot().then(() => {
-  console.log("Creating SCStoreController...");
-  const scStoreController = new SCStoreController(store);
+console.log("Initializing SCRedux");
+const scLangController = new SCRedux.SCLangController(store, {
+  interpretOnLangBoot: `
+MIDIClient.init;
+MIDIIn.connectAll;
+s.options.inDevice = "JackRouter";
+s.options.outDevice = "JackRouter";
+s.options.numOutputBusChannels = 48;
+s.options.numInputBusChannels = 48;
+s.options.memSize = 8192 * 2 * 2 * 2;
+s.options.blockSize = 8;
+
+s.waitForBoot({
+  var m = s.meter(),
+    mBounds,
+    performanceEnvironment;
+  // move level meter to bottom right of screen
+  mBounds = m.window.bounds;
+  mBounds.left = 1440;
+  mBounds.top = 900;
+  m.window.setTopLeftBounds(mBounds);
+
+  // debugging
+  //s.plotTree();
+
+  performanceEnvironment = CSPerformanceEnvironment.new();
+});`
+});
+const scStoreController = new SCRedux.SCStoreController(store);
+
+scLangController.boot().then(() => {
+  scStoreController.init();
 }).catch(function (err) {
   console.log("error while starting up...");
   throw err;
