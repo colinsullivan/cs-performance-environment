@@ -1,7 +1,0 @@
-sclang: /Users/colin/Projects/patches/supercollider/build/Install/SuperCollider/SuperCollider.app/Contents/MacOS/sclang
-scsynth: /Users/colin/Projects/patches/supercollider/build/Install/SuperCollider/SuperCollider.app/Contents/Resources/scsynth
-#sclang: /Applications/SuperCollider/SuperCollider.app/Contents/MacOS/sclang
-#scsynth: /Applications/SuperCollider/SuperCollider.app/Contents/Resources/scsynth
-sclang_conf: ~/Library/Application Support/SuperCollider/sclang_conf.yaml
-echo: false
-stdin: false

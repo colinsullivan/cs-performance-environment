@@ -37,7 +37,7 @@
     "build_react": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start_electron": "NODE_ENV=development electron -r @babel/register .",
+    "start_electron": "NODE_ENV=development electron -r @babel/register ./src/server/index.js",
     "rebuild_electron": "electron-rebuild",
     "build_electron": "babel --out-dir ./build/server/ src/server/*.js && babel --out-dir ./build/common/ src/common/*.js",
     "start": "electron build/server/",

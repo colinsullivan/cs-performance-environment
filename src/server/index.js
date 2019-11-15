@@ -99,7 +99,7 @@ var loggerMiddleware = store => next => action => {
 var middleware = [wsServerDispatcher.middleware];
 
 if (process.env.NODE_ENV === 'development') {
-  middleware.push(loggerMiddleware);
+  //middleware.push(loggerMiddleware);
 }
 
 var store = createStore(
@@ -134,7 +134,10 @@ s.waitForBoot({
   //s.plotTree();
 
   performanceEnvironment = CSPerformanceEnvironment.new();
-});`
+});`,
+  sclangOptions: {
+    debug: true
+  }
 });
 const scStoreController = new SCRedux.SCStoreController(store);
 
