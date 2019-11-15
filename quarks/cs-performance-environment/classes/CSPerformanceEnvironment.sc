@@ -28,7 +28,7 @@ CSPerformanceEnvironment {
   init {
     arg params;
 
-    store = StateStore.getInstance();
+    store = SCReduxStore.getInstance();
 
     //Server.default.latency = 0.9;
     Server.default.latency = 0.05;
