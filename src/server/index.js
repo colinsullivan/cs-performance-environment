@@ -136,7 +136,8 @@ s.waitForBoot({
   performanceEnvironment = CSPerformanceEnvironment.new();
 });`,
   sclangOptions: {
-    debug: true
+    debug: true,
+    sclang: process.env.SCLANG_PATH
   }
 });
 const scStoreController = new SCRedux.SCStoreController(store);
