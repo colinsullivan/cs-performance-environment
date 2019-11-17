@@ -11,8 +11,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import awakeningSequencers from 'awakening-sequencers';
-const PLAYING_STATES = awakeningSequencers.PLAYING_STATES;
+import SCReduxSequencers from 'supercollider-redux-sequencers';
+const PLAYING_STATES = SCReduxSequencers.PLAYING_STATES;
 
 /**
  *  @class        QueueSequencerButton
@@ -47,12 +47,12 @@ function mapDispatchToProps (dispatch, ownProps) {
   return {
     queue: () => {
       dispatch(
-        awakeningSequencers.actions.sequencerQueued(ownProps.sequencerId)
+        SCReduxSequencers.actions.sequencerQueued(ownProps.sequencerId)
       )
     },
     stop: () => {
       dispatch(
-        awakeningSequencers.actions.sequencerStopQueued(ownProps.sequencerId)
+        SCReduxSequencers.actions.sequencerStopQueued(ownProps.sequencerId)
       )
     }
   };

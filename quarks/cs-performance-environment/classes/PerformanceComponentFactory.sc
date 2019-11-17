@@ -10,7 +10,7 @@ PerformanceComponentFactory : Object {
     bufManager,
     // our list of components (PerformanceComponent instances / subclasses)
     components,
-    clockController;
+    clock;
 
   *new {
     ^super.new.init();
@@ -36,9 +36,9 @@ PerformanceComponentFactory : Object {
     bufManager = theBufManager;
   }
 
-  setClockController {
-    arg theClockController;
-    clockController = theClockController;
+  setClock {
+    arg theClock;
+    clock = theClock;
   }
 
   init {
@@ -61,7 +61,7 @@ PerformanceComponentFactory : Object {
             store: store,
             componentId: componentId,
             bufManager: bufManager,
-            clockController: clockController
+            clock: clock
           ));
         });
 

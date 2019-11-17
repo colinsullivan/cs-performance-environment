@@ -13,15 +13,12 @@ import electron from 'electron';
 import { createStore, applyMiddleware } from "redux"
 import express from 'express';
 import expressWebsocket from 'express-ws';
-import supercolliderRedux from 'supercollider-redux';
+import SCRedux from 'supercollider-redux';
 
-import SCController from './SCController';
 import WebsocketServerDispatcher from './WebsocketServerDispatcher';
 
 import rootReducer, {create_default_state} from '../common/reducers';
 import { PORT } from '../common/constants';
-
-const SCStoreController = supercolliderRedux.SCStoreController;
 
 //const electron = require('electron');
 // Module to control application life.
@@ -111,51 +108,78 @@ var store = createStore(
   applyMiddleware(...middleware)
 );
 
-console.log("Creating SCController...");
-const scController = new SCController();
-scController.boot().then(() => {
-  console.log("Creating SCStoreController...");
-  const scStoreController = new SCStoreController(store);
-}).catch(function (err) {
+console.log("Initializing SCRedux");
+const scReduxController = new SCRedux.SCReduxController(store, {
+  interpretOnLangBoot: `
+MIDIClient.init;
+MIDIIn.connectAll;
+s.options.inDevice = "JackRouter";
+s.options.outDevice = "JackRouter";
+s.options.numOutputBusChannels = 48;
+s.options.numInputBusChannels = 48;
+s.options.memSize = 8192 * 2 * 2 * 2;
+s.options.blockSize = 8;
+
+s.waitForBoot({
+  var m = s.meter(),
+    mBounds,
+    performanceEnvironment;
+  // move level meter to bottom right of screen
+  mBounds = m.window.bounds;
+  mBounds.left = 1440;
+  mBounds.top = 900;
+  m.window.setTopLeftBounds(mBounds);
+
+  // debugging
+  //s.plotTree();
+
+  performanceEnvironment = CSPerformanceEnvironment.new();
+});`
+});
+
+const startServer = () => {
+  const server = express();
+  expressWebsocket(server);
+
+  if (process.env.NODE_ENV === 'development') {
+    server.use(function (req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+      next();
+    });
+    server.use(express.static('public'));
+  } else {
+    server.use(express.static(path.join(__dirname, '..')));
+  }
+  server.get('/getState', function (req, res) {
+    res.json(store.getState());
+  });
+  server.ws('/:clientId', function (ws, req) {
+    const clientId = req.params.clientId;
+    console.log(`client ${clientId} connected.`);
+    ws.on('message', function (msg) {
+      const action = JSON.parse(msg);
+      store.dispatch(action);
+    });
+    ws.on('close', function () {
+      wsServerDispatcher.removeClient(clientId);
+    });
+    wsServerDispatcher.addClient(clientId, ws);
+  });
+  if (process.env.NODE_ENV !== 'development') {
+    server.get('/', function (req, res) {
+      res.sendFile(path.join(`${__dirname}/../index.html`));
+    });
+    server.get('/laptop', function (req, res) {
+      res.sendFile(path.join(`${__dirname}/../index.html`));
+    });
+  }
+
+  server.listen(PORT);
+};
+
+scReduxController.boot().then(startServer).catch(function (err) {
   console.log("error while starting up...");
   throw err;
 });
 
-const server = express();
-expressWebsocket(server);
-
-if (process.env.NODE_ENV === 'development') {
-  server.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-  });
-  server.use(express.static('public'));
-} else {
-  server.use(express.static(path.join(__dirname, '..')));
-}
-server.get('/getState', function (req, res, next) {
-  res.json(store.getState());
-});
-server.ws('/:clientId', function (ws, req) {
-  const clientId = req.params.clientId;
-  console.log(`client ${clientId} connected.`);
-  ws.on('message', function (msg) {
-    const action = JSON.parse(msg);
-    store.dispatch(action);
-  });
-  ws.on('close', function () {
-    wsServerDispatcher.removeClient(clientId);
-  });
-  wsServerDispatcher.addClient(clientId, ws);
-});
-if (process.env.NODE_ENV !== 'development') {
-  server.get('/', function (req, res) {
-    res.sendFile(path.join(`${__dirname}/../index.html`));
-  });
-  server.get('/laptop', function (req, res) {
-    res.sendFile(path.join(`${__dirname}/../index.html`));
-  });
-}
-
-server.listen(PORT);

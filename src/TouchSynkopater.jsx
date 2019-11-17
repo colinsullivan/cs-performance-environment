@@ -40,7 +40,9 @@ class TouchSynkopater extends React.Component {
       {value: 1/3, label: "1/3"},
       {value: 1/8, label: "1/8"},
       {value: 1/16, label: "1/16"},
-      {value: 1/32, label: "1/32"}
+      {value: 1/32, label: "1/32"},
+      {value: 1/64, label: "1/64"},
+      {value: 1/128, label: "1/128"}
     ];
 
     const factorOptions = [

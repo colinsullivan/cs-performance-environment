@@ -11,10 +11,10 @@
 /**
  *  @class        InstrumentParameter
  *
- *  @classdesc    Parameter for an instrument, takes state from StateStore.
+ *  @classdesc    Parameter for an instrument, takes state from SCReduxStore.
  */
 InstrumentParameter : Object {
-  var store, // the StateStore
+  var store, // the SCReduxStore
     statePath, // the dot.path to the state to bind to
     statePathArray,
     numberEditor, // the NumberEditor (or subclass) instance

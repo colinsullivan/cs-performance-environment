@@ -18,7 +18,8 @@ CSPerformanceEnvironment {
     granularChaosEnvironment,
     shakerTextureInstr,
     vileKickEnvironment,
-    wideBassEnvironment;
+    wideBassEnvironment,
+    lazersEnvironment;
 
   *new {
     ^super.new.init();
@@ -27,21 +28,24 @@ CSPerformanceEnvironment {
   init {
     arg params;
 
-    store = StateStore.getInstance();
+    store = SCReduxStore.getInstance();
 
-    Server.default.latency = 0.0;
+    //Server.default.latency = 0.9;
+    Server.default.latency = 0.05;
 
     clockController = LinkClockController.new((
       store: store
     ));
 
-    sequencerFactory = AwakenedSequencerFactory.getInstance();
+    clockController.clock.latency = Server.default.latency;
+
+    sequencerFactory = SCReduxSequencerFactory.getInstance();
     sequencerFactory.setStore(store);
-    sequencerFactory.setClockController(clockController);
+    sequencerFactory.setClock(clockController.clock);
 
     componentFactory = PerformanceComponentFactory.getInstance();
     componentFactory.setStore(store);
-    componentFactory.setClockController(clockController);
+    componentFactory.setClock(clockController.clock);
 
     randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
       store: store,
@@ -69,8 +73,10 @@ CSPerformanceEnvironment {
     wideBassEnvironment = WideBassVoicerEnvironment.new((
       inChannel: 5,
       outputBus: 28
-    )
-  );
-
+    ));
+    lazersEnvironment = RandomizedLazersEnvironment.new((
+      inChannel: 7,
+      outputBus: 32
+    ));
   }
 }

@@ -35,7 +35,7 @@ ShakerTextureInstrument : PatchEnvironmentComponent {
     
     this.patch = Patch("cs.sfx.ShakerTexture.ShakerTexture", (
         gate: KrNumberEditor.new(1, \gate),
-        amp: KrNumberEditor.new(0.0, \amp),
+        amp: KrNumberEditor.new(1.0, \amp),
         shakersSegBuf: shakersSegBuf,
         lowerResonantShakersSegBuf: lowerResonantShakersSegBuf,
         grainRate: KrNumberEditor.new(0.0, ControlSpec(-0.5, 2.0)),
@@ -80,8 +80,8 @@ ShakerTextureInstrument : PatchEnvironmentComponent {
       patch.trigRate.gui(layout);
       layout.startRow();
       
-      ArgNameLabel("amp", layout, labelWidth);
-      patch.amp.gui(layout);
+      //ArgNameLabel("amp", layout, labelWidth);
+      //patch.amp.gui(layout);
 
     });
 
