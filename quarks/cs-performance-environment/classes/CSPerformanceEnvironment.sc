@@ -41,11 +41,11 @@ CSPerformanceEnvironment {
 
     sequencerFactory = SCReduxSequencerFactory.getInstance();
     sequencerFactory.setStore(store);
-    sequencerFactory.setClockController(clockController);
+    sequencerFactory.setClock(clockController.clock);
 
     componentFactory = PerformanceComponentFactory.getInstance();
     componentFactory.setStore(store);
-    componentFactory.setClockController(clockController);
+    componentFactory.setClock(clockController.clock);
 
     randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
       store: store,

@@ -99,7 +99,7 @@ var loggerMiddleware = store => next => action => {
 var middleware = [wsServerDispatcher.middleware];
 
 if (process.env.NODE_ENV === 'development') {
-  //middleware.push(loggerMiddleware);
+  middleware.push(loggerMiddleware);
 }
 
 var store = createStore(
@@ -109,7 +109,7 @@ var store = createStore(
 );
 
 console.log("Initializing SCRedux");
-const scLangController = new SCRedux.SCLangController(store, {
+const scReduxController = new SCRedux.SCReduxController(store, {
   interpretOnLangBoot: `
 MIDIClient.init;
 MIDIIn.connectAll;
@@ -134,56 +134,52 @@ s.waitForBoot({
   //s.plotTree();
 
   performanceEnvironment = CSPerformanceEnvironment.new();
-});`,
-  sclangOptions: {
-    debug: true,
-    sclang: process.env.SCLANG_PATH
-  }
+});`
 });
-const scStoreController = new SCRedux.SCStoreController(store);
 
-scLangController.boot().then(() => {
-  scStoreController.init();
-}).catch(function (err) {
+const startServer = () => {
+  const server = express();
+  expressWebsocket(server);
+
+  if (process.env.NODE_ENV === 'development') {
+    server.use(function (req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+      next();
+    });
+    server.use(express.static('public'));
+  } else {
+    server.use(express.static(path.join(__dirname, '..')));
+  }
+  server.get('/getState', function (req, res) {
+    res.json(store.getState());
+  });
+  server.ws('/:clientId', function (ws, req) {
+    const clientId = req.params.clientId;
+    console.log(`client ${clientId} connected.`);
+    ws.on('message', function (msg) {
+      const action = JSON.parse(msg);
+      store.dispatch(action);
+    });
+    ws.on('close', function () {
+      wsServerDispatcher.removeClient(clientId);
+    });
+    wsServerDispatcher.addClient(clientId, ws);
+  });
+  if (process.env.NODE_ENV !== 'development') {
+    server.get('/', function (req, res) {
+      res.sendFile(path.join(`${__dirname}/../index.html`));
+    });
+    server.get('/laptop', function (req, res) {
+      res.sendFile(path.join(`${__dirname}/../index.html`));
+    });
+  }
+
+  server.listen(PORT);
+};
+
+scReduxController.boot().then(startServer).catch(function (err) {
   console.log("error while starting up...");
   throw err;
 });
 
-const server = express();
-expressWebsocket(server);
-
-if (process.env.NODE_ENV === 'development') {
-  server.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-  });
-  server.use(express.static('public'));
-} else {
-  server.use(express.static(path.join(__dirname, '..')));
-}
-server.get('/getState', function (req, res, next) {
-  res.json(store.getState());
-});
-server.ws('/:clientId', function (ws, req) {
-  const clientId = req.params.clientId;
-  console.log(`client ${clientId} connected.`);
-  ws.on('message', function (msg) {
-    const action = JSON.parse(msg);
-    store.dispatch(action);
-  });
-  ws.on('close', function () {
-    wsServerDispatcher.removeClient(clientId);
-  });
-  wsServerDispatcher.addClient(clientId, ws);
-});
-if (process.env.NODE_ENV !== 'development') {
-  server.get('/', function (req, res) {
-    res.sendFile(path.join(`${__dirname}/../index.html`));
-  });
-  server.get('/laptop', function (req, res) {
-    res.sendFile(path.join(`${__dirname}/../index.html`));
-  });
-}
-
-server.listen(PORT);

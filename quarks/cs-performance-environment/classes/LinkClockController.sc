@@ -29,16 +29,10 @@ LinkClockController : Object {
   init {
     arg params;
 
-    //store = params['store'];
-
     clock = LinkClock();
-  }
-  isReady {
-    ^(clock != nil);
   }
   beats {
     ^clock.beats;
   }
-
 }
 
