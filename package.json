@@ -9,7 +9,6 @@
     "bjorklund-js": "^0.1.2",
     "bootstrap": "^4.1.3",
     "easymidi": "^1.0.2",
-    "eslint": "^6.6.0",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
     "hammerjs": "^2.0.8",
@@ -22,7 +21,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-hammerjs": "^1.0.1",
-    "react-redux": "^5.1.1",
+    "react-redux": "^7.1.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^3.2.0",
@@ -47,21 +46,24 @@
     "package": "electron-packager . cs-performance-environment --platform darwin --overwrite"
   },
   "eslintConfig": {
-    "extends": "eslint:recommended",
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
     "parser": "babel-eslint",
     "env": {
       "browser": true,
       "node": true,
       "es6": true,
-      "mocha": true,
-      "jsx": true
+      "mocha": true
     },
     "rules": {
       "no-console": 0,
       "no-use-before-define": "error",
       "block-scoped-var": "error",
       "no-case-declarations": 0,
-      "prefer-const": "error"
+      "prefer-const": "error",
+      "react/prop-types": 0
     }
   },
   "babel": {
@@ -87,7 +89,9 @@
     "electron": "^6.1.4",
     "electron-packager": "^13.1.1",
     "electron-react-devtools": "^0.5.3",
-    "electron-rebuild": "^1.8.6"
+    "electron-rebuild": "^1.8.6",
+    "eslint": "^6.6.0",
+    "eslint-plugin-react": "^7.16.0"
   },
   "browserslist": {
     "production": [
