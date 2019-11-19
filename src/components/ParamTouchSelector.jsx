@@ -9,6 +9,8 @@ import Select from "@material-ui/core/Select";
 import { turquoiseTransparentColor, getRGBAString } from "constants/colors";
 import TouchPanParameter from "components/TouchPanParameter";
 
+import useLocalValue from "hooks/useLocalValue";
+
 const useStyles = makeStyles((theme) => createStyles({
     button: {
       marginTop: theme.spacing.unit * 2
@@ -42,7 +44,7 @@ const ParamTouchSelector = function (props) {
 
   // A local copy of the value state, changes during panning before
   // propagating choice upwards.
-  const [localValue, setLocalValue] = useState(value);
+  const [localValue, setLocalValue] = useLocalValue(value);
 
   /**
    *  A helper method to find the index of the current value in our list
@@ -88,15 +90,6 @@ const ParamTouchSelector = function (props) {
     const newIndex = Math.min(options.length - 1, currentIndex + 1);
     setLocalValue(options[newIndex].value);
   };
-
-  /**
-   *  Updates the local value in case it is different than the value sent
-   *  from the parent.  This path is used when the option is selected directly
-   *  from the dropdown menu because the `localValue` is not used.
-   **/
-  useEffect(() => {
-    setLocalValue(value);
-  }, [value]);
 
   return (
     <div>

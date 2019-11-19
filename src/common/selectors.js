@@ -1,1 +1,1 @@
-import { createSelector } from 'reselect';
+export const sequencersSelector = state => state.sequencers;
