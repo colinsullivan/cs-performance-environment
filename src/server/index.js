@@ -175,7 +175,9 @@ const startServer = () => {
     });
   }
 
+  console.log(`Starting to listen on port ${PORT}...`);
   server.listen(PORT);
+  console.log(`Listening on port ${PORT}.`);
 };
 
 scReduxController.boot().then(startServer).catch(function (err) {

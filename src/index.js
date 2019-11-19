@@ -21,11 +21,6 @@ import WebsocketDispatcher from './WebsocketDispatcher';
 import App from './App';
 import rootReducer from 'common/reducers';
 import { PORT } from 'common/constants';
-//import registerServiceWorker from './registerServiceWorker';
-
-//const electron = window.require('electron');
-//const ipcRenderer  = electron.ipcRenderer;
-//
 
 const middleware = [];
 
@@ -36,13 +31,6 @@ const wsDispatcher = new WebsocketDispatcher({
   clientId
 });
 middleware.push(wsDispatcher.middleware);
-
-//var dispatcherMiddleware = store => next => action => {
-  //if (!action.fromMain) {
-    //ipcRenderer.send('dispatch', action);
-  //}
-  //return next(action);
-//};
 
 // get initial state then render
 axios.get(
@@ -61,27 +49,3 @@ axios.get(
       </Provider>
   ), document.getElementById('root'));
 });
-
-
-//registerServiceWorker();
-
-//ipcRenderer.on('dispatch', function (e, action) {
-  //action.fromMain = true;
-  //store.dispatch(action);
-//});
-
-
-//var lastlink = null;
-//store.subscribe(() => {
-  //let state = store.getState();
-
-  //if (lastlink === null) {
-    //lastlink = state.abletonlink;
-  //} else {
-    //console.log("lastlink === state.abletonlink");
-    //console.log(lastlink === state.abletonlink);
-    //console.log("state.abletonlink");
-    //console.log(state.abletonlink);
-  //}
-
-//});
