@@ -53,7 +53,8 @@
       "browser": true,
       "node": true,
       "es6": true,
-      "mocha": true
+      "mocha": true,
+      "jsx": true
     },
     "rules": {
       "no-console": 0,
