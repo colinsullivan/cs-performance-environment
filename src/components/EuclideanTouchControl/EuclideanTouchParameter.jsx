@@ -24,11 +24,22 @@ const styles = {
 };
 
 const EuclideanTouchParameter = props => {
-  const { onChange, value, onPanEnd } = props;
+  const { onChange, value, onPanEnd, min, max } = props;
 
-  const handleTouchParamUp = () => onChange(Math.max(0, value - 1));
+  const constrainValue = newVal => {
+    if (min) {
+      newVal = Math.max(min, newVal);
+    }
 
-  const handleTouchParamDown = () => onChange(value + 1);
+    if (max) {
+      newVal = Math.min(max, newVal);
+    }
+
+    return newVal;
+  };
+
+  const handleTouchParamUp = () => onChange(constrainValue(value - 1));
+  const handleTouchParamDown = () => onChange(constrainValue(value + 1));
 
   return (
     <div style={styles.containerStyle}>

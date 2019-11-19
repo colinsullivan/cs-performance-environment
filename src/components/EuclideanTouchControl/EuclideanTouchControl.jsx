@@ -86,6 +86,8 @@ const EuclideanTouchControl = props => {
       <div style={styles.visualizationCanvasContainer}>
         <div style={styles.innerNumberContainer}>
           <EuclideanTouchParameter
+            min={1}
+            max={euclideanTotalNumHits}
             value={localNumHits}
             onChange={setLocalNumHits}
             onPanEnd={() => changeNumHits(localNumHits)}
@@ -99,6 +101,7 @@ const EuclideanTouchControl = props => {
       </div>
       <EuclideanTouchParameter
         value={localTotalNumHits}
+        min={euclideanNumHits}
         onChange={setLocalTotalNumHits}
         onPanEnd={() => changeTotalNumHits(localTotalNumHits)}
       />

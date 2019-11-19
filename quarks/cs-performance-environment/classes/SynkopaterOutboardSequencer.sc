@@ -83,8 +83,9 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       offset = currentState.offset;
       notes = currentState.notes;
 
-      midinoteProxy.quant = currentState.playQuant;
-      durProxy.quant = currentState.playQuant;
+      // TODO: Use new propQuant from supercollider-redux-sequencers
+      midinoteProxy.quant = [4, 0];
+      durProxy.quant = [4, 0];
 
       this.generatePatterns();
 
