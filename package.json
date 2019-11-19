@@ -28,7 +28,7 @@
     "react-scripts": "^3.2.0",
     "redux": "^4.0.4",
     "reselect": "^4.0.0",
-    "supercollider-redux": "1.0.0-alpha",
+    "supercollider-redux": "1.0.0-alpha.1",
     "supercollider-redux-sequencers": "0.9.0",
     "uuid": "^3.3.2"
   },
