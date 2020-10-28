@@ -18,3 +18,5 @@ export const MIDI_CONTROLLER_CC = "MIDI_CONTROLLER_CC";
 // controller, perhaps)
 export const INSTRUMENT_PARAMETER_UPDATED = "INSTRUMENT_PARAMETER_UPDATED";
 export const WS_READYSTATE_UPDATE = 'WS_READYSTATE_UPDATE';
+// When delay time is recalculated on the SC side
+export const SYNKOPATER_DELAY_TIME_UPDATE = "SYNKOPATER_DELAY_TIME_UPDATE";

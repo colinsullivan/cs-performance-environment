@@ -31,13 +31,16 @@ CSPerformanceEnvironment {
     store = SCReduxStore.getInstance();
 
     //Server.default.latency = 0.9;
-    Server.default.latency = 0.05;
+    Server.default.latency = 0.33;
+    //Server.default.latency = 0.0;
 
     clockController = LinkClockController.new((
       store: store
     ));
 
-    clockController.clock.latency = Server.default.latency;
+    //clockController.clock.latency = Server.default.latency + 0.2;
+    clockController.clock.latency = Server.default.latency + 0.1;
+    //clockController.clock.latency = 0;
 
     sequencerFactory = SCReduxSequencerFactory.getInstance();
     sequencerFactory.setStore(store);

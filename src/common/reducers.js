@@ -42,7 +42,9 @@ function create_synkopater_sequencer (id, type, midiChan) {
     euclideanTotalNumHits: 4,
     playQuant: [4, 4],
     stopQuant: [4, 4],
-    midiChan
+    midiChan,
+    // Delay has not yet been calculated, this is for display-only
+    delaySecs: null
   }};
 }
 
@@ -140,6 +142,16 @@ function sequencers (state, action) {
       state[action.payload.sequencerId] = seq;
       state = Object.assign({}, state);
       break;
+
+    case actionTypes.SYNKOPATER_DELAY_TIME_UPDATE:
+
+      return {
+        ...state,
+        [action.payload.sequencerId]: {
+          ...state[action.payload.sequencerId],
+          delaySecs: action.payload.delaySecs
+        }
+      };
 
     //case SCRedux.actionTypes.SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT:
       //seq = Object.assign({}, state[action.payload.id]);

@@ -89,33 +89,48 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     var currentBeatsPerSecond;
     currentBeatsPerSecond = clock.tempo;
     if (delayPatch != nil, {
+      "componentState.parameters.delayFactor:".postln;
+      componentState.parameters.delayFactor.postln;
+      "prevSequencerDur:".postln;
+      prevSequencerDur.postln;
       delayPatch.delaySecs.value = (
         componentState.parameters.delayFactor * (
           currentBeatsPerSecond / prevSequencerDur
         )
       );
+      this.store.dispatch((
+        type: 'SYNKOPATER_DELAY_TIME_UPDATE',
+        payload: (
+          sequencerId: componentState.sequencerId,
+          delaySecs: delayPatch.delaySecs.value
+        )
+      ));
+      "delayPatch.delaySecs.value:".postln;
+      delayPatch.delaySecs.value.postln;
     });
   }
 
-  handle_state_change {
+  get_sequencer_dur {
     var sequencerId,
       state,
       sequencerDur,
       prevComponentState = componentState;
-    super.handle_state_change();
-    "SynkopaterDelay.handle_state_change".postln();
-    
     sequencerId = componentState.sequencerId.asSymbol();
     state = this.store.getState();
     sequencerDur = state.sequencers.at(sequencerId)['dur'];
+    ^sequencerDur;
+  }
 
-    if (sequencerDur != prevSequencerDur, {
+  handle_state_change {
+    var sequencerDur,
+      prevComponentState = componentState;
+    super.handle_state_change();
+    //"SynkopaterDelay.handle_state_change".postln();
+    sequencerDur = this.get_sequencer_dur();
+
+    if ((sequencerDur != prevSequencerDur).or(componentState.parameters.delayFactor != prevComponentState.parameters.delayFactor), {
       prevSequencerDur = sequencerDur;
       this.update_delay_time();
-    }, {
-      if (componentState.parameters.delayFactor != prevComponentState.parameters.delayFactor, {
-        this.update_delay_time();    
-      });
     });
 
   }
