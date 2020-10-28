@@ -54,13 +54,13 @@ function create_performance_component (id, type) {
   };
 }
 
-function create_synkopater_component (id, bus) {
+function create_synkopater_component (id, inputBus, outputBus) {
   return {
     ...create_performance_component(id, 'SynkopaterDelay'),
     ...{
       sequencerId: id,
-      inputBus: bus,
-      outputBus: bus,
+      inputBus,
+      outputBus,
       parameters: {
         delayFactor: 1.0,
         delayFeedback: 0.0
@@ -89,8 +89,8 @@ export function create_default_state () {
       )
     },
     components: {
-      synkopaterA: create_synkopater_component('synkopaterA', 34),
-      synkopaterB: create_synkopater_component('synkopaterB', 36),
+      synkopaterA: create_synkopater_component('synkopaterA', 34, 38),
+      synkopaterB: create_synkopater_component('synkopaterB', 36, 40),
     }
   };
   Object.assign(initialState.sequencers.synkopaterA, {
