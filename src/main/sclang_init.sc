@@ -1,4 +1,3 @@
-API.mountDuplexOSC();
 s.options.inDevice = "UltraLite + BlackHole";
 s.options.outDevice = "UltraLite + BlackHole";
 s.options.numOutputBusChannels = 48;
