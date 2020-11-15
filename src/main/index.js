@@ -73,7 +73,6 @@ const quit = () =>
 
 const load = () => {
   if (process.env.NODE_ENV === "development") {
-    console.log("development");
     mainWindow.loadURL("http://localhost:3000/laptop");
   } else {
     mainWindow.loadURL("http://localhost:3001/laptop");

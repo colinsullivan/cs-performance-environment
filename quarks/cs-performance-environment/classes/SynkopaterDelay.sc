@@ -16,7 +16,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     <>delayFactorControl,
     //<>delayFactorParam,
     <>delayFeedbackControl,
-    <>ampAndToggleSlider,
+    <>ampSlider,
     prevSequencerDur;
 
   init {
@@ -25,7 +25,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 8, \linear, (1.0 / 16.0)));
     this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
 
-    this.ampAndToggleSlider = KrNumberEditor.new(1.0, \amp);
+    this.ampSlider = KrNumberEditor.new(1.0, \amp);
 
     "SynkopaterDelay.init".postln();
 
@@ -48,7 +48,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   init_tracks {
     arg params;
     super.init_tracks(params);
-    "SynkopaterDelay.initTracks".postln();
+    //"SynkopaterDelay.initTracks".postln();
 
     this.inputTrack = MixerChannel.new(
       "synkopaterDelayInput",
@@ -63,7 +63,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   init_patches {
     arg params;
     super.init_patches(params);
-    "SynkopaterDelay.initPatches".postln();
+    //"SynkopaterDelay.initPatches".postln();
 
     // because of the way MixerChannel works, we need a passthrough so
     // something gets through to the fx stage.  I tried rewriting the
@@ -89,10 +89,6 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     var currentBeatsPerSecond;
     currentBeatsPerSecond = clock.tempo;
     if (delayPatch != nil, {
-      "componentState.parameters.delayFactor:".postln;
-      componentState.parameters.delayFactor.postln;
-      "prevSequencerDur:".postln;
-      prevSequencerDur.postln;
       delayPatch.delaySecs.value = (
         componentState.parameters.delayFactor * (
           currentBeatsPerSecond / prevSequencerDur
@@ -146,25 +142,6 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
       arg val;
       me.update_delay_time();
     };
-
-    // when amplitude and toggle slider is changed
-    this.ampAndToggleSlider.action = {
-      arg val;
-
-      // set volume of output
-      me.outputChannel.level = val;
-
-      // if slider is zero, and patch is playing, stop patch
-      if (me.playing && val == 0, {
-        me.interface.stop();
-      }, {
-        // if slider is non-zero and patch is stopped, start patch
-        if (me.playing == false && val != 0, {
-          me.interface.play();    
-        });
-      });
-    };
-
   }
 
 
@@ -187,7 +164,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
       layout.startRow();
 
       ArgNameLabel("amp", layout, labelWidth);
-      this.ampAndToggleSlider.gui(layout);
+      this.ampSlider.gui(layout);
       layout.startRow();
 
     });
@@ -197,6 +174,6 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     ////this.map_uc33_to_property(\knm1, \synkopationControlTwo);
     ////this.map_uc33_to_property(\knl1, \delayFactorControl);
     ////this.map_uc33_to_property(\knu2, \delayFeedbackControl);
-    ////this.map_uc33_to_property(\sl1, \ampAndToggleSlider);
+    ////this.map_uc33_to_property(\sl1, \ampSlider);
   //}
 }
