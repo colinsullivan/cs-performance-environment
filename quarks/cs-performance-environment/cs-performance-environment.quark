@@ -3,7 +3,7 @@
   path:    "cs-performance-environment",
   summary:    "Colin's performance environment",
   author:    "Colin Sullivan",
-  version:    0.01,
+  version:    0.1,
 //  helpdoc:    "",
   url:      "https://github.com/colinsullivan/cs-performance-environment",
   dependencies:  #["supercollider-redux-sequencers@tags/0.8.0"]
