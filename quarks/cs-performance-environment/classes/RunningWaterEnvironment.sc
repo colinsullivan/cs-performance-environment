@@ -35,7 +35,7 @@ RunningWaterEnvironment : PatchEnvironmentComponent {
       buffer: this.buf,
       gate: KrNumberEditor.new(1, \gate.asSpec()),
       useOscillator: KrNumberEditor.new(0, \gate.asSpec()),
-      amp: KrNumberEditor.new(0.0, \amp)
+      amp: KrNumberEditor.new(1.0, \amp)
       //hellValueBus: this.hellValueBus
     ));
   }

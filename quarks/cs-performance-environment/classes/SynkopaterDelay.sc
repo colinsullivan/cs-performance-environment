@@ -25,7 +25,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 8, \linear, (1.0 / 16.0)));
     this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
 
-    this.ampAndToggleSlider = KrNumberEditor.new(0.0, \amp);
+    this.ampAndToggleSlider = KrNumberEditor.new(1.0, \amp);
 
     "SynkopaterDelay.init".postln();
 
