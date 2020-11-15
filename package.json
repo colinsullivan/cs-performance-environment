@@ -42,6 +42,8 @@
     "eject": "react-scripts eject",
     "start_electron": "NODE_ENV=development electron -r @babel/register ./src/main/index.js",
     "rebuild_electron": "electron-rebuild",
+    "postinstall": "npm run dev_codesign",
+    "dev_codesign": "codesign --force --deep --sign - node_modules/electron/dist/Electron.app",
     "build_electron": "babel --out-dir ./build/main/ src/main/*.js && babel --out-dir ./build/common/ src/common/*.js",
     "start": "electron build/main/",
     "build": "npm run build_react && npm run build_electron",

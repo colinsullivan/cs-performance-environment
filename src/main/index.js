@@ -94,6 +94,20 @@ s.waitForBoot({
 `,
 });
 
+const quit = () =>
+  scReduxController.quit().then(() => {
+    app.quit();
+  });
+
+const load = () => {
+  if (process.env.NODE_ENV === "development") {
+    console.log("development");
+    mainWindow.loadURL("http://localhost:3000/laptop");
+  } else {
+    mainWindow.loadURL("http://localhost:3001/laptop");
+  }
+};
+
 const startServer = () => {
   const server = express();
   expressWebsocket(server);
@@ -135,27 +149,16 @@ const startServer = () => {
   console.log(`Starting to listen on port ${PORT}...`);
   server.listen(PORT);
   console.log(`Listening on port ${PORT}.`);
+  load();
 };
-
-const quit = () =>
-  scReduxController.quit().then(() => {
-    app.quit();
-  });
 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({ width: 1440, height: 900 });
 
-  // and load the index.html of the app.
   if (process.env.NODE_ENV === "development") {
-    console.log("development");
-    mainWindow.loadURL("http://localhost:3000/laptop");
-  } else {
-    mainWindow.loadURL("http://localhost:3001/laptop");
+    mainWindow.webContents.openDevTools();
   }
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function () {
