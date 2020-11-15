@@ -14,11 +14,12 @@ import { createStore, applyMiddleware } from "redux"
 import { Provider } from 'react-redux';
 import axios from 'axios';
 import uuid from 'uuid/v4';
+
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-import WebsocketDispatcher from './WebsocketDispatcher';
-import App from './App';
+import WebsocketDispatcher from 'dispatchers/WebsocketDispatcher';
+import App from 'components/App';
 import rootReducer from 'common/reducers';
 import { PORT } from 'common/constants';
 
