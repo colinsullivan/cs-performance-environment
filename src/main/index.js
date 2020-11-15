@@ -71,7 +71,7 @@ s.options.numInputBusChannels = 48;
 s.options.memSize = 1024000;
 s.options.blockSize = 8;
 
-s.waitForBoot({
+s.doWhenBooted({
   var m = s.meter(),
     mBounds,
     performanceEnvironment;
