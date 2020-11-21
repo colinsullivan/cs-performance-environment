@@ -13,68 +13,12 @@ import {combineReducers} from 'redux'
 import SCReduxSequencers from "supercollider-redux-sequencers"
 import SCRedux from "supercollider-redux"
 
-import { READY_STATES } from '../common/constants'
+import { READY_STATES } from './constants'
 
-import * as actionTypes from '../common/actionTypes';
+import * as actionTypes from './actionTypes';
+import { create_synkopater_sequencer, create_synkopater_component } from './models';
 
 const durChoices = [1.0/128.0, 1.0/64.0, 1.0/32.0, 1.0/16.0, 1.0/8.0, 1.0/4.0, 1.0/2.0, 1.0, 2.0, 4.0, 8.0];
-
-export const ARP_MODES = {
-  UP: "UP",
-  DOWN: "DOWN",
-  UPDOWN: "UPDOWN"
-};
-
-// TODO: move these create methods into a model file
-function create_synkopater_sequencer (id, type, midiChan) {
-  return {...SCReduxSequencers.create_default_sequencer(id, type), ...{
-    dur: 0.5,
-    stretch: 1.0,
-    legato: 1.0,
-    offset: 0,
-    notes: [96, 84, 86, 87],
-    //arp_vels: [1.0, 1.0, 1.0, 1.0],
-    arpMode: ARP_MODES.UP,
-    //arp_updown_current_direction: 1,
-    //arp_note_index: 0,
-    //numBeats: 4,
-    euclideanNumHits: 4,
-    euclideanTotalNumHits: 4,
-    playQuant: [4, 4],
-    stopQuant: [4, 4],
-    midiChan,
-    // Delay has not yet been calculated, this is for display-only
-    delaySecs: null
-  }};
-}
-
-function create_performance_component (id, type) {
-  return {
-    id,
-    type,
-    controllerMappings: {}
-  };
-}
-
-function create_synkopater_component (id, inputBus, outputBus) {
-  return {
-    ...create_performance_component(id, 'SynkopaterDelay'),
-    ...{
-      sequencerId: id,
-      inputBus,
-      outputBus,
-      parameters: {
-        delayFactor: 1.0,
-        delayFeedback: 0.0
-      },
-      controllerMappings: {
-        launchControlController: {
-          pg0_kn_pan_1: 'delayFeedbackControl',
-        }
-      }
-    }
-  };
-}
 
 export function create_default_state () {
   const initialState = {

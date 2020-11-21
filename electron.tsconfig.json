@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/node12/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "build/",
+    "module": "commonjs",
+    "target": "es5",
+    "baseUrl": "src",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "src/common/**/*",
+    "src/main/**/*"
+  ]
+}

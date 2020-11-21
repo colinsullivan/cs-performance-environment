@@ -52,7 +52,7 @@ PerformanceComponentFactory : Object {
       // for each sequencer in state
       state.components.keysValuesDo({
         arg componentId, componentState;
-        var componentClass = componentState['type'].asSymbol().asClass();
+        var componentClass = componentState['scClassName'].asSymbol().asClass();
 
         // if it doesn't exist in our list
         if (components[componentId] == nil, {
