@@ -89,7 +89,7 @@ const factorOptions = [
 
 class TouchSynkopater extends React.Component {
   render() {
-    const { sequencerId, componentId, delaySecs } = this.props;
+    const { sequencerId, componentId } = this.props;
     return (
       <div className="row">
         <div className="col-1">
