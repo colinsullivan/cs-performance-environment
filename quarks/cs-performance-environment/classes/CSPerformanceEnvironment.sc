@@ -69,17 +69,17 @@ CSPerformanceEnvironment {
       store: store,
       outputBus: 22
     ));
-    vileKickEnvironment = VileKickEnvironment.new((
-      inChannel: 6,
-      outputBus: 24
-    ));
-    wideBassEnvironment = WideBassVoicerEnvironment.new((
-      inChannel: 5,
-      outputBus: 28
-    ));
-    lazersEnvironment = RandomizedLazersEnvironment.new((
-      inChannel: 7,
-      outputBus: 32
-    ));
+    //vileKickEnvironment = VileKickEnvironment.new((
+      //inChannel: 6,
+      //outputBus: 24
+    //));
+    //wideBassEnvironment = WideBassVoicerEnvironment.new((
+      //inChannel: 5,
+      //outputBus: 28
+    //));
+    //lazersEnvironment = RandomizedLazersEnvironment.new((
+      //inChannel: 7,
+      //outputBus: 32
+    //));
   }
 }

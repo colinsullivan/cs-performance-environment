@@ -81,7 +81,8 @@
       "no-case-declarations": 0,
       "prefer-const": "error",
       "react/prop-types": 0,
-      "@typescript-eslint/no-extra-semi": "off"
+      "@typescript-eslint/no-extra-semi": "off",
+      "@typescript-eslint/no-empty-function": "off"
     }
   },
   "devDependencies": {
