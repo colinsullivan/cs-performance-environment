@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
-const LabeledDropdown = ({ label, options, value, onClose, onOpen, onChange, open=null }) => {
+const LabeledDropdown = ({ label, options, value, onClose=null, onOpen=null, onChange=null, open=null }) => {
   const classes = useStyles();
   return (
       <FormControl className={classes.formControl}>

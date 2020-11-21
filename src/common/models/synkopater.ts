@@ -3,8 +3,8 @@ import SCReduxSequencers, {
 } from "supercollider-redux-sequencers";
 import {
   create_performance_component,
-  PerformanceComponent,
 } from "./performance_component";
+import { PerformanceComponent } from './types';
 
 export enum ARP_MODES {
   UP = "UP",
@@ -52,7 +52,7 @@ export const create_synkopater_sequencer = (
   euclideanNumHits: 4,
   euclideanTotalNumHits: 4,
   playQuant: [4, 0],
-  stopQuant: [4, 0],
+  stopQuant: [4, 4],
   propQuant: [4, 0],
   midiChan,
   // Delay has not yet been calculated, this is for display-only
@@ -88,3 +88,10 @@ export const create_synkopater_component = (
     },
   },
 });
+
+export const getGlobalQuant = (sequencer : SynkopaterSequencer) : number => {
+  if (sequencer.playQuant[0] === sequencer.stopQuant[0] && sequencer.playQuant[0] === sequencer.propQuant[0]) {
+    return sequencer.playQuant[0];
+  }
+  throw new Error("Sequencer has different quants for play and props...");
+}

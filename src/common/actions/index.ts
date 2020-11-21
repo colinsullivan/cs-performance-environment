@@ -26,13 +26,23 @@ import {
   WS_READYSTATE_UPDATE,
   WebsocketReadyStateChanged,
   SYNKOPATER_TRANSPOSED,
-  SynkopaterTransposed
+  SynkopaterTransposed,
+  SYNKOPATER_GLOBAL_QUANT_UPDATED,
+  SynkopaterGlobalQuantUpdated,
 } from "./types";
 
-import { ARP_MODES, TRANSPOSE_DIRECTION, SequencerParamKeys } from "common/models/synkopater";
+import {
+  ARP_MODES,
+  TRANSPOSE_DIRECTION,
+  SequencerParamKeys,
+} from "common/models/synkopater";
 import { READY_STATES } from "common/models/ready_states";
+import { ControllerMappingElements } from 'common/models/types';
 
-export function synkopater_arp_add_note(sequencerId: string, note: number) : SynkopaterAddNote {
+export function synkopater_arp_add_note(
+  sequencerId: string,
+  note: number
+): SynkopaterAddNote {
   return {
     type: SYNKOPATER_ARP_ADD_NOTE,
     payload: {
@@ -42,7 +52,10 @@ export function synkopater_arp_add_note(sequencerId: string, note: number) : Syn
   };
 }
 
-export function synkopater_arp_remove_note(sequencerId: string, note: number) : SynkopaterRemoveNote {
+export function synkopater_arp_remove_note(
+  sequencerId: string,
+  note: number
+): SynkopaterRemoveNote {
   return {
     type: SYNKOPATER_ARP_REMOVE_NOTE,
     payload: {
@@ -52,10 +65,10 @@ export function synkopater_arp_remove_note(sequencerId: string, note: number) : 
   };
 }
 
-export function synkopater_arp_change_mode (
+export function synkopater_arp_change_mode(
   sequencerId: string,
   arpMode: ARP_MODES
-) : SynkopaterChangeMode {
+): SynkopaterChangeMode {
   return {
     type: SYNKOPATER_ARP_CHANGE_MODE,
     payload: {
@@ -69,7 +82,7 @@ export function sequencer_update_param(
   sequencerId: string,
   param: SequencerParamKeys,
   value: any
-) : SequencerUpdateParam {
+): SequencerUpdateParam {
   return {
     type: SEQUENCER_STATE_UPDATED,
     payload: {
@@ -84,7 +97,7 @@ export function midi_controller_cc(
   controllerId: string,
   name: string,
   value: any
-) : MidiControllerCC {
+): MidiControllerCC {
   return {
     type: MIDI_CONTROLLER_CC,
     payload: {
@@ -95,7 +108,10 @@ export function midi_controller_cc(
   };
 }
 
-export function midi_controller_init(controllerId: string, mappings: object) : MidiControllerInit {
+export function midi_controller_init(
+  controllerId: string,
+  mappings: ControllerMappingElements
+): MidiControllerInit {
   return {
     type: MIDI_CONTROLLER_INIT,
     payload: {
@@ -109,7 +125,7 @@ export function instrument_parameter_updated(
   componentId: string,
   parameterId: string,
   newValue: any
-) : InstrumentParameterUpdated {
+): InstrumentParameterUpdated {
   return {
     type: INSTRUMENT_PARAMETER_UPDATED,
     payload: {
@@ -123,7 +139,7 @@ export function instrument_parameter_updated(
 export function websocketReadyStateChanged(
   readyState: READY_STATES,
   clientId: string
-) : WebsocketReadyStateChanged {
+): WebsocketReadyStateChanged {
   return {
     type: WS_READYSTATE_UPDATE,
     payload: { readyState, clientId },
@@ -133,12 +149,25 @@ export function websocketReadyStateChanged(
 export function synkopater_transposed(
   sequencerId: string,
   direction: TRANSPOSE_DIRECTION
-) : SynkopaterTransposed {
+): SynkopaterTransposed {
   return {
     type: SYNKOPATER_TRANSPOSED,
     payload: {
       sequencerId,
       direction,
+    },
+  };
+}
+
+export function synkopater_global_quant_updated(
+  sequencerId: string,
+  newQuant: number
+): SynkopaterGlobalQuantUpdated {
+  return {
+    type: SYNKOPATER_GLOBAL_QUANT_UPDATED,
+    payload: {
+      sequencerId,
+      newQuant,
     },
   };
 }
