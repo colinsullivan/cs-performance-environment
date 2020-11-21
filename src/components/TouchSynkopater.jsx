@@ -5,7 +5,7 @@ import StopButtonTouch from "components/StopButtonTouch";
 import QueueSequencerButton from "components/QueueSequencerButton";
 import SequencerParamTouchSelector from "components/SequencerParamTouchSelector";
 import EuclideanTouchControl from "components/EuclideanTouchControl/EuclideanTouchControl";
-import TouchSynkopaterPiano from "components/TouchSynkopaterPiano";
+import TouchSynkopaterPiano from "components/SynkopaterPiano/TouchSynkopaterPiano";
 import InstrParamTouchSelector from "components/InstrParamTouchSelector";
 import SynkDelayTimeDisplay from "components/SynkDelayTimeDisplay";
 
@@ -90,10 +90,6 @@ const factorOptions = [
 class TouchSynkopater extends React.Component {
   render() {
     const { sequencerId, componentId, delaySecs } = this.props;
-
-    console.log("delaySecs");
-    console.log(delaySecs);
-
     return (
       <div className="row">
         <div className="col-1">

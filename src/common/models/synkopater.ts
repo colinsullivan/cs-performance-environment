@@ -12,6 +12,11 @@ export enum ARP_MODES {
   UPDOWN = "UPDOWN",
 }
 
+export enum TRANSPOSE_DIRECTION {
+  UP = 1,
+  DOWN = -1
+};
+
 export type SynkopaterSequencer = SCReduxSequencer & {
   dur: number;
   stretch: number;
@@ -24,6 +29,9 @@ export type SynkopaterSequencer = SCReduxSequencer & {
   midiChan: number;
   delaySecs: number | null;
 };
+
+// Defines which keys can be set direction with the SEQUENCER_STATE_UPDATED action
+export type SequencerParamKeys = 'dur' | 'stretch' | 'legato' | 'offset' | 'euclideanTotalNumHits' | 'euclideanNumHits';
 
 export const create_synkopater_sequencer = (
   id: string,

@@ -7,9 +7,11 @@
     "@material-ui/icons": "^4.9.1",
     "@serialport/bindings": "^9.0.1",
     "@types/jest": "^26.0.15",
+    "@types/lodash": "^4.14.165",
     "@types/node": "^14.14.8",
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
+    "@types/react-redux": "^7.1.11",
     "axios": "^0.18.1",
     "bjorklund-js": "^0.1.2",
     "bootstrap": "^4.5.2",
@@ -58,9 +60,13 @@
   "eslintConfig": {
     "extends": [
       "eslint:recommended",
-      "plugin:react/recommended"
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended"
     ],
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
     "env": {
       "browser": true,
       "node": true,
@@ -78,6 +84,7 @@
   },
   "devDependencies": {
     "@tsconfig/node12": "^1.0.7",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
     "@typescript-eslint/parser": "^4.8.1",
     "electron": "^6.1.12",
     "electron-packager": "^13.1.1",
