@@ -9,9 +9,11 @@ import {
   SYNKOPATER_DELAY_TIME_UPDATE,
   SEQUENCER_STATE_UPDATED,
   MIDI_CONTROLLER_CC,
-  SYNKOPATER_TRANSPOSED
+  SYNKOPATER_TRANSPOSED,
+  SYNKOPATER_GLOBAL_QUANT_UPDATED,
 } from "common/actions/types";
-import { SynkopaterSequencer, TRANSPOSE_DIRECTION } from "common/models/synkopater";
+import { TRANSPOSE_DIRECTION } from "common/models/synkopater";
+import { Sequencers } from "./types";
 
 const durChoices = [
   1.0 / 128.0,
@@ -27,13 +29,9 @@ const durChoices = [
   8.0,
 ];
 
-export type Sequencers = {
-  [sequencerId: string]: SynkopaterSequencer;
-};
-
 const sequencers = (state: Sequencers, action: AllActionTypes) => {
   state = SCReduxSequencers.reducer(state, action);
-  let seq;
+  let seq, sequencerId;
   switch (action.type) {
     case SYNKOPATER_ARP_REMOVE_NOTE:
       seq = Object.assign({}, state[action.payload.sequencerId]);
@@ -128,7 +126,8 @@ const sequencers = (state: Sequencers, action: AllActionTypes) => {
       break;
 
     case SYNKOPATER_TRANSPOSED:
-      const { sequencerId, direction } = action.payload;
+      ({ sequencerId } = action.payload);
+      const { direction } = action.payload;
       seq = state[sequencerId];
       const sortedNotes = _.orderBy([...seq.notes]);
       const lowestNote = sortedNotes[0];
@@ -138,8 +137,8 @@ const sequencers = (state: Sequencers, action: AllActionTypes) => {
           ...state,
           [sequencerId]: {
             ...seq,
-            notes: seq.notes.map(n => n + 12)
-          }
+            notes: seq.notes.map((n: number) => n + 12),
+          },
         };
       } else if (direction === TRANSPOSE_DIRECTION.DOWN) {
         if (lowestNote - 12 < 1) {
@@ -149,11 +148,24 @@ const sequencers = (state: Sequencers, action: AllActionTypes) => {
           ...state,
           [sequencerId]: {
             ...seq,
-            notes: seq.notes.map(n => n - 12)
-          }
+            notes: seq.notes.map((n: number) => n - 12),
+          },
         };
       }
       return state;
+
+    case SYNKOPATER_GLOBAL_QUANT_UPDATED:
+      ({ sequencerId } = action.payload);
+      const { newQuant } = action.payload;
+      return {
+        ...state,
+        [sequencerId]: {
+          ...state[sequencerId],
+          playQuant: [newQuant, 0],
+          stopQuant: [newQuant, newQuant],
+          propQuant: [newQuant, 0],
+        },
+      };
 
     default:
       break;

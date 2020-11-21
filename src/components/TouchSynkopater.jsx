@@ -8,6 +8,7 @@ import EuclideanTouchControl from "components/EuclideanTouchControl/EuclideanTou
 import TouchSynkopaterPiano from "components/SynkopaterPiano/TouchSynkopaterPiano";
 import InstrParamTouchSelector from "components/InstrParamTouchSelector";
 import SynkDelayTimeDisplay from "components/SynkDelayTimeDisplay";
+import QuantDropdown from "components/QuantDropdown";
 
 const durOptions = [
   { value: 8, label: "8" },
@@ -93,11 +94,16 @@ class TouchSynkopater extends React.Component {
     return (
       <div className="row">
         <div className="col-1">
-          <QueueSequencerButton
-            playButtonComponent={PlayButtonTouch}
-            stopButtonComponent={StopButtonTouch}
-            sequencerId={sequencerId}
-          />
+          <div className="row">
+            <QueueSequencerButton
+              playButtonComponent={PlayButtonTouch}
+              stopButtonComponent={StopButtonTouch}
+              sequencerId={sequencerId}
+            />
+          </div>
+          <div className="row">
+            <QuantDropdown sequencerId={sequencerId} />
+          </div>
         </div>
         <div className="col-11">
           <TouchSynkopaterPiano sequencerId={sequencerId} />

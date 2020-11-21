@@ -20,9 +20,13 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
 
   initPatch {
     midinoteProxy = PatternProxy.new;
-    midinoteProxy.quant = currentState.playQuant;
     durProxy = PatternProxy.new;
-    durProxy.quant = currentState.playQuant;
+    this.updatePropQuant();
+  }
+
+  updatePropQuant {
+    midinoteProxy.quant = currentState.propQuant;
+    durProxy.quant = currentState.propQuant;
   }
 
   initStream {
@@ -83,10 +87,7 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       offset = currentState.offset;
       notes = currentState.notes;
 
-      // TODO: Use new propQuant from supercollider-redux-sequencers
-      midinoteProxy.quant = [4, 0];
-      durProxy.quant = [4, 0];
-
+      this.updatePropQuant();
       this.generatePatterns();
 
     });

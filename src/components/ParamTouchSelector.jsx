@@ -2,28 +2,27 @@ import React, { useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as _ from "lodash";
 
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import { turquoiseTransparentColor, getRGBAString } from "constants/colors";
 import TouchPanParameter from "components/TouchPanParameter";
+import LabeledDropdown from "components/LabeledDropdown";
 
 import useLocalValue from "hooks/useLocalValue";
 
-const useStyles = makeStyles((theme) => createStyles({
+const useStyles = makeStyles((theme) =>
+  createStyles({
     button: {
-      marginTop: theme.spacing.unit * 2
+      marginTop: theme.spacing.unit * 2,
     },
     formControl: {
       margin: theme.spacing.unit,
-      display: "inline-block"
+      display: "inline-block",
     },
     touchAreaContainer: {
       backgroundColor: getRGBAString(turquoiseTransparentColor),
-      display: "inline-block"
-    }
-}));
+      display: "inline-block",
+    },
+  })
+);
 
 /**
  *  @class        ParamTouchSelector
@@ -51,7 +50,7 @@ const ParamTouchSelector = function (props) {
    *  of options.
    **/
   const getCurrentValueIndex = () =>
-    _.findIndex(options, opt => opt.value === localValue);
+    _.findIndex(options, (opt) => opt.value === localValue);
 
   /**
    *  When the dropdown menu is closed.
@@ -66,7 +65,7 @@ const ParamTouchSelector = function (props) {
   /**
    *  When option is selected directly from the dropdown menu.
    **/
-  const handleMenuSelected = event => onChange(event.target.value);
+  const handleMenuSelected = (event) => onChange(event.target.value);
 
   /**
    *  When panning stops on the TouchPanParameter, close the dropdown menu and
@@ -101,22 +100,15 @@ const ParamTouchSelector = function (props) {
           panEnd={handlePanEnd}
         />
       </div>
-      <FormControl className={classes.formControl}>
-        <InputLabel>{param}</InputLabel>
-        <Select
-          open={open}
-          onClose={handleMenuClosed}
-          onOpen={handleMenuOpened}
-          value={localValue}
-          onChange={handleMenuSelected}
-        >
-          {options.map(option => (
-            <MenuItem value={option.value} key={option.label}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <LabeledDropdown
+        open={open}
+        label={param}
+        options={options}
+        value={localValue}
+        onClose={handleMenuClosed}
+        onOpen={handleMenuOpened}
+        onChange={handleMenuSelected}
+      />
     </div>
   );
 };

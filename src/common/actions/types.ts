@@ -14,6 +14,7 @@ import {
   SequencerParamKeys,
 } from "common/models/synkopater";
 import { READY_STATES } from "common/models/ready_states";
+import { ControllerMappingElements } from 'common/models/types';
 
 export const SYNKOPATER_ARP_ADD_NOTE = "SYNKOPATER_ARP_ADD_NOTE";
 export const SYNKOPATER_ARP_REMOVE_NOTE = "SYNKOPATER_ARP_REMOVE_NOTE";
@@ -72,7 +73,7 @@ export interface MidiControllerInit {
   type: typeof MIDI_CONTROLLER_INIT;
   payload: {
     controllerId: string;
-    mappings: object;
+    mappings: ControllerMappingElements;
   };
 }
 
@@ -109,6 +110,15 @@ export interface SynkopaterDelayTimeUpdate {
   };
 }
 
+export const SYNKOPATER_GLOBAL_QUANT_UPDATED = "SYNKOPATER_GLOBAL_QUANT_UPDATED";
+export interface SynkopaterGlobalQuantUpdated {
+  type: typeof SYNKOPATER_GLOBAL_QUANT_UPDATED;
+  payload: {
+    sequencerId: string;
+    newQuant: number;
+  };
+}
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -119,4 +129,5 @@ export type AllActionTypes =
   | InstrumentParameterUpdated
   | WebsocketReadyStateChanged
   | SynkopaterTransposed
-  | SynkopaterDelayTimeUpdate;
+  | SynkopaterDelayTimeUpdate
+  | SynkopaterGlobalQuantUpdated;
