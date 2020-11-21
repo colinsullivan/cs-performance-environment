@@ -10,7 +10,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "module": "esnext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src"
