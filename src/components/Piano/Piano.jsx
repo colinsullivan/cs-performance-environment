@@ -11,7 +11,8 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import React from 'react';
+import React, { useCallback } from 'react';
+import styled from 'styled-components';
 import { parse as parseNote } from 'note-parser';
 
 const diatonicNoteNames = [
@@ -39,16 +40,41 @@ var keyClickHandler = function (e, note, handler) {
   handler(note, clickHeightPercent);
 };
 
+const defaultSelectedColor = 'green';
+const defaultActiveColor = 'pink';
+const defaultNoteNumberColor = 'white';
+
+const NoteNumberContainer = styled.div`
+  position: absolute;
+  color: ${defaultNoteNumberColor};
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const NoteNumber = ({ selectedNotes, note }) => {
+  const number = selectedNotes.indexOf(note.midi) + 1;
+  return (
+    <NoteNumberContainer>{number}</NoteNumberContainer>
+  );
+};
+
 class WhitePianoKey extends React.Component {
   render() {
     const {
+      selectedNotes,
       note,
       handleKeyClicked,
       selected,
       active,
       keyBaseWidth,
-      selectedColor = 'green',
-      activeColor = 'pink'
+      selectedColor = defaultSelectedColor,
+      activeColor = defaultActiveColor,
+      showSelectedNoteOrder
     } = this.props;
 
     const containerStyle = {
@@ -77,6 +103,7 @@ class WhitePianoKey extends React.Component {
         style={containerStyle}
         onClick={(e) => keyClickHandler(e, note, handleKeyClicked)}
       >
+        {selected && showSelectedNoteOrder ? <NoteNumber selectedNotes={selectedNotes} note={note} /> : null}
       </div>
     );
   }
@@ -85,6 +112,7 @@ class WhitePianoKey extends React.Component {
 class BlackPianoKey extends React.Component {
   render() {
     const {
+      selectedNotes,
       note,
       index,
       handleKeyClicked,
@@ -92,8 +120,9 @@ class BlackPianoKey extends React.Component {
       active,
       blackKeyBaseWidthRatio,
       keyBaseWidth,
-      selectedColor='green',
-      activeColor='pink'
+      selectedColor=defaultSelectedColor,
+      activeColor=defaultActiveColor,
+      showSelectedNoteOrder
     } = this.props;
     var containerStyle = {
       backgroundColor: 'black',
@@ -101,8 +130,8 @@ class BlackPianoKey extends React.Component {
       height: '50%',
       //float: 'left',
       display: 'inline-block',
-      pointerEvents: 'all'
-      //position: 'relative'
+      pointerEvents: 'all',
+      position: 'relative'
     };
 
     if (selected || active) {
@@ -134,6 +163,7 @@ class BlackPianoKey extends React.Component {
         style={containerStyle}
         onClick={(e) => keyClickHandler(e, note, handleKeyClicked)}
       >
+        {selected && showSelectedNoteOrder ? <NoteNumber selectedNotes={selectedNotes} note={note} /> : null}
       </div>
     );
   }
@@ -142,20 +172,13 @@ class BlackPianoKey extends React.Component {
 const isWhiteNote = (note) => note.alt === 0;
 const isBlackNote = (note) => note.alt !== 0;
 
-class Piano extends React.Component {
-  handleKeyClicked(note, eventHeight) {
-    if (this.props.handleNoteClicked) {
-      this.props.handleNoteClicked(note, eventHeight);
+const Piano = ({ startingOctave = 3, numOctaves = 3, keyBaseWidth = 1.5, handleNoteClicked, selectedNotes, activeNotes, showSelectedNoteOrder = true }) => {
+  const handleKeyClicked = useCallback((note, eventHeight) => {
+    if (handleNoteClicked) {
+      handleNoteClicked(note, eventHeight);
     }
-  }
-  render () {
+  });
     var notes = [];
-
-    const {
-      startingOctave = 3,
-      numOctaves = 3,
-      keyBaseWidth = 1.5
-    } = this.props;
 
 
     // TODO: This could probably be done once for all notes
@@ -192,37 +215,40 @@ class Piano extends React.Component {
       <div style={containerStyle}>
         <div style={keyLayerStyle}>
           {notes.filter(isWhiteNote).map((note, i) => {
-            const noteIsSelected = this.props.selectedNotes.includes(note.midi);
-            const noteIsActive = this.props.activeNotes.includes(note.midi);
+            const noteIsSelected = selectedNotes.includes(note.midi);
+            const noteIsActive = activeNotes.includes(note.midi);
             return <WhitePianoKey
+              selectedNotes={selectedNotes}
               note={note}
               key={i}
-              handleKeyClicked={this.handleKeyClicked.bind(this)}
+              handleKeyClicked={handleKeyClicked}
               selected={noteIsSelected}
               active={noteIsActive}
               keyBaseWidth={keyBaseWidth}
+              showSelectedNoteOrder={showSelectedNoteOrder}
             />;
           })}
         </div>
         <div style={blackKeyLayerStyle}>
           {notes.filter(isBlackNote).map((note, i) => {
-            const noteIsSelected = this.props.selectedNotes.includes(note.midi);
-            const noteIsActive = this.props.activeNotes.includes(note.midi);
+            const noteIsSelected = selectedNotes.includes(note.midi);
+            const noteIsActive = activeNotes.includes(note.midi);
             return <BlackPianoKey
+              selectedNotes={selectedNotes}
               note={note}
               key={i}
               index={i}
-              handleKeyClicked={this.handleKeyClicked.bind(this)}
+              handleKeyClicked={handleKeyClicked}
               selected={noteIsSelected}
               active={noteIsActive}
               keyBaseWidth={keyBaseWidth}
               blackKeyBaseWidthRatio={blackKeyBaseWidthRatio}
+              showSelectedNoteOrder={showSelectedNoteOrder}
             />;
           })}
         </div>
       </div>
     );
-  }
-}
+};
 
 export default Piano;
