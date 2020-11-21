@@ -51,8 +51,9 @@ export const create_synkopater_sequencer = (
   //numBeats: 4,
   euclideanNumHits: 4,
   euclideanTotalNumHits: 4,
-  playQuant: [4, 4],
-  stopQuant: [4, 4],
+  playQuant: [4, 0],
+  stopQuant: [4, 0],
+  propQuant: [4, 0],
   midiChan,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
@@ -62,7 +63,10 @@ export type SynkopaterPerformanceComponent = PerformanceComponent & {
   sequencerId: string;
   inputBus: number;
   outputBus: number;
-  parameters: object;
+  parameters: {
+    delayFactor: number,
+    delayFeedback: number
+  };
 };
 
 export const create_synkopater_component = (

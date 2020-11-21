@@ -93,11 +93,20 @@ class TouchSynkopater extends React.Component {
     return (
       <div className="row">
         <div className="col-1">
-          <QueueSequencerButton
-            playButtonComponent={PlayButtonTouch}
-            stopButtonComponent={StopButtonTouch}
-            sequencerId={sequencerId}
-          />
+          <div className="row">
+            <QueueSequencerButton
+              playButtonComponent={PlayButtonTouch}
+              stopButtonComponent={StopButtonTouch}
+              sequencerId={sequencerId}
+            />
+          </div>
+          <div className="row">
+            <SequencerParamTouchSelector
+              sequencerId={sequencerId}
+              param="dur"
+              options={durOptions}
+            />
+          </div>
         </div>
         <div className="col-11">
           <TouchSynkopaterPiano sequencerId={sequencerId} />
