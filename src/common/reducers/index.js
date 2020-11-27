@@ -40,8 +40,8 @@ export function create_default_state() {
       ),
     },
     components: {
-      synkopaterA: create_synkopater_component("synkopaterA", 34, 38),
-      synkopaterB: create_synkopater_component("synkopaterB", 36, 40),
+      synkopaterA: create_synkopater_component("synkopaterA", 28, 28),
+      synkopaterB: create_synkopater_component("synkopaterB", 32, 32),
     },
   };
   Object.assign(initialState.sequencers.synkopaterA, {

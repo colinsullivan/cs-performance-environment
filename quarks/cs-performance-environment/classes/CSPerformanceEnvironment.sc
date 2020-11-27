@@ -50,24 +50,21 @@ CSPerformanceEnvironment {
     componentFactory.setStore(store);
     componentFactory.setClock(clockController.clock);
 
-    randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
-      store: store,
-      outputBus: 26
-    ));
-
     runningWaterEnvironment = RunningWaterEnvironment.new((
       store: store,
       outputBus: 18
     ));
-
     granularChaosEnvironment = GranularChaosEnvironment.new((
       store: store,
       outputBus: 20
     ));
-
     shakerTextureInstr = ShakerTextureInstrument.new((
       store: store,
       outputBus: 22
+    ));
+    randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
+      store: store,
+      outputBus: 24
     ));
     //vileKickEnvironment = VileKickEnvironment.new((
       //inChannel: 6,
