@@ -119,6 +119,14 @@ export interface SynkopaterGlobalQuantUpdated {
   };
 }
 
+export const OCTATRACK_PATTERN_UPDATED = "OCTATRACK_PATTERN_UPDATED";
+export interface OctatrackPatternUpdated {
+  type: typeof OCTATRACK_PATTERN_UPDATED;
+  payload: {
+    programChangeValue: number;
+  };
+};
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -130,4 +138,5 @@ export type AllActionTypes =
   | WebsocketReadyStateChanged
   | SynkopaterTransposed
   | SynkopaterDelayTimeUpdate
-  | SynkopaterGlobalQuantUpdated;
+  | SynkopaterGlobalQuantUpdated
+  | OctatrackPatternUpdated;

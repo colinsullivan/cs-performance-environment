@@ -24,6 +24,7 @@ import {
   create_synkopater_component,
 } from "common/models";
 import sequencers from "./sequencers";
+import octatrack from './octatrack';
 
 export function create_default_state() {
   const initialState = {
@@ -130,4 +131,5 @@ export default combineReducers({
   sequencers,
   components,
   websocketReadyState,
+  octatrack
 });

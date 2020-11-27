@@ -20,7 +20,8 @@ CSPerformanceEnvironment {
     vileKickEnvironment,
     wideBassEnvironment,
     lazersEnvironment,
-    clockEnvironment;
+    clockEnvironment,
+    octatrackStateDispatcher;
 
   *new {
     ^super.new.init();
@@ -96,6 +97,13 @@ CSPerformanceEnvironment {
       'origin': [0, 0],
       clock: clockController.clock,
       store: store
+    ));
+
+    octatrackStateDispatcher = OctatrackStateDispatcher.new((
+      store: store,
+      midiInDeviceName: "UltraLite AVB",
+      midiInPortName: "MIDI In",
+      midiInChannel: 15
     ));
   }
 }
