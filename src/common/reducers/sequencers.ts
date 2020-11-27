@@ -161,9 +161,9 @@ const sequencers = (state: Sequencers, action: AllActionTypes) => {
         ...state,
         [sequencerId]: {
           ...state[sequencerId],
-          playQuant: [newQuant, 0],
+          playQuant: [newQuant, newQuant],
           stopQuant: [newQuant, newQuant],
-          propQuant: [newQuant, 0],
+          propQuant: [newQuant, newQuant],
         },
       };
 

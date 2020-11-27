@@ -51,9 +51,9 @@ export const create_synkopater_sequencer = (
   //numBeats: 4,
   euclideanNumHits: 4,
   euclideanTotalNumHits: 4,
-  playQuant: [4, 0],
+  playQuant: [4, 4],
   stopQuant: [4, 4],
-  propQuant: [4, 0],
+  propQuant: [4, 4],
   midiChan,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,

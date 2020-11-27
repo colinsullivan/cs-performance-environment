@@ -19,7 +19,8 @@ CSPerformanceEnvironment {
     shakerTextureInstr,
     vileKickEnvironment,
     wideBassEnvironment,
-    lazersEnvironment;
+    lazersEnvironment,
+    clockEnvironment;
 
   *new {
     ^super.new.init();
@@ -52,19 +53,31 @@ CSPerformanceEnvironment {
 
     runningWaterEnvironment = RunningWaterEnvironment.new((
       store: store,
-      outputBus: 18
+      outputBus: 18,
+      origin: [0, -500],
+      clock: clockController.clock,
+      store: store
     ));
     granularChaosEnvironment = GranularChaosEnvironment.new((
       store: store,
-      outputBus: 20
+      outputBus: 20,
+      origin: [0, -150],
+      clock: clockController.clock,
+      store: store
     ));
     shakerTextureInstr = ShakerTextureInstrument.new((
       store: store,
-      outputBus: 22
+      outputBus: 22,
+      origin: [0, -750],
+      clock: clockController.clock,
+      store: store
     ));
     randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
       store: store,
-      outputBus: 24
+      outputBus: 24,
+      origin: [0, -1000],
+      clock: clockController.clock,
+      store: store
     ));
     //vileKickEnvironment = VileKickEnvironment.new((
       //inChannel: 6,
@@ -78,5 +91,11 @@ CSPerformanceEnvironment {
       //inChannel: 7,
       //outputBus: 32
     //));
+
+    clockEnvironment = ClockEnvironment.new((
+      'origin': [0, 0],
+      clock: clockController.clock,
+      store: store
+    ));
   }
 }
