@@ -3,11 +3,11 @@ import { withStyles  } from '@material-ui/core/styles';
 
 import IconButton from '@material-ui/core/IconButton';
 
-const styles = theme => ({
+const styles = () => ({
   button: {
-    margin: theme.spacing.unit,
-    height: 48,
-    width: 48
+    margin: 0,
+    height: 64,
+    width: 64
   },
 });
 

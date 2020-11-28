@@ -11,3 +11,5 @@ export const getSequencer = createSelector(
   [sequencersSelector, getSequencerIdFromProps],
   (sequencers : Sequencers, sequencerId : string) : SynkopaterSequencer => sequencers[sequencerId]
 );
+
+export const getComponents = (state: any) => state.components;

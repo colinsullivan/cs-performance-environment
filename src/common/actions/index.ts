@@ -32,15 +32,15 @@ import {
   SYNKOPATER_SAVE_PRESET,
   SynkopaterSavePreset,
   SYNKOPATER_UPDATE_PRESET,
-  SynkopaterUpdatePreset
+  SynkopaterUpdatePreset,
+  Thunk,
 } from "./types";
 
-import {
-  SequencerParamKeys,
-} from "common/models/synkopater";
+import { SequencerParamKeys } from "common/models/synkopater";
 import { ARP_MODES, TRANSPOSE_DIRECTION } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
-import { ControllerMappingElements } from 'common/models/types';
+import { ControllerMappingElements } from "common/models/types";
+import { getComponents } from "common/selectors";
 
 export function synkopater_arp_add_note(
   sequencerId: string,
@@ -175,21 +175,34 @@ export function synkopater_global_quant_updated(
   };
 }
 
-export function synkopater_save_preset (sequencerId: string, followOctatrackPattern = false) : SynkopaterSavePreset {
-  return {
-    type: SYNKOPATER_SAVE_PRESET,
-    payload: {
-      sequencerId,
-      followOctatrackPattern
-    }
+export const synkopater_save_preset = (
+  componentId: string,
+  followOctatrackPattern = false
+): Thunk => {
+  return (dispatch, getState) => {
+    const component = getComponents(getState())[componentId];
+    const { sequencerId } = component.sequencerId;
+    dispatch({
+      type: SYNKOPATER_SAVE_PRESET,
+      payload: {
+        componentId,
+        sequencerId,
+        followOctatrackPattern,
+      },
+    });
   };
-}
+};
 
-export function synkopater_update_preset (sequencerId: string) : SynkopaterUpdatePreset {
-  return {
-    type: SYNKOPATER_UPDATE_PRESET,
-    payload: {
-      sequencerId
-    }
+export const synkopater_update_preset = (componentId: string): Thunk => {
+  return (dispatch, getState) => {
+    const component = getComponents(getState())[componentId];
+    const { sequencerId } = component;
+    dispatch({
+      type: SYNKOPATER_UPDATE_PRESET,
+      payload: {
+        componentId,
+        sequencerId,
+      },
+    });
   };
-}
+};

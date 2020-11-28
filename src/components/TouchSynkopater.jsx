@@ -106,7 +106,7 @@ class TouchSynkopater extends React.Component {
           </div>
         </div>
         <div className="col-11">
-          <TouchSynkopaterPiano sequencerId={sequencerId} />
+          <TouchSynkopaterPiano sequencerId={sequencerId} componentId={componentId} />
         </div>
         <div className="col-12">
           <div className="row">

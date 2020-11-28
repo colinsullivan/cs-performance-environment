@@ -18,6 +18,7 @@ import {
   MIDI_CONTROLLER_CC,
   INSTRUMENT_PARAMETER_UPDATED,
   WS_READYSTATE_UPDATE,
+  SYNKOPATER_SAVE_PRESET
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
