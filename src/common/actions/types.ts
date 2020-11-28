@@ -126,6 +126,23 @@ export interface OctatrackPatternUpdated {
   };
 };
 
+export const SYNKOPATER_SAVE_PRESET = "SYNKOPATER_SAVE_PRESET";
+export interface SynkopaterSavePreset {
+  type: typeof SYNKOPATER_SAVE_PRESET;
+  payload: {
+    sequencerId: string;
+    followOctatrackPattern: boolean;
+  }
+};
+
+export const SYNKOPATER_UPDATE_PRESET = "SYNKOPATER_UPDATE_PRESET";
+export interface SynkopaterUpdatePreset {
+  type: typeof SYNKOPATER_UPDATE_PRESET;
+  payload: {
+    sequencerId: string;
+  }
+};
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote

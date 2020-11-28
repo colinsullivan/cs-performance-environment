@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 import {
   PerformanceComponent,
   OctatrackState,
@@ -20,6 +22,7 @@ export const create_preset = (
   props: { [propName: string]: any },
   followOctatrackPattern = false
 ): PerformanceComponentPreset => ({
+  id: uuidv4(),
   octatrackPatternValue: octatrackState.currentPatternProgramChangeValue,
   followOctatrackPattern,
   props,

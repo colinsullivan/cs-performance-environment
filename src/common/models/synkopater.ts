@@ -53,7 +53,8 @@ export const create_synkopater_component = (
       pg0_kn_pan_1: "delayFeedbackControl",
     },
   },
-  presets: []
+  presets: [],
+  currentPresetId: null
 });
 
 export const getGlobalQuant = (sequencer : SynkopaterSequencer) : number => {

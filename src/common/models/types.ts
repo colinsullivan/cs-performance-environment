@@ -29,6 +29,7 @@ export type OctatrackState = {
 };
 
 export type PerformanceComponentPreset = {
+  id: string;
   octatrackPatternValue: number|null;
   followOctatrackPattern: boolean;
   props: {
@@ -44,6 +45,7 @@ export type SynkopaterPerformanceComponent = PerformanceComponent & {
     delayFactor: number,
     delayFeedback: number
   };
+  currentPresetId: string|null,
   presets: PerformanceComponentPreset[]
 };
 

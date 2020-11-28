@@ -29,6 +29,10 @@ import {
   SynkopaterTransposed,
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
   SynkopaterGlobalQuantUpdated,
+  SYNKOPATER_SAVE_PRESET,
+  SynkopaterSavePreset,
+  SYNKOPATER_UPDATE_PRESET,
+  SynkopaterUpdatePreset
 } from "./types";
 
 import {
@@ -168,5 +172,24 @@ export function synkopater_global_quant_updated(
       sequencerId,
       newQuant,
     },
+  };
+}
+
+export function synkopater_save_preset (sequencerId: string, followOctatrackPattern = false) : SynkopaterSavePreset {
+  return {
+    type: SYNKOPATER_SAVE_PRESET,
+    payload: {
+      sequencerId,
+      followOctatrackPattern
+    }
+  };
+}
+
+export function synkopater_update_preset (sequencerId: string) : SynkopaterUpdatePreset {
+  return {
+    type: SYNKOPATER_UPDATE_PRESET,
+    payload: {
+      sequencerId
+    }
   };
 }
