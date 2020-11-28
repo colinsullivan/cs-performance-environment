@@ -33,6 +33,8 @@ import {
   SYNKOPATER_UPDATE_PRESET,
   Thunk,
   SYNKOPATER_LOAD_PRESET,
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
+  SynkopaterToggleFollowOctatrack
 } from "./types";
 
 import {
@@ -256,3 +258,10 @@ export const synkopater_load_preset = (
     });
   };
 };
+
+export const synkopater_toggle_follow_octatrack = (componentId: string) : SynkopaterToggleFollowOctatrack => ({
+  type: SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
+  payload: {
+    componentId
+  }
+});

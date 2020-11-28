@@ -65,6 +65,7 @@ export const create_synkopater_component = (
   },
   presets: [],
   currentPresetId: null,
+  followOctatrackPattern: false
 });
 
 export const findPresetForOctatrackPattern = (octatrackPatternValue: number, synkopaterComponent: SynkopaterPerformanceComponent) : PerformanceComponentPreset|undefined => {

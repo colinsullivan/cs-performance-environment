@@ -157,6 +157,15 @@ export interface SynkopaterLoadPreset {
   };
 }
 
+export const SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK =
+  "SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK";
+export interface SynkopaterToggleFollowOctatrack {
+  type: typeof SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK;
+  payload: {
+    componentId: string;
+  };
+}
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -172,7 +181,8 @@ export type AllActionTypes =
   | OctatrackPatternUpdated
   | SynkopaterSavePreset
   | SynkopaterUpdatePreset
-  | SynkopaterLoadPreset;
+  | SynkopaterLoadPreset
+  | SynkopaterToggleFollowOctatrack;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

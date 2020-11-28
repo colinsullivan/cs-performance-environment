@@ -13,7 +13,7 @@ import SynkopaterPiano from "components/SynkopaterPiano";
 import TouchTransposeControl from "./TouchTransposeControl";
 import TouchOctaveControl from "./TouchOctaveControl";
 import { numOctaves } from './constants';
-import PresetControl from './PresetControl';
+import PresetControl from './PresetControl/PresetControl';
 
 const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
   const [startingOctave, setStartingOctave] = useState(5);

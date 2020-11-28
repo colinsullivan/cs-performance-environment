@@ -46,6 +46,7 @@ export type SynkopaterPerformanceComponent = PerformanceComponent & {
   };
   currentPresetId: string | null;
   presets: PerformanceComponentPreset[];
+  followOctatrackPattern: boolean
 };
 
 export type SynkopaterSequencer = SCReduxSequencer & {
