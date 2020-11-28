@@ -83,6 +83,17 @@ export const synkopaterComponentToPresetProps = (
   ...comp.parameters,
 });
 
+export const applyPresetToSynkopaterComponent = (
+  comp: SynkopaterPerformanceComponent,
+  props: PresetProps
+): SynkopaterPerformanceComponent => ({
+  ...comp,
+  parameters: {
+    ...comp.parameters,
+    ...props,
+  },
+});
+
 export const synkopaterSequencerToPresetProps = (
   seq: SynkopaterSequencer
 ): PresetProps =>
@@ -99,3 +110,11 @@ export const synkopaterSequencerToPresetProps = (
     "stopQuant",
     "propQuant",
   ]);
+
+export const applyPresetToSynkopaterSequencer = (
+  seq: SynkopaterSequencer,
+  props: PresetProps
+): SynkopaterSequencer => ({
+  ...seq,
+  ...props,
+});
