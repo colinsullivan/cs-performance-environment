@@ -6,6 +6,7 @@ import {
   PerformanceComponentPreset,
   PresetProps
 } from "./types";
+import { getPatternValue } from "common/models/octatrack";
 
 export const create_performance_component = (
   id: string,
@@ -20,11 +21,9 @@ export const create_performance_component = (
 
 export const create_preset = (
   octatrackState: OctatrackState,
-  props: PresetProps,
-  followOctatrackPattern = false
+  props: PresetProps
 ): PerformanceComponentPreset => ({
   id: uuidv4(),
-  octatrackPatternValue: octatrackState.currentPatternProgramChangeValue,
-  followOctatrackPattern,
+  octatrackPatternValue: getPatternValue(octatrackState),
   props,
 });

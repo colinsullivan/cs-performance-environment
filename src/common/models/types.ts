@@ -35,7 +35,6 @@ export type PresetProps = {
 export type PerformanceComponentPreset = {
   id: string;
   octatrackPatternValue: number|null;
-  followOctatrackPattern: boolean;
   props: PresetProps
 };
 

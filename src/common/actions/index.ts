@@ -41,6 +41,7 @@ import { ARP_MODES, TRANSPOSE_DIRECTION, PerformanceComponentPreset } from "comm
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
 import { getPerformanceComponents, getSequencer, getOctatrack } from "common/selectors";
+import { getPatternValue } from "common/models/octatrack";
 
 export function synkopater_arp_add_note(
   sequencerId: string,
@@ -176,8 +177,7 @@ export function synkopater_global_quant_updated(
 }
 
 export const synkopater_save_preset = (
-  componentId: string,
-  followOctatrackPattern: boolean
+  componentId: string
 ): Thunk => {
   return (dispatch, getState) => {
     const component = getPerformanceComponents(getState())[componentId];
@@ -185,7 +185,7 @@ export const synkopater_save_preset = (
     const sequencer = getSequencer(getState(), { sequencerId });
     const octatrack = getOctatrack(getState());
     const props = synkopaterToPresetProps(component, sequencer);
-    const preset = create_preset(octatrack, props, followOctatrackPattern);
+    const preset = create_preset(octatrack, props);
     dispatch({
       type: SYNKOPATER_SAVE_PRESET,
       payload: {
@@ -199,12 +199,21 @@ export const synkopater_save_preset = (
 export const synkopater_update_preset = (componentId: string): Thunk => {
   return (dispatch, getState) => {
     const component = getPerformanceComponents(getState())[componentId];
-    const { sequencerId } = component;
+    const { sequencerId, currentPresetId } = component;
+    const sequencer = getSequencer(getState(), { sequencerId });
+    const octatrack = getOctatrack(getState());
+    const preset = component.presets.find((p: PerformanceComponentPreset) => p.id === currentPresetId);
+    const updatedPreset = {
+      ...preset,
+      props: synkopaterToPresetProps(component, sequencer),
+      octatrackPatternValue: getPatternValue(octatrack)
+    };
     dispatch({
       type: SYNKOPATER_UPDATE_PRESET,
       payload: {
         componentId,
         sequencerId,
+        updatedPreset
       },
     });
   };
