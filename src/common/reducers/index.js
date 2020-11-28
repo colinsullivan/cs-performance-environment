@@ -20,7 +20,8 @@ import {
   WS_READYSTATE_UPDATE,
   SYNKOPATER_SAVE_PRESET,
   SYNKOPATER_LOAD_PRESET,
-  SYNKOPATER_UPDATE_PRESET
+  SYNKOPATER_UPDATE_PRESET,
+  OCTATRACK_PATTERN_UPDATED
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
@@ -157,6 +158,25 @@ function components(state = {}, action) {
         }
       };
     }
+    case OCTATRACK_PATTERN_UPDATED: {
+      let newState = state;
+      const { programChangeValue } = action.payload;
+      for (const componentId of Object.keys(state)) {
+        const component = state[componentId];
+        
+        const presetForPattern = component.presets.find((p) => p.octatrackPatternValue === programChangeValue);
+        if (presetForPattern) {
+          newState = {
+            ...newState,
+            [componentId]: {
+              ...applyPresetToSynkopaterComponent(component, presetForPattern),
+              currentPresetId: presetForPattern.id
+            }
+          };
+        }
+      }
+      return newState;
+    }
 
     default:
       return state;
@@ -172,11 +192,27 @@ export function websocketReadyState(state = READY_STATES.CLOSED, action) {
   }
 }
 
-export default combineReducers({
+const combinedReducers = combineReducers({
   [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
   controllers,
-  sequencers,
+  sequencers: (state={}) => state,
   components,
   websocketReadyState,
   octatrack,
 });
+
+const rootReducer = (state, action) => {
+  let newState = combinedReducers(state, action);
+
+  const newSequencers = sequencers(state.sequencers, action, newState);
+  if (newSequencers !== state.sequencers) {
+    newState = {
+      ...newState,
+      sequencers: newSequencers
+    };
+  }
+
+  return newState;
+};
+
+export default rootReducer;

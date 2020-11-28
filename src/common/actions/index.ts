@@ -44,6 +44,7 @@ import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
   PerformanceComponentPreset,
+  SynkopaterPerformanceComponent
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
@@ -189,7 +190,7 @@ export function synkopater_global_quant_updated(
 
 export const synkopater_save_preset = (componentId: string): Thunk => {
   return (dispatch, getState) => {
-    const component = getPerformanceComponents(getState())[componentId];
+    const component = (getPerformanceComponents(getState())[componentId] as SynkopaterPerformanceComponent);
     const { sequencerId } = component;
     const sequencer = getSequencer(getState(), { sequencerId });
     const octatrack = getOctatrack(getState());
@@ -207,15 +208,18 @@ export const synkopater_save_preset = (componentId: string): Thunk => {
 
 export const synkopater_update_preset = (componentId: string): Thunk => {
   return (dispatch, getState) => {
-    const component = getPerformanceComponents(getState())[componentId];
+    const component = (getPerformanceComponents(getState())[componentId] as SynkopaterPerformanceComponent);
     const { sequencerId, currentPresetId } = component;
     const sequencer = getSequencer(getState(), { sequencerId });
     const octatrack = getOctatrack(getState());
     const preset = component.presets.find(
       (p: PerformanceComponentPreset) => p.id === currentPresetId
     );
+    if (!preset) {
+      throw new Error(`No current preset for component ${componentId}`);
+    }
     const updatedPreset = {
-      ...preset,
+      id: preset.id,
       props: synkopaterToPresetProps(component, sequencer),
       octatrackPatternValue: getPatternValue(octatrack),
     };
@@ -234,11 +238,14 @@ export const synkopater_load_preset = (
   presetId: string
 ): Thunk => {
   return (dispatch, getState) => {
-    const component = getPerformanceComponents(getState())[componentId];
+    const component = (getPerformanceComponents(getState())[componentId] as SynkopaterPerformanceComponent);
     const { sequencerId } = component;
     const preset = component.presets.find(
       (p: PerformanceComponentPreset) => p.id === presetId
     );
+    if (!preset) {
+      throw new Error(`Cannot load preset ${presetId}!`);
+    }
     dispatch({
       type: SYNKOPATER_LOAD_PRESET,
       payload: {

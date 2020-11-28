@@ -12,10 +12,17 @@ import {
   SYNKOPATER_TRANSPOSED,
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
   SYNKOPATER_LOAD_PRESET,
+  OCTATRACK_PATTERN_UPDATED,
 } from "common/actions/types";
-import { TRANSPOSE_DIRECTION } from "common/models/types";
+import {
+  TRANSPOSE_DIRECTION,
+  PerformanceComponent,
+  PerformanceComponentPreset,
+  SynkopaterPerformanceComponent,
+} from "common/models/types";
 import { Sequencers } from "./types";
 import { applyPresetToSynkopaterSequencer } from "common/models";
+import { getPerformanceComponents } from "common/selectors";
 
 const durChoices = [
   1.0 / 128.0,
@@ -31,7 +38,11 @@ const durChoices = [
   8.0,
 ];
 
-const sequencers = (state: Sequencers, action: AllActionTypes) => {
+const sequencers = (
+  state: Sequencers,
+  action: AllActionTypes,
+  allState: any
+) => {
   state = SCReduxSequencers.reducer(state, action);
   let seq, sequencerId;
   switch (action.type) {
@@ -178,6 +189,39 @@ const sequencers = (state: Sequencers, action: AllActionTypes) => {
           preset
         ),
       };
+    }
+
+    case OCTATRACK_PATTERN_UPDATED: {
+      let newState = state;
+      const { programChangeValue } = action.payload;
+      const performanceComponents = getPerformanceComponents(allState);
+
+      for (const sequencerId of Object.keys(state)) {
+        // Gets performance component corresponding to this sequencer
+        const myPerformanceComponent = Object.values(
+          performanceComponents
+        ).find(
+          (p: SynkopaterPerformanceComponent) => p.sequencerId === sequencerId
+        );
+        if (myPerformanceComponent) {
+          // Finds preset corresponding to the pattern
+          const presetForPattern = myPerformanceComponent.presets.find(
+            (p: PerformanceComponentPreset) =>
+              p.octatrackPatternValue === programChangeValue
+          );
+          if (presetForPattern) {
+            newState = {
+              ...newState,
+              [sequencerId]: applyPresetToSynkopaterSequencer(
+                newState[sequencerId],
+                presetForPattern
+              ),
+            };
+          }
+        }
+      }
+
+      return newState;
     }
 
     default:
