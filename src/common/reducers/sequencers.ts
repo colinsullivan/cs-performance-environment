@@ -204,7 +204,10 @@ const sequencers = (
         ).find(
           (p: SynkopaterPerformanceComponent) => p.sequencerId === sequencerId
         );
-        if (myPerformanceComponent) {
+        if (
+          myPerformanceComponent &&
+          myPerformanceComponent.followOctatrackPattern
+        ) {
           const presetForPattern = findPresetForOctatrackPattern(
             programChangeValue,
             myPerformanceComponent

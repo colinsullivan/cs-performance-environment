@@ -22,6 +22,7 @@ import {
   SYNKOPATER_LOAD_PRESET,
   SYNKOPATER_UPDATE_PRESET,
   OCTATRACK_PATTERN_UPDATED,
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
@@ -169,7 +170,7 @@ function components(state = {}, action) {
           programChangeValue,
           component
         );
-        if (presetForPattern) {
+        if (presetForPattern && component.followOctatrackPattern) {
           newState = {
             ...newState,
             [componentId]: {
@@ -180,6 +181,16 @@ function components(state = {}, action) {
         }
       }
       return newState;
+    }
+    case SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK: {
+      const { componentId } = action.payload;
+      return {
+        ...state,
+        [componentId]: {
+          ...state[componentId],
+          followOctatrackPattern: !state[componentId].followOctatrackPattern
+        }
+      };
     }
 
     default:
