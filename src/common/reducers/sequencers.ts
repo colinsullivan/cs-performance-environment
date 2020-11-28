@@ -16,12 +16,13 @@ import {
 } from "common/actions/types";
 import {
   TRANSPOSE_DIRECTION,
-  PerformanceComponent,
-  PerformanceComponentPreset,
   SynkopaterPerformanceComponent,
 } from "common/models/types";
 import { Sequencers } from "./types";
-import { applyPresetToSynkopaterSequencer } from "common/models";
+import {
+  applyPresetToSynkopaterSequencer,
+  findPresetForOctatrackPattern,
+} from "common/models";
 import { getPerformanceComponents } from "common/selectors";
 
 const durChoices = [
@@ -204,10 +205,9 @@ const sequencers = (
           (p: SynkopaterPerformanceComponent) => p.sequencerId === sequencerId
         );
         if (myPerformanceComponent) {
-          // Finds preset corresponding to the pattern
-          const presetForPattern = myPerformanceComponent.presets.find(
-            (p: PerformanceComponentPreset) =>
-              p.octatrackPatternValue === programChangeValue
+          const presetForPattern = findPresetForOctatrackPattern(
+            programChangeValue,
+            myPerformanceComponent
           );
           if (presetForPattern) {
             newState = {

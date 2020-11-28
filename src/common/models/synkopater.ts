@@ -67,6 +67,10 @@ export const create_synkopater_component = (
   currentPresetId: null,
 });
 
+export const findPresetForOctatrackPattern = (octatrackPatternValue: number, synkopaterComponent: SynkopaterPerformanceComponent) : PerformanceComponentPreset|undefined => {
+  return synkopaterComponent.presets.find((p: PerformanceComponentPreset) => p.octatrackPatternValue === octatrackPatternValue);
+};
+
 export const getGlobalQuant = (sequencer: SynkopaterSequencer): number => {
   if (
     sequencer.playQuant[0] === sequencer.stopQuant[0] &&

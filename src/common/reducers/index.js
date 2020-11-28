@@ -21,12 +21,13 @@ import {
   SYNKOPATER_SAVE_PRESET,
   SYNKOPATER_LOAD_PRESET,
   SYNKOPATER_UPDATE_PRESET,
-  OCTATRACK_PATTERN_UPDATED
+  OCTATRACK_PATTERN_UPDATED,
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
   create_synkopater_component,
   applyPresetToSynkopaterComponent,
+  findPresetForOctatrackPattern,
 } from "common/models";
 import sequencers from "./sequencers";
 import octatrack from "./octatrack";
@@ -149,13 +150,13 @@ function components(state = {}, action) {
         ...state,
         [componentId]: {
           ...component,
-          presets: component.presets.map(p => {
+          presets: component.presets.map((p) => {
             if (p.id === updatedPreset.id) {
               return updatedPreset;
             }
             return p;
-          })
-        }
+          }),
+        },
       };
     }
     case OCTATRACK_PATTERN_UPDATED: {
@@ -163,15 +164,18 @@ function components(state = {}, action) {
       const { programChangeValue } = action.payload;
       for (const componentId of Object.keys(state)) {
         const component = state[componentId];
-        
-        const presetForPattern = component.presets.find((p) => p.octatrackPatternValue === programChangeValue);
+
+        const presetForPattern = findPresetForOctatrackPattern(
+          programChangeValue,
+          component
+        );
         if (presetForPattern) {
           newState = {
             ...newState,
             [componentId]: {
               ...applyPresetToSynkopaterComponent(component, presetForPattern),
-              currentPresetId: presetForPattern.id
-            }
+              currentPresetId: presetForPattern.id,
+            },
           };
         }
       }
@@ -195,7 +199,7 @@ export function websocketReadyState(state = READY_STATES.CLOSED, action) {
 const combinedReducers = combineReducers({
   [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
   controllers,
-  sequencers: (state={}) => state,
+  sequencers: (state = {}) => state,
   components,
   websocketReadyState,
   octatrack,
@@ -208,7 +212,7 @@ const rootReducer = (state, action) => {
   if (newSequencers !== state.sequencers) {
     newState = {
       ...newState,
-      sequencers: newSequencers
+      sequencers: newSequencers,
     };
   }
 
