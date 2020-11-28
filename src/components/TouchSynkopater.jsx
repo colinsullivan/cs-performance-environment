@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 import PlayButtonTouch from "components/PlayButtonTouch";
 import StopButtonTouch from "components/StopButtonTouch";
@@ -88,10 +89,18 @@ const factorOptions = [
   { value: 1 / 32, label: "1/32" },
 ];
 
+
+const TouchSynkopaterContainer = styled.div`
+  padding-top: 12px;
+  padding-left: 12px;
+`;
+
+
 class TouchSynkopater extends React.Component {
   render() {
     const { sequencerId, componentId } = this.props;
     return (
+      <TouchSynkopaterContainer>
       <div className="row">
         <div className="col-1">
           <div className="row">
@@ -141,6 +150,7 @@ class TouchSynkopater extends React.Component {
           </div>
         </div>
       </div>
+      </TouchSynkopaterContainer>
     );
   }
 }

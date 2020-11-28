@@ -6,12 +6,11 @@ import TouchButton from "components/TouchButton";
 import { numOctaves } from "./constants";
 
 const TouchOctaveControl = ({
-  sequencerId,
   startingOctave,
   setStartingOctave,
 }) => {
   return (
-    <div className="col">
+    <div className="col-2">
       <TouchButton
         icon={<KeyboardArrowLeft />}
         onClick={() => setStartingOctave(Math.max(0, startingOctave - 1))}

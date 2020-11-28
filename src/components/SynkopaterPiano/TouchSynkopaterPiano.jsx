@@ -9,6 +9,7 @@
  **/
 
 import React, { useState } from "react";
+
 import SynkopaterPiano from "components/SynkopaterPiano";
 import TouchTransposeControl from "./TouchTransposeControl";
 import TouchOctaveControl from "./TouchOctaveControl";
@@ -23,7 +24,6 @@ const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
       <div className="row">
         <TouchTransposeControl sequencerId={sequencerId} />
         <TouchOctaveControl
-          sequencerId={sequencerId}
           startingOctave={startingOctave}
           setStartingOctave={setStartingOctave}
         />

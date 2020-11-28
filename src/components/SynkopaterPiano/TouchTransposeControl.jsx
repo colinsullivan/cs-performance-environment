@@ -5,7 +5,7 @@ import { TRANSPOSE_DIRECTION } from "common/models/types";
 
 const TouchTransposeControl = ({ sequencerId }) => {
   return (
-    <div className="col">
+    <div className="col-2">
       <TransposeButton
         sequencerId={sequencerId}
         transposeDirection={TRANSPOSE_DIRECTION.DOWN}
