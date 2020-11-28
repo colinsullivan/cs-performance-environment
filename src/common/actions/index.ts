@@ -214,10 +214,6 @@ export const synkopater_load_preset = (componentId: string, presetId: string) : 
   return (dispatch, getState) => {
     const component = getPerformanceComponents(getState())[componentId];
     const { sequencerId } = component;
-    console.log("componentId");
-    console.log(componentId);
-    console.log("component");
-    console.log(component);
     const preset = component.presets.find((p : PerformanceComponentPreset) => p.id === presetId);
     dispatch({
       type: SYNKOPATER_LOAD_PRESET,

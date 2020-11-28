@@ -18,14 +18,16 @@ import {
   MIDI_CONTROLLER_CC,
   INSTRUMENT_PARAMETER_UPDATED,
   WS_READYSTATE_UPDATE,
-  SYNKOPATER_SAVE_PRESET
+  SYNKOPATER_SAVE_PRESET,
+  SYNKOPATER_LOAD_PRESET,
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
   create_synkopater_component,
+  applyPresetToSynkopaterComponent,
 } from "common/models";
 import sequencers from "./sequencers";
-import octatrack from './octatrack';
+import octatrack from "./octatrack";
 
 export function create_default_state() {
   const initialState = {
@@ -120,8 +122,21 @@ function components(state = {}, action) {
         [componentId]: {
           ...component,
           currentPresetId: preset.id,
-          presets: component.presets.concat([preset])
-        }
+          presets: component.presets.concat([preset]),
+        },
+      };
+    }
+
+    case SYNKOPATER_LOAD_PRESET: {
+      const { componentId, preset } = action.payload;
+      const component = {
+        ...applyPresetToSynkopaterComponent(state[componentId], preset),
+        currentPresetId: preset.id,
+      };
+
+      return {
+        ...state,
+        [componentId]: component,
       };
     }
 
@@ -145,5 +160,5 @@ export default combineReducers({
   sequencers,
   components,
   websocketReadyState,
-  octatrack
+  octatrack,
 });

@@ -9,7 +9,12 @@
  **/
 
 import { SequencerParamKeys } from "common/models/synkopater";
-import { ARP_MODES, TRANSPOSE_DIRECTION, SynkopaterSequencer, PerformanceComponentPreset } from "common/models/types";
+import {
+  ARP_MODES,
+  TRANSPOSE_DIRECTION,
+  SynkopaterSequencer,
+  PerformanceComponentPreset,
+} from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
 
@@ -130,7 +135,7 @@ export interface SynkopaterSavePreset {
   type: typeof SYNKOPATER_SAVE_PRESET;
   payload: {
     componentId: string;
-    preset: PerformanceComponentPreset
+    preset: PerformanceComponentPreset;
   };
 }
 
@@ -149,9 +154,9 @@ export interface SynkopaterLoadPreset {
   payload: {
     componentId: string;
     sequencerId: string;
-    preset: PerformanceComponentPreset
-  }
-};
+    preset: PerformanceComponentPreset;
+  };
+}
 
 export type AllActionTypes =
   | SynkopaterAddNote
@@ -168,7 +173,7 @@ export type AllActionTypes =
   | OctatrackPatternUpdated
   | SynkopaterSavePreset
   | SynkopaterUpdatePreset
-| SynkopaterLoadPreset;
+  | SynkopaterLoadPreset;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

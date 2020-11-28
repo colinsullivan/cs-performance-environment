@@ -11,9 +11,11 @@ import {
   MIDI_CONTROLLER_CC,
   SYNKOPATER_TRANSPOSED,
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
+  SYNKOPATER_LOAD_PRESET,
 } from "common/actions/types";
 import { TRANSPOSE_DIRECTION } from "common/models/types";
 import { Sequencers } from "./types";
+import { applyPresetToSynkopaterSequencer } from "common/models";
 
 const durChoices = [
   1.0 / 128.0,
@@ -166,6 +168,17 @@ const sequencers = (state: Sequencers, action: AllActionTypes) => {
           propQuant: [newQuant, newQuant],
         },
       };
+
+    case SYNKOPATER_LOAD_PRESET: {
+      const { sequencerId, preset } = action.payload;
+      return {
+        ...state,
+        [sequencerId]: applyPresetToSynkopaterSequencer(
+          state[sequencerId],
+          preset
+        ),
+      };
+    }
 
     default:
       break;
