@@ -1,6 +1,4 @@
-import {
-  SCReduxSequencer,
-} from "supercollider-redux-sequencers";
+import { SCReduxSequencer } from "supercollider-redux-sequencers";
 
 export enum ARP_MODES {
   UP = "UP",
@@ -10,22 +8,22 @@ export enum ARP_MODES {
 
 export enum TRANSPOSE_DIRECTION {
   UP = 1,
-  DOWN = -1
-};
+  DOWN = -1,
+}
 
 export interface ControllerMappingElements {
-  [elementName: string]: string
+  [elementName: string]: string;
 }
 export interface ControllerMapping {
-  [controllerName: string]: ControllerMappingElements
-};
+  [controllerName: string]: ControllerMappingElements;
+}
 export type PerformanceComponent = {
-  id: string,
-  scClassName: string,
-  controllerMappings: ControllerMapping
+  id: string;
+  scClassName: string;
+  controllerMappings: ControllerMapping;
 };
 export type OctatrackState = {
-  currentPatternProgramChangeValue: number|null;
+  currentPatternProgramChangeValue: number | null;
 };
 
 export type PresetProps = {
@@ -34,8 +32,8 @@ export type PresetProps = {
 
 export type PerformanceComponentPreset = {
   id: string;
-  octatrackPatternValue: number|null;
-  props: PresetProps
+  octatrackPatternValue: number | null;
+  props: PresetProps;
 };
 
 export type SynkopaterPerformanceComponent = PerformanceComponent & {
@@ -43,11 +41,11 @@ export type SynkopaterPerformanceComponent = PerformanceComponent & {
   inputBus: number;
   outputBus: number;
   parameters: {
-    delayFactor: number,
-    delayFeedback: number
+    delayFactor: number;
+    delayFeedback: number;
   };
-  currentPresetId: string|null,
-  presets: PerformanceComponentPreset[]
+  currentPresetId: string | null;
+  presets: PerformanceComponentPreset[];
 };
 
 export type SynkopaterSequencer = SCReduxSequencer & {
@@ -62,4 +60,3 @@ export type SynkopaterSequencer = SCReduxSequencer & {
   midiChan: number;
   delaySecs: number | null;
 };
-

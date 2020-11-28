@@ -145,7 +145,7 @@ export interface SynkopaterUpdatePreset {
   payload: {
     sequencerId: string;
     componentId: string;
-    updatedPreset: PerformanceComponentPreset
+    updatedPreset: PerformanceComponentPreset;
   };
 }
 

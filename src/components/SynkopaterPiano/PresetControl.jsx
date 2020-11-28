@@ -10,7 +10,10 @@ import { getPerformanceComponents } from "common/selectors";
 const PresetIndicatorBox = styled.div`
   width: 24px;
   height: 24px;
-  background-color: rgba(64, 128, 64, 0.75);
+  ${({ isSelected }) =>
+    isSelected
+      ? `background-color: rgba(200, 64, 64, 1.0);`
+      : `background-color: rgba(64, 128, 64, 0.75);`}
   display: inline-block;
   margin-right: 6px;
   color: white;
@@ -19,13 +22,17 @@ const PresetIndicatorBox = styled.div`
 
 const PresetIndicator = ({ preset, componentId }) => {
   const dispatch = useDispatch();
+  const component = useSelector(
+    (state) => getPerformanceComponents(state)[componentId]
+  );
+  const isSelected = component.currentPresetId === preset.id;
   //const { followOctatrackPattern, octatrackPatternValue } = preset;
 
   const loadPreset = useCallback(() => {
     dispatch(synkopater_load_preset(componentId, preset.id));
   }, [dispatch, synkopater_load_preset, componentId, preset.id]);
 
-  return <PresetIndicatorBox onClick={loadPreset} />;
+  return <PresetIndicatorBox onClick={loadPreset} isSelected={isSelected} />;
 };
 
 const PresetControl = ({ componentId }) => {

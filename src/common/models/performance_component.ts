@@ -4,7 +4,7 @@ import {
   PerformanceComponent,
   OctatrackState,
   PerformanceComponentPreset,
-  PresetProps
+  PresetProps,
 } from "./types";
 import { getPatternValue } from "common/models/octatrack";
 

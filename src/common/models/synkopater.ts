@@ -7,7 +7,7 @@ import {
   ARP_MODES,
   SynkopaterSequencer,
   PresetProps,
-  PerformanceComponentPreset
+  PerformanceComponentPreset,
 } from "./types";
 
 // Defines which keys can be set direction with the SEQUENCER_STATE_UPDATED action
@@ -95,8 +95,8 @@ export const synkopaterToPresetProps = (
     "propQuant",
   ]),
   synkopaterComponentProps: {
-    ...synkopaterComponent.parameters
-  }
+    ...synkopaterComponent.parameters,
+  },
 });
 
 export const applyPresetToSynkopaterComponent = (
