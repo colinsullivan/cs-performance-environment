@@ -32,14 +32,15 @@ import {
   SYNKOPATER_SAVE_PRESET,
   SYNKOPATER_UPDATE_PRESET,
   Thunk,
+  SYNKOPATER_LOAD_PRESET,
 } from "./types";
 
 import { SequencerParamKeys, synkopaterToPresetProps } from "common/models/synkopater";
 import { create_preset } from "common/models/performance_component";
-import { ARP_MODES, TRANSPOSE_DIRECTION } from "common/models/types";
+import { ARP_MODES, TRANSPOSE_DIRECTION, PerformanceComponentPreset } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
-import { getComponents, getSequencer, getOctatrack } from "common/selectors";
+import { getPerformanceComponents, getSequencer, getOctatrack } from "common/selectors";
 
 export function synkopater_arp_add_note(
   sequencerId: string,
@@ -179,7 +180,7 @@ export const synkopater_save_preset = (
   followOctatrackPattern: boolean
 ): Thunk => {
   return (dispatch, getState) => {
-    const component = getComponents(getState())[componentId];
+    const component = getPerformanceComponents(getState())[componentId];
     const { sequencerId } = component;
     const sequencer = getSequencer(getState(), { sequencerId });
     const octatrack = getOctatrack(getState());
@@ -197,7 +198,7 @@ export const synkopater_save_preset = (
 
 export const synkopater_update_preset = (componentId: string): Thunk => {
   return (dispatch, getState) => {
-    const component = getComponents(getState())[componentId];
+    const component = getPerformanceComponents(getState())[componentId];
     const { sequencerId } = component;
     dispatch({
       type: SYNKOPATER_UPDATE_PRESET,
@@ -208,3 +209,23 @@ export const synkopater_update_preset = (componentId: string): Thunk => {
     });
   };
 };
+
+export const synkopater_load_preset = (componentId: string, presetId: string) : Thunk => {
+  return (dispatch, getState) => {
+    const component = getPerformanceComponents(getState())[componentId];
+    const { sequencerId } = component;
+    console.log("componentId");
+    console.log(componentId);
+    console.log("component");
+    console.log(component);
+    const preset = component.presets.find((p : PerformanceComponentPreset) => p.id === presetId);
+    dispatch({
+      type: SYNKOPATER_LOAD_PRESET,
+      payload: {
+        componentId,
+        sequencerId,
+        preset
+      }
+    });
+  };
+}

@@ -12,6 +12,6 @@ export const getSequencer = createSelector(
   (sequencers : Sequencers, sequencerId : string) : SynkopaterSequencer => sequencers[sequencerId]
 );
 
-export const getComponents = (state: any) => state.components;
+export const getPerformanceComponents = (state: any) => state.components;
 
 export const getOctatrack = (state: any) => state.octatrack;

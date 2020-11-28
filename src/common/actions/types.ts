@@ -143,6 +143,16 @@ export interface SynkopaterUpdatePreset {
   };
 }
 
+export const SYNKOPATER_LOAD_PRESET = "SYNKOPATER_LOAD_PRESET";
+export interface SynkopaterLoadPreset {
+  type: typeof SYNKOPATER_LOAD_PRESET;
+  payload: {
+    componentId: string;
+    sequencerId: string;
+    preset: PerformanceComponentPreset
+  }
+};
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -157,7 +167,8 @@ export type AllActionTypes =
   | SynkopaterGlobalQuantUpdated
   | OctatrackPatternUpdated
   | SynkopaterSavePreset
-  | SynkopaterUpdatePreset;
+  | SynkopaterUpdatePreset
+| SynkopaterLoadPreset;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

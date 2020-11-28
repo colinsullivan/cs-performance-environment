@@ -125,7 +125,6 @@ function components(state = {}, action) {
       };
     }
 
-
     default:
       return state;
   }

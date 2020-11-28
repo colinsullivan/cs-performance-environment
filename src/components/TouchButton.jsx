@@ -6,8 +6,9 @@ import IconButton from '@material-ui/core/IconButton';
 const styles = () => ({
   button: {
     margin: 0,
-    height: 64,
-    width: 64
+    padding: 0,
+    height: 24,
+    width: 24
   },
 });
 
