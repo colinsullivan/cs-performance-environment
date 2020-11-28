@@ -42,7 +42,6 @@ export const create_synkopater_sequencer = (
   midiChan,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
-  presets: [],
 });
 
 export const create_synkopater_component = (
@@ -77,27 +76,11 @@ export const getGlobalQuant = (sequencer: SynkopaterSequencer): number => {
   throw new Error("Sequencer has different quants for play and props...");
 };
 
-export const synkopaterComponentToPresetProps = (
-  comp: SynkopaterPerformanceComponent
+export const synkopaterToPresetProps = (
+  synkopaterComponent: SynkopaterPerformanceComponent,
+  synkopaterSequencer: SynkopaterSequencer
 ): PresetProps => ({
-  ...comp.parameters,
-});
-
-export const applyPresetToSynkopaterComponent = (
-  comp: SynkopaterPerformanceComponent,
-  props: PresetProps
-): SynkopaterPerformanceComponent => ({
-  ...comp,
-  parameters: {
-    ...comp.parameters,
-    ...props,
-  },
-});
-
-export const synkopaterSequencerToPresetProps = (
-  seq: SynkopaterSequencer
-): PresetProps =>
-  pick(seq, [
+  synkopaterSequencerProps: pick(synkopaterSequencer, [
     "dur",
     "stretch",
     "legato",
@@ -109,12 +92,27 @@ export const synkopaterSequencerToPresetProps = (
     "playQuant",
     "stopQuant",
     "propQuant",
-  ]);
+  ]),
+  synkopaterComponentProps: {
+    ...synkopaterComponent.parameters
+  }
+});
+
+export const applyPresetToSynkopaterComponent = (
+  comp: SynkopaterPerformanceComponent,
+  props: PresetProps
+): SynkopaterPerformanceComponent => ({
+  ...comp,
+  parameters: {
+    ...comp.parameters,
+    ...props.synkopaterComponentProps,
+  },
+});
 
 export const applyPresetToSynkopaterSequencer = (
   seq: SynkopaterSequencer,
   props: PresetProps
 ): SynkopaterSequencer => ({
   ...seq,
-  ...props,
+  ...props.synkopaterSequencerProps,
 });

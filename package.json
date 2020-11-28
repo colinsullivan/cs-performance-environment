@@ -83,7 +83,8 @@
       "prefer-const": "error",
       "react/prop-types": 0,
       "@typescript-eslint/no-extra-semi": "off",
-      "@typescript-eslint/no-empty-function": "off"
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
     }
   },
   "devDependencies": {

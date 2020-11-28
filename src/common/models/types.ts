@@ -62,6 +62,5 @@ export type SynkopaterSequencer = SCReduxSequencer & {
   euclideanTotalNumHits: number;
   midiChan: number;
   delaySecs: number | null;
-  presets: PerformanceComponentPreset[]
 };
 
