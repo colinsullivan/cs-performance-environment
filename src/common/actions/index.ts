@@ -223,7 +223,6 @@ export const synkopater_update_preset = (componentId: string): Thunk => {
       type: SYNKOPATER_UPDATE_PRESET,
       payload: {
         componentId,
-        sequencerId,
         updatedPreset,
       },
     });

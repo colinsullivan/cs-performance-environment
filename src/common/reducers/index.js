@@ -20,6 +20,7 @@ import {
   WS_READYSTATE_UPDATE,
   SYNKOPATER_SAVE_PRESET,
   SYNKOPATER_LOAD_PRESET,
+  SYNKOPATER_UPDATE_PRESET
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
@@ -137,6 +138,23 @@ function components(state = {}, action) {
       return {
         ...state,
         [componentId]: component,
+      };
+    }
+
+    case SYNKOPATER_UPDATE_PRESET: {
+      const { componentId, updatedPreset } = action.payload;
+      const component = state[componentId];
+      return {
+        ...state,
+        [componentId]: {
+          ...component,
+          presets: component.presets.map(p => {
+            if (p.id === updatedPreset.id) {
+              return updatedPreset;
+            }
+            return p;
+          })
+        }
       };
     }
 

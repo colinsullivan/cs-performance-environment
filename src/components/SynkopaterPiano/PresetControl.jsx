@@ -4,7 +4,7 @@ import AddCircle from "@material-ui/icons/AddCircle";
 import styled from "styled-components";
 
 import TouchButton from "components/TouchButton";
-import { synkopater_save_preset, synkopater_load_preset } from "common/actions";
+import { synkopater_save_preset, synkopater_load_preset, synkopater_update_preset } from "common/actions";
 import { getPerformanceComponents } from "common/selectors";
 
 const PresetIndicatorBox = styled.div`
@@ -28,11 +28,15 @@ const PresetIndicator = ({ preset, componentId }) => {
   const isSelected = component.currentPresetId === preset.id;
   //const { followOctatrackPattern, octatrackPatternValue } = preset;
 
+  const updatePreset = useCallback(() => {
+    dispatch(synkopater_update_preset(componentId));
+  }, [dispatch, synkopater_update_preset, componentId]);
+
   const loadPreset = useCallback(() => {
     dispatch(synkopater_load_preset(componentId, preset.id));
   }, [dispatch, synkopater_load_preset, componentId, preset.id]);
 
-  return <PresetIndicatorBox onClick={loadPreset} isSelected={isSelected} />;
+  return <PresetIndicatorBox onClick={isSelected ? updatePreset : loadPreset} isSelected={isSelected} />;
 };
 
 const PresetControl = ({ componentId }) => {

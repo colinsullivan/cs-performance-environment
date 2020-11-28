@@ -12,7 +12,6 @@ import { SequencerParamKeys } from "common/models/synkopater";
 import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
-  SynkopaterSequencer,
   PerformanceComponentPreset,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
@@ -143,7 +142,6 @@ export const SYNKOPATER_UPDATE_PRESET = "SYNKOPATER_UPDATE_PRESET";
 export interface SynkopaterUpdatePreset {
   type: typeof SYNKOPATER_UPDATE_PRESET;
   payload: {
-    sequencerId: string;
     componentId: string;
     updatedPreset: PerformanceComponentPreset;
   };
