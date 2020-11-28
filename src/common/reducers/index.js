@@ -112,6 +112,20 @@ function components(state = {}, action) {
         return state;
       }
 
+    case SYNKOPATER_SAVE_PRESET: {
+      const { componentId, preset } = action.payload;
+      const component = state[componentId];
+      return {
+        ...state,
+        [componentId]: {
+          ...component,
+          currentPresetId: preset.id,
+          presets: component.presets.concat([preset])
+        }
+      };
+    }
+
+
     default:
       return state;
   }

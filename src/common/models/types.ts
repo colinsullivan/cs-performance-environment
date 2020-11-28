@@ -1,4 +1,4 @@
-import SCReduxSequencers, {
+import {
   SCReduxSequencer,
 } from "supercollider-redux-sequencers";
 

@@ -13,3 +13,5 @@ export const getSequencer = createSelector(
 );
 
 export const getComponents = (state: any) => state.components;
+
+export const getOctatrack = (state: any) => state.octatrack;
