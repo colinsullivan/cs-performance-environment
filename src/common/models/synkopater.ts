@@ -32,6 +32,7 @@ export const create_synkopater_sequencer = (
   midiChan,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
+  presets: []
 });
 
 export const create_synkopater_component = (
@@ -52,6 +53,7 @@ export const create_synkopater_component = (
       pg0_kn_pan_1: "delayFeedbackControl",
     },
   },
+  presets: []
 });
 
 export const getGlobalQuant = (sequencer : SynkopaterSequencer) : number => {

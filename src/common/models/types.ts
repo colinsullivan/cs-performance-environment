@@ -28,6 +28,14 @@ export type OctatrackState = {
   currentPatternProgramChangeValue: number|null;
 };
 
+export type PerformanceComponentPreset = {
+  octatrackPatternValue: number|null;
+  followOctatrackPattern: boolean;
+  props: {
+    [propName: string]: any;
+  }
+};
+
 export type SynkopaterPerformanceComponent = PerformanceComponent & {
   sequencerId: string;
   inputBus: number;
@@ -36,6 +44,7 @@ export type SynkopaterPerformanceComponent = PerformanceComponent & {
     delayFactor: number,
     delayFeedback: number
   };
+  presets: PerformanceComponentPreset[]
 };
 
 export type SynkopaterSequencer = SCReduxSequencer & {
@@ -49,5 +58,6 @@ export type SynkopaterSequencer = SCReduxSequencer & {
   euclideanTotalNumHits: number;
   midiChan: number;
   delaySecs: number | null;
+  presets: PerformanceComponentPreset[]
 };
 
