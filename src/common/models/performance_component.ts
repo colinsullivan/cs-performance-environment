@@ -4,6 +4,7 @@ import {
   PerformanceComponent,
   OctatrackState,
   PerformanceComponentPreset,
+  PresetProps
 } from "./types";
 
 export const create_performance_component = (
@@ -19,7 +20,7 @@ export const create_performance_component = (
 
 export const create_preset = (
   octatrackState: OctatrackState,
-  props: { [propName: string]: any },
+  props: PresetProps,
   followOctatrackPattern = false
 ): PerformanceComponentPreset => ({
   id: uuidv4(),

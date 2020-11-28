@@ -1,12 +1,22 @@
 import SCReduxSequencers from "supercollider-redux-sequencers";
+import { pick } from "lodash";
 
+import { create_performance_component } from "./performance_component";
 import {
-  create_performance_component,
-} from "./performance_component";
-import { SynkopaterPerformanceComponent, ARP_MODES, SynkopaterSequencer } from './types';
+  SynkopaterPerformanceComponent,
+  ARP_MODES,
+  SynkopaterSequencer,
+  PresetProps,
+} from "./types";
 
 // Defines which keys can be set direction with the SEQUENCER_STATE_UPDATED action
-export type SequencerParamKeys = 'dur' | 'stretch' | 'legato' | 'offset' | 'euclideanTotalNumHits' | 'euclideanNumHits';
+export type SequencerParamKeys =
+  | "dur"
+  | "stretch"
+  | "legato"
+  | "offset"
+  | "euclideanTotalNumHits"
+  | "euclideanNumHits";
 
 export const create_synkopater_sequencer = (
   id: string,
@@ -32,7 +42,7 @@ export const create_synkopater_sequencer = (
   midiChan,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
-  presets: []
+  presets: [],
 });
 
 export const create_synkopater_component = (
@@ -54,12 +64,38 @@ export const create_synkopater_component = (
     },
   },
   presets: [],
-  currentPresetId: null
+  currentPresetId: null,
 });
 
-export const getGlobalQuant = (sequencer : SynkopaterSequencer) : number => {
-  if (sequencer.playQuant[0] === sequencer.stopQuant[0] && sequencer.playQuant[0] === sequencer.propQuant[0]) {
+export const getGlobalQuant = (sequencer: SynkopaterSequencer): number => {
+  if (
+    sequencer.playQuant[0] === sequencer.stopQuant[0] &&
+    sequencer.playQuant[0] === sequencer.propQuant[0]
+  ) {
     return sequencer.playQuant[0];
   }
   throw new Error("Sequencer has different quants for play and props...");
-}
+};
+
+export const synkopaterComponentToPresetProps = (
+  comp: SynkopaterPerformanceComponent
+): PresetProps => ({
+  ...comp.parameters,
+});
+
+export const synkopaterSequencerToPresetProps = (
+  seq: SynkopaterSequencer
+): PresetProps =>
+  pick(seq, [
+    "dur",
+    "stretch",
+    "legato",
+    "offset",
+    "notes",
+    "arpMode",
+    "euclideanNumHits",
+    "euclideanTotalNumHits",
+    "playQuant",
+    "stopQuant",
+    "propQuant",
+  ]);

@@ -28,13 +28,15 @@ export type OctatrackState = {
   currentPatternProgramChangeValue: number|null;
 };
 
+export type PresetProps = {
+  [propName: string]: any;
+};
+
 export type PerformanceComponentPreset = {
   id: string;
   octatrackPatternValue: number|null;
   followOctatrackPattern: boolean;
-  props: {
-    [propName: string]: any;
-  }
+  props: PresetProps
 };
 
 export type SynkopaterPerformanceComponent = PerformanceComponent & {
