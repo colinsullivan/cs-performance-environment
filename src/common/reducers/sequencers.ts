@@ -12,7 +12,7 @@ import {
   SYNKOPATER_TRANSPOSED,
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
 } from "common/actions/types";
-import { TRANSPOSE_DIRECTION } from "common/models/synkopater";
+import { TRANSPOSE_DIRECTION } from "common/models/types";
 import { Sequencers } from "./types";
 
 const durChoices = [

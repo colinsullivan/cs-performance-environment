@@ -21,7 +21,7 @@ import {
   sequencer_update_param,
   synkopater_arp_change_mode
 } from 'common/actions';
-import { ARP_MODES } from 'common/models';
+import { ARP_MODES } from 'common/models/types';
 import SynkopaterPiano from 'components/SynkopaterPiano';
 import PlayButtonSmall from 'components/PlayButtonSmall';
 import StopButtonSmall from 'components/StopButtonSmall';

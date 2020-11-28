@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 
-import { TRANSPOSE_DIRECTION } from "common/models/synkopater";
+import { TRANSPOSE_DIRECTION } from "common/models/types";
 import TouchButton from "components/TouchButton";
 import { synkopater_transposed } from "common/actions";
 

@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 
 import { Sequencers } from 'common/reducers/types';
-import { SynkopaterSequencer } from 'common/models/synkopater';
+import { SynkopaterSequencer } from 'common/models/types';
 
 export const sequencersSelector = (state : any) : Sequencers => state.sequencers;
 

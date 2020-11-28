@@ -1,34 +1,9 @@
-import SCReduxSequencers, {
-  SCReduxSequencer,
-} from "supercollider-redux-sequencers";
+import SCReduxSequencers from "supercollider-redux-sequencers";
+
 import {
   create_performance_component,
 } from "./performance_component";
-import { PerformanceComponent } from './types';
-
-export enum ARP_MODES {
-  UP = "UP",
-  DOWN = "DOWN",
-  UPDOWN = "UPDOWN",
-}
-
-export enum TRANSPOSE_DIRECTION {
-  UP = 1,
-  DOWN = -1
-};
-
-export type SynkopaterSequencer = SCReduxSequencer & {
-  dur: number;
-  stretch: number;
-  legato: number;
-  offset: number;
-  notes: number[];
-  arpMode: ARP_MODES;
-  euclideanNumHits: number;
-  euclideanTotalNumHits: number;
-  midiChan: number;
-  delaySecs: number | null;
-};
+import { SynkopaterPerformanceComponent, ARP_MODES, SynkopaterSequencer } from './types';
 
 // Defines which keys can be set direction with the SEQUENCER_STATE_UPDATED action
 export type SequencerParamKeys = 'dur' | 'stretch' | 'legato' | 'offset' | 'euclideanTotalNumHits' | 'euclideanNumHits';
@@ -58,16 +33,6 @@ export const create_synkopater_sequencer = (
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
 });
-
-export type SynkopaterPerformanceComponent = PerformanceComponent & {
-  sequencerId: string;
-  inputBus: number;
-  outputBus: number;
-  parameters: {
-    delayFactor: number,
-    delayFeedback: number
-  };
-};
 
 export const create_synkopater_component = (
   id: string,

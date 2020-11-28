@@ -1,3 +1,18 @@
+import SCReduxSequencers, {
+  SCReduxSequencer,
+} from "supercollider-redux-sequencers";
+
+export enum ARP_MODES {
+  UP = "UP",
+  DOWN = "DOWN",
+  UPDOWN = "UPDOWN",
+}
+
+export enum TRANSPOSE_DIRECTION {
+  UP = 1,
+  DOWN = -1
+};
+
 export interface ControllerMappingElements {
   [elementName: string]: string
 }
@@ -12,3 +27,27 @@ export type PerformanceComponent = {
 export type OctatrackState = {
   currentPatternProgramChangeValue: number|null;
 };
+
+export type SynkopaterPerformanceComponent = PerformanceComponent & {
+  sequencerId: string;
+  inputBus: number;
+  outputBus: number;
+  parameters: {
+    delayFactor: number,
+    delayFeedback: number
+  };
+};
+
+export type SynkopaterSequencer = SCReduxSequencer & {
+  dur: number;
+  stretch: number;
+  legato: number;
+  offset: number;
+  notes: number[];
+  arpMode: ARP_MODES;
+  euclideanNumHits: number;
+  euclideanTotalNumHits: number;
+  midiChan: number;
+  delaySecs: number | null;
+};
+

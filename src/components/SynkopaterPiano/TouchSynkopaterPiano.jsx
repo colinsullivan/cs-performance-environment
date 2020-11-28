@@ -9,15 +9,10 @@
  **/
 
 import React, { useState } from "react";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-
-import TouchButton from "components/TouchButton";
 import SynkopaterPiano from "components/SynkopaterPiano";
-import TransposeButton from "./TransposeButton";
-import { TRANSPOSE_DIRECTION } from "common/models/synkopater";
-
-const numOctaves = 3;
+import TouchTransposeControl from "./TouchTransposeControl";
+import TouchOctaveControl from "./TouchOctaveControl";
+import { numOctaves } from './constants';
 
 const TouchSynkopaterPiano = ({ sequencerId }) => {
   const [startingOctave, setStartingOctave] = useState(5);
@@ -25,24 +20,12 @@ const TouchSynkopaterPiano = ({ sequencerId }) => {
   return (
     <div>
       <div className="row">
-        <div className="col">
-          <TouchButton
-            icon={<KeyboardArrowLeft />}
-            onClick={() => setStartingOctave(Math.max(0, startingOctave - 1))}
-          />
-          <span>
-            C{startingOctave} - C{startingOctave + numOctaves}
-          </span>
-          <TouchButton
-            icon={<KeyboardArrowRight />}
-            onClick={() => setStartingOctave(startingOctave + 1)}
-          />
-        </div>
-        <div className="col">
-          <TransposeButton sequencerId={sequencerId} transposeDirection={TRANSPOSE_DIRECTION.DOWN} />
-          <span>transpose</span>
-          <TransposeButton sequencerId={sequencerId} transposeDirection={TRANSPOSE_DIRECTION.UP} />
-        </div>
+        <TouchTransposeControl sequencerId={sequencerId} />
+        <TouchOctaveControl
+          sequencerId={sequencerId}
+          startingOctave={startingOctave}
+          setStartingOctave={setStartingOctave}
+        />
       </div>
       <div className="row">
         <div className="col">
