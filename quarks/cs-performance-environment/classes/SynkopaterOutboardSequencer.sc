@@ -21,6 +21,25 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
   initPatch {
     midinoteProxy = PatternProxy.new;
     durProxy = PatternProxy.new;
+    midinoteProxy.clock = clock;
+    durProxy.clock = clock;
+
+    durProxy.condition = {
+      arg value, count;
+      // This method is called once the dur is changed.
+      // If we aren't on an integer multiple, resets the sequence.  This can
+      // happen when the dur is set to 0.666 for instance, then the sequence
+      // may forever be offset 2/3 of a beat.  This resets the sequence,
+      // then on the next call of `durProxy.condition`, the proxy will take
+      // the new dur values.
+      if (clock.beats - floor(clock.beats) > 0, {
+        midinoteProxy.reset;
+        durProxy.reset;
+        false;    
+      }, {
+        true;
+      });
+    };
     this.updatePropQuant();
   }
 
