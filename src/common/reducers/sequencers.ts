@@ -175,9 +175,9 @@ const sequencers = (
         ...state,
         [sequencerId]: {
           ...state[sequencerId],
-          playQuant: [newQuant, newQuant],
-          stopQuant: [newQuant, newQuant],
-          propQuant: [newQuant, newQuant],
+          playQuant: [newQuant, 0],
+          stopQuant: [newQuant, 0],
+          propQuant: [newQuant, 0],
         },
       };
 
