@@ -13,6 +13,7 @@ import {
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
   SYNKOPATER_LOAD_PRESET,
   OCTATRACK_PATTERN_UPDATED,
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK
 } from "common/actions/types";
 import {
   TRANSPOSE_DIRECTION,
@@ -190,6 +191,50 @@ const sequencers = (
           preset
         ),
       };
+    }
+
+    case SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK: {
+      const performanceComponents = getPerformanceComponents(allState);
+      const { componentId } = action.payload;
+      for (const sequencerId of Object.keys(state)) {
+        // Gets performance component corresponding to this sequencer
+        const myPerformanceComponent = Object.values(
+          performanceComponents
+        ).find(
+          (p) => p.sequencerId === sequencerId
+        );
+        if (
+          myPerformanceComponent &&
+          myPerformanceComponent.id === componentId
+        ) {
+          if (!myPerformanceComponent.followOctatrackPattern) {
+            return {
+              ...state,
+              [sequencerId]: {
+                ...state[sequencerId],
+                ...state[sequencerId].savedQuants
+              }
+            };
+          } else {
+            return {
+              ...state,
+              [sequencerId]: {
+                ...state[sequencerId],
+                savedQuants: {
+                  playQuant: state[sequencerId].playQuant,
+                  propQuant: state[sequencerId].propQuant,
+                  stopQuant: state[sequencerId].stopQuant
+                },
+                playQuant: null,
+                propQuant: null,
+                stopQuant: null,
+              }
+            };
+          }
+        }
+      }
+      return state;
+      
     }
 
     case OCTATRACK_PATTERN_UPDATED: {

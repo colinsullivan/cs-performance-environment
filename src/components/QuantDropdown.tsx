@@ -40,14 +40,14 @@ const QuantDropdown = (props: { sequencerId: string }) => {
     const newValue = e.target.value;
     dispatch(synkopater_global_quant_updated(props.sequencerId, newValue));
   }, []);
-  return (
+  return globalQuant ? (
     <LabeledDropdown
       label="quant"
       options={options}
       value={globalQuant}
       onChange={handleChanged}
     />
-  );
+  ) : null;
 };
 
 export default QuantDropdown;

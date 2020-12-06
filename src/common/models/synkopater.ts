@@ -43,6 +43,7 @@ export const create_synkopater_sequencer = (
   midiChan,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
+  savedQuants: {},
 });
 
 export const create_synkopater_component = (
@@ -65,21 +66,31 @@ export const create_synkopater_component = (
   },
   presets: [],
   currentPresetId: null,
-  followOctatrackPattern: false
+  followOctatrackPattern: false,
 });
 
-export const findPresetForOctatrackPattern = (octatrackPatternValue: number, synkopaterComponent: SynkopaterPerformanceComponent) : PerformanceComponentPreset|undefined => {
-  return synkopaterComponent.presets.find((p: PerformanceComponentPreset) => p.octatrackPatternValue === octatrackPatternValue);
+export const findPresetForOctatrackPattern = (
+  octatrackPatternValue: number,
+  synkopaterComponent: SynkopaterPerformanceComponent
+): PerformanceComponentPreset | undefined => {
+  return synkopaterComponent.presets.find(
+    (p: PerformanceComponentPreset) =>
+      p.octatrackPatternValue === octatrackPatternValue
+  );
 };
 
-export const getGlobalQuant = (sequencer: SynkopaterSequencer): number => {
+export const getGlobalQuant = (sequencer: SynkopaterSequencer): number | null => {
   if (
+    sequencer.playQuant &&
+    sequencer.stopQuant &&
+    sequencer.propQuant &&
     sequencer.playQuant[0] === sequencer.stopQuant[0] &&
     sequencer.playQuant[0] === sequencer.propQuant[0]
   ) {
     return sequencer.playQuant[0];
+  } else {
+    return null;
   }
-  throw new Error("Sequencer has different quants for play and props...");
 };
 
 export const synkopaterToPresetProps = (

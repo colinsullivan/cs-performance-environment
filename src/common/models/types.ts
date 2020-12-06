@@ -1,4 +1,4 @@
-import { SCReduxSequencer } from "supercollider-redux-sequencers";
+import { SCReduxSequencer, Quant } from "supercollider-redux-sequencers";
 
 export enum ARP_MODES {
   UP = "UP",
@@ -60,4 +60,7 @@ export type SynkopaterSequencer = SCReduxSequencer & {
   euclideanTotalNumHits: number;
   midiChan: number;
   delaySecs: number | null;
+  savedQuants: {
+    [quantName: string]: Quant
+  }
 };
