@@ -106,9 +106,6 @@ export const synkopaterToPresetProps = (
     "arpMode",
     "euclideanNumHits",
     "euclideanTotalNumHits",
-    "playQuant",
-    "stopQuant",
-    "propQuant",
   ]),
   synkopaterComponentProps: {
     ...synkopaterComponent.parameters,
