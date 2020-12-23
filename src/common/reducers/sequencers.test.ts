@@ -1,5 +1,7 @@
-import sequencers, { Sequencers } from './sequencers';
-import { create_synkopater_sequencer, TRANSPOSE_DIRECTION } from 'common/models/synkopater';
+import sequencers from './sequencers';
+import { Sequencers } from './types';
+import { create_synkopater_sequencer } from 'common/models/synkopater';
+import { TRANSPOSE_DIRECTION } from 'common/models/types';
 import { synkopater_transposed } from 'common/actions';
 
 describe("sequencers", () => {;

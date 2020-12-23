@@ -44,7 +44,7 @@ var loggerMiddleware = (store) => (next) => (action) => {
   // Call the next dispatch method in the middleware chain.
   const returnValue = next(action);
 
-  console.log("state after dispatch", JSON.stringify(store.getState(), null, 4));
+  //console.log("state after dispatch", JSON.stringify(store.getState(), null, 4));
 
   // This will likely be the action itself, unless
   // a middleware further in chain changed it.
