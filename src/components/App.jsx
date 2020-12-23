@@ -16,6 +16,7 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import TabletView from "./TabletView";
 import LaptopView from "./LaptopView";
 import { theme } from "constants/colors";
+import { getWebsocketReadyState } from 'common/selectors';
 
 const styles = {
   containerStyle: {
@@ -38,4 +39,6 @@ const App = () => (
   </BrowserRouter>
 );
 
-export default connect()(App);
+export default connect(state => ({
+    websocketReadyState: getWebsocketReadyState(state)
+}))(App);
