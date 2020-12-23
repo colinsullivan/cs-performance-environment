@@ -8,13 +8,14 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
+import { SequencerParamKeys } from "common/models/synkopater";
 import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
-  SequencerParamKeys,
-} from "common/models/synkopater";
+  PerformanceComponentPreset,
+} from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
-import { ControllerMappingElements } from 'common/models/types';
+import { ControllerMappingElements } from "common/models/types";
 
 export const SYNKOPATER_ARP_ADD_NOTE = "SYNKOPATER_ARP_ADD_NOTE";
 export const SYNKOPATER_ARP_REMOVE_NOTE = "SYNKOPATER_ARP_REMOVE_NOTE";
@@ -110,7 +111,8 @@ export interface SynkopaterDelayTimeUpdate {
   };
 }
 
-export const SYNKOPATER_GLOBAL_QUANT_UPDATED = "SYNKOPATER_GLOBAL_QUANT_UPDATED";
+export const SYNKOPATER_GLOBAL_QUANT_UPDATED =
+  "SYNKOPATER_GLOBAL_QUANT_UPDATED";
 export interface SynkopaterGlobalQuantUpdated {
   type: typeof SYNKOPATER_GLOBAL_QUANT_UPDATED;
   payload: {
@@ -125,7 +127,44 @@ export interface OctatrackPatternUpdated {
   payload: {
     programChangeValue: number;
   };
-};
+}
+
+export const SYNKOPATER_SAVE_PRESET = "SYNKOPATER_SAVE_PRESET";
+export interface SynkopaterSavePreset {
+  type: typeof SYNKOPATER_SAVE_PRESET;
+  payload: {
+    componentId: string;
+    preset: PerformanceComponentPreset;
+  };
+}
+
+export const SYNKOPATER_UPDATE_PRESET = "SYNKOPATER_UPDATE_PRESET";
+export interface SynkopaterUpdatePreset {
+  type: typeof SYNKOPATER_UPDATE_PRESET;
+  payload: {
+    componentId: string;
+    updatedPreset: PerformanceComponentPreset;
+  };
+}
+
+export const SYNKOPATER_LOAD_PRESET = "SYNKOPATER_LOAD_PRESET";
+export interface SynkopaterLoadPreset {
+  type: typeof SYNKOPATER_LOAD_PRESET;
+  payload: {
+    componentId: string;
+    sequencerId: string;
+    preset: PerformanceComponentPreset;
+  };
+}
+
+export const SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK =
+  "SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK";
+export interface SynkopaterToggleFollowOctatrack {
+  type: typeof SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK;
+  payload: {
+    componentId: string;
+  };
+}
 
 export type AllActionTypes =
   | SynkopaterAddNote
@@ -139,4 +178,13 @@ export type AllActionTypes =
   | SynkopaterTransposed
   | SynkopaterDelayTimeUpdate
   | SynkopaterGlobalQuantUpdated
-  | OctatrackPatternUpdated;
+  | OctatrackPatternUpdated
+  | SynkopaterSavePreset
+  | SynkopaterUpdatePreset
+  | SynkopaterLoadPreset
+  | SynkopaterToggleFollowOctatrack;
+
+export type Thunk = (
+  dispatch: (action: AllActionTypes) => void,
+  getState: () => any
+) => void;

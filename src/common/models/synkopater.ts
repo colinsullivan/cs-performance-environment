@@ -1,37 +1,23 @@
-import SCReduxSequencers, {
-  SCReduxSequencer,
-} from "supercollider-redux-sequencers";
+import SCReduxSequencers from "supercollider-redux-sequencers";
+import { pick } from "lodash";
+
+import { create_performance_component } from "./performance_component";
 import {
-  create_performance_component,
-} from "./performance_component";
-import { PerformanceComponent } from './types';
-
-export enum ARP_MODES {
-  UP = "UP",
-  DOWN = "DOWN",
-  UPDOWN = "UPDOWN",
-}
-
-export enum TRANSPOSE_DIRECTION {
-  UP = 1,
-  DOWN = -1
-};
-
-export type SynkopaterSequencer = SCReduxSequencer & {
-  dur: number;
-  stretch: number;
-  legato: number;
-  offset: number;
-  notes: number[];
-  arpMode: ARP_MODES;
-  euclideanNumHits: number;
-  euclideanTotalNumHits: number;
-  midiChan: number;
-  delaySecs: number | null;
-};
+  SynkopaterPerformanceComponent,
+  ARP_MODES,
+  SynkopaterSequencer,
+  PresetProps,
+  PerformanceComponentPreset,
+} from "./types";
 
 // Defines which keys can be set direction with the SEQUENCER_STATE_UPDATED action
-export type SequencerParamKeys = 'dur' | 'stretch' | 'legato' | 'offset' | 'euclideanTotalNumHits' | 'euclideanNumHits';
+export type SequencerParamKeys =
+  | "dur"
+  | "stretch"
+  | "legato"
+  | "offset"
+  | "euclideanTotalNumHits"
+  | "euclideanNumHits";
 
 export const create_synkopater_sequencer = (
   id: string,
@@ -51,23 +37,14 @@ export const create_synkopater_sequencer = (
   //numBeats: 4,
   euclideanNumHits: 4,
   euclideanTotalNumHits: 4,
-  playQuant: [4, 4],
-  stopQuant: [4, 4],
-  propQuant: [4, 4],
+  playQuant: [4, 0],
+  stopQuant: [4, 0],
+  propQuant: [4, 0],
   midiChan,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
+  savedQuants: {},
 });
-
-export type SynkopaterPerformanceComponent = PerformanceComponent & {
-  sequencerId: string;
-  inputBus: number;
-  outputBus: number;
-  parameters: {
-    delayFactor: number,
-    delayFeedback: number
-  };
-};
 
 export const create_synkopater_component = (
   id: string,
@@ -87,11 +64,69 @@ export const create_synkopater_component = (
       pg0_kn_pan_1: "delayFeedbackControl",
     },
   },
+  presets: [],
+  currentPresetId: null,
+  followOctatrackPattern: false,
 });
 
-export const getGlobalQuant = (sequencer : SynkopaterSequencer) : number => {
-  if (sequencer.playQuant[0] === sequencer.stopQuant[0] && sequencer.playQuant[0] === sequencer.propQuant[0]) {
+export const findPresetForOctatrackPattern = (
+  octatrackPatternValue: number,
+  synkopaterComponent: SynkopaterPerformanceComponent
+): PerformanceComponentPreset | undefined => {
+  return synkopaterComponent.presets.find(
+    (p: PerformanceComponentPreset) =>
+      p.octatrackPatternValue === octatrackPatternValue
+  );
+};
+
+export const getGlobalQuant = (sequencer: SynkopaterSequencer): number | null => {
+  if (
+    sequencer.playQuant &&
+    sequencer.stopQuant &&
+    sequencer.propQuant &&
+    sequencer.playQuant[0] === sequencer.stopQuant[0] &&
+    sequencer.playQuant[0] === sequencer.propQuant[0]
+  ) {
     return sequencer.playQuant[0];
+  } else {
+    return null;
   }
-  throw new Error("Sequencer has different quants for play and props...");
-}
+};
+
+export const synkopaterToPresetProps = (
+  synkopaterComponent: SynkopaterPerformanceComponent,
+  synkopaterSequencer: SynkopaterSequencer
+): PresetProps => ({
+  synkopaterSequencerProps: pick(synkopaterSequencer, [
+    "dur",
+    "stretch",
+    "legato",
+    "offset",
+    "notes",
+    "arpMode",
+    "euclideanNumHits",
+    "euclideanTotalNumHits",
+  ]),
+  synkopaterComponentProps: {
+    ...synkopaterComponent.parameters,
+  },
+});
+
+export const applyPresetToSynkopaterComponent = (
+  comp: SynkopaterPerformanceComponent,
+  preset: PerformanceComponentPreset
+): SynkopaterPerformanceComponent => ({
+  ...comp,
+  parameters: {
+    ...comp.parameters,
+    ...preset.props.synkopaterComponentProps,
+  },
+});
+
+export const applyPresetToSynkopaterSequencer = (
+  seq: SynkopaterSequencer,
+  preset: PerformanceComponentPreset
+): SynkopaterSequencer => ({
+  ...seq,
+  ...preset.props.synkopaterSequencerProps,
+});

@@ -11,6 +11,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from "redux"
+import thunk from "redux-thunk";
 import { Provider } from 'react-redux';
 import axios from 'axios';
 import uuid from 'uuid/v4';
@@ -23,7 +24,7 @@ import App from 'components/App';
 import rootReducer from 'common/reducers';
 import { PORT } from 'common/constants';
 
-const middleware = [];
+const middleware = [thunk];
 
 const clientId = uuid();
 

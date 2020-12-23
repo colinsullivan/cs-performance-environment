@@ -12,6 +12,7 @@ import path from "path";
 import fs from "fs";
 import electron from "electron";
 import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import express from "express";
 import expressWebsocket from "express-ws";
 import SCRedux from "supercollider-redux";
@@ -43,13 +44,13 @@ var loggerMiddleware = (store) => (next) => (action) => {
   // Call the next dispatch method in the middleware chain.
   const returnValue = next(action);
 
-  console.log("state after dispatch", JSON.stringify(store.getState(), null, 4));
+  //console.log("state after dispatch", JSON.stringify(store.getState(), null, 4));
 
   // This will likely be the action itself, unless
   // a middleware further in chain changed it.
   return returnValue;
 };
-var middleware = [wsServerDispatcher.middleware];
+var middleware = [thunk, wsServerDispatcher.middleware];
 
 if (process.env.NODE_ENV === "development") {
   middleware.push(loggerMiddleware);

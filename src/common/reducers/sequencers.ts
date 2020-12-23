@@ -11,9 +11,20 @@ import {
   MIDI_CONTROLLER_CC,
   SYNKOPATER_TRANSPOSED,
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
+  SYNKOPATER_LOAD_PRESET,
+  OCTATRACK_PATTERN_UPDATED,
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK
 } from "common/actions/types";
-import { TRANSPOSE_DIRECTION } from "common/models/synkopater";
+import {
+  TRANSPOSE_DIRECTION,
+  SynkopaterPerformanceComponent,
+} from "common/models/types";
 import { Sequencers } from "./types";
+import {
+  applyPresetToSynkopaterSequencer,
+  findPresetForOctatrackPattern,
+} from "common/models";
+import { getPerformanceComponents } from "common/selectors";
 
 const durChoices = [
   1.0 / 128.0,
@@ -29,7 +40,11 @@ const durChoices = [
   8.0,
 ];
 
-const sequencers = (state: Sequencers, action: AllActionTypes) => {
+const sequencers = (
+  state: Sequencers,
+  action: AllActionTypes,
+  allState: any
+) => {
   state = SCReduxSequencers.reducer(state, action);
   let seq, sequencerId;
   switch (action.type) {
@@ -161,11 +176,101 @@ const sequencers = (state: Sequencers, action: AllActionTypes) => {
         ...state,
         [sequencerId]: {
           ...state[sequencerId],
-          playQuant: [newQuant, newQuant],
-          stopQuant: [newQuant, newQuant],
-          propQuant: [newQuant, newQuant],
+          playQuant: [newQuant, 0],
+          stopQuant: [newQuant, 0],
+          propQuant: [newQuant, 0],
         },
       };
+
+    case SYNKOPATER_LOAD_PRESET: {
+      const { sequencerId, preset } = action.payload;
+      return {
+        ...state,
+        [sequencerId]: applyPresetToSynkopaterSequencer(
+          state[sequencerId],
+          preset
+        ),
+      };
+    }
+
+    case SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK: {
+      const performanceComponents = getPerformanceComponents(allState);
+      const { componentId } = action.payload;
+      for (const sequencerId of Object.keys(state)) {
+        // Gets performance component corresponding to this sequencer
+        const myPerformanceComponent = Object.values(
+          performanceComponents
+        ).find(
+          (p) => p.sequencerId === sequencerId
+        );
+        if (
+          myPerformanceComponent &&
+          myPerformanceComponent.id === componentId
+        ) {
+          if (!myPerformanceComponent.followOctatrackPattern) {
+            return {
+              ...state,
+              [sequencerId]: {
+                ...state[sequencerId],
+                ...state[sequencerId].savedQuants
+              }
+            };
+          } else {
+            return {
+              ...state,
+              [sequencerId]: {
+                ...state[sequencerId],
+                savedQuants: {
+                  playQuant: state[sequencerId].playQuant,
+                  propQuant: state[sequencerId].propQuant,
+                  stopQuant: state[sequencerId].stopQuant
+                },
+                playQuant: null,
+                propQuant: null,
+                stopQuant: null,
+              }
+            };
+          }
+        }
+      }
+      return state;
+      
+    }
+
+    case OCTATRACK_PATTERN_UPDATED: {
+      let newState = state;
+      const { programChangeValue } = action.payload;
+      const performanceComponents = getPerformanceComponents(allState);
+
+      for (const sequencerId of Object.keys(state)) {
+        // Gets performance component corresponding to this sequencer
+        const myPerformanceComponent = Object.values(
+          performanceComponents
+        ).find(
+          (p: SynkopaterPerformanceComponent) => p.sequencerId === sequencerId
+        );
+        if (
+          myPerformanceComponent &&
+          myPerformanceComponent.followOctatrackPattern
+        ) {
+          const presetForPattern = findPresetForOctatrackPattern(
+            programChangeValue,
+            myPerformanceComponent
+          );
+          if (presetForPattern) {
+            newState = {
+              ...newState,
+              [sequencerId]: applyPresetToSynkopaterSequencer(
+                newState[sequencerId],
+                presetForPattern
+              ),
+            };
+          }
+        }
+      }
+
+      return newState;
+    }
 
     default:
       break;

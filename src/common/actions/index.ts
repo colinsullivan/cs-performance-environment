@@ -29,15 +29,33 @@ import {
   SynkopaterTransposed,
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
   SynkopaterGlobalQuantUpdated,
+  SYNKOPATER_SAVE_PRESET,
+  SYNKOPATER_UPDATE_PRESET,
+  Thunk,
+  SYNKOPATER_LOAD_PRESET,
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
+  SynkopaterToggleFollowOctatrack
 } from "./types";
 
 import {
+  SequencerParamKeys,
+  synkopaterToPresetProps,
+} from "common/models/synkopater";
+import { create_preset } from "common/models/performance_component";
+import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
-  SequencerParamKeys,
-} from "common/models/synkopater";
+  PerformanceComponentPreset,
+  SynkopaterPerformanceComponent
+} from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
-import { ControllerMappingElements } from 'common/models/types';
+import { ControllerMappingElements } from "common/models/types";
+import {
+  getPerformanceComponents,
+  getSequencer,
+  getOctatrack,
+} from "common/selectors";
+import { getPatternValue } from "common/models/octatrack";
 
 export function synkopater_arp_add_note(
   sequencerId: string,
@@ -171,3 +189,79 @@ export function synkopater_global_quant_updated(
     },
   };
 }
+
+export const synkopater_save_preset = (componentId: string): Thunk => {
+  return (dispatch, getState) => {
+    const component = (getPerformanceComponents(getState())[componentId] as SynkopaterPerformanceComponent);
+    const { sequencerId } = component;
+    const sequencer = getSequencer(getState(), { sequencerId });
+    const octatrack = getOctatrack(getState());
+    const props = synkopaterToPresetProps(component, sequencer);
+    const preset = create_preset(octatrack, props);
+    dispatch({
+      type: SYNKOPATER_SAVE_PRESET,
+      payload: {
+        componentId,
+        preset,
+      },
+    });
+  };
+};
+
+export const synkopater_update_preset = (componentId: string): Thunk => {
+  return (dispatch, getState) => {
+    const component = (getPerformanceComponents(getState())[componentId] as SynkopaterPerformanceComponent);
+    const { sequencerId, currentPresetId } = component;
+    const sequencer = getSequencer(getState(), { sequencerId });
+    const octatrack = getOctatrack(getState());
+    const preset = component.presets.find(
+      (p: PerformanceComponentPreset) => p.id === currentPresetId
+    );
+    if (!preset) {
+      throw new Error(`No current preset for component ${componentId}`);
+    }
+    const updatedPreset = {
+      id: preset.id,
+      props: synkopaterToPresetProps(component, sequencer),
+      octatrackPatternValue: getPatternValue(octatrack),
+    };
+    dispatch({
+      type: SYNKOPATER_UPDATE_PRESET,
+      payload: {
+        componentId,
+        updatedPreset,
+      },
+    });
+  };
+};
+
+export const synkopater_load_preset = (
+  componentId: string,
+  presetId: string
+): Thunk => {
+  return (dispatch, getState) => {
+    const component = (getPerformanceComponents(getState())[componentId] as SynkopaterPerformanceComponent);
+    const { sequencerId } = component;
+    const preset = component.presets.find(
+      (p: PerformanceComponentPreset) => p.id === presetId
+    );
+    if (!preset) {
+      throw new Error(`Cannot load preset ${presetId}!`);
+    }
+    dispatch({
+      type: SYNKOPATER_LOAD_PRESET,
+      payload: {
+        componentId,
+        sequencerId,
+        preset,
+      },
+    });
+  };
+};
+
+export const synkopater_toggle_follow_octatrack = (componentId: string) : SynkopaterToggleFollowOctatrack => ({
+  type: SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
+  payload: {
+    componentId
+  }
+});

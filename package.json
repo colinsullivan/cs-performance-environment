@@ -12,6 +12,8 @@
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
     "@types/react-redux": "^7.1.11",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/uuid": "^8.3.0",
     "axios": "^0.18.1",
     "bjorklund-js": "^0.1.2",
     "bootstrap": "^4.5.2",
@@ -34,6 +36,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "^4.0.0",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "styled-components": "^5.2.0",
     "supercollider-redux": "1.0.0-alpha.2",
@@ -82,7 +85,8 @@
       "prefer-const": "error",
       "react/prop-types": 0,
       "@typescript-eslint/no-extra-semi": "off",
-      "@typescript-eslint/no-empty-function": "off"
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
     }
   },
   "devDependencies": {

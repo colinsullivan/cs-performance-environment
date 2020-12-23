@@ -18,13 +18,20 @@ import {
   MIDI_CONTROLLER_CC,
   INSTRUMENT_PARAMETER_UPDATED,
   WS_READYSTATE_UPDATE,
+  SYNKOPATER_SAVE_PRESET,
+  SYNKOPATER_LOAD_PRESET,
+  SYNKOPATER_UPDATE_PRESET,
+  OCTATRACK_PATTERN_UPDATED,
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
   create_synkopater_component,
+  applyPresetToSynkopaterComponent,
+  findPresetForOctatrackPattern,
 } from "common/models";
 import sequencers from "./sequencers";
-import octatrack from './octatrack';
+import octatrack from "./octatrack";
 
 export function create_default_state() {
   const initialState = {
@@ -111,6 +118,81 @@ function components(state = {}, action) {
         return state;
       }
 
+    case SYNKOPATER_SAVE_PRESET: {
+      const { componentId, preset } = action.payload;
+      const component = state[componentId];
+      return {
+        ...state,
+        [componentId]: {
+          ...component,
+          currentPresetId: preset.id,
+          presets: component.presets.concat([preset]),
+        },
+      };
+    }
+
+    case SYNKOPATER_LOAD_PRESET: {
+      const { componentId, preset } = action.payload;
+      const component = {
+        ...applyPresetToSynkopaterComponent(state[componentId], preset),
+        currentPresetId: preset.id,
+      };
+
+      return {
+        ...state,
+        [componentId]: component,
+      };
+    }
+
+    case SYNKOPATER_UPDATE_PRESET: {
+      const { componentId, updatedPreset } = action.payload;
+      const component = state[componentId];
+      return {
+        ...state,
+        [componentId]: {
+          ...component,
+          presets: component.presets.map((p) => {
+            if (p.id === updatedPreset.id) {
+              return updatedPreset;
+            }
+            return p;
+          }),
+        },
+      };
+    }
+    case OCTATRACK_PATTERN_UPDATED: {
+      let newState = state;
+      const { programChangeValue } = action.payload;
+      for (const componentId of Object.keys(state)) {
+        const component = state[componentId];
+
+        const presetForPattern = findPresetForOctatrackPattern(
+          programChangeValue,
+          component
+        );
+        if (presetForPattern && component.followOctatrackPattern) {
+          newState = {
+            ...newState,
+            [componentId]: {
+              ...applyPresetToSynkopaterComponent(component, presetForPattern),
+              currentPresetId: presetForPattern.id,
+            },
+          };
+        }
+      }
+      return newState;
+    }
+    case SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK: {
+      const { componentId } = action.payload;
+      return {
+        ...state,
+        [componentId]: {
+          ...state[componentId],
+          followOctatrackPattern: !state[componentId].followOctatrackPattern
+        }
+      };
+    }
+
     default:
       return state;
   }
@@ -125,11 +207,27 @@ export function websocketReadyState(state = READY_STATES.CLOSED, action) {
   }
 }
 
-export default combineReducers({
+const combinedReducers = combineReducers({
   [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
   controllers,
-  sequencers,
+  sequencers: (state = {}) => state,
   components,
   websocketReadyState,
-  octatrack
+  octatrack,
 });
+
+const rootReducer = (state, action) => {
+  let newState = combinedReducers(state, action);
+
+  const newSequencers = sequencers(state.sequencers, action, newState);
+  if (newSequencers !== state.sequencers) {
+    newState = {
+      ...newState,
+      sequencers: newSequencers,
+    };
+  }
+
+  return newState;
+};
+
+export default rootReducer;

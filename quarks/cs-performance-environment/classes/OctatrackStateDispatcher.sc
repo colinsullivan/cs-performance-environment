@@ -12,11 +12,16 @@ OctatrackStateDispatcher {
 
     store = params['store'];
 
-    // Listens for program change messages
-    programChangeListener = MIDIFunc.program({
-      arg val;
-      this.handleProgramMessage(val);
-    }, params['midiInChannel'], midiPort.uid);
+
+    if (midiPort.isNil() == false, {
+      // Listens for program change messages
+      programChangeListener = MIDIFunc.program({
+        arg val;
+        this.handleProgramMessage(val);
+      }, params['midiInChannel'], midiPort.uid);
+    }, {
+      ("OctatrackStateDispatcher: Could not connect to " + params['midiInDeviceName']).postln();
+    });
 
   }
 
