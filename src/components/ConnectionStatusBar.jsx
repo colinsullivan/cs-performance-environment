@@ -8,9 +8,14 @@ import "./ConnectionStatusBar.scss";
 const ConnectionStatusBar = ({ isConnected }) => {
   return (
     <div className="connection-status-bar">
-      <p className={`connection-text ${isConnected ? "connected" : ""}`}>
-        {isConnected ? "Connected!" : "Connecting..."}
-      </p>
+      <div>
+        <p className={`connection-text ${isConnected ? "connected" : ""}`}>
+          {isConnected ? "Connected!" : "Connecting..."}
+        </p>
+      </div>
+      <div>
+        <span className={`connection-status-dot ${isConnected ? "connected" : ""}`}></span>
+      </div>
     </div>
   );
 };
