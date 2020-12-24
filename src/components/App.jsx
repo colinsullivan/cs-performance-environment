@@ -28,7 +28,7 @@ const styles = {
 const App = () => (
   <BrowserRouter>
     <MuiThemeProvider theme={theme}>
-      <div className="container-fluid" style={styles.containerStyle}>
+      <div className="app container-fluid" style={styles.containerStyle}>
         <Switch>
           <Route exact path="/laptop" component={LaptopView} />
           <Route path="" component={TabletView} />

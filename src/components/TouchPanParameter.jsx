@@ -1,53 +1,49 @@
-import React from 'react';
-import Hammer from 'react-hammerjs';
-import { DIRECTION_UP, DIRECTION_DOWN } from 'hammerjs';
+import React from "react";
+import Hammer from "react-hammerjs";
+import { DIRECTION_UP, DIRECTION_DOWN } from "hammerjs";
 import {
   turquoiseTransparentColor,
   orangeTransparentColor,
-  getRGBAString
-} from 'constants/colors';
+  getRGBAString,
+} from "constants/colors";
 
 const styles = {
   containerStyle: {
-    minWidth: '48px',
-    minHeight: '48px'
+    minWidth: "48px",
+    minHeight: "48px",
   },
   panningStyle: {
-    backgroundColor: getRGBAString(orangeTransparentColor)
+    backgroundColor: getRGBAString(orangeTransparentColor),
   },
   notPanningStyle: {
-    backgroundColor: getRGBAString(turquoiseTransparentColor)
-  }
+    backgroundColor: getRGBAString(turquoiseTransparentColor),
+  },
 };
 
 const hammerOptions = {
-  touchAction: 'compute',
+  touchAction: "compute",
   recognizers: {
     pan: {
-      threshold: 1
-    }
-  }
+      threshold: 1,
+    },
+  },
 };
 
-const noop = function () {};
-
-
 class TouchPanParameter extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       panning: false,
-      panAmount: 0
+      panAmount: 0,
     };
   }
   handlePan = (e) => {
-
     const {
       panCallbackAmount = 5,
       valueChangeThreshold = 5 * 15,
-      tickUp = noop,
-      tickDown = noop
+      tickUp = null,
+      tickDown = null,
     } = this.props;
 
     let panAmount = this.state.panAmount;
@@ -57,12 +53,14 @@ class TouchPanParameter extends React.Component {
 
         if (panAmount < -1.0 * valueChangeThreshold) {
           this.setState({
-            panAmount: 0
+            panAmount: 0,
           });
-          tickUp();
+          if (tickUp) {
+            tickUp();
+          }
         } else {
           this.setState({
-            panAmount
+            panAmount,
           });
         }
         break;
@@ -71,36 +69,41 @@ class TouchPanParameter extends React.Component {
         panAmount += panCallbackAmount;
         if (panAmount > valueChangeThreshold) {
           this.setState({
-            panAmount: 0
+            panAmount: 0,
           });
-          tickDown();
+          if (tickDown) {
+            tickDown();
+          }
         } else {
           this.setState({
-            panAmount
+            panAmount,
           });
         }
         break;
-      
+
       default:
         break;
     }
-
-  }
+  };
   handlePanStart = (e) => {
-    const { panStart = noop } = this.props;
+    const { panStart = null } = this.props;
     this.setState({
       panning: true,
       panAmount: 0,
     });
-    panStart();
+    if (panStart) {
+      panStart();
+    }
   };
 
   handlePanEnd = (e) => {
-    const { panEnd = noop } = this.props;
+    const { panEnd = null } = this.props;
     this.setState({
       panning: false,
     });
-    panEnd();
+    if (panEnd) {
+      panEnd();
+    }
   };
 
   render() {
@@ -112,17 +115,19 @@ class TouchPanParameter extends React.Component {
         onPanEnd={this.handlePanEnd}
         onPanStart={this.handlePanStart}
       >
-        <div style={{
-          ...styles.containerStyle,
-          ...(
-            this.state.panning ? styles.panningStyle : styles.notPanningStyle
-          )
-        }}>
+        <div
+          style={{
+            ...styles.containerStyle,
+            ...(this.state.panning
+              ? styles.panningStyle
+              : styles.notPanningStyle),
+          }}
+        >
           {this.props.children}
         </div>
       </Hammer>
     );
   }
-};
+}
 
 export default TouchPanParameter;
