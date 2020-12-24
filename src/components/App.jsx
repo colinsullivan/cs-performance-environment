@@ -8,7 +8,6 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import { connect } from "react-redux";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { MuiThemeProvider } from "@material-ui/core/styles";
@@ -17,6 +16,7 @@ import TabletView from "./TabletView";
 import LaptopView from "./LaptopView";
 import { theme } from "constants/colors";
 import { getWebsocketReadyState } from 'common/selectors';
+import ConnectionStatusBar from "components/ConnectionStatusBar";
 
 const styles = {
   containerStyle: {
@@ -26,10 +26,12 @@ const styles = {
   },
 };
 
-const App = () => (
+const App = () => {
+  return (
   <BrowserRouter>
     <MuiThemeProvider theme={theme}>
-      <div className="app container-fluid" style={styles.containerStyle}>
+      <div className="container-fluid" style={styles.containerStyle}>
+        <ConnectionStatusBar />
         <Switch>
           <Route exact path="/laptop" component={LaptopView} />
           <Route path="" component={TabletView} />
@@ -38,7 +40,6 @@ const App = () => (
     </MuiThemeProvider>
   </BrowserRouter>
 );
+};
 
-export default connect(state => ({
-    websocketReadyState: getWebsocketReadyState(state)
-}))(App);
+export default App;

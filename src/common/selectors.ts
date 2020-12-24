@@ -17,3 +17,4 @@ export const getPerformanceComponents = (state: any) : { [componentId: string]: 
 
 export const getOctatrack = (state: any) : OctatrackState => state.octatrack;
 export const getWebsocketReadyState = (state: any) : READY_STATES => state.websocketReadyState;
+export const getIsConnected = createSelector([getWebsocketReadyState], (websocketReadyState) => websocketReadyState === READY_STATES.OPEN);

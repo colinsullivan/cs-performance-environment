@@ -1,0 +1,22 @@
+div.connection-status-bar {
+
+  font-size: 10px;
+  height: 12px;
+
+  display: flex;
+  justify-content: flex-end;
+
+  p.connection-text {
+    transition: opacity;
+    transition-timing-function: ease-in;
+    transition-duration: 200ms;
+    opacity: 1.0;
+
+    &.connected {
+      transition-duration: 5s;
+      transition-timing-function: ease-out;
+      opacity: 0.0;
+    }
+  }
+  
+}
