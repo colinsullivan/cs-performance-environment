@@ -22,7 +22,8 @@ import {
   SYNKOPATER_LOAD_PRESET,
   SYNKOPATER_UPDATE_PRESET,
   OCTATRACK_PATTERN_UPDATED,
-  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
+  STATE_REHYDRATED
 } from "common/actions/types";
 import {
   create_synkopater_sequencer,
@@ -64,33 +65,33 @@ export function create_default_state() {
   return initialState;
 }
 
-function controllers(state = {}, action) {
-  switch (action.type) {
-    case MIDI_CONTROLLER_INIT:
-      const controller = {};
-      const mappings = action.payload.mappings;
-      let controlName;
-      for (const channel in mappings) {
-        for (const cc in mappings[channel]) {
-          controlName = mappings[channel][cc];
-          controller[controlName] = 0;
-        }
-      }
-      state[action.payload.controllerId] = controller;
-      state = Object.assign({}, state);
-      break;
+//function controllers(state = {}, action) {
+  //switch (action.type) {
+    //case MIDI_CONTROLLER_INIT:
+      //const controller = {};
+      //const mappings = action.payload.mappings;
+      //let controlName;
+      //for (const channel in mappings) {
+        //for (const cc in mappings[channel]) {
+          //controlName = mappings[channel][cc];
+          //controller[controlName] = 0;
+        //}
+      //}
+      //state[action.payload.controllerId] = controller;
+      //state = Object.assign({}, state);
+      //break;
 
-    case MIDI_CONTROLLER_CC:
-      state[action.payload.controllerId][action.payload.name] =
-        action.payload.value;
-      state = Object.assign({}, state);
-      break;
+    //case MIDI_CONTROLLER_CC:
+      //state[action.payload.controllerId][action.payload.name] =
+        //action.payload.value;
+      //state = Object.assign({}, state);
+      //break;
 
-    default:
-      break;
-  }
-  return state;
-}
+    //default:
+      //break;
+  //}
+  //return state;
+//}
 
 function components(state = {}, action) {
   switch (action.type) {
@@ -209,7 +210,7 @@ export function websocketReadyState(state = READY_STATES.CLOSED, action) {
 
 const combinedReducers = combineReducers({
   [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
-  controllers,
+  //controllers,
   sequencers: (state = {}) => state,
   components,
   websocketReadyState,
@@ -225,6 +226,17 @@ const rootReducer = (state, action) => {
       ...newState,
       sequencers: newSequencers,
     };
+  }
+
+  switch (action.type) {
+    case STATE_REHYDRATED:
+      newState = {
+        ...newState,
+        ...JSON.parse(action.payload.serializedState)
+      };
+    
+    default:
+      break;
   }
 
   return newState;

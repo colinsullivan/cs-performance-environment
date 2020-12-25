@@ -166,6 +166,14 @@ export interface SynkopaterToggleFollowOctatrack {
   };
 }
 
+export const STATE_REHYDRATED = "STATE_REHYDRATED";
+export interface StateRehydrated {
+  type: typeof STATE_REHYDRATED;
+  payload: {
+    serializedState: string;
+  }
+}
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -182,7 +190,8 @@ export type AllActionTypes =
   | SynkopaterSavePreset
   | SynkopaterUpdatePreset
   | SynkopaterLoadPreset
-  | SynkopaterToggleFollowOctatrack;
+  | SynkopaterToggleFollowOctatrack
+| StateRehydrated;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

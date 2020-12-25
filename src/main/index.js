@@ -21,6 +21,7 @@ import WebsocketServerDispatcher from "./WebsocketServerDispatcher";
 
 import rootReducer, { create_default_state } from "../common/reducers";
 import { PORT } from "../common/constants";
+import { rehydrate_state } from "../common/actions";
 
 //const electron = require('electron');
 // Module to control application life.
@@ -108,6 +109,9 @@ const startServer = () => {
       wsServerDispatcher.removeClient(clientId);
     });
     wsServerDispatcher.addClient(clientId, ws);
+
+    store.dispatch(rehydrate_state());
+
   });
   if (process.env.NODE_ENV !== "development") {
     server.get("/", function (req, res) {
