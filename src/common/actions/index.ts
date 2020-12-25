@@ -8,6 +8,7 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
+import SCRedux from "supercollider-redux";
 import {
   SYNKOPATER_ARP_ADD_NOTE,
   SynkopaterAddNote,
@@ -35,6 +36,8 @@ import {
   SYNKOPATER_LOAD_PRESET,
   SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
   SynkopaterToggleFollowOctatrack,
+  STATE_REHYDRATED,
+  StateRehydrated
 } from "./types";
 
 import {
@@ -273,3 +276,25 @@ export const synkopater_toggle_follow_octatrack = (
     componentId,
   },
 });
+
+const state_rehydrated = (serializedState : string) : StateRehydrated => ({
+  type: STATE_REHYDRATED,
+  payload: {
+    serializedState
+  }
+});
+
+export const rehydrate_state = () : Thunk => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const serializedState = JSON.stringify({
+      [SCRedux.DEFAULT_MOUNT_POINT]: state[SCRedux.DEFAULT_MOUNT_POINT],
+      sequencers: state.sequencers,
+      components: state.components,
+      octatrack: state.octatrack
+    });
+
+    dispatch(state_rehydrated(serializedState));
+    
+  };
+}
