@@ -1,0 +1,24 @@
+div.preset-indicator {
+  display: inline-block;
+  margin-right: 6px;
+
+  color: white;
+  font-size: 10px;
+
+  width: 24px;
+  height: 24px;
+
+  background-color: rgba(64, 128, 64, 0.75);
+  &.selected {
+    background-color: rgba(200, 64, 64, 1);
+  }
+
+  div {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

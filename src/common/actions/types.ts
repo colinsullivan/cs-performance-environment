@@ -157,6 +157,16 @@ export interface SynkopaterLoadPreset {
   };
 }
 
+export const SYNKOPATER_DELETE_PRESET = "SYNKOPATER_DELETE_PRESET";
+export interface SynkopaterDeletePreset {
+  type: typeof SYNKOPATER_DELETE_PRESET;
+  payload: {
+    componentId: string;
+    sequencerId: string;
+    presetId: string;
+  };
+}
+
 export const SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK =
   "SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK";
 export interface SynkopaterToggleFollowOctatrack {
@@ -171,7 +181,7 @@ export interface StateRehydrated {
   type: typeof STATE_REHYDRATED;
   payload: {
     serializedState: string;
-  }
+  };
 }
 
 export type AllActionTypes =
@@ -191,7 +201,8 @@ export type AllActionTypes =
   | SynkopaterUpdatePreset
   | SynkopaterLoadPreset
   | SynkopaterToggleFollowOctatrack
-| StateRehydrated;
+  | StateRehydrated
+  | SynkopaterDeletePreset;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

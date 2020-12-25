@@ -1,4 +1,6 @@
-html, body, div#root {
+html,
+body,
+div#root {
   height: 100%;
 }
 
@@ -6,4 +8,13 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

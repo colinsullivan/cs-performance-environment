@@ -37,7 +37,8 @@ import {
   SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
   SynkopaterToggleFollowOctatrack,
   STATE_REHYDRATED,
-  StateRehydrated
+  StateRehydrated,
+  SYNKOPATER_DELETE_PRESET,
 } from "./types";
 
 import {
@@ -267,6 +268,26 @@ export const synkopater_load_preset = (
     });
   };
 };
+
+export const synkopater_delete_preset = (
+  componentId : string,
+  preset : PerformanceComponentPreset
+) : Thunk => {
+  return (dispatch, getState) => {
+    const component = getPerformanceComponents(getState())[
+      componentId
+    ] as SynkopaterPerformanceComponent;
+    const { sequencerId } = component;
+    dispatch({
+      type: SYNKOPATER_DELETE_PRESET,
+      payload: {
+        componentId,
+        sequencerId,
+        presetId: preset.id
+      }
+    })
+  }
+}
 
 export const synkopater_toggle_follow_octatrack = (
   componentId: string

@@ -10,7 +10,7 @@ const PresetControl = ({ componentId }) => {
       <div className="row">
         <PresetIndicatorRows componentId={componentId} />
         <div className="col-2">
-          <SavePresetButton />
+          <SavePresetButton componentId={componentId} />
         </div>
         <div className="col-2">
           <OctatrackFollowControl componentId={componentId} />

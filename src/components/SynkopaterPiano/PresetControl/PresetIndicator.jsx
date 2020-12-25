@@ -1,25 +1,17 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 
 import {
   synkopater_load_preset,
   synkopater_update_preset,
+  synkopater_delete_preset,
 } from "common/actions";
 import { getPerformanceComponents } from "common/selectors";
 
-const PresetIndicatorBox = styled.div`
-  width: 24px;
-  height: 24px;
-  ${({ isSelected }) =>
-    isSelected
-      ? `background-color: rgba(200, 64, 64, 1.0);`
-      : `background-color: rgba(64, 128, 64, 0.75);`}
-  display: inline-block;
-  margin-right: 6px;
-  color: white;
-  font-size: 18px;
-`;
+import "./PresetIndicator.scss";
+
+const formatOctatrackPatternValue = ({ octatrackPatternValue }) =>
+  octatrackPatternValue + 1;
 
 const PresetIndicator = ({ preset, componentId }) => {
   const dispatch = useDispatch();
@@ -36,11 +28,46 @@ const PresetIndicator = ({ preset, componentId }) => {
     dispatch(synkopater_load_preset(componentId, preset.id));
   }, [dispatch, synkopater_load_preset, componentId, preset.id]);
 
+  // If indicator is held for 1 sec, deletes the corresponding preset
+  const touchingTimer = useRef(null);
+  const clearTimer = useCallback(() => {
+    clearTimeout(touchingTimer.current);
+    touchingTimer.current = null;
+  }, [touchingTimer]);
+
+  const handleTouchStart = useCallback(() => {
+    clearTimer();
+    touchingTimer.current = setTimeout(() => {
+      if (!isSelected) {
+        dispatch(synkopater_delete_preset(componentId, preset));
+      }
+    }, 1000);
+  }, [
+    clearTimer,
+    isSelected,
+    dispatch,
+    synkopater_delete_preset,
+    componentId,
+    preset,
+  ]);
+
+  const handleTouchEnd = clearTimer;
+
   return (
-    <PresetIndicatorBox
+    <div
+      className={`preset-indicator ${isSelected ? "selected" : ""}`}
       onClick={isSelected ? updatePreset : loadPreset}
-      isSelected={isSelected}
-    />
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div>
+        <div>
+          {preset.octatrackPatternValue !== null
+            ? formatOctatrackPatternValue(preset)
+            : "N"}
+        </div>
+      </div>
+    </div>
   );
 };
 export default PresetIndicator;
