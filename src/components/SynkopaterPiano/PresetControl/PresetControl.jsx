@@ -1,24 +1,16 @@
-import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
-import AddCircle from "@material-ui/icons/AddCircle";
+import React from "react";
 
-import TouchButton from "components/TouchButton";
-import { synkopater_save_preset } from "common/actions";
 import OctatrackFollowControl from "./OctatrackFollowControl";
 import PresetIndicatorRows from "./PresetIndicatorRows";
+import SavePresetButton from "./SavePresetButton.jsx";
 
 const PresetControl = ({ componentId }) => {
-  const dispatch = useDispatch();
-  const savePreset = useCallback(() => {
-    dispatch(synkopater_save_preset(componentId));
-  }, [dispatch, synkopater_save_preset, componentId]);
-
   return (
     <div className="col">
       <div className="row">
         <PresetIndicatorRows componentId={componentId} />
         <div className="col-2">
-          <TouchButton icon={<AddCircle />} onClick={savePreset} />
+          <SavePresetButton />
         </div>
         <div className="col-2">
           <OctatrackFollowControl componentId={componentId} />
