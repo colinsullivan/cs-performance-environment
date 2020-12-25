@@ -21,6 +21,7 @@ import {
   SYNKOPATER_SAVE_PRESET,
   SYNKOPATER_LOAD_PRESET,
   SYNKOPATER_UPDATE_PRESET,
+  SYNKOPATER_DELETE_PRESET,
   OCTATRACK_PATTERN_UPDATED,
   SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
   STATE_REHYDRATED
@@ -161,6 +162,19 @@ function components(state = {}, action) {
         },
       };
     }
+
+    case SYNKOPATER_DELETE_PRESET: {
+      const { componentId, presetId } = action.payload;
+      const component = state[componentId];
+      return {
+        ...state,
+        [componentId]: {
+          ...component,
+          presets: component.presets.filter(p => p.id !== presetId)
+        }
+      };
+    }
+
     case OCTATRACK_PATTERN_UPDATED: {
       let newState = state;
       const { programChangeValue } = action.payload;
