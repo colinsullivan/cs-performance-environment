@@ -10,6 +10,7 @@ import TouchSynkopaterPiano from "components/SynkopaterPiano/TouchSynkopaterPian
 import InstrParamTouchSelector from "components/InstrParamTouchSelector";
 import SynkDelayTimeDisplay from "components/SynkDelayTimeDisplay";
 import QuantDropdown from "components/QuantDropdown";
+import OctatrackFollowControl from "components/SynkopaterPiano/PresetControl/OctatrackFollowControl";
 
 const durOptions = [
   { value: 8, label: "8" },
@@ -92,7 +93,7 @@ const factorOptions = [
 
 const TouchSynkopaterContainer = styled.div`
   padding-top: 12px;
-  padding-left: 12px;
+  padding-left: 6px;
 `;
 
 
@@ -109,6 +110,9 @@ class TouchSynkopater extends React.Component {
               stopButtonComponent={StopButtonTouch}
               sequencerId={sequencerId}
             />
+          </div>
+          <div className="row">
+            <OctatrackFollowControl componentId={componentId} />
           </div>
           <div className="row">
             <QuantDropdown sequencerId={sequencerId} />

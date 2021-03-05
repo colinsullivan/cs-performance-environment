@@ -10,7 +10,7 @@ const TouchOctaveControl = ({
   setStartingOctave,
 }) => {
   return (
-    <div className="col-2">
+    <div>
       <TouchButton
         icon={<KeyboardArrowLeft />}
         onClick={() => setStartingOctave(Math.max(0, startingOctave - 1))}
