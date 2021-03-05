@@ -4,10 +4,13 @@
     "allowJs": true,
     "outDir": "build/",
     "module": "commonjs",
-    "target": "es5",
-    "baseUrl": "src",
-    "moduleResolution": "node"
+    "target": "es6",
+    "baseUrl": "src/",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true
   },
+  "lib": ["es2015"],
   "include": [
     "src/common/**/*",
     "src/main/**/*"
