@@ -113,112 +113,77 @@ const bounceDurMultiplierOptions = [
   { value: 1, label: "1" },
 ];
 
-
 const TouchSynkopaterContainer = styled.div`
   padding-top: 12px;
   padding-left: 6px;
 `;
-
 
 class TouchSynkopater extends React.Component {
   render() {
     const { sequencerId, componentId } = this.props;
     return (
       <TouchSynkopaterContainer>
-      <div className="row">
-        <div className="col-1">
-          <div className="row">
-            <QueueSequencerButton
-              playButtonComponent={PlayButtonTouch}
-              stopButtonComponent={StopButtonTouch}
+        <div className="row">
+          <div className="col-1">
+            <div className="row">
+              <QueueSequencerButton
+                playButtonComponent={PlayButtonTouch}
+                stopButtonComponent={StopButtonTouch}
+                sequencerId={sequencerId}
+              />
+            </div>
+            <div className="row">
+              <OctatrackFollowControl componentId={componentId} />
+            </div>
+            <div className="row">
+              <QuantDropdown sequencerId={sequencerId} />
+            </div>
+          </div>
+
+          <div className="col-11">
+            <TouchSynkopaterPiano
               sequencerId={sequencerId}
+              componentId={componentId}
             />
           </div>
-          <div className="row">
-            <OctatrackFollowControl componentId={componentId} />
-          </div>
-          <div className="row">
-            <QuantDropdown sequencerId={sequencerId} />
-          </div>
         </div>
-        <div className="col-11">
-          <TouchSynkopaterPiano sequencerId={sequencerId} componentId={componentId} />
-        </div>
-        <div className="col">
-          <div className="row">
-            <div className="col-2">
-              <SequencerParamTouchSelector
-                sequencerId={sequencerId}
-                param="dur"
-                options={durOptions}
-              />
-              <SequencerParamTouchSelector
-                sequencerId={sequencerId}
-                param="offset"
-                options={offsetOptions}
-              />
-              <SequencerParamTouchSelector
-                sequencerId={sequencerId}
-                param="legato"
-                options={legatoOptions}
-              />
-            </div>
-            <div className="col-1">
-              <EuclidBounceControls sequencerId={sequencerId} />
-            </div>
-            <div className="col">
-                <EuclideanTouchControl sequencerId={sequencerId} />
-              <div className="row">
-                <div className="col">
-                  <SequencerParamTouchSelector
-                    sequencerId={sequencerId}
-                    param="euclidBounceFirstDur"
-                    labelText="first"
-                    options={bounceDurOptions}
-                  />
-                </div>
-                <div className="col">
-                  <SequencerParamTouchSelector
-                    sequencerId={sequencerId}
-                    param="euclidBounceFirstDurMult"
-                    labelText="mult"
-                    options={bounceDurMultiplierOptions}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col">
-              <EuclideanTouchControl sequencerId={sequencerId} isSecond={true} />
-              <div className="row">
-                <div className="col">
-                  <SequencerParamTouchSelector
-                    sequencerId={sequencerId}
-                    param="euclidBounceSecondDur"
-                    labelText="second"
-                    options={bounceDurOptions}
-                  />
-                </div>
-                <div className="col">
-                  <SequencerParamTouchSelector
-                    sequencerId={sequencerId}
-                    param="euclidBounceSecondDurMult"
-                    labelText="mult"
-                    options={bounceDurMultiplierOptions}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-2">
-              <InstrParamTouchSelector
-                componentId={componentId}
-                param="delayFactor"
-                options={factorOptions}
-              />
-              <SynkDelayTimeDisplay sequencerId={sequencerId} />
-            </div>
+        <div className="row">
+          <div className="col-2">
+            <SequencerParamTouchSelector
+              sequencerId={sequencerId}
+              param="dur"
+              options={durOptions}
+            />
+            <SequencerParamTouchSelector
+              sequencerId={sequencerId}
+              param="legato"
+              options={legatoOptions}
+            />
+          </div>
+          <div className="col-2">
+            <SequencerParamTouchSelector
+              sequencerId={sequencerId}
+              param="offset"
+              options={offsetOptions}
+            />
+          </div>
+          <div className="col-3">
+            <EuclideanTouchControl sequencerId={sequencerId} />
+          </div>
+          <div className="col-3">
+            <EuclideanTouchControl sequencerId={sequencerId} isSecond={true} />
+            <div className="row"></div>
+          </div>
+          <div className="col-2">
+            <InstrParamTouchSelector
+              componentId={componentId}
+              param="delayFactor"
+              options={factorOptions}
+            />
+            <SynkDelayTimeDisplay sequencerId={sequencerId} />
           </div>
         </div>
-      </div>
+        <EuclidBounceControls sequencerId={sequencerId} />
       </TouchSynkopaterContainer>
     );
   }

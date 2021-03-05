@@ -25,8 +25,42 @@ const bounceDurMultiplierOptions = [
 
 const EuclidBounceControls = ({ sequencerId }) => {
   return (
-    <div>
-      <EuclidBounceToggle sequencerId={sequencerId} />
+    <div className="row">
+      <div className="col-2">
+        <EuclidBounceToggle sequencerId={sequencerId} />
+      </div>
+      <div className="col-2">
+        <SequencerParamTouchSelector
+          sequencerId={sequencerId}
+          param="euclidBounceFirstDur"
+          labelText="first"
+          options={bounceDurOptions}
+        />
+      </div>
+      <div className="col-2">
+        <SequencerParamTouchSelector
+          sequencerId={sequencerId}
+          param="euclidBounceFirstDurMult"
+          labelText="mult"
+          options={bounceDurMultiplierOptions}
+        />
+      </div>
+      <div className="col-2">
+        <SequencerParamTouchSelector
+          sequencerId={sequencerId}
+          param="euclidBounceSecondDur"
+          labelText="second"
+          options={bounceDurOptions}
+        />
+      </div>
+      <div className="col-2">
+        <SequencerParamTouchSelector
+          sequencerId={sequencerId}
+          param="euclidBounceSecondDurMult"
+          labelText="mult"
+          options={bounceDurMultiplierOptions}
+        />
+      </div>
     </div>
   );
 };
