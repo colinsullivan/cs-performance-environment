@@ -144,9 +144,6 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       durSeq = [offset] ++ durSeq;
     });
 
-    "durSeq:".postln;
-    durSeq.postln;
-
     midinoteProxy.source = Pseq(noteSeq, inf);
     durProxy.source = Pseq(durSeq, inf);
   }
