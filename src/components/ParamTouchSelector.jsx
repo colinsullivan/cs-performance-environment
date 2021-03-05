@@ -34,8 +34,7 @@ const useStyles = makeStyles((theme) =>
  *  the value is only sent once the pan gesture stops.
  **/
 const ParamTouchSelector = function (props) {
-  const { param, options, value, onChange } = props;
-
+  const { labelText = null, param, options, value, onChange } = props;
   const classes = useStyles(props);
 
   // Whether the select is open
@@ -102,7 +101,7 @@ const ParamTouchSelector = function (props) {
       </div>
       <LabeledDropdown
         open={open}
-        label={param}
+        label={labelText ? labelText : param}
         options={options}
         value={localValue}
         onClose={handleMenuClosed}

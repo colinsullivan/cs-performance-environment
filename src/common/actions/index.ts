@@ -39,6 +39,8 @@ import {
   STATE_REHYDRATED,
   StateRehydrated,
   SYNKOPATER_DELETE_PRESET,
+  SequencerToggleEuclidBounce,
+  SEQUENCER_TOGGLE_EUCLID_BOUNCE
 } from "./types";
 
 import {
@@ -296,6 +298,13 @@ export const synkopater_toggle_follow_octatrack = (
   payload: {
     componentId,
   },
+});
+
+export const sequencer_toggle_euclid_bounce = (sequencerId: string): SequencerToggleEuclidBounce => ({
+  type: SEQUENCER_TOGGLE_EUCLID_BOUNCE,
+  payload: {
+    sequencerId
+  }
 });
 
 const state_rehydrated = (serializedState : string) : StateRehydrated => ({

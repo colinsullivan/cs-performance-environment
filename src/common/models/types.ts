@@ -60,7 +60,9 @@ export type SynkopaterSequencer = SCReduxSequencer & {
   euclideanTotalNumHits: number;
   euclidBounceEnabled: boolean;
   euclidBounceFirstDur: number;
+  euclidBounceFirstDurMult: number;
   euclidBounceSecondDur: number;
+  euclidBounceSecondDurMult: number;
   secondEuclieanNumHits: number;
   secondEuclieanTotalNumHits: number;
   midiChan: number;

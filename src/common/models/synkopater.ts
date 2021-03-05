@@ -19,7 +19,9 @@ export type SequencerParamKeys =
   | "euclideanTotalNumHits"
   | "euclideanNumHits"
   | "euclidBounceFirstDur"
+  | "euclidBounceFirstDurMult"
   | "euclidBounceSecondDur"
+  | "euclidBounceSecondDurMult"
   | "secondEuclieanNumHits"
   | "secondEuclieanTotalNumHits";
 
@@ -43,7 +45,9 @@ export const create_synkopater_sequencer = (
   euclideanTotalNumHits: 4,
   euclidBounceEnabled: false,
   euclidBounceFirstDur: 4,
+  euclidBounceFirstDurMult: 1,
   euclidBounceSecondDur: 4,
+  euclidBounceSecondDurMult: 1,
   secondEuclieanNumHits: 4,
   secondEuclieanTotalNumHits: 4,
   playQuant: [4, 0],
@@ -119,7 +123,9 @@ export const synkopaterToPresetProps = (
     "euclideanTotalNumHits",
     "euclidBounceEnabled",
     "euclidBounceFirstDur",
+    "euclidBounceFirstDurMult",
     "euclidBounceSecondDur",
+    "euclidBounceSecondDurMult",
     "secondEuclieanNumHits",
     "secondEuclieanTotalNumHits",
   ]),
