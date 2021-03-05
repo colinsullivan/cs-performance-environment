@@ -47,7 +47,7 @@ class TouchPanParameter extends React.Component {
 
     // Determines direction if a previous Y value exists.
     if (prevY) {
-      const direction = prevY < y ? DIRECTION_UP : DIRECTION_DOWN;
+      const direction = prevY < y ? DIRECTION_DOWN : DIRECTION_UP;
 
       switch (direction) {
         case DIRECTION_UP:
