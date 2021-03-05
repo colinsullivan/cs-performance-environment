@@ -10,6 +10,13 @@ import useLocalValue from "hooks/useLocalValue";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    container: {
+      
+    },
+    containerDisabled: {
+      pointerEvents: "none",
+      opacity: 0.2
+    },
     button: {
       marginTop: theme.spacing.unit * 2,
     },
@@ -34,7 +41,7 @@ const useStyles = makeStyles((theme) =>
  *  the value is only sent once the pan gesture stops.
  **/
 const ParamTouchSelector = function (props) {
-  const { labelText = null, param, options, value, onChange } = props;
+  const { labelText = null, param, options, value, onChange, isDisabled=false } = props;
   const classes = useStyles(props);
 
   // Whether the select is open
@@ -90,7 +97,7 @@ const ParamTouchSelector = function (props) {
   };
 
   return (
-    <div>
+    <div className={isDisabled ? classes.containerDisabled : classes.container}>
       <div className={classes.touchAreaContainer}>
         <TouchPanParameter
           panStart={handleMenuOpened}

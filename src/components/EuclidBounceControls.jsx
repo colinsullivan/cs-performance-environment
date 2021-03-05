@@ -41,6 +41,7 @@ const EuclidBounceControls = ({ sequencerId }) => {
           param="euclidBounceFirstDur"
           labelText="first"
           options={bounceDurOptions}
+          isDisabled={!euclidBounceEnabled}
         />
       </div>
       <div className="col-2">
@@ -49,6 +50,7 @@ const EuclidBounceControls = ({ sequencerId }) => {
           param="euclidBounceFirstDurMult"
           labelText="mult"
           options={bounceDurMultiplierOptions}
+          isDisabled={!euclidBounceEnabled}
         />
       </div>
       <div className="col-2">
@@ -57,6 +59,7 @@ const EuclidBounceControls = ({ sequencerId }) => {
           param="euclidBounceSecondDur"
           labelText="second"
           options={bounceDurOptions}
+          isDisabled={!euclidBounceEnabled}
         />
       </div>
       <div className="col-2">
@@ -65,6 +68,7 @@ const EuclidBounceControls = ({ sequencerId }) => {
           param="euclidBounceSecondDurMult"
           labelText="mult"
           options={bounceDurMultiplierOptions}
+          isDisabled={!euclidBounceEnabled}
         />
       </div>
     </div>

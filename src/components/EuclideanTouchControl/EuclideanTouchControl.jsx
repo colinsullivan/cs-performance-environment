@@ -19,11 +19,20 @@ import EuclideanVisualizer from "./EuclideanVisualizer";
 
 import useLocalValue from "hooks/useLocalValue";
 
+const containerStyles = {
+    display: "flex",
+    alignItems: "center",
+  };
+
 const size = 150;
 const styles = {
   container: {
-    display: "flex",
-    alignItems: "center",
+    ...containerStyles
+  },
+  containerDisabled: {
+    ...containerStyles,
+    pointerEvents: "none",
+    opacity: 0.2
   },
   innerNumberContainer: {
     position: "absolute",
@@ -56,16 +65,19 @@ const createEuclideanTouchControlSelector = (sequencerId, isSecond) =>
         euclideanTotalNumHits,
         secondEuclieanNumHits,
         secondEuclieanTotalNumHits,
+        euclidBounceEnabled
       },
     } = sequencers;
     return isSecond
       ? {
           euclideanNumHits: secondEuclieanNumHits,
           euclideanTotalNumHits: secondEuclieanTotalNumHits,
+          euclidBounceEnabled
         }
       : {
           euclideanNumHits,
           euclideanTotalNumHits,
+          euclidBounceEnabled
         };
   });
 
@@ -79,9 +91,11 @@ const EuclideanTouchControl = (props) => {
     [sequencerId]
   );
 
-  const { euclideanNumHits, euclideanTotalNumHits } = useSelector(
+  const { euclideanNumHits, euclideanTotalNumHits, euclidBounceEnabled } = useSelector(
     euclideanTouchControlSelector
   );
+
+  const isDisabled = isSecond && !euclidBounceEnabled;
 
   const changeNumHits = (val) =>
     dispatch(sequencer_update_param(sequencerId, isSecond ? "secondEuclieanNumHits" : "euclideanNumHits", val));
@@ -94,7 +108,7 @@ const EuclideanTouchControl = (props) => {
   );
 
   return (
-    <div style={styles.container}>
+    <div style={isDisabled ? styles.containerDisabled : styles.container}>
       <div style={styles.visualizationCanvasContainer}>
         <div style={styles.innerNumberContainer}>
           <EuclideanTouchParameter

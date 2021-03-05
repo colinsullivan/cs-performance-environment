@@ -172,7 +172,6 @@ class TouchSynkopater extends React.Component {
           </div>
           <div className="col-3">
             <EuclideanTouchControl sequencerId={sequencerId} isSecond={true} />
-            <div className="row"></div>
           </div>
           <div className="col-2">
             <InstrParamTouchSelector
