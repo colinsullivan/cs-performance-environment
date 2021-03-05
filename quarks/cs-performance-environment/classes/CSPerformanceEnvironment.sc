@@ -41,8 +41,9 @@ CSPerformanceEnvironment {
     ));
 
     //clockController.clock.latency = Server.default.latency + 0.2;
-    clockController.clock.latency = Server.default.latency + 0.0426;
+    //clockController.clock.latency = Server.default.latency + 0.0426;
     //clockController.clock.latency = Server.default.latency;
+    clockController.clock.latency = 0.46;
     //clockController.clock.latency = 0;
 
     sequencerFactory = SCReduxSequencerFactory.getInstance();
@@ -102,8 +103,10 @@ CSPerformanceEnvironment {
 
     octatrackStateDispatcher = OctatrackStateDispatcher.new((
       store: store,
-      midiInDeviceName: "UltraLite AVB",
-      midiInPortName: "MIDI In",
+      midiInDeviceName: "micro lite",
+      midiInPortName: "Port 1",
+      //midiInDeviceName: "UltraLite AVB",
+      //midiInPortName: "MIDI In",
       midiInChannel: 15
     ));
   }

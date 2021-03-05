@@ -5,7 +5,9 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     meterEditor,
     transportText,
     quantumText,
-    quantumEditor;
+    quantumEditor,
+    clockLatencyEditor,
+    clock;
 
   init_gui {
     arg params;
@@ -34,6 +36,11 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     transportText = StaticText.new(layout, textRect);
     layout.startRow();
 
+    ArgNameLabel("Clock Latency", layout, labelWidth);
+    clockLatencyEditor = NumberBox.new(layout, textRect);
+    clockLatencyEditor.value = clock.latency;
+    layout.startRow();
+
 
     meterEditor.action = {
       arg editor;
@@ -52,6 +59,12 @@ ClockEnvironment : PerformanceEnvironmentComponent {
       clock.playNextBar({
         clock.quantum = newQuantum;
       });
+    };
+
+    clockLatencyEditor.action = {
+      arg editor;
+      var newLatency = editor.value.asFloat();
+      clock.latency = newLatency;
     };
 
   }

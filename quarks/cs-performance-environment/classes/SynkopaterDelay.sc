@@ -101,8 +101,6 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
           delaySecs: delayPatch.delaySecs.value
         )
       ));
-      "delayPatch.delaySecs.value:".postln;
-      delayPatch.delaySecs.value.postln;
     });
   }
 
