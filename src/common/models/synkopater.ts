@@ -61,7 +61,7 @@ export const create_synkopater_component = (
   },
   controllerMappings: {
     launchControlController: {
-      pg0_kn_pan_1: "delayFeedbackControl",
+      pg0_kn_sndA_1: "delayFeedbackControl",
     },
   },
   presets: [],
