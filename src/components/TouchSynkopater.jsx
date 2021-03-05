@@ -92,7 +92,7 @@ const factorOptions = [
 
 const TouchSynkopaterContainer = styled.div`
   padding-top: 12px;
-  padding-left: 12px;
+  padding-left: 6px;
 `;
 
 

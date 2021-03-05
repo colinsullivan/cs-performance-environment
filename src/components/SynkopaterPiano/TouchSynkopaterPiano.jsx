@@ -9,12 +9,19 @@
  **/
 
 import React, { useState } from "react";
+import styled from "styled-components";
 
 import SynkopaterPiano from "components/SynkopaterPiano";
 import TouchTransposeControl from "./TouchTransposeControl";
 import TouchOctaveControl from "./TouchOctaveControl";
-import { numOctaves } from './constants';
-import PresetControl from './PresetControl/PresetControl';
+import { numOctaves } from "./constants";
+import PresetControl from "./PresetControl/PresetControl";
+
+const TransposeControls = styled.div`
+  > div {
+    display: inline-block;
+  }
+`;
 
 const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
   const [startingOctave, setStartingOctave] = useState(5);
@@ -22,12 +29,18 @@ const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
   return (
     <div>
       <div className="row">
-        <TouchTransposeControl sequencerId={sequencerId} />
-        <TouchOctaveControl
-          startingOctave={startingOctave}
-          setStartingOctave={setStartingOctave}
-        />
-        <PresetControl sequencerId={sequencerId} componentId={componentId} />
+        <div className="col">
+          <TransposeControls>
+            <TouchTransposeControl sequencerId={sequencerId} />
+            <TouchOctaveControl
+              startingOctave={startingOctave}
+              setStartingOctave={setStartingOctave}
+            />
+          </TransposeControls>
+        </div>
+        <div className="col">
+          <PresetControl sequencerId={sequencerId} componentId={componentId} />
+        </div>
       </div>
       <div className="row">
         <div className="col">

@@ -3,12 +3,13 @@ import { withStyles  } from '@material-ui/core/styles';
 
 import IconButton from '@material-ui/core/IconButton';
 
+const size = 36;
 const styles = () => ({
   button: {
     margin: 0,
     padding: 0,
-    height: 24,
-    width: 24
+    height: size,
+    width: size
   },
 });
 
