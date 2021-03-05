@@ -23,25 +23,31 @@ const TransposeControls = styled.div`
   }
 `;
 
+const AboveKeyboardRowContainer = styled.div`
+  margin-bottom: 12px;
+`
+
 const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
   const [startingOctave, setStartingOctave] = useState(5);
 
   return (
     <div>
-      <div className="row">
-        <div className="col">
-          <TransposeControls>
-            <TouchTransposeControl sequencerId={sequencerId} />
-            <TouchOctaveControl
-              startingOctave={startingOctave}
-              setStartingOctave={setStartingOctave}
-            />
-          </TransposeControls>
+      <AboveKeyboardRowContainer>
+        <div className="row">
+          <div className="col">
+            <TransposeControls>
+              <TouchTransposeControl sequencerId={sequencerId} />
+              <TouchOctaveControl
+                startingOctave={startingOctave}
+                setStartingOctave={setStartingOctave}
+              />
+            </TransposeControls>
+          </div>
+          <div className="col">
+            <PresetControl sequencerId={sequencerId} componentId={componentId} />
+          </div>
         </div>
-        <div className="col">
-          <PresetControl sequencerId={sequencerId} componentId={componentId} />
-        </div>
-      </div>
+      </AboveKeyboardRowContainer>
       <div className="row">
         <div className="col">
           <SynkopaterPiano

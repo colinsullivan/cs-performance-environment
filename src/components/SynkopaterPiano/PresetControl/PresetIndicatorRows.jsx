@@ -7,7 +7,7 @@ import PresetIndicator from "./PresetIndicator";
 
 const PresetIndicatorRowsContainer = styled.div`
   width: 100%;
-  height: 60px;
+  height: auto;
   overflow: scroll;
 `;
 
