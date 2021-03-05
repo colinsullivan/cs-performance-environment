@@ -23,49 +23,59 @@ const size = 150;
 const styles = {
   container: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   innerNumberContainer: {
     position: "absolute",
     top: "50%",
     left: "50%",
     marginTop: "-24px",
-    marginLeft: "-24px"
+    marginLeft: "-24px",
   },
   outerNumberContainer: {
     display: "inline-block",
     height: "100%",
     flex: "1 0 auto",
     textAlign: "left",
-    paddingLeft: "1em"
+    paddingLeft: "1em",
   },
   visualizationCanvasContainer: {
     height: size,
     width: size,
     display: "inline-block",
     flex: `0 0 ${size}px`,
-    position: "relative"
-  }
+    position: "relative",
+  },
 };
 
-const createEuclideanTouchControlSelector = sequencerId =>
-  createSelector(sequencersSelector, sequencers => {
+const createEuclideanTouchControlSelector = (sequencerId, isSecond) =>
+  createSelector(sequencersSelector, (sequencers) => {
     const {
-      [sequencerId]: { euclideanNumHits, euclideanTotalNumHits }
+      [sequencerId]: {
+        euclideanNumHits,
+        euclideanTotalNumHits,
+        secondEuclieanNumHits,
+        secondEuclieanTotalNumHits,
+      },
     } = sequencers;
-    return {
-      euclideanNumHits,
-      euclideanTotalNumHits
-    };
+    return isSecond
+      ? {
+          euclideanNumHits: secondEuclieanNumHits,
+          euclideanTotalNumHits: secondEuclieanTotalNumHits,
+        }
+      : {
+          euclideanNumHits,
+          euclideanTotalNumHits,
+        };
   });
 
-const EuclideanTouchControl = props => {
-  const { sequencerId } = props;
+const EuclideanTouchControl = (props) => {
+  const { sequencerId, isSecond=false } = props;
 
   const dispatch = useDispatch();
 
   const euclideanTouchControlSelector = useMemo(
-    () => createEuclideanTouchControlSelector(sequencerId),
+    () => createEuclideanTouchControlSelector(sequencerId, isSecond),
     [sequencerId]
   );
 
@@ -73,13 +83,15 @@ const EuclideanTouchControl = props => {
     euclideanTouchControlSelector
   );
 
-  const changeNumHits = val =>
-    dispatch(sequencer_update_param(sequencerId, "euclideanNumHits", val));
-  const changeTotalNumHits = val =>
-    dispatch(sequencer_update_param(sequencerId, "euclideanTotalNumHits", val));
+  const changeNumHits = (val) =>
+    dispatch(sequencer_update_param(sequencerId, isSecond ? "secondEuclieanNumHits" : "euclideanNumHits", val));
+  const changeTotalNumHits = (val) =>
+    dispatch(sequencer_update_param(sequencerId, isSecond ? "secondEuclieanTotalNumHits" : "euclideanTotalNumHits", val));
 
   const [localNumHits, setLocalNumHits] = useLocalValue(euclideanNumHits);
-  const [localTotalNumHits, setLocalTotalNumHits] = useLocalValue(euclideanTotalNumHits);
+  const [localTotalNumHits, setLocalTotalNumHits] = useLocalValue(
+    euclideanTotalNumHits
+  );
 
   return (
     <div style={styles.container}>

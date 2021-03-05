@@ -123,7 +123,7 @@ class TouchSynkopater extends React.Component {
         </div>
         <div className="col-12">
           <div className="row">
-            <div className="col-2">
+            <div className="col">
               <SequencerParamTouchSelector
                 sequencerId={sequencerId}
                 param="dur"
@@ -140,10 +140,13 @@ class TouchSynkopater extends React.Component {
                 options={legatoOptions}
               />
             </div>
-            <div className="col-3">
+            <div className="col">
               <EuclideanTouchControl sequencerId={sequencerId} />
             </div>
-            <div className="col-2">
+            <div className="col">
+              <EuclideanTouchControl sequencerId={sequencerId} isSecond={true} />
+            </div>
+            <div className="col">
               <InstrParamTouchSelector
                 componentId={componentId}
                 param="delayFactor"

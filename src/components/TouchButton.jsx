@@ -30,12 +30,12 @@ const LabelContainer = styled.div`
   }
 `;
 
-const TouchButton = ({ icon, onClick, classes, labelUnder = null }) => (
+const TouchButton = ({ icon, onClick, classes, labelText = null }) => (
     <IconButton onClick={onClick} className={classes.button} variant="outlined">
       {icon}
-      {labelUnder ? (
+      {labelText ? (
         <LabelContainer>
-          <label>{labelUnder}</label>
+          <label>{labelText}</label>
         </LabelContainer>
       ) : null}
     </IconButton>
