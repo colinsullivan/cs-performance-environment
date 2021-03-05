@@ -176,6 +176,14 @@ export interface SynkopaterToggleFollowOctatrack {
   };
 }
 
+export const SEQUENCER_TOGGLE_EUCLID_BOUNCE = "SEQUENCER_TOGGLE_EUCLID_BOUNCE";
+export interface SequencerToggleEuclidBounce {
+  type: typeof SEQUENCER_TOGGLE_EUCLID_BOUNCE;
+  payload: {
+    sequencerId: string;
+  };
+}
+
 export const STATE_REHYDRATED = "STATE_REHYDRATED";
 export interface StateRehydrated {
   type: typeof STATE_REHYDRATED;
@@ -202,7 +210,8 @@ export type AllActionTypes =
   | SynkopaterLoadPreset
   | SynkopaterToggleFollowOctatrack
   | StateRehydrated
-  | SynkopaterDeletePreset;
+  | SynkopaterDeletePreset
+  | SequencerToggleEuclidBounce;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,
