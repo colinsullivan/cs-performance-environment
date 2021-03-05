@@ -1,6 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import EuclidBounceToggle from "components/EuclidBounceToggle";
 import SequencerParamTouchSelector from "components/SequencerParamTouchSelector";
+import { sequencersSelector } from "common/selectors";
 
 const bounceDurOptions = [
   { value: 7, label: "7" },
@@ -24,9 +26,13 @@ const bounceDurMultiplierOptions = [
 ];
 
 const EuclidBounceControls = ({ sequencerId }) => {
+  const sequencer = useSelector(
+    (state) => sequencersSelector(state)[sequencerId]
+  );
+  const { euclidBounceEnabled } = sequencer;
   return (
     <div className="row">
-      <div className="col-2">
+      <div className="col-3">
         <EuclidBounceToggle sequencerId={sequencerId} />
       </div>
       <div className="col-2">
