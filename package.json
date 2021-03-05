@@ -47,7 +47,7 @@
     "build_react": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start_server_dev": "TS_NODE_PROJECT=electron.tsconfig.json node -r ts-node/register -r tsconfig-paths/register ./src/main/index.js",
+    "start_server_dev": "NODE_ENV=development TS_NODE_PROJECT=electron.tsconfig.json node -r ts-node/register -r tsconfig-paths/register ./src/main/index.js",
     "build_server": "mkdir -p build/main && cp src/main/sclang_init.sc build/main/ && tsc --build electron.tsconfig.json",
     "start": "electron -r tsconfig-paths/register build/main/",
     "build": "npm run build_react && npm run build_server",
