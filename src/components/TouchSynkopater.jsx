@@ -14,20 +14,7 @@ import OctatrackFollowControl from "components/SynkopaterPiano/PresetControl/Oct
 import EuclidBounceToggle from "components/EuclidBounceToggle";
 import EuclidBounceControls from "components/EuclidBounceControls";
 
-const durOptions = [
-  { value: 8, label: "8" },
-  { value: 4, label: "4" },
-  { value: 2, label: "2" },
-  { value: 1.5, label: "1 1/2" },
-  { value: 1, label: "1" },
-  { value: 3 / 4, label: "3/4" },
-  { value: 1 / 2, label: "1/2" },
-  { value: 2 / 3, label: "2/3" },
-  { value: 1 / 3, label: "1/3" },
-  { value: 1 / 8, label: "1/8" },
-  { value: 1 / 16, label: "1/16" },
-  { value: 1 / 32, label: "1/32" },
-];
+import { durOptions } from "constants/options";
 
 const offsetOptions = [
   ...durOptions,
@@ -114,8 +101,8 @@ const bounceDurMultiplierOptions = [
 ];
 
 const TouchSynkopaterContainer = styled.div`
-  padding-top: 12px;
-  padding-left: 6px;
+  //padding-top: 12px;
+  //padding-left: 6px;
 `;
 
 class TouchSynkopater extends React.Component {
@@ -124,7 +111,7 @@ class TouchSynkopater extends React.Component {
     return (
       <TouchSynkopaterContainer>
         <div className="row">
-          <div className="col-1">
+          <div className="col-2">
             <div className="row">
               <QueueSequencerButton
                 playButtonComponent={PlayButtonTouch}
@@ -140,7 +127,7 @@ class TouchSynkopater extends React.Component {
             </div>
           </div>
 
-          <div className="col-11">
+          <div className="col-22">
             <TouchSynkopaterPiano
               sequencerId={sequencerId}
               componentId={componentId}
@@ -154,6 +141,8 @@ class TouchSynkopater extends React.Component {
               param="dur"
               options={durOptions}
             />
+          </div>
+          <div className="col-2">
             <SequencerParamTouchSelector
               sequencerId={sequencerId}
               param="legato"
@@ -167,10 +156,10 @@ class TouchSynkopater extends React.Component {
               options={offsetOptions}
             />
           </div>
-          <div className="col-3">
+          <div className="col-6">
             <EuclideanTouchControl sequencerId={sequencerId} />
           </div>
-          <div className="col-3">
+          <div className="col-6">
             <EuclideanTouchControl sequencerId={sequencerId} isSecond={true} />
           </div>
           <div className="col-2">

@@ -1,3 +1,4 @@
+
 html,
 body,
 div#root {
@@ -18,3 +19,7 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+
+$grid-columns: 24;
+$grid-gutter-width:           0px;
+@import 'bootstrap/scss/bootstrap.scss';

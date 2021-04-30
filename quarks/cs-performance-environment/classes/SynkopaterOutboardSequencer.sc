@@ -15,9 +15,11 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
     euclideanTotalNumHits = nil,
     euclidBounceEnabled = nil,
     euclidBounceFirstDur = nil,
+    euclidBounceFirstBeats = nil,
     euclidBounceSecondDur = nil,
-    euclidBounceFirstDurMult = nil,
-    euclidBounceSecondDurMult = nil,
+    euclidBounceSecondBeats = nil,
+    euclidBounceFirstBeatsMult = nil,
+    euclidBounceSecondBeatsMult = nil,
     secondEuclieanNumHits = nil,
     secondEuclieanTotalNumHits = nil,
     dur = nil,
@@ -77,17 +79,17 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
   }
 
   getEuclidDurs {
-    arg k, n;
+    arg k, n, theDur;
     ^(
-      dur * Bjorklund2.new(k, n)
+      theDur * Bjorklund2.new(k, n)
     );
   }
 
   getEuclidDursForDuration {
-    arg k, n, beats;
+    arg k, n, beats, theDur;
     var euclidDurs, durSeq, sum;
 
-    euclidDurs = this.getEuclidDurs(k, n);
+    euclidDurs = this.getEuclidDurs(k, n, theDur);
     durSeq = [];
     sum = 0;
     // Takes first portion of first euclidean rhythm up to `bounceFirstBeats`.
@@ -124,11 +126,13 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       durSeq = this.getEuclidDursForDuration(
         euclideanNumHits,
         euclideanTotalNumHits,
-        euclidBounceFirstDur * euclidBounceFirstDurMult
+        euclidBounceFirstBeats * euclidBounceFirstBeatsMult,
+        euclidBounceFirstDur
       ) ++ this.getEuclidDursForDuration(
         secondEuclieanNumHits,
         secondEuclieanTotalNumHits,
-        euclidBounceSecondDur * euclidBounceSecondDurMult
+        euclidBounceSecondBeats * euclidBounceSecondBeatsMult,
+        euclidBounceSecondDur
       );
 
 
@@ -136,6 +140,7 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       durSeq = this.getEuclidDurs(
         euclideanNumHits,
         euclideanTotalNumHits,
+        dur
       );
     });
 
@@ -143,6 +148,9 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       noteSeq = [\rest] ++ noteSeq;
       durSeq = [offset] ++ durSeq;
     });
+
+    "durSeq:".postln;
+    durSeq.postln;
 
     midinoteProxy.source = Pseq(noteSeq, inf);
     durProxy.source = Pseq(durSeq, inf);
@@ -164,11 +172,15 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
     ).or(
       euclidBounceFirstDur != currentState.euclidBounceFirstDur
     ).or(
-      euclidBounceFirstDurMult != currentState.euclidBounceFirstDurMult
+      euclidBounceFirstBeats != currentState.euclidBounceFirstBeats
+    ).or(
+      euclidBounceFirstBeatsMult != currentState.euclidBounceFirstBeatsMult
     ).or(
       euclidBounceSecondDur != currentState.euclidBounceSecondDur
     ).or(
-      euclidBounceSecondDurMult != currentState.euclidBounceSecondDurMult
+      euclidBounceSecondBeats != currentState.euclidBounceSecondBeats
+    ).or(
+      euclidBounceSecondBeatsMult != currentState.euclidBounceSecondBeatsMult
     ).or(
       dur != currentState.dur
     ).or(
@@ -182,9 +194,11 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       secondEuclieanTotalNumHits = currentState.secondEuclieanTotalNumHits;
       euclidBounceEnabled = currentState.euclidBounceEnabled;
       euclidBounceFirstDur = currentState.euclidBounceFirstDur;
-      euclidBounceFirstDurMult = currentState.euclidBounceFirstDurMult;
+      euclidBounceFirstBeats = currentState.euclidBounceFirstBeats;
+      euclidBounceFirstBeatsMult = currentState.euclidBounceFirstBeatsMult;
       euclidBounceSecondDur = currentState.euclidBounceSecondDur;
-      euclidBounceSecondDurMult = currentState.euclidBounceSecondDurMult;
+      euclidBounceSecondBeats = currentState.euclidBounceSecondBeats;
+      euclidBounceSecondBeatsMult = currentState.euclidBounceSecondBeatsMult;
 
       dur = currentState.dur;
       offset = currentState.offset;

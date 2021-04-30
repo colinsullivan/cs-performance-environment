@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import EuclidBounceToggle from "components/EuclidBounceToggle";
 import SequencerParamTouchSelector from "components/SequencerParamTouchSelector";
 import { sequencersSelector } from "common/selectors";
+import { durOptions } from "constants/options";
 
 const bounceDurOptions = [
   { value: 7, label: "7" },
@@ -32,14 +33,23 @@ const EuclidBounceControls = ({ sequencerId }) => {
   const { euclidBounceEnabled } = sequencer;
   return (
     <div className="row">
-      <div className="col-3">
+      <div className="col-6">
         <EuclidBounceToggle sequencerId={sequencerId} />
       </div>
       <div className="col-2">
         <SequencerParamTouchSelector
           sequencerId={sequencerId}
           param="euclidBounceFirstDur"
-          labelText="first"
+          labelText="dur"
+          options={durOptions}
+          isDisabled={!euclidBounceEnabled}
+        />
+      </div>
+      <div className="col-2">
+        <SequencerParamTouchSelector
+          sequencerId={sequencerId}
+          param="euclidBounceFirstBeats"
+          labelText="beats"
           options={bounceDurOptions}
           isDisabled={!euclidBounceEnabled}
         />
@@ -47,7 +57,7 @@ const EuclidBounceControls = ({ sequencerId }) => {
       <div className="col-2">
         <SequencerParamTouchSelector
           sequencerId={sequencerId}
-          param="euclidBounceFirstDurMult"
+          param="euclidBounceFirstBeatsMult"
           labelText="mult"
           options={bounceDurMultiplierOptions}
           isDisabled={!euclidBounceEnabled}
@@ -57,7 +67,16 @@ const EuclidBounceControls = ({ sequencerId }) => {
         <SequencerParamTouchSelector
           sequencerId={sequencerId}
           param="euclidBounceSecondDur"
-          labelText="second"
+          labelText="dur"
+          options={durOptions}
+          isDisabled={!euclidBounceEnabled}
+        />
+      </div>
+      <div className="col-2">
+        <SequencerParamTouchSelector
+          sequencerId={sequencerId}
+          param="euclidBounceSecondBeats"
+          labelText="beats"
           options={bounceDurOptions}
           isDisabled={!euclidBounceEnabled}
         />
@@ -65,7 +84,7 @@ const EuclidBounceControls = ({ sequencerId }) => {
       <div className="col-2">
         <SequencerParamTouchSelector
           sequencerId={sequencerId}
-          param="euclidBounceSecondDurMult"
+          param="euclidBounceSecondBeatsMult"
           labelText="mult"
           options={bounceDurMultiplierOptions}
           isDisabled={!euclidBounceEnabled}
