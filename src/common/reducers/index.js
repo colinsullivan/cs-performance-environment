@@ -41,12 +41,12 @@ export function create_default_state() {
       synkopaterA: create_synkopater_sequencer(
         "synkopaterA",
         "SynkopaterOutboardSequencer",
-        0
+        2
       ),
       synkopaterB: create_synkopater_sequencer(
         "synkopaterB",
         "SynkopaterOutboardSequencer",
-        1
+        3
       ),
     },
     components: {
@@ -55,12 +55,18 @@ export function create_default_state() {
     },
   };
   Object.assign(initialState.sequencers.synkopaterA, {
-    midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider",
+    //midiOutDeviceName: "(in) SuperCollider",
+    //midiOutPortName: "(in) SuperCollider",
+    midiOutDeviceName: "UltraLite AVB",
+    midiOutPortName: "MIDI Out",
+    midiChan: 1 // 2
   });
   Object.assign(initialState.sequencers.synkopaterB, {
-    midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider",
+    //midiOutDeviceName: "(in) SuperCollider",
+    //midiOutPortName: "(in) SuperCollider",
+    midiOutDeviceName: "UltraLite AVB",
+    midiOutPortName: "MIDI Out",
+    midiChan: 2 // 3
   });
 
   return initialState;

@@ -34,7 +34,7 @@ RunningWaterEnvironment : PatchEnvironmentComponent {
       buffer: this.buf,
       gate: KrNumberEditor.new(1, \gate.asSpec()),
       useOscillator: KrNumberEditor.new(0, \gate.asSpec()),
-      amp: KrNumberEditor.new(1.0, \amp)
+      amp: KrNumberEditor.new(0.0, \amp)
       //hellValueBus: this.hellValueBus
     ));
   }
@@ -173,11 +173,24 @@ RunningWaterEnvironment : PatchEnvironmentComponent {
 
   //}
   init_launchcontrol_mappings {
+    //this.map_controller_to_patch(
+      //this.launchControlController,
+      //'pg0_kn_sndB_5',
+      //[\hellMax]
+    //);
+
     this.map_controller_to_patch(
-      this.launchControlController,
-      'pg0_kn_sndB_5',
-      [\hellMax]
+      this.sixteennController,
+      'sl_4',
+      \hellMax
     );
+
+    this.map_controller_to_patch(
+      this.sixteennController,
+      'sl_5',
+      \amp
+    );
+
   }
 
 }
