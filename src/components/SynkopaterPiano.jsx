@@ -21,7 +21,6 @@ class SynkopaterPiano extends React.Component {
   }
   render() {
     const {
-      keyBaseWidth,
       sequencer: { notes, event },
       startingOctave = 3,
       numOctaves = 8,
@@ -33,7 +32,6 @@ class SynkopaterPiano extends React.Component {
         numOctaves={numOctaves}
         selectedNotes={notes}
         activeNotes={event ? [event.midinote] : []}
-        keyBaseWidth={keyBaseWidth}
       />
     );
   }

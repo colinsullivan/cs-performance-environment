@@ -8,12 +8,9 @@ import {
   DIRECTION_UP,
   DIRECTION_DOWN,
 } from "constants/ui";
+import TouchSquareButton from "components/TouchSquareButton";
 
 const styles = {
-  containerStyle: {
-    minWidth: "48px",
-    minHeight: "48px",
-  },
   panningStyle: {
     backgroundColor: getRGBAString(orangeTransparentColor),
   },
@@ -97,19 +94,18 @@ class TouchPanParameter extends React.Component {
 
   render() {
     return (
-      <div
+      <TouchSquareButton
         onTouchEnd={this.handleTouchEnd}
         onTouchMove={this.handleTouchMove}
         onTouchStart={this.handleTouchStart}
-        style={{
-          ...styles.containerStyle,
+        styles={{
           ...(this.state.panning
             ? styles.panningStyle
             : styles.notPanningStyle),
         }}
       >
         {this.props.children}
-      </div>
+      </TouchSquareButton>
     );
   }
 }

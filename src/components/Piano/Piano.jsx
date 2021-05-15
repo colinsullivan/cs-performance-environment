@@ -180,7 +180,7 @@ const isBlackNote = (note) => note.alt !== 0;
 const Piano = ({
   startingOctave = 3,
   numOctaves = 3,
-  keyBaseWidth = 1.5,
+  keyBaseWidth = 2.5,
   handleNoteClicked,
   selectedNotes,
   activeNotes,

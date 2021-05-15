@@ -52,7 +52,6 @@ const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
         <div className="col">
           <SynkopaterPiano
             sequencerId={sequencerId}
-            keyBaseWidth={2.5}
             numOctaves={numOctaves}
             startingOctave={startingOctave}
           />

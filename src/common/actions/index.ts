@@ -64,6 +64,8 @@ import {
 } from "common/selectors";
 import { getPatternValue } from "common/models/octatrack";
 
+export * from './menus';
+
 export function synkopater_arp_add_note(
   sequencerId: string,
   note: number
