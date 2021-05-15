@@ -34,7 +34,7 @@ GranularChaosEnvironment : PatchEnvironmentComponent {
       buffer: this.buf,
       envbuf: this.grainEnvBuf,
       gate: KrNumberEditor.new(1, \gate),
-      amp: KrNumberEditor.new(1.0, \amp)
+      amp: KrNumberEditor.new(0.0, \amp)
       /*done_callback: {
         "done!".postln;
       },*/
@@ -47,16 +47,35 @@ GranularChaosEnvironment : PatchEnvironmentComponent {
     /*"GranularChaosEnvironment.init_external_controller_mappings".postln;*/
     
 
+    //this.map_controller_to_patch(
+      //this.launchControlController,
+      //'pg0_kn_sndA_4',
+      //\pointer
+    //);
+    //this.map_controller_to_patch(
+      //this.launchControlController,
+      //'pg0_kn_sndB_4',
+      //\pitch
+    //);
+
     this.map_controller_to_patch(
-      this.launchControlController,
-      'pg0_kn_sndA_4',
+      this.sixteennController,
+      'sl_1',
       \pointer
     );
+
     this.map_controller_to_patch(
-      this.launchControlController,
-      'pg0_kn_sndB_4',
+      this.sixteennController,
+      'sl_2',
       \pitch
     );
+
+    this.map_controller_to_patch(
+      this.sixteennController,
+      'sl_3',
+      \amp
+    );
+
   }
 
   init_gui {

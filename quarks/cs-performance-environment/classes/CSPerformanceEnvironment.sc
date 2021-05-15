@@ -103,10 +103,10 @@ CSPerformanceEnvironment {
 
     octatrackStateDispatcher = OctatrackStateDispatcher.new((
       store: store,
-      midiInDeviceName: "micro lite",
-      midiInPortName: "Port 1",
-      //midiInDeviceName: "UltraLite AVB",
-      //midiInPortName: "MIDI In",
+      //midiInDeviceName: "micro lite",
+      //midiInPortName: "Port 1",
+      midiInDeviceName: "UltraLite AVB",
+      midiInPortName: "MIDI In",
       midiInChannel: 15
     ));
   }
