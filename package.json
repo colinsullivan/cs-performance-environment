@@ -78,7 +78,9 @@
       "no-case-declarations": 0,
       "prefer-const": "error",
       "react/prop-types": 0,
-      "@typescript-eslint/explicit-module-boundary-types": 0
+      "@typescript-eslint/explicit-module-boundary-types": 0,
+      "no-use-before-define": "off",
+      "@typescript-eslint/no-use-before-define": ["error"]
     }
   },
   "devDependencies": {
@@ -87,11 +89,7 @@
     "tsconfig-paths": "^3.9.0"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
