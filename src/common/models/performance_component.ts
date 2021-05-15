@@ -4,7 +4,6 @@ import {
   PerformanceComponent,
   OctatrackState,
   PerformanceComponentPreset,
-  PresetProps,
 } from "./types";
 import { getPatternValue } from "common/models/octatrack";
 
@@ -19,9 +18,9 @@ export const create_performance_component = (
   };
 };
 
-export const create_preset = (
+export const create_synkopater_preset = (
   octatrackState: OctatrackState,
-  props: PresetProps
+  props
 ): PerformanceComponentPreset => ({
   id: uuidv4(),
   octatrackPatternValue: getPatternValue(octatrackState),

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback, ChangeEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import LabeledDropdown from "components/LabeledDropdown";
@@ -36,10 +36,10 @@ const QuantDropdown = (props: { sequencerId: string }) => {
     getSequencer(state, props)
   );
   const globalQuant = getGlobalQuant(seq);
-  const handleChanged = useCallback((e: any) => {
-    const newValue = e.target.value;
+  const handleChanged = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = Number(e.currentTarget.value);
     dispatch(synkopater_global_quant_updated(props.sequencerId, newValue));
-  }, []);
+  }, [props.sequencerId, dispatch]);
   return globalQuant ? (
     <LabeledDropdown
       label="quant"

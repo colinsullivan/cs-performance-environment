@@ -8,7 +8,7 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { createSelector } from "reselect";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,19 +20,19 @@ import EuclideanVisualizer from "./EuclideanVisualizer";
 import useLocalValue from "hooks/useLocalValue";
 
 const containerStyles = {
-    display: "flex",
-    alignItems: "center",
-  };
+  display: "flex",
+  alignItems: "center",
+};
 
 const size = 150;
 const styles = {
   container: {
-    ...containerStyles
+    ...containerStyles,
   },
   containerDisabled: {
     ...containerStyles,
     pointerEvents: "none",
-    opacity: 0.2
+    opacity: 0.2,
   },
   innerNumberContainer: {
     position: "absolute",
@@ -65,42 +65,53 @@ const createEuclideanTouchControlSelector = (sequencerId, isSecond) =>
         euclideanTotalNumHits,
         secondEuclieanNumHits,
         secondEuclieanTotalNumHits,
-        euclidBounceEnabled
+        euclidBounceEnabled,
       },
     } = sequencers;
     return isSecond
       ? {
           euclideanNumHits: secondEuclieanNumHits,
           euclideanTotalNumHits: secondEuclieanTotalNumHits,
-          euclidBounceEnabled
+          euclidBounceEnabled,
         }
       : {
           euclideanNumHits,
           euclideanTotalNumHits,
-          euclidBounceEnabled
+          euclidBounceEnabled,
         };
   });
 
 const EuclideanTouchControl = (props) => {
-  const { sequencerId, isSecond=false } = props;
+  const { sequencerId, isSecond = false } = props;
 
   const dispatch = useDispatch();
 
   const euclideanTouchControlSelector = useMemo(
     () => createEuclideanTouchControlSelector(sequencerId, isSecond),
-    [sequencerId]
+    [sequencerId, isSecond]
   );
 
-  const { euclideanNumHits, euclideanTotalNumHits, euclidBounceEnabled } = useSelector(
-    euclideanTouchControlSelector
-  );
+  const { euclideanNumHits, euclideanTotalNumHits, euclidBounceEnabled } =
+    useSelector(euclideanTouchControlSelector);
 
   const isDisabled = isSecond && !euclidBounceEnabled;
 
   const changeNumHits = (val) =>
-    dispatch(sequencer_update_param(sequencerId, isSecond ? "secondEuclieanNumHits" : "euclideanNumHits", val));
+    dispatch(
+      sequencer_update_param(
+        sequencerId,
+        isSecond ? "secondEuclieanNumHits" : "euclideanNumHits",
+        val
+      )
+    );
   const changeTotalNumHits = (val) =>
-    dispatch(sequencer_update_param(sequencerId, isSecond ? "secondEuclieanTotalNumHits" : "euclideanTotalNumHits", val));
+    dispatch(
+      sequencer_update_param(
+        sequencerId,
+        isSecond ? "secondEuclieanTotalNumHits" : "euclideanTotalNumHits",
+        val
+      )
+    );
 
   const [localNumHits, setLocalNumHits] = useLocalValue(euclideanNumHits);
   const [localTotalNumHits, setLocalTotalNumHits] = useLocalValue(

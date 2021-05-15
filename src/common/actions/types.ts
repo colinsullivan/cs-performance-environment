@@ -8,7 +8,7 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import { SequencerParamKeys } from "common/models/synkopater";
+import { SequencerGenericParamKeys, SequencerGenericParamValue } from "common/models/synkopater";
 import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
@@ -56,8 +56,8 @@ export interface SequencerUpdateParam {
   type: typeof SEQUENCER_STATE_UPDATED;
   payload: {
     sequencerId: string;
-    param: SequencerParamKeys;
-    value: any;
+    param: SequencerGenericParamKeys;
+    value: SequencerGenericParamValue;
   };
 }
 
@@ -66,7 +66,7 @@ export interface MidiControllerCC {
   payload: {
     controllerId: string;
     name: string;
-    value: any;
+    value;
   };
 }
 
@@ -83,7 +83,7 @@ export interface InstrumentParameterUpdated {
   payload: {
     componentId: string;
     parameterId: string;
-    newValue: any;
+    newValue;
   };
 }
 
@@ -143,7 +143,7 @@ export interface SynkopaterUpdatePreset {
   type: typeof SYNKOPATER_UPDATE_PRESET;
   payload: {
     componentId: string;
-    updatedPreset: PerformanceComponentPreset;
+    updatedPreset;
   };
 }
 
@@ -215,5 +215,5 @@ export type AllActionTypes =
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,
-  getState: () => any
+  getState
 ) => void;

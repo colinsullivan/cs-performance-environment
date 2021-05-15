@@ -1,12 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import * as _ from "lodash";
+import _ from "lodash";
 
 import Piano from "components/Piano/Piano";
 import { sequencer_update_param } from "common/actions";
 
 class SynkopaterPiano extends React.Component {
-  handleNoteClicked(note, height) {
+  handleNoteClicked(note) {
     if (this.props.sequencer.notes.includes(note.midi)) {
       this.props.changeSequencerParam(
         "notes",

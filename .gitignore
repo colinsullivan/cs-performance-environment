@@ -22,3 +22,4 @@ yarn-error.log*
 *.swp
 *react-app-env.d.ts
 *.log
+yarn.lock

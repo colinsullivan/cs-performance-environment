@@ -10,6 +10,7 @@
 
 import path from "path";
 import fs from "fs";
+import dotenv from "dotenv";
 
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
@@ -23,10 +24,12 @@ import rootReducer, { create_default_state } from "../common/reducers";
 import { PORT } from "../common/constants";
 import { rehydrate_state } from "../common/actions";
 
+dotenv.config({ path: ".env.local" });
+
 const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
-var loggerMiddleware = (store) => (next) => (action) => {
-  console.log("will dispatch", action);
+var loggerMiddleware = (_store) => (next) => (action) => {
+  //console.log("will dispatch", action);
 
   // Call the next dispatch method in the middleware chain.
   const returnValue = next(action);
@@ -66,6 +69,7 @@ const quit = () => {
 process.on("SIGINT", quit);
 
 const startServer = () => {
+  console.log("startServer");
   const server = express();
   expressWebsocket(server);
 

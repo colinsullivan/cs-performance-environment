@@ -6,12 +6,11 @@ import {
   SynkopaterPerformanceComponent,
   ARP_MODES,
   SynkopaterSequencer,
-  PresetProps,
   PerformanceComponentPreset,
 } from "./types";
 
 // Defines which keys can be set directly with the SEQUENCER_STATE_UPDATED action
-export type SequencerParamKeys =
+export type SequencerGenericParamKeys =
   | "dur"
   | "stretch"
   | "legato"
@@ -25,11 +24,15 @@ export type SequencerParamKeys =
   | "secondEuclieanNumHits"
   | "secondEuclieanTotalNumHits";
 
+export type SequencerGenericParamValue = number;
+
 
 export const create_synkopater_sequencer = (
   id: string,
   scClassName: string,
-  midiChan: number
+  midiChan: number,
+  midiOutDeviceName: string,
+  midiOutPortName: string
 ): SynkopaterSequencer => ({
   ...SCReduxSequencers.create_default_sequencer(id, scClassName),
   dur: 0.5,
@@ -62,7 +65,7 @@ export const create_synkopater_sequencer = (
   savedQuants: {},
 });
 
-export const create_synkopater_component = (
+export const create_synk_delay_component = (
   id: string,
   inputBus: number,
   outputBus: number
@@ -118,7 +121,7 @@ export const getGlobalQuant = (
 export const synkopaterToPresetProps = (
   synkopaterComponent: SynkopaterPerformanceComponent,
   synkopaterSequencer: SynkopaterSequencer
-): PresetProps => ({
+) => ({
   synkopaterSequencerProps: pick(synkopaterSequencer, [
     "dur",
     "stretch",

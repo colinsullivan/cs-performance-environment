@@ -1,10 +1,13 @@
 import React from "react";
-import { DIRECTION_UP, DIRECTION_DOWN } from "hammerjs";
 import {
   turquoiseTransparentColor,
   orangeTransparentColor,
   getRGBAString,
 } from "constants/colors";
+import { 
+  DIRECTION_UP,
+  DIRECTION_DOWN,
+} from "constants/ui";
 
 const styles = {
   containerStyle: {

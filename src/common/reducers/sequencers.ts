@@ -45,7 +45,7 @@ const durChoices = [
 const sequencers = (
   state: Sequencers,
   action: AllActionTypes,
-  allState: any
+  allState
 ) => {
   state = SCReduxSequencers.reducer(state, action);
   let seq: SynkopaterSequencer, sequencerId: string;

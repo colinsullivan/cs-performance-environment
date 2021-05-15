@@ -12,7 +12,7 @@ const EuclidBounceToggle = ({ sequencerId }) => {
   const { euclidBounceEnabled } = sequencer;
   const onClick = useCallback(
     () => dispatch(sequencer_toggle_euclid_bounce(sequencerId)),
-    [dispatch, sequencer_toggle_euclid_bounce, sequencerId]
+    [dispatch, sequencerId]
   );
   return (
     <ToggleButtonWithLabel
