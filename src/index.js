@@ -16,8 +16,7 @@ import { Provider } from 'react-redux';
 import axios from 'axios';
 import uuid from 'uuid/v4';
 
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.css';
+import './index.scss';
 
 import WebsocketDispatcher from 'dispatchers/WebsocketDispatcher';
 import App from 'components/App';

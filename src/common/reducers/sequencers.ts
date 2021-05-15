@@ -13,11 +13,13 @@ import {
   SYNKOPATER_GLOBAL_QUANT_UPDATED,
   SYNKOPATER_LOAD_PRESET,
   OCTATRACK_PATTERN_UPDATED,
-  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK
+  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
+  SEQUENCER_TOGGLE_EUCLID_BOUNCE
 } from "common/actions/types";
 import {
   TRANSPOSE_DIRECTION,
   SynkopaterPerformanceComponent,
+  SynkopaterSequencer,
 } from "common/models/types";
 import { Sequencers } from "./types";
 import {
@@ -46,7 +48,7 @@ const sequencers = (
   allState: any
 ) => {
   state = SCReduxSequencers.reducer(state, action);
-  let seq, sequencerId;
+  let seq: SynkopaterSequencer, sequencerId: string;
   switch (action.type) {
     case SYNKOPATER_ARP_REMOVE_NOTE:
       seq = Object.assign({}, state[action.payload.sequencerId]);
@@ -200,9 +202,7 @@ const sequencers = (
         // Gets performance component corresponding to this sequencer
         const myPerformanceComponent = Object.values(
           performanceComponents
-        ).find(
-          (p) => p.sequencerId === sequencerId
-        );
+        ).find((p) => p.sequencerId === sequencerId);
         if (
           myPerformanceComponent &&
           myPerformanceComponent.id === componentId
@@ -212,8 +212,8 @@ const sequencers = (
               ...state,
               [sequencerId]: {
                 ...state[sequencerId],
-                ...state[sequencerId].savedQuants
-              }
+                ...state[sequencerId].savedQuants,
+              },
             };
           } else {
             return {
@@ -223,18 +223,17 @@ const sequencers = (
                 savedQuants: {
                   playQuant: state[sequencerId].playQuant,
                   propQuant: state[sequencerId].propQuant,
-                  stopQuant: state[sequencerId].stopQuant
+                  stopQuant: state[sequencerId].stopQuant,
                 },
                 playQuant: null,
                 propQuant: null,
                 stopQuant: null,
-              }
+              },
             };
           }
         }
       }
       return state;
-      
     }
 
     case OCTATRACK_PATTERN_UPDATED: {
@@ -270,6 +269,18 @@ const sequencers = (
       }
 
       return newState;
+    }
+
+    case SEQUENCER_TOGGLE_EUCLID_BOUNCE: {
+      const { sequencerId } = action.payload;
+      const sequencer = state[sequencerId];
+      return {
+        ...state,
+        [sequencerId]: {
+          ...sequencer,
+          euclidBounceEnabled: !sequencer.euclidBounceEnabled
+        },
+      };
     }
 
     default:

@@ -1,5 +1,4 @@
 import React from "react";
-import Hammer from "react-hammerjs";
 import { DIRECTION_UP, DIRECTION_DOWN } from "hammerjs";
 import {
   turquoiseTransparentColor,
@@ -20,13 +19,8 @@ const styles = {
   },
 };
 
-const hammerOptions = {
-  touchAction: "compute",
-  recognizers: {
-    pan: {
-      threshold: 1,
-    },
-  },
+const noop = () => {
+  return;
 };
 
 class TouchPanParameter extends React.Component {
@@ -36,96 +30,83 @@ class TouchPanParameter extends React.Component {
     this.state = {
       panning: false,
       panAmount: 0,
+      prevY: null,
     };
   }
-  handlePan = (e) => {
+  handleTouchMove = (e) => {
     const {
-      panCallbackAmount = 5,
-      valueChangeThreshold = 5 * 15,
-      tickUp = null,
-      tickDown = null,
+      valueChangeThreshold = 5,
+      tickUp = noop,
+      tickDown = noop,
     } = this.props;
 
-    let panAmount = this.state.panAmount;
-    switch (e.direction) {
-      case DIRECTION_UP:
-        panAmount -= panCallbackAmount;
+    const { prevY } = this.state;
 
-        if (panAmount < -1.0 * valueChangeThreshold) {
-          this.setState({
-            panAmount: 0,
-          });
-          if (tickUp) {
+    const y = e.nativeEvent.targetTouches[0].clientY;
+    let panAmount = this.state.panAmount;
+
+    // Determines direction if a previous Y value exists.
+    if (prevY) {
+      const direction = prevY < y ? DIRECTION_DOWN : DIRECTION_UP;
+
+      switch (direction) {
+        case DIRECTION_UP:
+          panAmount -= 1;
+          if (Math.abs(panAmount) > valueChangeThreshold) {
+            panAmount = 0;
             tickUp();
           }
-        } else {
-          this.setState({
-            panAmount,
-          });
-        }
-        break;
+          break;
 
-      case DIRECTION_DOWN:
-        panAmount += panCallbackAmount;
-        if (panAmount > valueChangeThreshold) {
-          this.setState({
-            panAmount: 0,
-          });
-          if (tickDown) {
+        case DIRECTION_DOWN:
+          panAmount += 1;
+          if (Math.abs(panAmount) > valueChangeThreshold) {
+            panAmount = 0;
             tickDown();
           }
-        } else {
-          this.setState({
-            panAmount,
-          });
-        }
-        break;
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
+    this.setState({
+      panAmount,
+      prevY: y,
+    });
   };
-  handlePanStart = (e) => {
-    const { panStart = null } = this.props;
+  handleTouchStart = () => {
+    const { panStart = noop } = this.props;
     this.setState({
       panning: true,
       panAmount: 0,
     });
-    if (panStart) {
-      panStart();
-    }
+    panStart();
   };
 
-  handlePanEnd = (e) => {
-    const { panEnd = null } = this.props;
+  handleTouchEnd = () => {
+    const { panEnd = noop } = this.props;
     this.setState({
       panning: false,
     });
-    if (panEnd) {
-      panEnd();
-    }
+    panEnd();
   };
 
   render() {
     return (
-      <Hammer
-        options={hammerOptions}
-        onPan={this.handlePan}
-        onPanCancel={this.handlePanCancel}
-        onPanEnd={this.handlePanEnd}
-        onPanStart={this.handlePanStart}
+      <div
+        onTouchEnd={this.handleTouchEnd}
+        onTouchMove={this.handleTouchMove}
+        onTouchStart={this.handleTouchStart}
+        style={{
+          ...styles.containerStyle,
+          ...(this.state.panning
+            ? styles.panningStyle
+            : styles.notPanningStyle),
+        }}
       >
-        <div
-          style={{
-            ...styles.containerStyle,
-            ...(this.state.panning
-              ? styles.panningStyle
-              : styles.notPanningStyle),
-          }}
-        >
-          {this.props.children}
-        </div>
-      </Hammer>
+        {this.props.children}
+      </div>
     );
   }
 }

@@ -10,14 +10,21 @@ import {
   PerformanceComponentPreset,
 } from "./types";
 
-// Defines which keys can be set direction with the SEQUENCER_STATE_UPDATED action
+// Defines which keys can be set directly with the SEQUENCER_STATE_UPDATED action
 export type SequencerParamKeys =
   | "dur"
   | "stretch"
   | "legato"
   | "offset"
   | "euclideanTotalNumHits"
-  | "euclideanNumHits";
+  | "euclideanNumHits"
+  | "euclidBounceFirstBeats"
+  | "euclidBounceFirstBeatsMult"
+  | "euclidBounceSecondBeats"
+  | "euclidBounceSecondBeatsMult"
+  | "secondEuclieanNumHits"
+  | "secondEuclieanTotalNumHits";
+
 
 export const create_synkopater_sequencer = (
   id: string,
@@ -37,6 +44,15 @@ export const create_synkopater_sequencer = (
   //numBeats: 4,
   euclideanNumHits: 4,
   euclideanTotalNumHits: 4,
+  euclidBounceEnabled: false,
+  euclidBounceFirstDur: 4,
+  euclidBounceFirstBeats: 4,
+  euclidBounceFirstBeatsMult: 1,
+  euclidBounceSecondDur: 4,
+  euclidBounceSecondBeats: 4,
+  euclidBounceSecondBeatsMult: 1,
+  secondEuclieanNumHits: 4,
+  secondEuclieanTotalNumHits: 4,
   playQuant: [4, 0],
   stopQuant: [4, 0],
   propQuant: [4, 0],
@@ -79,7 +95,9 @@ export const findPresetForOctatrackPattern = (
   );
 };
 
-export const getGlobalQuant = (sequencer: SynkopaterSequencer): number | null => {
+export const getGlobalQuant = (
+  sequencer: SynkopaterSequencer
+): number | null => {
   if (
     sequencer.playQuant &&
     sequencer.stopQuant &&
@@ -106,6 +124,15 @@ export const synkopaterToPresetProps = (
     "arpMode",
     "euclideanNumHits",
     "euclideanTotalNumHits",
+    "euclidBounceEnabled",
+    "euclidBounceFirstDur",
+    "euclidBounceFirstBeats",
+    "euclidBounceFirstBeatsMult",
+    "euclidBounceSecondDur",
+    "euclidBounceSecondBeats",
+    "euclidBounceSecondBeatsMult",
+    "secondEuclieanNumHits",
+    "secondEuclieanTotalNumHits",
   ]),
   synkopaterComponentProps: {
     ...synkopaterComponent.parameters,

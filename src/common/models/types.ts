@@ -46,7 +46,7 @@ export type SynkopaterPerformanceComponent = PerformanceComponent & {
   };
   currentPresetId: string | null;
   presets: PerformanceComponentPreset[];
-  followOctatrackPattern: boolean
+  followOctatrackPattern: boolean;
 };
 
 export type SynkopaterSequencer = SCReduxSequencer & {
@@ -58,9 +58,18 @@ export type SynkopaterSequencer = SCReduxSequencer & {
   arpMode: ARP_MODES;
   euclideanNumHits: number;
   euclideanTotalNumHits: number;
+  euclidBounceEnabled: boolean;
+  euclidBounceFirstDur: number;
+  euclidBounceFirstBeats: number;
+  euclidBounceFirstBeatsMult: number;
+  euclidBounceSecondDur: number;
+  euclidBounceSecondBeats: number;
+  euclidBounceSecondBeatsMult: number;
+  secondEuclieanNumHits: number;
+  secondEuclieanTotalNumHits: number;
   midiChan: number;
   delaySecs: number | null;
   savedQuants: {
-    [quantName: string]: Quant
-  }
+    [quantName: string]: Quant;
+  };
 };
