@@ -1,9 +1,11 @@
 import { create_synkopater_sequencer } from "common/models";
-const midiOutDeviceName = "(in) SuperCollider";
-const midiOutPortName = "(in) SuperCollider";
-//const midiOutDeviceName = "UltraLite AVB";
-//const midiOutPortName = "MIDI Out";
-export const createInitialSequencersState = () => ({
+import { getEnvOrError } from "utils";
+
+export const createInitialSequencersState = () => {
+  const midiOutDeviceName = getEnvOrError("REACT_APP_SYNKOPATER_MIDI_OUT_DEVICE_NAME");
+  const midiOutPortName = getEnvOrError("REACT_APP_SYNKOPATER_MIDI_OUT_DEVICE_PORT");
+
+  return ({
   synkopaterA: create_synkopater_sequencer(
     "synkopaterA",
     "SynkopaterOutboardSequencer",
@@ -18,4 +20,4 @@ export const createInitialSequencersState = () => ({
     midiOutDeviceName,
     midiOutPortName
   ),
-});
+})};

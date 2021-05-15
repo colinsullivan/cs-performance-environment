@@ -10,6 +10,7 @@
 
 import path from "path";
 import fs from "fs";
+import dotenv from "dotenv";
 
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
@@ -22,6 +23,8 @@ import WebsocketServerDispatcher from "./WebsocketServerDispatcher";
 import rootReducer, { create_default_state } from "../common/reducers";
 import { PORT } from "../common/constants";
 import { rehydrate_state } from "../common/actions";
+
+dotenv.config({ path: ".env.local" });
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
