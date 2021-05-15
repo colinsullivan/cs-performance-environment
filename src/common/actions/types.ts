@@ -8,7 +8,10 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import { SequencerGenericParamKeys, SequencerGenericParamValue } from "common/models/synkopater";
+import {
+  SequencerGenericParamKeys,
+  SequencerGenericParamValue,
+} from "common/models/synkopater";
 import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
@@ -16,6 +19,8 @@ import {
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
+
+import { openHoldMenu, closeHoldMenu } from "common/actions/menus";
 
 export const SYNKOPATER_ARP_ADD_NOTE = "SYNKOPATER_ARP_ADD_NOTE";
 export const SYNKOPATER_ARP_REMOVE_NOTE = "SYNKOPATER_ARP_REMOVE_NOTE";
@@ -211,7 +216,9 @@ export type AllActionTypes =
   | SynkopaterToggleFollowOctatrack
   | StateRehydrated
   | SynkopaterDeletePreset
-  | SequencerToggleEuclidBounce;
+  | SequencerToggleEuclidBounce
+  | ReturnType<typeof openHoldMenu>
+  | ReturnType<typeof closeHoldMenu>;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

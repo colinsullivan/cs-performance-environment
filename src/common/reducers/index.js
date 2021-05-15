@@ -13,19 +13,20 @@ import SCRedux from "supercollider-redux";
 
 import { READY_STATES } from "common/models/ready_states";
 
-import {
-  WS_READYSTATE_UPDATE,
-  STATE_REHYDRATED,
-} from "common/actions/types";
+import { WS_READYSTATE_UPDATE, STATE_REHYDRATED } from "common/actions/types";
 import sequencers from "./sequencers";
 import octatrack from "./octatrack";
 import { createInitialSequencersState } from "common/models/sequencers";
 import { createInitialComponentsState } from "common/models/components";
 import components from "./components";
+import holdMenus from "./holdMenus";
+import { createInitialHoldMenus } from "common/models/menus";
+
 export const create_default_state = () => ({
-    sequencers: createInitialSequencersState(),
-    components: createInitialComponentsState(),
-  });
+  sequencers: createInitialSequencersState(),
+  components: createInitialComponentsState(),
+  holdMenus: createInitialHoldMenus()
+});
 
 export function websocketReadyState(state = READY_STATES.CLOSED, action) {
   switch (action.type) {
@@ -43,6 +44,7 @@ const combinedReducers = combineReducers({
   components,
   websocketReadyState,
   octatrack,
+  holdMenus
 });
 
 const rootReducer = (state, action) => {
