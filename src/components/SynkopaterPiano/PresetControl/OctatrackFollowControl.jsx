@@ -13,7 +13,7 @@ const OctatrackFollowControl = ({ componentId }) => {
   const enabled = component.followOctatrackPattern;
   const onClick = useCallback(
     () => dispatch(synkopater_toggle_follow_octatrack(componentId)),
-    [dispatch, synkopater_toggle_follow_octatrack, componentId]
+    [dispatch, componentId]
   );
   return (
     <ToggleButtonWithLabel labelText="OT" enabled={enabled} onClick={onClick} />

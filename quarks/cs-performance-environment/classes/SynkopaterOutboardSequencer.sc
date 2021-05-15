@@ -59,10 +59,11 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
 
   initStream {
 
+    // TODO: This should not crash if requested MIDI port does not exist
+
     pat = Pbind(
       \type, \midi,
       \midiout, this.midiOut,
-      //\midicmd, \noteOn,
       \chan, this.getStateSlice().midiChan,
       \midinote, midinoteProxy,
       // rhythmic values

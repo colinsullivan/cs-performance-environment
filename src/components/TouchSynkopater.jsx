@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 
 import PlayButtonTouch from "components/PlayButtonTouch";
 import StopButtonTouch from "components/StopButtonTouch";
@@ -11,7 +10,6 @@ import InstrParamTouchSelector from "components/InstrParamTouchSelector";
 import SynkDelayTimeDisplay from "components/SynkDelayTimeDisplay";
 import QuantDropdown from "components/QuantDropdown";
 import OctatrackFollowControl from "components/SynkopaterPiano/PresetControl/OctatrackFollowControl";
-import EuclidBounceToggle from "components/EuclidBounceToggle";
 import EuclidBounceControls from "components/EuclidBounceControls";
 
 import { durOptions } from "constants/options";
@@ -79,37 +77,11 @@ const factorOptions = [
   { value: 1 / 32, label: "1/32" },
 ];
 
-const bounceDurOptions = [
-  { value: 7, label: "7" },
-  { value: 6, label: "6" },
-  { value: 5, label: "5" },
-  { value: 4, label: "4" },
-  { value: 3, label: "3" },
-  { value: 2, label: "2" },
-  { value: 1.5, label: "1 1/2" },
-  { value: 1, label: "1" },
-  { value: 3 / 4, label: "3/4" },
-  { value: 1 / 2, label: "1/2" },
-];
-
-const bounceDurMultiplierOptions = [
-  { value: 5, label: "5" },
-  { value: 4, label: "4" },
-  { value: 3, label: "3" },
-  { value: 2, label: "2" },
-  { value: 1, label: "1" },
-];
-
-const TouchSynkopaterContainer = styled.div`
-  //padding-top: 12px;
-  //padding-left: 6px;
-`;
-
 class TouchSynkopater extends React.Component {
   render() {
     const { sequencerId, componentId } = this.props;
     return (
-      <TouchSynkopaterContainer>
+      <div>
         <div className="row">
           <div className="col-2">
             <div className="row">
@@ -172,7 +144,7 @@ class TouchSynkopater extends React.Component {
           </div>
         </div>
         <EuclidBounceControls sequencerId={sequencerId} />
-      </TouchSynkopaterContainer>
+      </div>
     );
   }
 }

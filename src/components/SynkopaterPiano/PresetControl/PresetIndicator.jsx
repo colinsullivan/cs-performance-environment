@@ -22,11 +22,11 @@ const PresetIndicator = ({ preset, componentId }) => {
 
   const updatePreset = useCallback(() => {
     dispatch(synkopater_update_preset(componentId));
-  }, [dispatch, synkopater_update_preset, componentId]);
+  }, [dispatch, componentId]);
 
   const loadPreset = useCallback(() => {
     dispatch(synkopater_load_preset(componentId, preset.id));
-  }, [dispatch, synkopater_load_preset, componentId, preset.id]);
+  }, [dispatch, componentId, preset.id]);
 
   // If indicator is held for 1 sec, deletes the corresponding preset
   const touchingTimer = useRef(null);
@@ -46,7 +46,6 @@ const PresetIndicator = ({ preset, componentId }) => {
     clearTimer,
     isSelected,
     dispatch,
-    synkopater_delete_preset,
     componentId,
     preset,
   ]);

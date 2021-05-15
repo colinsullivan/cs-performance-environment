@@ -25,8 +25,8 @@ import { rehydrate_state } from "../common/actions";
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
-var loggerMiddleware = (store) => (next) => (action) => {
-  console.log("will dispatch", action);
+var loggerMiddleware = (_store) => (next) => (action) => {
+  //console.log("will dispatch", action);
 
   // Call the next dispatch method in the middleware chain.
   const returnValue = next(action);
@@ -66,6 +66,7 @@ const quit = () => {
 process.on("SIGINT", quit);
 
 const startServer = () => {
+  console.log("startServer");
   const server = express();
   expressWebsocket(server);
 

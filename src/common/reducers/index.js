@@ -14,8 +14,6 @@ import SCRedux from "supercollider-redux";
 import { READY_STATES } from "common/models/ready_states";
 
 import {
-  MIDI_CONTROLLER_INIT,
-  MIDI_CONTROLLER_CC,
   INSTRUMENT_PARAMETER_UPDATED,
   WS_READYSTATE_UPDATE,
   SYNKOPATER_SAVE_PRESET,
@@ -55,17 +53,17 @@ export function create_default_state() {
     },
   };
   Object.assign(initialState.sequencers.synkopaterA, {
-    //midiOutDeviceName: "(in) SuperCollider",
-    //midiOutPortName: "(in) SuperCollider",
-    midiOutDeviceName: "UltraLite AVB",
-    midiOutPortName: "MIDI Out",
+    midiOutDeviceName: "(in) SuperCollider",
+    midiOutPortName: "(in) SuperCollider",
+    //midiOutDeviceName: "UltraLite AVB",
+    //midiOutPortName: "MIDI Out",
     midiChan: 1 // 2
   });
   Object.assign(initialState.sequencers.synkopaterB, {
-    //midiOutDeviceName: "(in) SuperCollider",
-    //midiOutPortName: "(in) SuperCollider",
-    midiOutDeviceName: "UltraLite AVB",
-    midiOutPortName: "MIDI Out",
+    midiOutDeviceName: "(in) SuperCollider",
+    midiOutPortName: "(in) SuperCollider",
+    //midiOutDeviceName: "UltraLite AVB",
+    //midiOutPortName: "MIDI Out",
     midiChan: 2 // 3
   });
 
@@ -254,6 +252,7 @@ const rootReducer = (state, action) => {
         ...newState,
         ...JSON.parse(action.payload.serializedState)
       };
+      break;
     
     default:
       break;

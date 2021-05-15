@@ -18,10 +18,6 @@ const styles = () => ({
   }
 });
 
-const ButtonContainer = styled.div`
-  display: inline-block;
-`;
-
 const LabelContainer = styled.div`
   font-size: 18px;
   > label {

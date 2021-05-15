@@ -44,10 +44,11 @@ import {
 } from "./types";
 
 import {
-  SequencerParamKeys,
+  SequencerGenericParamKeys,
+  SequencerGenericParamValue,
   synkopaterToPresetProps,
 } from "common/models/synkopater";
-import { create_preset } from "common/models/performance_component";
+import { create_synkopater_preset } from "common/models/performance_component";
 import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
@@ -104,8 +105,8 @@ export function synkopater_arp_change_mode(
 
 export function sequencer_update_param(
   sequencerId: string,
-  param: SequencerParamKeys,
-  value: any
+  param: SequencerGenericParamKeys,
+  value: SequencerGenericParamValue
 ): SequencerUpdateParam {
   return {
     type: SEQUENCER_STATE_UPDATED,
@@ -120,7 +121,7 @@ export function sequencer_update_param(
 export function midi_controller_cc(
   controllerId: string,
   name: string,
-  value: any
+  value
 ): MidiControllerCC {
   return {
     type: MIDI_CONTROLLER_CC,
@@ -148,7 +149,7 @@ export function midi_controller_init(
 export function instrument_parameter_updated(
   componentId: string,
   parameterId: string,
-  newValue: any
+  newValue
 ): InstrumentParameterUpdated {
   return {
     type: INSTRUMENT_PARAMETER_UPDATED,
@@ -205,7 +206,7 @@ export const synkopater_save_preset = (componentId: string): Thunk => {
     const sequencer = getSequencer(getState(), { sequencerId });
     const octatrack = getOctatrack(getState());
     const props = synkopaterToPresetProps(component, sequencer);
-    const preset = create_preset(octatrack, props);
+    const preset = create_synkopater_preset(octatrack, props);
     dispatch({
       type: SYNKOPATER_SAVE_PRESET,
       payload: {

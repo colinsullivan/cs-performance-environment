@@ -9,7 +9,7 @@ const SavePresetButton = ({ componentId }) => {
   const dispatch = useDispatch();
   const savePreset = useCallback(() => {
     dispatch(synkopater_save_preset(componentId));
-  }, [dispatch, synkopater_save_preset, componentId]);
+  }, [dispatch, componentId]);
   return <TouchButton icon={<AddCircle />} onClick={savePreset} />;
 };
 

@@ -35,7 +35,7 @@ class WebsocketServerDispatcher {
     this.wsByClientId = _.pick(this.wsByClientId, this.clientIds);
   }
 
-  handleMiddleware (store, next, action) {
+  handleMiddleware (_store, next, action) {
     let i;
     let clientIds = this.clientIds;
       // if action is from a client, do not send back to that client

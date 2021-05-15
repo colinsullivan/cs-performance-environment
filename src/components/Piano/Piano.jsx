@@ -190,7 +190,7 @@ const Piano = ({
     if (handleNoteClicked) {
       handleNoteClicked(note, eventHeight);
     }
-  });
+  }, [handleNoteClicked]);
   var notes = [];
 
   // TODO: This could probably be done once for all notes
