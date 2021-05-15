@@ -14,208 +14,18 @@ import SCRedux from "supercollider-redux";
 import { READY_STATES } from "common/models/ready_states";
 
 import {
-  INSTRUMENT_PARAMETER_UPDATED,
   WS_READYSTATE_UPDATE,
-  SYNKOPATER_SAVE_PRESET,
-  SYNKOPATER_LOAD_PRESET,
-  SYNKOPATER_UPDATE_PRESET,
-  SYNKOPATER_DELETE_PRESET,
-  OCTATRACK_PATTERN_UPDATED,
-  SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
-  STATE_REHYDRATED
+  STATE_REHYDRATED,
 } from "common/actions/types";
-import {
-  create_synkopater_sequencer,
-  create_synkopater_component,
-  applyPresetToSynkopaterComponent,
-  findPresetForOctatrackPattern,
-} from "common/models";
 import sequencers from "./sequencers";
 import octatrack from "./octatrack";
-
-export function create_default_state() {
-  const initialState = {
-    sequencers: {
-      synkopaterA: create_synkopater_sequencer(
-        "synkopaterA",
-        "SynkopaterOutboardSequencer",
-        2
-      ),
-      synkopaterB: create_synkopater_sequencer(
-        "synkopaterB",
-        "SynkopaterOutboardSequencer",
-        3
-      ),
-    },
-    components: {
-      synkopaterA: create_synkopater_component("synkopaterA", 28, 28),
-      synkopaterB: create_synkopater_component("synkopaterB", 32, 32),
-    },
-  };
-  Object.assign(initialState.sequencers.synkopaterA, {
-    midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider",
-    //midiOutDeviceName: "UltraLite AVB",
-    //midiOutPortName: "MIDI Out",
-    midiChan: 1 // 2
+import { createInitialSequencersState } from "common/models/sequencers";
+import { createInitialComponentsState } from "common/models/components";
+import components from "./components";
+export const create_default_state = () => ({
+    sequencers: createInitialSequencersState(),
+    components: createInitialComponentsState(),
   });
-  Object.assign(initialState.sequencers.synkopaterB, {
-    midiOutDeviceName: "(in) SuperCollider",
-    midiOutPortName: "(in) SuperCollider",
-    //midiOutDeviceName: "UltraLite AVB",
-    //midiOutPortName: "MIDI Out",
-    midiChan: 2 // 3
-  });
-
-  return initialState;
-}
-
-//function controllers(state = {}, action) {
-  //switch (action.type) {
-    //case MIDI_CONTROLLER_INIT:
-      //const controller = {};
-      //const mappings = action.payload.mappings;
-      //let controlName;
-      //for (const channel in mappings) {
-        //for (const cc in mappings[channel]) {
-          //controlName = mappings[channel][cc];
-          //controller[controlName] = 0;
-        //}
-      //}
-      //state[action.payload.controllerId] = controller;
-      //state = Object.assign({}, state);
-      //break;
-
-    //case MIDI_CONTROLLER_CC:
-      //state[action.payload.controllerId][action.payload.name] =
-        //action.payload.value;
-      //state = Object.assign({}, state);
-      //break;
-
-    //default:
-      //break;
-  //}
-  //return state;
-//}
-
-function components(state = {}, action) {
-  switch (action.type) {
-    case INSTRUMENT_PARAMETER_UPDATED:
-      const payload = action.payload;
-      const instr = state[payload.componentId];
-      if (instr.parameters[payload.parameterId] !== payload.newValue) {
-        return {
-          ...state,
-          ...{
-            [payload.componentId]: {
-              ...instr,
-              ...{
-                parameters: {
-                  ...instr.parameters,
-                  ...{
-                    [payload.parameterId]: payload.newValue,
-                  },
-                },
-              },
-            },
-          },
-        };
-      } else {
-        return state;
-      }
-
-    case SYNKOPATER_SAVE_PRESET: {
-      const { componentId, preset } = action.payload;
-      const component = state[componentId];
-      return {
-        ...state,
-        [componentId]: {
-          ...component,
-          currentPresetId: preset.id,
-          presets: component.presets.concat([preset]),
-        },
-      };
-    }
-
-    case SYNKOPATER_LOAD_PRESET: {
-      const { componentId, preset } = action.payload;
-      const component = {
-        ...applyPresetToSynkopaterComponent(state[componentId], preset),
-        currentPresetId: preset.id,
-      };
-
-      return {
-        ...state,
-        [componentId]: component,
-      };
-    }
-
-    case SYNKOPATER_UPDATE_PRESET: {
-      const { componentId, updatedPreset } = action.payload;
-      const component = state[componentId];
-      return {
-        ...state,
-        [componentId]: {
-          ...component,
-          presets: component.presets.map((p) => {
-            if (p.id === updatedPreset.id) {
-              return updatedPreset;
-            }
-            return p;
-          }),
-        },
-      };
-    }
-
-    case SYNKOPATER_DELETE_PRESET: {
-      const { componentId, presetId } = action.payload;
-      const component = state[componentId];
-      return {
-        ...state,
-        [componentId]: {
-          ...component,
-          presets: component.presets.filter(p => p.id !== presetId)
-        }
-      };
-    }
-
-    case OCTATRACK_PATTERN_UPDATED: {
-      let newState = state;
-      const { programChangeValue } = action.payload;
-      for (const componentId of Object.keys(state)) {
-        const component = state[componentId];
-
-        const presetForPattern = findPresetForOctatrackPattern(
-          programChangeValue,
-          component
-        );
-        if (presetForPattern && component.followOctatrackPattern) {
-          newState = {
-            ...newState,
-            [componentId]: {
-              ...applyPresetToSynkopaterComponent(component, presetForPattern),
-              currentPresetId: presetForPattern.id,
-            },
-          };
-        }
-      }
-      return newState;
-    }
-    case SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK: {
-      const { componentId } = action.payload;
-      return {
-        ...state,
-        [componentId]: {
-          ...state[componentId],
-          followOctatrackPattern: !state[componentId].followOctatrackPattern
-        }
-      };
-    }
-
-    default:
-      return state;
-  }
-}
 
 export function websocketReadyState(state = READY_STATES.CLOSED, action) {
   switch (action.type) {
@@ -250,10 +60,10 @@ const rootReducer = (state, action) => {
     case STATE_REHYDRATED:
       newState = {
         ...newState,
-        ...JSON.parse(action.payload.serializedState)
+        ...JSON.parse(action.payload.serializedState),
       };
       break;
-    
+
     default:
       break;
   }

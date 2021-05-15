@@ -30,7 +30,9 @@ export type SequencerGenericParamValue = number;
 export const create_synkopater_sequencer = (
   id: string,
   scClassName: string,
-  midiChan: number
+  midiChan: number,
+  midiOutDeviceName: string,
+  midiOutPortName: string
 ): SynkopaterSequencer => ({
   ...SCReduxSequencers.create_default_sequencer(id, scClassName),
   dur: 0.5,
@@ -63,7 +65,7 @@ export const create_synkopater_sequencer = (
   savedQuants: {},
 });
 
-export const create_synkopater_component = (
+export const create_synk_delay_component = (
   id: string,
   inputBus: number,
   outputBus: number
