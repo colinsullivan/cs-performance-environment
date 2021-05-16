@@ -15,6 +15,7 @@ import thunk from "redux-thunk";
 import { Provider } from 'react-redux';
 import axios from 'axios';
 import uuid from 'uuid/v4';
+import logger from "redux-logger";
 
 import './index.scss';
 
@@ -24,6 +25,10 @@ import rootReducer from 'common/reducers';
 import { PORT } from 'common/constants';
 
 const middleware = [thunk];
+
+if (process.env.NODE_ENV === "development") {
+  middleware.push(logger);
+}
 
 const clientId = uuid();
 
