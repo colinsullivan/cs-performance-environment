@@ -21,6 +21,7 @@ import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
 
 import { openHoldMenu, closeHoldMenu } from "common/actions/menus";
+import { setKey } from "common/actions/scale";
 
 export const SYNKOPATER_ARP_ADD_NOTE = "SYNKOPATER_ARP_ADD_NOTE";
 export const SYNKOPATER_ARP_REMOVE_NOTE = "SYNKOPATER_ARP_REMOVE_NOTE";
@@ -218,7 +219,8 @@ export type AllActionTypes =
   | SynkopaterDeletePreset
   | SequencerToggleEuclidBounce
   | ReturnType<typeof openHoldMenu>
-  | ReturnType<typeof closeHoldMenu>;
+  | ReturnType<typeof closeHoldMenu>
+  | ReturnType<typeof setKey>;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

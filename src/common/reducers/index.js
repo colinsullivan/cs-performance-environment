@@ -21,11 +21,12 @@ import { createInitialComponentsState } from "common/models/components";
 import components from "./components";
 import holdMenus from "./holdMenus";
 import createInitialHoldMenus from "common/models/menus/menus";
+import scale from "./scale";
 
 export const create_default_state = () => ({
   sequencers: createInitialSequencersState(),
   components: createInitialComponentsState(),
-  holdMenus: createInitialHoldMenus()
+  holdMenus: createInitialHoldMenus(),
 });
 
 export function websocketReadyState(state = READY_STATES.CLOSED, action) {
@@ -44,7 +45,8 @@ const combinedReducers = combineReducers({
   components,
   websocketReadyState,
   octatrack,
-  holdMenus
+  holdMenus,
+  scale,
 });
 
 const rootReducer = (state, action) => {
