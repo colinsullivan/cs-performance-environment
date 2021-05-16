@@ -54,3 +54,9 @@ export const theme = createMuiTheme({
     useNextVariants: true,
   },
 });
+
+
+export const defaultSelectedColor = "green";
+export const defaultActiveColor = "pink";
+export const defaultNoteNumberColor = "white";
+export const defaultInvalidColor = "red";

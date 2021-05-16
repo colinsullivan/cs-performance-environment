@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState, FunctionComponent } from "react";
+
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import * as _ from "lodash";
+import _ from "lodash";
 
 import { turquoiseTransparentColor, getRGBAString } from "constants/colors";
 import TouchPanParameter from "components/TouchPanParameter";
@@ -8,6 +9,7 @@ import LabeledDropdown from "components/LabeledDropdown";
 import InputLabel from "@material-ui/core/InputLabel";
 
 import useLocalValue from "hooks/useLocalValue";
+import { MenuOption, MenuOptionValue } from './types';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -19,10 +21,10 @@ const useStyles = makeStyles((theme) =>
       opacity: 0.2
     },
     button: {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: "16px",
     },
     formControl: {
-      margin: theme.spacing.unit,
+      margin: "16px",
       display: "inline-block",
     },
     touchAreaContainer: {
@@ -38,6 +40,15 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+interface ParamTouchSelectorProps {
+  labelText?: string;
+  param?: string;
+  options: MenuOption[];
+  value: MenuOptionValue;
+  onChange: (newValue: MenuOptionValue) => void;
+  isDisabled?: boolean;
+}
+
 /**
  *  @class        ParamTouchSelector
  *
@@ -47,7 +58,7 @@ const useStyles = makeStyles((theme) =>
  *  propagated to the parent immediately but while using the TouchPanParameter,
  *  the value is only sent once the pan gesture stops.
  **/
-const ParamTouchSelector = function (props) {
+const ParamTouchSelector: FunctionComponent<ParamTouchSelectorProps> = (props) => {
   const { labelText = null, param, options, value, onChange, isDisabled=false } = props;
   const classes = useStyles(props);
 

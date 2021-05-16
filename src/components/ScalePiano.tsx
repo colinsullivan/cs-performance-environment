@@ -1,18 +1,30 @@
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Piano from "components/Piano/Piano";
+import { getScale } from "common/selectors";
+import {
+  getNotesForScaleOctave,
+  getMidiNoteNumbersFromNotes,
+} from "common/models/scale";
 
 const ScalePiano = () => {
+  const scale = useSelector(getScale);
   const handleNoteSelected = (note) => {
+    // TODO: manually set scale to diverge from key
     console.log(note);
   };
+
+  const octave = -1;
+  const firstOctaveNotes = getNotesForScaleOctave(scale, octave);
+  const activeNotes = getMidiNoteNumbersFromNotes(firstOctaveNotes);
+
   return (
     <Piano
-      startingOctave={0}
+      startingOctave={-1}
       numOctaves={1}
       handleNoteClicked={handleNoteSelected}
       selectedNotes={[]}
-      activeNotes={[]}
+      activeNotes={activeNotes}
       showSelectedNoteOrder={false}
     />
   );

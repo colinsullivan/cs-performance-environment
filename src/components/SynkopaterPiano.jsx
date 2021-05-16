@@ -4,6 +4,11 @@ import _ from "lodash";
 
 import Piano from "components/Piano/Piano";
 import { sequencer_update_param } from "common/actions";
+import { getScale } from "common/selectors";
+import {
+  getNotesForScaleOctaveRange,
+  getMidiNoteNumbersFromNotes,
+} from "common/models/scale";
 
 class SynkopaterPiano extends React.Component {
   handleNoteClicked(note) {
@@ -24,7 +29,22 @@ class SynkopaterPiano extends React.Component {
       sequencer: { notes, event },
       startingOctave = 3,
       numOctaves = 8,
+      scale,
     } = this.props;
+
+    const notesForScaleInVisibleRange = getNotesForScaleOctaveRange(
+      scale,
+      startingOctave,
+      numOctaves
+    );
+    const midiNotesForScaleInRange = getMidiNoteNumbersFromNotes(
+      notesForScaleInVisibleRange
+    );
+
+    const selectedNotesOutOfScale = notes.filter(
+      (n) => !midiNotesForScaleInRange.includes(n)
+    );
+
     return (
       <Piano
         handleNoteClicked={this.handleNoteClicked.bind(this)}
@@ -32,6 +52,7 @@ class SynkopaterPiano extends React.Component {
         numOctaves={numOctaves}
         selectedNotes={notes}
         activeNotes={event ? [event.midinote] : []}
+        invalidNotes={selectedNotesOutOfScale}
       />
     );
   }
@@ -40,6 +61,7 @@ class SynkopaterPiano extends React.Component {
 function mapStateToProps(state, ownProps) {
   return {
     sequencer: state.sequencers[ownProps.sequencerId],
+    scale: getScale(state),
   };
 }
 function mapDispatchToProps(dispatch, ownProps) {

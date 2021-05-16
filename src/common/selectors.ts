@@ -41,3 +41,5 @@ export const getScaleHoldMenuIsOpen = createSelector(
   [getHoldMenus],
   (holdMenus) => holdMenus[scaleMenuId].isOpen
 );
+
+export const getScale = (state) => state.scale;
