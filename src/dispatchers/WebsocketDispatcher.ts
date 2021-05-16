@@ -7,8 +7,9 @@
  *  @copyright  2018 Colin Sullivan
  *  @license    Licensed under the GPLv3 license.
  **/
-
+import { Store, Middleware } from 'redux';
 import { websocketReadyStateChanged } from "common/actions";
+import { WebsocketDispatcherProps } from "./types";
 
 /**
  *  @class        WebsocketDispatcher
@@ -17,7 +18,14 @@ import { websocketReadyStateChanged } from "common/actions";
  *  maintaining WebSocket connection.
  **/
 class WebsocketDispatcher {
-  constructor(props) {
+
+  props: WebsocketDispatcherProps;
+  url: string;
+  store: Store | null;
+  ws: WebSocket | null;
+  middleware: Middleware<unknown>
+
+  constructor(props: WebsocketDispatcherProps) {
     this.props = props;
     this.url = `ws://${window.location.hostname}:${props.port}/${props.clientId}`;
     this.store = null;
@@ -76,14 +84,27 @@ class WebsocketDispatcher {
     const action = JSON.parse(message.data);
     // ignore actions just dispatched from this client
     if (!action.clientId || action.clientId !== this.props.clientId) {
-      this.store.dispatch(action);
+      if (this.store) {
+        this.store.dispatch(action);
+      } else {
+        throw new Error("WebsocketDispatcher: Store not yet initialized.");
+      }
     }
   }
 
   update_readystate() {
-    this.store.dispatch(
-      websocketReadyStateChanged(this.ws.readyState, this.props.clientId)
-    );
+    if (!this.store) {
+      throw new Error("WebsocketDispatcher: Store not yet initialized.");
+    }
+    if (!this.ws) {
+      throw new Error("WebsocketDispatcher: WS not yet initialized.");
+    }
+    if (this.store) {
+      this.store.dispatch(
+        websocketReadyStateChanged(this.ws.readyState, this.props.clientId)
+      );
+    } else {
+    }
   }
 
   handle_opened() {
