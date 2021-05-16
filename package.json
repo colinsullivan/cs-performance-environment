@@ -39,6 +39,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "4.0.3",
     "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "sass": "^1.32.13",
@@ -80,7 +81,9 @@
       "react/prop-types": 0,
       "@typescript-eslint/explicit-module-boundary-types": 0,
       "no-use-before-define": "off",
-      "@typescript-eslint/no-use-before-define": ["error"]
+      "@typescript-eslint/no-use-before-define": [
+        "error"
+      ]
     }
   },
   "devDependencies": {
@@ -89,7 +92,11 @@
     "tsconfig-paths": "^3.9.0"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

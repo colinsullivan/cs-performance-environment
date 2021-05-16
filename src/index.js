@@ -10,8 +10,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from "redux"
-import thunk from "redux-thunk";
 import { Provider } from 'react-redux';
 import axios from 'axios';
 import uuid from 'uuid/v4';
@@ -20,10 +18,8 @@ import './index.scss';
 
 import WebsocketDispatcher from 'dispatchers/WebsocketDispatcher';
 import App from 'components/App';
-import rootReducer from 'common/reducers';
 import { PORT } from 'common/constants';
-
-const middleware = [thunk];
+import { configureStore } from './store';
 
 const clientId = uuid();
 
@@ -31,18 +27,13 @@ const wsDispatcher = new WebsocketDispatcher({
   port: PORT,
   clientId
 });
-middleware.push(wsDispatcher.middleware);
 
 // get initial state then render
 axios.get(
   `${window.location.protocol}//${window.location.hostname}:${PORT}/getState`
 ).then(function (resp) {
   const initialState = resp.data;
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(...middleware)
-  );
+  const store = configureStore(initialState, wsDispatcher);
   wsDispatcher.setStore(store);
   ReactDOM.render((
       <Provider store={store}>
