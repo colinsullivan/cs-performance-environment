@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import SCRedux from "supercollider-redux";
 
 import { Sequencers } from "common/reducers/types";
 import {
@@ -43,3 +44,11 @@ export const getScaleHoldMenuIsOpen = createSelector(
 );
 
 export const getScale = (state) => state.scale;
+
+export const getSerializedState = (state) => ({
+  [SCRedux.DEFAULT_MOUNT_POINT]: state[SCRedux.DEFAULT_MOUNT_POINT],
+  sequencers: state.sequencers,
+  components: state.components,
+  octatrack: state.octatrack,
+  scale: state.scale
+});
