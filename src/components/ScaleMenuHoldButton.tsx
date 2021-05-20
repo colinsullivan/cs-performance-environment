@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
-import TouchSquareButton from "components/TouchSquareButton";
+import TouchSquareButton from "components/TouchSquareButton/TouchSquareButton";
 import { scaleMenuId } from "common/models/menus";
 import { openHoldMenu, closeHoldMenu } from "common/actions";
 

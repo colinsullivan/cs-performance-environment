@@ -1,9 +1,7 @@
-import React, { FunctionComponent, TouchEventHandler } from "react";
+import { FunctionComponent, TouchEventHandler } from "react";
 import CSS from "csstype";
-import {
-  turquoiseTransparentColor,
-  getRGBAString,
-} from "constants/colors";
+import { turquoiseTransparentColor, getRGBAString } from "constants/colors";
+import SquareButtonLabel from "./SquareButtonLabel";
 
 const size = 48;
 const touchSquareButtonStyle = {
@@ -17,6 +15,7 @@ interface TouchSquareButtonProps {
   onTouchEnd?: TouchEventHandler<HTMLDivElement>;
   onTouchMove?: TouchEventHandler<HTMLDivElement>;
   styles?: CSS.Properties;
+  labelText?: string | null;
 }
 
 const TouchSquareButton: FunctionComponent<TouchSquareButtonProps> = ({
@@ -25,20 +24,20 @@ const TouchSquareButton: FunctionComponent<TouchSquareButtonProps> = ({
   onTouchMove,
   children,
   styles = {},
-}) => {
-  return (
-    <div
-      onTouchEnd={onTouchEnd}
-      onTouchMove={onTouchMove}
-      onTouchStart={onTouchStart}
-      style={{
-        ...touchSquareButtonStyle,
-        ...styles,
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+  labelText = null
+}) => (
+  <div
+    onTouchEnd={onTouchEnd}
+    onTouchMove={onTouchMove}
+    onTouchStart={onTouchStart}
+    style={{
+      ...touchSquareButtonStyle,
+      ...styles,
+    }}
+  >
+    {labelText ? <SquareButtonLabel text={labelText} /> : null}
+    {children}
+  </div>
+);
 
 export default TouchSquareButton;

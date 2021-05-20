@@ -6,7 +6,6 @@ import _ from "lodash";
 import { turquoiseTransparentColor, getRGBAString } from "constants/colors";
 import TouchPanParameter from "components/TouchPanParameter";
 import LabeledDropdown from "components/LabeledDropdown";
-import InputLabel from "@material-ui/core/InputLabel";
 
 import useLocalValue from "hooks/useLocalValue";
 import { MenuOption, MenuOptionValue } from './types';
@@ -32,11 +31,6 @@ const useStyles = makeStyles((theme) =>
       display: "inline-block",
       position: "relative"
     },
-    labelContainer: {
-      fontSize: "12px",
-      position: "absolute",
-      pointerEvents: "none"
-    }
   })
 );
 
@@ -117,14 +111,12 @@ const ParamTouchSelector: FunctionComponent<ParamTouchSelectorProps> = (props) =
   return (
     <div className={isDisabled ? classes.containerDisabled : classes.container}>
       <div className={classes.touchAreaContainer}>
-        <div className={classes.labelContainer}>
-          <InputLabel>{labelText ? labelText : param}</InputLabel>
-        </div>
         <TouchPanParameter
           panStart={handleMenuOpened}
           tickUp={handleTouchParamUp}
           tickDown={handleTouchParamDown}
           panEnd={handlePanEnd}
+          labelText={labelText ? labelText : param}
         />
       </div>
       <LabeledDropdown

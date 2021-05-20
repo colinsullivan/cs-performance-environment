@@ -8,7 +8,7 @@ import {
   DIRECTION_UP,
   DIRECTION_DOWN,
 } from "constants/ui";
-import TouchSquareButton from "components/TouchSquareButton";
+import TouchSquareButton from "components/TouchSquareButton/TouchSquareButton";
 
 const styles = {
   panningStyle: {
@@ -93,6 +93,7 @@ class TouchPanParameter extends React.Component {
   };
 
   render() {
+    const { labelText=null } = this.props;
     return (
       <TouchSquareButton
         onTouchEnd={this.handleTouchEnd}
@@ -103,6 +104,7 @@ class TouchPanParameter extends React.Component {
             ? styles.panningStyle
             : styles.notPanningStyle),
         }}
+        labelText={labelText}
       >
         {this.props.children}
       </TouchSquareButton>
