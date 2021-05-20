@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import iNoBounce from "inobounce";
 
-import ScaleMenuHoldButton from "components/ScaleMenuHoldButton";
+import ScaleMenuHoldButton from "./ScaleMenuHoldButton";
+import ModulationMenuHoldButton from "./ModulationMenuHoldButton";
 import { getScaleHoldMenuIsOpen } from "common/selectors";
 import SynkopaterView from "components/views/SynkopaterView";
 import ScaleView from "components/views/ScaleView";
@@ -23,7 +24,10 @@ const TabletView = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-2">
-            <ScaleMenuHoldButton />
+            <div>
+              <ScaleMenuHoldButton />
+              <ModulationMenuHoldButton />
+            </div>
           </div>
           {view}
         </div>
