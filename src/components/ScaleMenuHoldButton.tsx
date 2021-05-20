@@ -18,7 +18,7 @@ const ScaleMenuHoldButton = () => {
 
   return (
     <div>
-      <TouchSquareButton onTouchStart={openMenu} onTouchEnd={closeMenu} />
+      <TouchSquareButton onTouchStart={openMenu} onTouchEnd={closeMenu} labelText="key" />
     </div>
   );
 };
