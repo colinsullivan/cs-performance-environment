@@ -23,7 +23,6 @@ interface MultisliderProps {
   smoothing: number;
   step: number;
   values: number[];
-  numberOfSliders: number;
   candycane: number;
   onChange: (newState: { index: number; value: number }) => void;
   onReady?: (slider) => void;
@@ -37,7 +36,6 @@ const Multislider = ({
   smoothing,
   step,
   values,
-  numberOfSliders,
   candycane,
   onChange = NO_OP,
   onReady = NO_OP,
@@ -46,7 +44,7 @@ const Multislider = ({
   const elementId = useRef(`nexus-ui-multislider-${id}`);
   useEffect(() => {
     multislider.current = new Nexus.Multislider(elementId.current, {
-      numberOfSliders,
+      numberOfSliders: values.length,
       size,
       max,
       min,
@@ -122,7 +120,7 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
     (newLength) => {
       dispatch(sequencer_update_mod_length(sequencerId, modParam, newLength));
     },
-    [sequencerId, modParam]
+    [dispatch, sequencerId, modParam]
   );
 
   const sequencer = sequencers[sequencerId];
@@ -149,7 +147,6 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
           step={1}
           candycane={2}
           values={values}
-          numberOfSliders={values.length}
           smoothing={0}
           onChange={handleSlidersChanged}
         />
