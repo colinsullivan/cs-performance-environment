@@ -2,7 +2,7 @@ import { SCReduxSequencer, Quant } from "supercollider-redux-sequencers";
 
 export type SequencerGenericParamValue = number;
 export const MidiCCRange = [0, 127];
-
+export type MidiModSequence = number[];
 
 export enum ARP_MODES {
   UP = "UP",
@@ -62,9 +62,9 @@ export interface SynkopaterPresetProps {
   legato: number;
   offset: number;
   notes: number[];
-  velocities: number[];
-  cc1: number[];
-  cc74: number[];
+  velocities: MidiModSequence;
+  cc1: MidiModSequence;
+  cc74: MidiModSequence;
   arpMode: ARP_MODES;
   euclideanNumHits: number;
   euclideanTotalNumHits: number;
@@ -93,6 +93,12 @@ export type SequencerGenericParamKeys =
   | "euclidBounceSecondBeatsMult"
   | "secondEuclieanNumHits"
   | "secondEuclieanTotalNumHits";
+
+// Defines which keys represent modulation sequences
+export type SequencerModSeqParamKey = 
+  | "velocities"
+  | "cc1"
+  | "cc74";
 
 
 export interface SynkopaterSequencer

@@ -9,6 +9,11 @@ import {
   PerformanceComponentPreset,
 } from "./types";
 
+export const sequencerIds = [
+  "synkopaterA",
+  "synkopaterB"
+];
+
 export const create_synkopater_sequencer = (
   id: string,
   scClassName: string,

@@ -1,7 +1,10 @@
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 import { Multislider } from "react-nexusui";
+
 import { midToneColor, getRGBAString } from "constants/colors";
 import { MidiCCRange } from "common/models";
+import { sequencersSelector } from "common/selectors";
 
 const SliderContainer = styled.div`
   div svg {
@@ -11,7 +14,15 @@ const SliderContainer = styled.div`
 `
 
 const ModulationView = () => {
-  const values = [64, 32];
+  const sequencers = useSelector(sequencersSelector);
+  const sequencerId = "synkopaterA";
+
+  const sequencer = sequencers[sequencerId];
+  if (!sequencer) {
+    return null;
+  }
+  const values = sequencer.velocities;
+
   const multiSliderProps = {
     numberOfSliders: values.length,
     min: MidiCCRange[0],

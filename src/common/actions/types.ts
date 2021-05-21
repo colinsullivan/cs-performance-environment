@@ -14,6 +14,8 @@ import {
   PerformanceComponentPreset,
   SequencerGenericParamKeys,
   SequencerGenericParamValue,
+  SequencerModSeqParamKey,
+  MidiModSequence
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
@@ -188,6 +190,25 @@ export interface SequencerToggleEuclidBounce {
   };
 }
 
+export const SEQUENCER_UPDATE_MOD_SEQUENCE = "SEQUENCER_UPDATE_MOD_SEQUENCE";
+export interface SequencerUpdateModSequence {
+  type: typeof SEQUENCER_UPDATE_MOD_SEQUENCE;
+  payload: {
+    sequencerId: string;
+    modParam: SequencerModSeqParamKey;
+    newValue: MidiModSequence
+  }
+}
+export const SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH = "SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH";
+export interface SequencerUpdateModSequenceLength {
+  type: typeof SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH;
+  payload: {
+    sequencerId: string;
+    modParam: SequencerModSeqParamKey;
+    newLength: number
+  }
+}
+
 export const STATE_REHYDRATED = "STATE_REHYDRATED";
 export interface StateRehydrated {
   type: typeof STATE_REHYDRATED;
@@ -218,7 +239,9 @@ export type AllActionTypes =
   | SequencerToggleEuclidBounce
   | ReturnType<typeof openHoldMenu>
   | ReturnType<typeof closeHoldMenu>
-  | ReturnType<typeof setKey>;
+  | ReturnType<typeof setKey>
+  | SequencerUpdateModSequence
+  | SequencerUpdateModSequenceLength;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,
