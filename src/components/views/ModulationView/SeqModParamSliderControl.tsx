@@ -86,12 +86,18 @@ const Multislider = ({
     if (step === undefined) return;
     multislider.current.step = step;
   }, [step]);
+
+  // This required updating from react-nexusui
+  // TODO: Contribute this back to the Multislider interface there.
   useEffect(() => {
     if (multislider.current === null) return;
     if (values === undefined || !Array.isArray(values)) return;
     if (!Array.isArray(size)) {
       return;
     }
+
+    // When updating the size and number of sliders simultaneously,
+    // the operations need to be synchronized in this order.
     multislider.current.setAllSliders(values);
     multislider.current.resize(...size);
   }, [values, size]);
