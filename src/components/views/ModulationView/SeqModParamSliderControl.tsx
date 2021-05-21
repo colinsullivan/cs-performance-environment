@@ -42,7 +42,7 @@ const Multislider = ({
 }: MultisliderProps) => {
   const multislider = useRef<null | Nexus.Multislider>(null);
   const elementId = useRef(`nexus-ui-multislider-${id}`);
-  useEffect(() => {
+  const initializeMultislider = useCallback(() => {
     multislider.current = new Nexus.Multislider(elementId.current, {
       numberOfSliders: values.length,
       size,
@@ -63,7 +63,20 @@ const Multislider = ({
     return () => {
       multislider.current.destroy();
     };
-  }, []);
+  }, [
+    candycane,
+    max,
+    min,
+    multislider,
+    onChange,
+    onReady,
+    size,
+    smoothing,
+    step,
+    values,
+  ]);
+
+  useEffect(initializeMultislider, []); // eslint-disable-line
 
   useEffect(() => {
     if (multislider.current === null) return;
@@ -89,6 +102,7 @@ const Multislider = ({
 
   // This required updating from react-nexusui
   // TODO: Contribute this back to the Multislider interface there.
+  const prevSize = useRef<number[]>(size);
   useEffect(() => {
     if (multislider.current === null) return;
     if (values === undefined || !Array.isArray(values)) return;
@@ -98,8 +112,14 @@ const Multislider = ({
 
     // When updating the size and number of sliders simultaneously,
     // the operations need to be synchronized in this order.
+    console.log("set all sliders");
     multislider.current.setAllSliders(values);
-    multislider.current.resize(...size);
+    // Only calls resize if the size has actually changed.
+    if (prevSize.current[0] !== size[0] || prevSize.current[1] !== size[1]) {
+      prevSize.current = size;
+      console.log("resize");
+      multislider.current.resize(...size);
+    }
   }, [values, size]);
   return <div id={elementId.current} />;
 };
@@ -138,6 +158,7 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
 
   return (
     <div>
+      <p>{modParam}</p>
       <ParamTouchSelector
         labelText="length"
         options={modSequenceLengthOptions}

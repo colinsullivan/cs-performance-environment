@@ -16,8 +16,7 @@ const ModulationControlsContainer = styled.div`
   }
 `;
 
-//const modParams = ["velocities", "cc1", "cc74"];
-const modParams = ["cc1"];
+const modParams = ["velocities", "cc1", "cc74"];
 
 const SeqModulationControls = ({
   sequencerId,
