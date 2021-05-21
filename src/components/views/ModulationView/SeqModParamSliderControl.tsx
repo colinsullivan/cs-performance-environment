@@ -94,8 +94,8 @@ const Multislider = ({
     if (!Array.isArray(size)) {
       return;
     }
-    multislider.current.resize(...size);
     multislider.current.setAllSliders(values);
+    multislider.current.resize(...size);
   }, [values, size]);
   return <div id={elementId.current} />;
 };
