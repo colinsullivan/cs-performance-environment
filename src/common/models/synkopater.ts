@@ -50,6 +50,8 @@ export const create_synkopater_sequencer = (
   stopQuant: [4, 0],
   propQuant: [4, 0],
   midiChan,
+  midiOutDeviceName,
+  midiOutPortName,
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
   savedQuants: {},
