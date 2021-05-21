@@ -13,9 +13,9 @@ const SliderContainer = styled.div`
   }
 `
 
-const ModulationView = () => {
+
+const SynkModSeqSliders = ({ sequencerId, modParam }) => {
   const sequencers = useSelector(sequencersSelector);
-  const sequencerId = "synkopaterA";
 
   const sequencer = sequencers[sequencerId];
   if (!sequencer) {
@@ -43,4 +43,4 @@ const ModulationView = () => {
   );
 };
 
-export default ModulationView;
+export default SynkModSeqSliders;
