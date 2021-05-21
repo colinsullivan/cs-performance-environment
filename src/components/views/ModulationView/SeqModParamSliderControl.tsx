@@ -27,7 +27,7 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
   if (!sequencer) {
     return null;
   }
-  const values = sequencer.velocities;
+  const values = sequencer[modParam];
 
   const multiSliderProps = {
     numberOfSliders: values.length,
