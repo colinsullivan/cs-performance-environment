@@ -29,22 +29,18 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
   }
   const values = sequencer[modParam];
 
-  const multiSliderProps = {
-    numberOfSliders: values.length,
-    min: MidiCCRange[0],
-    max: MidiCCRange[1],
-    step: 1,
-    candycane: 2,
-    values,
-    smoothing: 0,
-  };
-
   return (
     <SliderContainer>
       <Multislider
+        numberOfSliders={values.length}
         size={[200, 100]}
         mode="bar"
-        {...multiSliderProps}
+        min={MidiCCRange[0]}
+        max={MidiCCRange[1]}
+        step={1}
+        candycane={2}
+        values={values}
+        smoothing={0}
         onChange={handleSlidersChanged}
       />
     </SliderContainer>
