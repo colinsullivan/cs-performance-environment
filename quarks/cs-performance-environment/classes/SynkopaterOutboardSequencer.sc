@@ -76,7 +76,8 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
 
     // TODO: This should not crash if requested MIDI port does not exist
 
-    pat = Pbind(
+    var notesPat, cc1Pat, cc74Pat;
+    notesPat = Pbind(
       \type, \midi,
       \midiout, this.midiOut,
       \chan, this.getStateSlice().midiChan,
@@ -94,6 +95,32 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
         this.getStateSlice().legato;
       })
     );
+
+    cc1Pat = Pbind(
+      \type, \midi,
+      \midiout, this.midiOut,
+      \chan, this.getStateSlice().midiChan,
+      \dur, durProxy,
+      \midicmd, \control,
+      \ctlNum, 1,
+      \control, cc1Proxy
+    );
+
+    cc74Pat = Pbind(
+      \type, \midi,
+      \midiout, this.midiOut,
+      \chan, this.getStateSlice().midiChan,
+      \dur, durProxy,
+      \midicmd, \control,
+      \ctlNum, 74,
+      \control, cc74Proxy
+    );
+
+    pat = Ppar([
+      notesPat,
+      cc1Pat,
+      cc74Pat
+    ]);
 
     ^pat.asStream();
   }
@@ -175,6 +202,9 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
     // MIDI note velocities are calculated via amp, so put them back into [0, 1]
     // so they can be converted back to [0, 127] by the pattern...
     ampProxy.source = Pseq(velocities / 127.0, inf);
+
+    cc1Proxy.source = Pseq(cc1, inf);
+    cc74Proxy.source = Pseq(cc74, inf);
 
   }
 
