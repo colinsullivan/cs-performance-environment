@@ -8,7 +8,11 @@ import {
   SynkopaterPerformanceComponent,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
-import { scaleMenuId } from "common/models/menus";
+import {
+  scaleMenuId,
+  HoldMenusState,
+  HoldMenuState,
+} from "common/models/menus";
 
 export const sequencersSelector = (state): Sequencers => state.sequencers;
 
@@ -36,11 +40,25 @@ export const getIsConnected = createSelector(
   (websocketReadyState) => websocketReadyState === READY_STATES.OPEN
 );
 
-const getHoldMenus = (state) => state.holdMenus;
+// TODO: remove this type definition when state tree is typed
+const getHoldMenus = (state): HoldMenusState => state.holdMenus;
 
 export const getScaleHoldMenuIsOpen = createSelector(
   [getHoldMenus],
   (holdMenus) => holdMenus[scaleMenuId].isOpen
+);
+
+export const getOpenHoldMenu = createSelector(
+  [getHoldMenus],
+  (holdMenus): HoldMenuState | null => {
+    for (const holdMenuId of Object.keys(holdMenus)) {
+      const holdMenu = holdMenus[holdMenuId];
+      if (holdMenu.isOpen) {
+        return holdMenu;
+      }
+    }
+    return null;
+  }
 );
 
 export const getScale = (state) => state.scale;
@@ -50,5 +68,5 @@ export const getSerializedState = (state) => ({
   sequencers: state.sequencers,
   components: state.components,
   octatrack: state.octatrack,
-  scale: state.scale
+  scale: state.scale,
 });

@@ -9,13 +9,11 @@
  **/
 
 import {
-  SequencerGenericParamKeys,
-  SequencerGenericParamValue,
-} from "common/models/synkopater";
-import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
   PerformanceComponentPreset,
+  SequencerGenericParamKeys,
+  SequencerGenericParamValue,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";

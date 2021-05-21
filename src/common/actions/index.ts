@@ -42,17 +42,15 @@ import {
   SEQUENCER_TOGGLE_EUCLID_BOUNCE,
 } from "./types";
 
-import {
-  SequencerGenericParamKeys,
-  SequencerGenericParamValue,
-  synkopaterToPresetProps,
-} from "common/models/synkopater";
+import { synkopaterToPresetProps } from "common/models/synkopater";
 import { create_synkopater_preset } from "common/models/performance_component";
 import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
   PerformanceComponentPreset,
   SynkopaterPerformanceComponent,
+  SequencerGenericParamKeys,
+  SequencerGenericParamValue,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
@@ -60,7 +58,7 @@ import {
   getPerformanceComponents,
   getSequencer,
   getOctatrack,
-  getSerializedState
+  getSerializedState,
 } from "common/selectors";
 import { getPatternValue } from "common/models/octatrack";
 

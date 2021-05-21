@@ -9,24 +9,6 @@ import {
   PerformanceComponentPreset,
 } from "./types";
 
-// Defines which keys can be set directly with the SEQUENCER_STATE_UPDATED action
-export type SequencerGenericParamKeys =
-  | "dur"
-  | "stretch"
-  | "legato"
-  | "offset"
-  | "euclideanTotalNumHits"
-  | "euclideanNumHits"
-  | "euclidBounceFirstBeats"
-  | "euclidBounceFirstBeatsMult"
-  | "euclidBounceSecondBeats"
-  | "euclidBounceSecondBeatsMult"
-  | "secondEuclieanNumHits"
-  | "secondEuclieanTotalNumHits";
-
-export type SequencerGenericParamValue = number;
-
-
 export const create_synkopater_sequencer = (
   id: string,
   scClassName: string,
@@ -40,6 +22,9 @@ export const create_synkopater_sequencer = (
   legato: 1.0,
   offset: 0,
   notes: [96, 84, 86, 87],
+  velocities: [64, 64, 64, 64],
+  cc1: [64, 64, 64, 64],
+  cc74: [64, 64, 64, 64],
   //arp_vels: [1.0, 1.0, 1.0, 1.0],
   arpMode: ARP_MODES.UP,
   //arp_updown_current_direction: 1,
@@ -80,12 +65,11 @@ export const create_synk_delay_component = (
   },
   controllerMappings: {
     //launchControlController: {
-      //pg0_kn_sndA_1: "delayFeedbackControl",
+    //pg0_kn_sndA_1: "delayFeedbackControl",
     //},
     pc12Controller: {
-      B10_kn_C_10: "delayFeedbackControl"
-    }
-
+      B10_kn_C_10: "delayFeedbackControl",
+    },
   },
   presets: [],
   currentPresetId: null,
@@ -128,6 +112,9 @@ export const synkopaterToPresetProps = (
     "legato",
     "offset",
     "notes",
+    "velocities",
+    "cc1",
+    "cc74",
     "arpMode",
     "euclideanNumHits",
     "euclideanTotalNumHits",
