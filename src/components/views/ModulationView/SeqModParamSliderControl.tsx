@@ -6,7 +6,12 @@ import * as Nexus from "nexusui";
 import { midToneColor, getRGBAString } from "constants/colors";
 import { MidiCCRange } from "common/models";
 import { sequencersSelector } from "common/selectors";
-import { sequencer_update_mod } from "common/actions";
+import {
+  sequencer_update_mod,
+  sequencer_update_mod_length,
+} from "common/actions";
+import { modSequenceLengthOptions } from "constants/options";
+import ParamTouchSelector from "components/ParamTouchSelector";
 
 const NO_OP = () => {}; // eslint-disable-line
 
@@ -64,13 +69,6 @@ const Multislider = ({
 
   useEffect(() => {
     if (multislider.current === null) return;
-    if (!Array.isArray(size)) {
-      return;
-    }
-    multislider.current.resize(...size);
-  }, [size]);
-  useEffect(() => {
-    if (multislider.current === null) return;
     if (min === undefined) return;
     multislider.current.min = min;
   }, [min]);
@@ -93,8 +91,12 @@ const Multislider = ({
   useEffect(() => {
     if (multislider.current === null) return;
     if (values === undefined || !Array.isArray(values)) return;
+    if (!Array.isArray(size)) {
+      return;
+    }
+    multislider.current.resize(...size);
     multislider.current.setAllSliders(values);
-  }, [values]);
+  }, [values, size]);
   return <div id={elementId.current} />;
 };
 
@@ -116,6 +118,13 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
     [dispatch, sequencerId, modParam]
   );
 
+  const handleLengthChanged = useCallback(
+    (newLength) => {
+      dispatch(sequencer_update_mod_length(sequencerId, modParam, newLength));
+    },
+    [sequencerId, modParam]
+  );
+
   const sequencer = sequencers[sequencerId];
   if (!sequencer) {
     return null;
@@ -124,20 +133,28 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
   const values = sequencer[modParam];
 
   return (
-    <SliderContainer>
-      <Multislider
-        id={`${sequencerId}-${modParam}`}
-        size={[sliderWidth * values.length, 100]}
-        min={MidiCCRange[0]}
-        max={MidiCCRange[1]}
-        step={1}
-        candycane={2}
-        values={values}
-        numberOfSliders={values.length}
-        smoothing={0}
-        onChange={handleSlidersChanged}
+    <div>
+      <ParamTouchSelector
+        labelText="length"
+        options={modSequenceLengthOptions}
+        value={values.length}
+        onChange={handleLengthChanged}
       />
-    </SliderContainer>
+      <SliderContainer>
+        <Multislider
+          id={`${sequencerId}-${modParam}`}
+          size={[sliderWidth * values.length, 100]}
+          min={MidiCCRange[0]}
+          max={MidiCCRange[1]}
+          step={1}
+          candycane={2}
+          values={values}
+          numberOfSliders={values.length}
+          smoothing={0}
+          onChange={handleSlidersChanged}
+        />
+      </SliderContainer>
+    </div>
   );
 };
 
