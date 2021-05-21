@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Multislider } from "react-nexusui";
 
 import { midToneColor, getRGBAString } from "constants/colors";
 import { MidiCCRange } from "common/models";
 import { sequencersSelector } from "common/selectors";
+import { sequencer_update_mod } from "common/actions";
 
 const SliderContainer = styled.div`
   div svg {
@@ -15,7 +17,11 @@ const SliderContainer = styled.div`
 
 
 const SynkModSeqSliders = ({ sequencerId, modParam }) => {
+  const dispatch = useDispatch();
   const sequencers = useSelector(sequencersSelector);
+  const handleSlidersChanged = useCallback((newValues) => {
+    dispatch(sequencer_update_mod(sequencerId, modParam, newValues));
+  }, [dispatch, sequencerId, modParam]);
 
   const sequencer = sequencers[sequencerId];
   if (!sequencer) {
@@ -32,12 +38,14 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
     values,
     smoothing: 0,
   };
+
   return (
     <SliderContainer>
       <Multislider
         size={[200, 100]}
         mode="bar"
         {...multiSliderProps}
+        onChange={handleSlidersChanged}
       />
     </SliderContainer>
   );
