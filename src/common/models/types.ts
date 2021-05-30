@@ -26,8 +26,11 @@ export type PerformanceComponent = {
   scClassName: string;
   controllerMappings: ControllerMapping;
 };
+
+export type OctatrackPatternValue = number | null;
+
 export type OctatrackState = {
-  currentPatternProgramChangeValue: number | null;
+  currentPatternProgramChangeValue: OctatrackPatternValue;
 };
 
 interface PerformanceComponentPresetProps {
