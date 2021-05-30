@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import SCRedux from "supercollider-redux";
 
 import { Sequencers } from "common/reducers/types";
 import {
@@ -7,6 +8,7 @@ import {
   SynkopaterPerformanceComponent,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
+import { scaleMenuId } from "common/models/menus";
 
 export const sequencersSelector = (state): Sequencers => state.sequencers;
 
@@ -33,3 +35,20 @@ export const getIsConnected = createSelector(
   [getWebsocketReadyState],
   (websocketReadyState) => websocketReadyState === READY_STATES.OPEN
 );
+
+const getHoldMenus = (state) => state.holdMenus;
+
+export const getScaleHoldMenuIsOpen = createSelector(
+  [getHoldMenus],
+  (holdMenus) => holdMenus[scaleMenuId].isOpen
+);
+
+export const getScale = (state) => state.scale;
+
+export const getSerializedState = (state) => ({
+  [SCRedux.DEFAULT_MOUNT_POINT]: state[SCRedux.DEFAULT_MOUNT_POINT],
+  sequencers: state.sequencers,
+  components: state.components,
+  octatrack: state.octatrack,
+  scale: state.scale
+});

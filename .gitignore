@@ -23,3 +23,4 @@ yarn-error.log*
 *react-app-env.d.ts
 *.log
 yarn.lock
+.env

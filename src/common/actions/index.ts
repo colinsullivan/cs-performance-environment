@@ -8,7 +8,6 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import SCRedux from "supercollider-redux";
 import {
   SYNKOPATER_ARP_ADD_NOTE,
   SynkopaterAddNote,
@@ -40,7 +39,7 @@ import {
   StateRehydrated,
   SYNKOPATER_DELETE_PRESET,
   SequencerToggleEuclidBounce,
-  SEQUENCER_TOGGLE_EUCLID_BOUNCE
+  SEQUENCER_TOGGLE_EUCLID_BOUNCE,
 } from "./types";
 
 import {
@@ -61,8 +60,13 @@ import {
   getPerformanceComponents,
   getSequencer,
   getOctatrack,
+  getSerializedState
 } from "common/selectors";
 import { getPatternValue } from "common/models/octatrack";
+
+export * from "./menus";
+export * from "./types";
+export * from "./scale";
 
 export function synkopater_arp_add_note(
   sequencerId: string,
@@ -273,9 +277,9 @@ export const synkopater_load_preset = (
 };
 
 export const synkopater_delete_preset = (
-  componentId : string,
-  preset : PerformanceComponentPreset
-) : Thunk => {
+  componentId: string,
+  preset: PerformanceComponentPreset
+): Thunk => {
   return (dispatch, getState) => {
     const component = getPerformanceComponents(getState())[
       componentId
@@ -286,11 +290,11 @@ export const synkopater_delete_preset = (
       payload: {
         componentId,
         sequencerId,
-        presetId: preset.id
-      }
-    })
-  }
-}
+        presetId: preset.id,
+      },
+    });
+  };
+};
 
 export const synkopater_toggle_follow_octatrack = (
   componentId: string
@@ -301,31 +305,26 @@ export const synkopater_toggle_follow_octatrack = (
   },
 });
 
-export const sequencer_toggle_euclid_bounce = (sequencerId: string): SequencerToggleEuclidBounce => ({
+export const sequencer_toggle_euclid_bounce = (
+  sequencerId: string
+): SequencerToggleEuclidBounce => ({
   type: SEQUENCER_TOGGLE_EUCLID_BOUNCE,
   payload: {
-    sequencerId
-  }
+    sequencerId,
+  },
 });
 
-const state_rehydrated = (serializedState : string) : StateRehydrated => ({
+const state_rehydrated = (serializedState: string): StateRehydrated => ({
   type: STATE_REHYDRATED,
   payload: {
-    serializedState
-  }
+    serializedState,
+  },
 });
 
-export const rehydrate_state = () : Thunk => {
+export const rehydrate_state = (): Thunk => {
   return (dispatch, getState) => {
-    const state = getState();
-    const serializedState = JSON.stringify({
-      [SCRedux.DEFAULT_MOUNT_POINT]: state[SCRedux.DEFAULT_MOUNT_POINT],
-      sequencers: state.sequencers,
-      components: state.components,
-      octatrack: state.octatrack
-    });
+    const serializedState = JSON.stringify(getSerializedState(getState()));
 
     dispatch(state_rehydrated(serializedState));
-    
   };
-}
+};

@@ -54,3 +54,11 @@ export const theme = createMuiTheme({
     useNextVariants: true,
   },
 });
+
+
+export const defaultSelectedColor = "green";
+export const defaultActiveColor = "pink";
+export const defaultNoteNumberColor = "white";
+export const defaultInvalidColor = "red";
+export const whiteKeyOutOfScaleColor = "rgba(255, 140, 140, 0.4)";
+export const blackKeyOutOfScaleColor = "rgba(200, 0, 0, 0.4)";

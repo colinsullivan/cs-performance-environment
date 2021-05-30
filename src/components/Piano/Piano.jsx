@@ -11,9 +11,10 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import React, { useCallback } from "react";
-import styled from "styled-components";
+import { useCallback } from "react";
 import { parse as parseNote } from "note-parser";
+import WhitePianoKey from "./WhitePianoKey";
+import BlackPianoKey from "./BlackPianoKey";
 
 const diatonicNoteNames = [
   "c",
@@ -30,170 +31,33 @@ const diatonicNoteNames = [
   "b",
 ];
 
-var keyClickHandler = function (e, note, handler) {
-  var keyHeight = e.target.clientHeight;
-  var clickHeight = e.nativeEvent.offsetY;
-
-  var clickHeightPercent = 1.0 - clickHeight / keyHeight;
-
-  handler(note, clickHeightPercent);
-};
-
-const defaultSelectedColor = "green";
-const defaultActiveColor = "pink";
-const defaultNoteNumberColor = "white";
-
-const NoteNumberContainer = styled.div`
-  position: absolute;
-  color: ${defaultNoteNumberColor};
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-`;
-
-const NoteNumber = ({ selectedNotes, note }) => {
-  const number = selectedNotes.indexOf(note.midi) + 1;
-  return <NoteNumberContainer>{number}</NoteNumberContainer>;
-};
-
-class WhitePianoKey extends React.Component {
-  render() {
-    const {
-      selectedNotes,
-      note,
-      handleKeyClicked,
-      selected,
-      active,
-      keyBaseWidth,
-      selectedColor = defaultSelectedColor,
-      activeColor = defaultActiveColor,
-      showSelectedNoteOrder,
-    } = this.props;
-
-    const containerStyle = {
-      borderRight: "1px solid black",
-      borderBottom: "none",
-      position: "relative",
-      display: "inline-block",
-      backgroundColor: "white",
-      width: `${keyBaseWidth}em`,
-      height: "100%",
-      pointerEvents: "all",
-    };
-
-    if (selected || active) {
-      if (selected) {
-        containerStyle.backgroundColor = selectedColor || "green";
-      }
-
-      if (active) {
-        containerStyle.backgroundColor = activeColor || "pink";
-      }
-    }
-
-    return (
-      <div
-        style={containerStyle}
-        onClick={(e) => keyClickHandler(e, note, handleKeyClicked)}
-      >
-        {selected && showSelectedNoteOrder ? (
-          <NoteNumber selectedNotes={selectedNotes} note={note} />
-        ) : null}
-      </div>
-    );
-  }
-}
-
-class BlackPianoKey extends React.Component {
-  render() {
-    const {
-      selectedNotes,
-      note,
-      index,
-      handleKeyClicked,
-      selected,
-      active,
-      blackKeyBaseWidthRatio,
-      keyBaseWidth,
-      selectedColor = defaultSelectedColor,
-      activeColor = defaultActiveColor,
-      showSelectedNoteOrder,
-    } = this.props;
-    var containerStyle = {
-      backgroundColor: "black",
-      width: `${blackKeyBaseWidthRatio * keyBaseWidth}em`,
-      height: "50%",
-      //float: 'left',
-      display: "inline-block",
-      pointerEvents: "all",
-      position: "relative",
-    };
-
-    if (selected || active) {
-      containerStyle.border = "1px solid black";
-
-      if (selected) {
-        containerStyle.backgroundColor = selectedColor || "green";
-      }
-
-      if (active) {
-        containerStyle.backgroundColor = activeColor || "pink";
-      }
-    }
-
-    if (index > 0) {
-      if ([1, 6].includes(note.chroma)) {
-        containerStyle.marginLeft = `${
-          blackKeyBaseWidthRatio * keyBaseWidth + keyBaseWidth
-        }em`;
-      } else {
-        containerStyle.marginLeft = `${
-          blackKeyBaseWidthRatio * keyBaseWidth
-        }em`;
-      }
-    } else {
-      containerStyle.marginLeft = `${
-        0.5 * blackKeyBaseWidthRatio * keyBaseWidth
-      }em`;
-    }
-
-    return (
-      <div
-        style={containerStyle}
-        onClick={(e) => keyClickHandler(e, note, handleKeyClicked)}
-      >
-        {selected && showSelectedNoteOrder ? (
-          <NoteNumber selectedNotes={selectedNotes} note={note} />
-        ) : null}
-      </div>
-    );
-  }
-}
-
 const isWhiteNote = (note) => note.alt === 0;
 const isBlackNote = (note) => note.alt !== 0;
 
 const Piano = ({
   startingOctave = 3,
   numOctaves = 3,
-  keyBaseWidth = 1.5,
+  keyBaseWidth = 2.5,
   handleNoteClicked,
-  selectedNotes,
-  activeNotes,
+  selectedNotes = [],
+  activeNotes = [],
   showSelectedNoteOrder = true,
+  invalidNotes = [],
+  notesForScaleInVisibleRange = [],
+  showNotesInScale = false,
 }) => {
-  const handleKeyClicked = useCallback((note, eventHeight) => {
-    if (handleNoteClicked) {
-      handleNoteClicked(note, eventHeight);
-    }
-  }, [handleNoteClicked]);
+  const handleKeyClicked = useCallback(
+    (note, eventHeight) => {
+      if (handleNoteClicked) {
+        handleNoteClicked(note, eventHeight);
+      }
+    },
+    [handleNoteClicked]
+  );
   var notes = [];
 
   // TODO: This could probably be done once for all notes
+  // TODO: Use tonaljs for this stuff instead and remove parseNote dependency
   let oi;
   for (oi = startingOctave; oi < startingOctave + numOctaves; oi++) {
     let ni;
@@ -212,6 +76,7 @@ const Piano = ({
     width: "100%",
     overflowX: "scroll",
     overflowY: "hidden",
+    backgroundColor: "white"
   };
   const keyLayerStyle = {
     height: "100%",
@@ -226,45 +91,44 @@ const Piano = ({
     keyLayerStyle
   );
 
+  const notesWithDisplayInfo = notes.map((n) => ({
+    ...n,
+    selected: selectedNotes.includes(n.midi),
+    active: activeNotes.includes(n.midi),
+    invalid: invalidNotes.includes(n.midi),
+    outOfScale: !notesForScaleInVisibleRange.includes(n.midi),
+    showNotesInScale
+  }));
+
   return (
     <div style={containerStyle}>
       <div style={keyLayerStyle}>
-        {notes.filter(isWhiteNote).map((note, i) => {
-          const noteIsSelected = selectedNotes.includes(note.midi);
-          const noteIsActive = activeNotes.includes(note.midi);
-          return (
-            <WhitePianoKey
-              selectedNotes={selectedNotes}
-              note={note}
-              key={i}
-              handleKeyClicked={handleKeyClicked}
-              selected={noteIsSelected}
-              active={noteIsActive}
-              keyBaseWidth={keyBaseWidth}
-              showSelectedNoteOrder={showSelectedNoteOrder}
-            />
-          );
-        })}
+        {notesWithDisplayInfo.filter(isWhiteNote).map((note, i) => (
+          <WhitePianoKey
+            selectedNotes={selectedNotes}
+            note={note}
+            key={i}
+            handleKeyClicked={handleKeyClicked}
+            keyBaseWidth={keyBaseWidth}
+            showSelectedNoteOrder={showSelectedNoteOrder}
+            {...note}
+          />
+        ))}
       </div>
       <div style={blackKeyLayerStyle}>
-        {notes.filter(isBlackNote).map((note, i) => {
-          const noteIsSelected = selectedNotes.includes(note.midi);
-          const noteIsActive = activeNotes.includes(note.midi);
-          return (
-            <BlackPianoKey
-              selectedNotes={selectedNotes}
-              note={note}
-              key={i}
-              index={i}
-              handleKeyClicked={handleKeyClicked}
-              selected={noteIsSelected}
-              active={noteIsActive}
-              keyBaseWidth={keyBaseWidth}
-              blackKeyBaseWidthRatio={blackKeyBaseWidthRatio}
-              showSelectedNoteOrder={showSelectedNoteOrder}
-            />
-          );
-        })}
+        {notesWithDisplayInfo.filter(isBlackNote).map((note, i) => (
+          <BlackPianoKey
+            selectedNotes={selectedNotes}
+            note={note}
+            key={i}
+            index={i}
+            handleKeyClicked={handleKeyClicked}
+            keyBaseWidth={keyBaseWidth}
+            blackKeyBaseWidthRatio={blackKeyBaseWidthRatio}
+            showSelectedNoteOrder={showSelectedNoteOrder}
+            {...note}
+          />
+        ))}
       </div>
     </div>
   );
