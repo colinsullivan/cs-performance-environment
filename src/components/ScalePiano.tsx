@@ -23,8 +23,7 @@ const ScalePiano = () => {
       startingOctave={-1}
       numOctaves={1}
       handleNoteClicked={handleNoteSelected}
-      selectedNotes={[]}
-      activeNotes={activeNotes}
+      selectedNotes={activeNotes}
       showSelectedNoteOrder={false}
     />
   );

@@ -4,6 +4,7 @@ import {
   defaultSelectedColor,
   defaultActiveColor,
   defaultInvalidColor,
+  whiteKeyOutOfScaleColor
 } from "constants/colors";
 import { keyClickHandler } from "./util";
 import NoteNumber from "./NoteNumber";
@@ -15,11 +16,13 @@ const WhitePianoKey = ({
   selected,
   active,
   invalid,
+  outOfScale,
   keyBaseWidth,
   selectedColor = defaultSelectedColor,
   activeColor = defaultActiveColor,
   invalidColor = defaultInvalidColor,
   showSelectedNoteOrder,
+  showNotesInScale
 }) => {
   const containerStyle: CSSProperties = {
     borderRight: "1px solid black",
@@ -32,6 +35,10 @@ const WhitePianoKey = ({
     pointerEvents: "all",
   };
 
+  if (outOfScale && showNotesInScale) {
+    containerStyle.backgroundColor = whiteKeyOutOfScaleColor;
+  }
+
   if (selected) {
     containerStyle.backgroundColor = selectedColor;
   }
@@ -43,6 +50,7 @@ const WhitePianoKey = ({
   if (invalid) {
     containerStyle.backgroundColor = invalidColor;
   }
+
 
   return (
     <div
