@@ -1,7 +1,10 @@
-import React from 'react';
+import React from "react";
 import { useSelector } from "react-redux";
 
 import { getOctatrack } from "common/selectors";
+import OTPatternNumDisplay from "components/OTPatternNumDisplay";
+
+import "./OctatrackStatus.scss";
 
 const OctatrackStatus = () => {
   const octatrack = useSelector(getOctatrack);
@@ -9,7 +12,14 @@ const OctatrackStatus = () => {
   const { currentPatternProgramChangeValue } = octatrack;
 
   return (
-    <div></div>
+    <div className="octatrack-status">
+      <label>OT: </label>
+      <OTPatternNumDisplay
+        octatrackPatternValue={currentPatternProgramChangeValue}
+        active={currentPatternProgramChangeValue !== null}
+        size="small"
+      />
+    </div>
   );
 };
 

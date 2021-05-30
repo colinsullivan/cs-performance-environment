@@ -2,22 +2,11 @@ div.connection-status {
   display: flex;
   justify-content: flex-end;
 
-  p.connection-text {
-    transition: opacity;
-    transition-timing-function: ease-in;
-    transition-duration: 200ms;
-    opacity: 1;
-
-    &.connected {
-      transition-duration: 5s;
-      transition-timing-function: ease-out;
-      opacity: 0;
-    }
-  }
-
   $dotSize: 12px;
-  span.connection-status-dot {
+  div.connection-status-dot {
     display: inline-block;
+    position: relative;
+    top: 1px;
     margin: 0 4px;
     height: $dotSize;
     width: $dotSize;

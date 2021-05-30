@@ -8,16 +8,12 @@ const ConnectionStatus = () => {
   const isConnected = useSelector(getIsConnected);
   return (
     <div className="connection-status">
-      <div>
-        <p className={`connection-text ${isConnected ? "connected" : ""}`}>
-          {isConnected ? "Connected!" : "Connecting..."}
-        </p>
-      </div>
-      <div>
-        <span
-          className={`connection-status-dot ${isConnected ? "connected" : ""}`}
-        ></span>
-      </div>
+      <label>
+        Server:
+      </label>
+      <div
+        className={`connection-status-dot ${isConnected ? "connected" : ""}`}
+      ></div>
     </div>
   );
 };
