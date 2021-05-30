@@ -1,6 +1,6 @@
 import { NumberMenuOption } from "./api";
 
-export const durOptions : Array<NumberMenuOption> = [
+export const durOptions: Array<NumberMenuOption> = [
   { value: 8, label: "8" },
   { value: 4, label: "4" },
   { value: 2, label: "2" },
@@ -15,4 +15,9 @@ export const durOptions : Array<NumberMenuOption> = [
   { value: 1 / 32, label: "1/32" },
 ];
 
-
+export const modSequenceLengthOptions: Array<NumberMenuOption> = new Array(16)
+  .fill(0)
+  .map((_, i) => ({
+    value: i + 1,
+    label: (i + 1).toString(),
+  }));

@@ -11,6 +11,9 @@
 SynkopaterOutboardSequencer : SCReduxSequencer {
   var pat,
     notes = nil,
+    velocities = nil,
+    cc1 = nil,
+    cc74 = nil,
     euclideanNumHits = nil,
     euclideanTotalNumHits = nil,
     euclidBounceEnabled = nil,
@@ -25,13 +28,23 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
     dur = nil,
     offset = nil,
     midinoteProxy,
-    durProxy;
+    durProxy,
+    ampProxy,
+    cc1Proxy,
+    cc74Proxy,
+    proxies;
 
   initPatch {
     midinoteProxy = PatternProxy.new;
     durProxy = PatternProxy.new;
-    midinoteProxy.clock = clock;
-    durProxy.clock = clock;
+    ampProxy = PatternProxy.new;
+    cc1Proxy = PatternProxy.new;
+    cc74Proxy = PatternProxy.new;
+    proxies = [midinoteProxy, durProxy, ampProxy, cc1Proxy, cc74Proxy];
+    proxies.do({
+      arg theProxy;
+      theProxy.clock = clock;
+    });
 
     durProxy.condition = {
       arg value, count;
@@ -53,21 +66,28 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
   }
 
   updatePropQuant {
-    midinoteProxy.quant = currentState.propQuant;
-    durProxy.quant = currentState.propQuant;
+    proxies.do({
+      arg theProxy;
+      theProxy.quant = currentState.propQuant;
+    });
   }
 
   initStream {
 
     // TODO: This should not crash if requested MIDI port does not exist
 
-    pat = Pbind(
+    var notesPat, cc1Pat, cc74Pat;
+    notesPat = Pbind(
       \type, \midi,
       \midiout, this.midiOut,
       \chan, this.getStateSlice().midiChan,
       \midinote, midinoteProxy,
       // rhythmic values
       \dur, durProxy,
+
+      // midi note velocity
+      \amp, ampProxy,
+
       \stretch, Pfunc({
         this.getStateSlice().stretch;
       }),
@@ -75,6 +95,32 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
         this.getStateSlice().legato;
       })
     );
+
+    cc1Pat = Pbind(
+      \type, \midi,
+      \midiout, this.midiOut,
+      \chan, this.getStateSlice().midiChan,
+      \dur, durProxy,
+      \midicmd, \control,
+      \ctlNum, 1,
+      \control, cc1Proxy
+    );
+
+    cc74Pat = Pbind(
+      \type, \midi,
+      \midiout, this.midiOut,
+      \chan, this.getStateSlice().midiChan,
+      \dur, durProxy,
+      \midicmd, \control,
+      \ctlNum, 74,
+      \control, cc74Proxy
+    );
+
+    pat = Ppar([
+      notesPat,
+      cc1Pat,
+      cc74Pat
+    ]);
 
     ^pat.asStream();
   }
@@ -152,6 +198,14 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
 
     midinoteProxy.source = Pseq(noteSeq, inf);
     durProxy.source = Pseq(durSeq, inf);
+
+    // MIDI note velocities are calculated via amp, so put them back into [0, 1]
+    // so they can be converted back to [0, 127] by the pattern...
+    ampProxy.source = Pseq(velocities / 127.0, inf);
+
+    cc1Proxy.source = Pseq(cc1, inf);
+    cc74Proxy.source = Pseq(cc74, inf);
+
   }
 
   handleStateChange {
@@ -185,6 +239,12 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       offset != currentState.offset
     ).or(
       notes != currentState.notes
+    ).or(
+      velocities != currentState.velocities
+    ).or(
+      cc1 != currentState.cc1
+    ).or(
+      cc74 != currentState.cc74
     ), {
       euclideanNumHits = currentState.euclideanNumHits;
       euclideanTotalNumHits = currentState.euclideanTotalNumHits;
@@ -201,6 +261,9 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
       dur = currentState.dur;
       offset = currentState.offset;
       notes = currentState.notes;
+      velocities = currentState.velocities;
+      cc1 = currentState.cc1;
+      cc74 = currentState.cc74;
 
       this.updatePropQuant();
       this.generatePatterns();

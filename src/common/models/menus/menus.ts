@@ -20,10 +20,9 @@ export const setMenuIsOpen = (
 });
 
 export const scaleMenuId = "scaleMenu";
-
-const scaleMenu = createHoldMenu(scaleMenuId);
+export const modulationMenuId = "modulationMenu";
 
 const createInitialHoldMenus = (): HoldMenusState =>
-  keyBy([scaleMenu], "menuId");
+  keyBy([scaleMenuId, modulationMenuId].map(createHoldMenu), "menuId");
 
 export default createInitialHoldMenus;

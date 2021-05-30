@@ -14,12 +14,16 @@ import {
   SYNKOPATER_LOAD_PRESET,
   OCTATRACK_PATTERN_UPDATED,
   SYNKOPATER_TOGGLE_FOLLOW_OCTATRACK,
-  SEQUENCER_TOGGLE_EUCLID_BOUNCE
+  SEQUENCER_TOGGLE_EUCLID_BOUNCE,
+  SEQUENCER_UPDATE_MOD_SEQUENCE,
+  SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH,
 } from "common/actions/types";
 import {
   TRANSPOSE_DIRECTION,
   SynkopaterPerformanceComponent,
   SynkopaterSequencer,
+  MidiCCRange,
+  MidiModSequence
 } from "common/models/types";
 import { Sequencers } from "./types";
 import {
@@ -280,6 +284,52 @@ const sequencers = (
           ...sequencer,
           euclidBounceEnabled: !sequencer.euclidBounceEnabled
         },
+      };
+    }
+
+    case SEQUENCER_UPDATE_MOD_SEQUENCE: {
+      const { sequencerId, modParam, newValue } = action.payload;
+      const sequencer = state[sequencerId];
+
+      if (newValue.length !== sequencer[modParam].length) {
+        throw new Error("Mod sequence lengths must be the same when updating.");
+      }
+      for (const seqValue of newValue) {
+        if (seqValue < MidiCCRange[0] || seqValue > MidiCCRange[1]) {
+          throw new Error("MIDI CC value out of range");
+        }
+      }
+
+      const newSequencer = {
+        ...sequencer,
+        [modParam]: newValue
+      };
+      
+      return {
+        ...state,
+        [sequencerId]: newSequencer
+      };
+    }
+
+    case SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH: {
+      const { sequencerId, modParam, newLength } = action.payload;
+      const newSequencer = {...state[sequencerId]};
+
+      const currentSequence = newSequencer[modParam];
+      const currentLength = currentSequence.length;
+      let newSequence: MidiModSequence = [];
+      if (newLength > currentLength) {
+        const lastEl = currentSequence[currentLength - 1];
+        const newEls = (new Array(newLength - currentLength)).fill(lastEl);
+        newSequence = newSequence.concat(currentSequence, newEls);
+      } else {
+        newSequence = currentSequence.slice(0, newLength);
+      }
+      newSequencer[modParam] = newSequence;
+
+      return {
+        ...state,
+        [sequencerId]: newSequencer
       };
     }
 

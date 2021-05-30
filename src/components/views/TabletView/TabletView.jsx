@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import iNoBounce from "inobounce";
 
-import ScaleMenuHoldButton from "components/ScaleMenuHoldButton";
+import ScaleMenuHoldButton from "./ScaleMenuHoldButton";
+import ModulationMenuHoldButton from "./ModulationMenuHoldButton";
 import SynkopaterView from "components/views/SynkopaterView";
 import HoldMenuView from "components/views/HoldMenuView";
 
@@ -12,7 +13,10 @@ const TabletView = () => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-2">
-          <ScaleMenuHoldButton />
+          <div>
+            <ScaleMenuHoldButton />
+            <ModulationMenuHoldButton />
+          </div>
         </div>
         <div className="col">
           <SynkopaterView />

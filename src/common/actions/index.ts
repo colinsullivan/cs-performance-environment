@@ -40,19 +40,23 @@ import {
   SYNKOPATER_DELETE_PRESET,
   SequencerToggleEuclidBounce,
   SEQUENCER_TOGGLE_EUCLID_BOUNCE,
+  SequencerUpdateModSequence,
+  SEQUENCER_UPDATE_MOD_SEQUENCE,
+  SequencerUpdateModSequenceLength,
+  SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH
 } from "./types";
 
-import {
-  SequencerGenericParamKeys,
-  SequencerGenericParamValue,
-  synkopaterToPresetProps,
-} from "common/models/synkopater";
+import { synkopaterToPresetProps } from "common/models/synkopater";
 import { create_synkopater_preset } from "common/models/performance_component";
 import {
   ARP_MODES,
   TRANSPOSE_DIRECTION,
   PerformanceComponentPreset,
   SynkopaterPerformanceComponent,
+  SequencerGenericParamKeys,
+  SequencerGenericParamValue,
+  SequencerModSeqParamKey,
+  MidiModSequence
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
@@ -60,7 +64,7 @@ import {
   getPerformanceComponents,
   getSequencer,
   getOctatrack,
-  getSerializedState
+  getSerializedState,
 } from "common/selectors";
 import { getPatternValue } from "common/models/octatrack";
 
@@ -312,6 +316,32 @@ export const sequencer_toggle_euclid_bounce = (
   payload: {
     sequencerId,
   },
+});
+
+export const sequencer_update_mod = (
+  sequencerId: string,
+  modParam: SequencerModSeqParamKey,
+  newValue: MidiModSequence
+): SequencerUpdateModSequence => ({
+  type: SEQUENCER_UPDATE_MOD_SEQUENCE,
+  payload: {
+    sequencerId,
+    modParam,
+    newValue
+  }
+});
+
+export const sequencer_update_mod_length = (
+  sequencerId: string,
+  modParam: SequencerModSeqParamKey,
+  newLength: number
+): SequencerUpdateModSequenceLength => ({
+  type: SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH,
+  payload: {
+    sequencerId,
+    modParam,
+    newLength
+  }
 });
 
 const state_rehydrated = (serializedState: string): StateRehydrated => ({

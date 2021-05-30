@@ -2,9 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { getScaleHoldMenuIsOpen } from "common/selectors";
+import { getOpenHoldMenu } from "common/selectors";
 import ScaleView from "components/views/ScaleView";
 import { offDarkColor, getRGBAString } from "constants/colors";
+import { scaleMenuId, modulationMenuId } from "common/models/menus";
+import ModulationView from "components/views/ModulationView";
 
 const HoldMenuViewContainer = styled.div`
   position: absolute;
@@ -16,13 +18,26 @@ const HoldMenuViewContainer = styled.div`
 `;
 
 const HoldMenuView = () => {
-  const holdMenuIsOpen = useSelector(getScaleHoldMenuIsOpen);
+  const openHoldMenu = useSelector(getOpenHoldMenu);
   let overlayView: React.ReactNode = null;
 
-  if (holdMenuIsOpen) {
-    overlayView = <ScaleView />;
+  if (openHoldMenu) {
+    switch (openHoldMenu.menuId) {
+      case scaleMenuId:
+        overlayView = <ScaleView />;
+        break;
+
+      case modulationMenuId:
+        overlayView = <ModulationView />;
+        break;
+
+      default:
+        throw new Error(
+          `Cannot render menu with menuId ${openHoldMenu.menuId}`
+        );
+    }
   }
-  return holdMenuIsOpen ? <HoldMenuViewContainer>{overlayView}</HoldMenuViewContainer> : null;
+  return openHoldMenu ? <HoldMenuViewContainer>{overlayView}</HoldMenuViewContainer> : null;
 };
 
 export default HoldMenuView;

@@ -12,7 +12,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 
-import TabletView from "./TabletView";
+import TabletView from "./views/TabletView/TabletView";
 import LaptopView from "./LaptopView";
 import { theme } from "constants/colors";
 import ConnectionStatusBar from "components/ConnectionStatusBar";
