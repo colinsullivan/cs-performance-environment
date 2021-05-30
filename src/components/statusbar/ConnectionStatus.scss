@@ -1,9 +1,4 @@
-div.connection-status-bar {
-
-  padding: 4px 0px;
-  height: 10px;
-  font-size: 10px;
-
+div.connection-status {
   display: flex;
   justify-content: flex-end;
 
@@ -11,12 +6,12 @@ div.connection-status-bar {
     transition: opacity;
     transition-timing-function: ease-in;
     transition-duration: 200ms;
-    opacity: 1.0;
+    opacity: 1;
 
     &.connected {
       transition-duration: 5s;
       transition-timing-function: ease-out;
-      opacity: 0.0;
+      opacity: 0;
     }
   }
 
@@ -28,13 +23,10 @@ div.connection-status-bar {
     width: $dotSize;
     border-radius: 0.5 * $dotSize;
 
-
     background-color: red;
 
     &.connected {
       background-color: green;
     }
-
   }
-  
 }
