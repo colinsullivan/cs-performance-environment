@@ -37,6 +37,7 @@ class SynkopaterPiano extends React.Component {
       startingOctave,
       numOctaves
     );
+
     const midiNotesForScaleInRange = getMidiNoteNumbersFromNotes(
       notesForScaleInVisibleRange
     );
@@ -53,6 +54,8 @@ class SynkopaterPiano extends React.Component {
         selectedNotes={notes}
         activeNotes={event ? [event.midinote] : []}
         invalidNotes={selectedNotesOutOfScale}
+        notesForScaleInVisibleRange={midiNotesForScaleInRange}
+        showNotesInScale={true}
       />
     );
   }

@@ -13,8 +13,8 @@
 
 import { useCallback } from "react";
 import { parse as parseNote } from "note-parser";
-import WhitePianoKey from './WhitePianoKey';
-import BlackPianoKey from './BlackPianoKey';
+import WhitePianoKey from "./WhitePianoKey";
+import BlackPianoKey from "./BlackPianoKey";
 
 const diatonicNoteNames = [
   "c",
@@ -31,7 +31,6 @@ const diatonicNoteNames = [
   "b",
 ];
 
-
 const isWhiteNote = (note) => note.alt === 0;
 const isBlackNote = (note) => note.alt !== 0;
 
@@ -43,13 +42,18 @@ const Piano = ({
   selectedNotes = [],
   activeNotes = [],
   showSelectedNoteOrder = true,
-  invalidNotes = []
+  invalidNotes = [],
+  notesForScaleInVisibleRange = [],
+  showNotesInScale = false,
 }) => {
-  const handleKeyClicked = useCallback((note, eventHeight) => {
-    if (handleNoteClicked) {
-      handleNoteClicked(note, eventHeight);
-    }
-  }, [handleNoteClicked]);
+  const handleKeyClicked = useCallback(
+    (note, eventHeight) => {
+      if (handleNoteClicked) {
+        handleNoteClicked(note, eventHeight);
+      }
+    },
+    [handleNoteClicked]
+  );
   var notes = [];
 
   // TODO: This could probably be done once for all notes
@@ -72,6 +76,7 @@ const Piano = ({
     width: "100%",
     overflowX: "scroll",
     overflowY: "hidden",
+    backgroundColor: "white"
   };
   const keyLayerStyle = {
     height: "100%",
@@ -86,50 +91,44 @@ const Piano = ({
     keyLayerStyle
   );
 
-  const notesWithDisplayInfo = notes.map(n => ({
-      ...n,
-      isSelected: selectedNotes.includes(n.midi),
-      isActive: activeNotes.includes(n.midi),
-      isInvalid: invalidNotes.includes(n.midi)
+  const notesWithDisplayInfo = notes.map((n) => ({
+    ...n,
+    selected: selectedNotes.includes(n.midi),
+    active: activeNotes.includes(n.midi),
+    invalid: invalidNotes.includes(n.midi),
+    outOfScale: !notesForScaleInVisibleRange.includes(n.midi),
+    showNotesInScale
   }));
 
   return (
     <div style={containerStyle}>
       <div style={keyLayerStyle}>
-        {notesWithDisplayInfo.filter(isWhiteNote).map((note, i) => {
-          return (
-            <WhitePianoKey
-              selectedNotes={selectedNotes}
-              note={note}
-              key={i}
-              handleKeyClicked={handleKeyClicked}
-              selected={note.isSelected}
-              active={note.isActive}
-              invalid={note.isInvalid}
-              keyBaseWidth={keyBaseWidth}
-              showSelectedNoteOrder={showSelectedNoteOrder}
-            />
-          );
-        })}
+        {notesWithDisplayInfo.filter(isWhiteNote).map((note, i) => (
+          <WhitePianoKey
+            selectedNotes={selectedNotes}
+            note={note}
+            key={i}
+            handleKeyClicked={handleKeyClicked}
+            keyBaseWidth={keyBaseWidth}
+            showSelectedNoteOrder={showSelectedNoteOrder}
+            {...note}
+          />
+        ))}
       </div>
       <div style={blackKeyLayerStyle}>
-        {notesWithDisplayInfo.filter(isBlackNote).map((note, i) => {
-          return (
-            <BlackPianoKey
-              selectedNotes={selectedNotes}
-              note={note}
-              key={i}
-              index={i}
-              handleKeyClicked={handleKeyClicked}
-              selected={note.isSelected}
-              active={note.isActive}
-              invalid={note.isInvalid}
-              keyBaseWidth={keyBaseWidth}
-              blackKeyBaseWidthRatio={blackKeyBaseWidthRatio}
-              showSelectedNoteOrder={showSelectedNoteOrder}
-            />
-          );
-        })}
+        {notesWithDisplayInfo.filter(isBlackNote).map((note, i) => (
+          <BlackPianoKey
+            selectedNotes={selectedNotes}
+            note={note}
+            key={i}
+            index={i}
+            handleKeyClicked={handleKeyClicked}
+            keyBaseWidth={keyBaseWidth}
+            blackKeyBaseWidthRatio={blackKeyBaseWidthRatio}
+            showSelectedNoteOrder={showSelectedNoteOrder}
+            {...note}
+          />
+        ))}
       </div>
     </div>
   );

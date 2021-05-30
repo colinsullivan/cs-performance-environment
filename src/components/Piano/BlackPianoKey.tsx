@@ -4,6 +4,7 @@ import {
   defaultSelectedColor,
   defaultActiveColor,
   defaultInvalidColor,
+  blackKeyOutOfScaleColor
 } from "constants/colors";
 import NoteNumber from "./NoteNumber";
 import { keyClickHandler } from "./util";
@@ -16,23 +17,27 @@ const BlackPianoKey = ({
   selected,
   active,
   invalid,
+  outOfScale,
   blackKeyBaseWidthRatio,
   keyBaseWidth,
   selectedColor = defaultSelectedColor,
   activeColor = defaultActiveColor,
   invalidColor = defaultInvalidColor,
   showSelectedNoteOrder,
+  showNotesInScale
 }) => {
   const containerStyle: CSSProperties = {
     backgroundColor: "black",
     width: `${blackKeyBaseWidthRatio * keyBaseWidth}em`,
     height: "50%",
-    //float: 'left',
     display: "inline-block",
     pointerEvents: "all",
     position: "relative",
   };
 
+  if (outOfScale && showNotesInScale) {
+    containerStyle.backgroundColor = blackKeyOutOfScaleColor;
+  }
   if (selected || active) {
     containerStyle.border = "1px solid black";
   }
