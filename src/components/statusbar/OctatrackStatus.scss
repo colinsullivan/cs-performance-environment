@@ -1,0 +1,11 @@
+div.octatrack-status {
+  display: inline-block;
+
+  margin-right: 6px;
+
+  display: flex;
+  flex-direction: row;
+  label {
+    margin-right: 6px;
+  }
+}

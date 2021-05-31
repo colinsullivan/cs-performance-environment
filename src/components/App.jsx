@@ -15,7 +15,7 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import TabletView from "./views/TabletView/TabletView";
 import LaptopView from "./LaptopView";
 import { theme } from "constants/colors";
-import ConnectionStatusBar from "components/ConnectionStatusBar";
+import StatusBar from "components/statusbar/StatusBar";
 
 const styles = {
   containerStyle: {
@@ -30,7 +30,7 @@ const App = () => {
   <BrowserRouter>
     <MuiThemeProvider theme={theme}>
       <div className="container-fluid" style={styles.containerStyle}>
-        <ConnectionStatusBar />
+        <StatusBar />
         <Switch>
           <Route exact path="/laptop" component={LaptopView} />
           <Route path="" component={TabletView} />

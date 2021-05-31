@@ -1,0 +1,11 @@
+div.status-bar {
+  padding: 4px 0px;
+  height: 10px;
+  font-size: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  width: 100%;
+}

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -8,10 +8,9 @@ import {
 } from "common/actions";
 import { getPerformanceComponents } from "common/selectors";
 
-import "./PresetIndicator.scss";
+import OTPatternNumDisplay from "components/OTPatternNumDisplay";
 
-const formatOctatrackPatternValue = ({ octatrackPatternValue }) =>
-  octatrackPatternValue + 1;
+import "./PresetIndicator.scss";
 
 const PresetIndicator = ({ preset, componentId }) => {
   const dispatch = useDispatch();
@@ -42,30 +41,21 @@ const PresetIndicator = ({ preset, componentId }) => {
         dispatch(synkopater_delete_preset(componentId, preset));
       }
     }, 1000);
-  }, [
-    clearTimer,
-    isSelected,
-    dispatch,
-    componentId,
-    preset,
-  ]);
+  }, [clearTimer, isSelected, dispatch, componentId, preset]);
 
   const handleTouchEnd = clearTimer;
 
   return (
     <div
-      className={`preset-indicator ${isSelected ? "selected" : ""}`}
+      className={`preset-indicator`}
       onClick={isSelected ? updatePreset : loadPreset}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div>
-        <div>
-          {preset.octatrackPatternValue !== null
-            ? formatOctatrackPatternValue(preset)
-            : "N"}
-        </div>
-      </div>
+      <OTPatternNumDisplay
+        octatrackPatternValue={preset.octatrackPatternValue}
+        active={isSelected}
+      />
     </div>
   );
 };
