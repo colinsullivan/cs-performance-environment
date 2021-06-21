@@ -7,6 +7,7 @@
  *  @copyright  2017 Colin Sullivan
  *  @license    Licensed under the GPLv3 license.
  **/
+require('module-alias/register');
 
 import path from "path";
 import fs from "fs";
@@ -18,13 +19,13 @@ import express from "express";
 import expressWebsocket from "express-ws";
 import SCRedux from "supercollider-redux";
 
-import WebsocketServerDispatcher from "./WebsocketServerDispatcher";
+import WebsocketServerDispatcher from "main/WebsocketServerDispatcher";
 
-import rootReducer, { create_default_state } from "../common/reducers";
-import { PORT } from "../common/constants";
-import { rehydrate_state } from "../common/actions";
+import rootReducer, { create_default_state } from "common/reducers";
+import { PORT } from "common/constants";
+import { rehydrate_state } from "common/actions";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
@@ -54,7 +55,7 @@ var store = createStore(
 
 console.log("Initializing SCRedux");
 const scReduxController = new SCRedux.SCReduxController(store, {
-  interpretOnLangBoot: fs.readFileSync(path.join(__dirname, "sclang_init.sc")),
+  interpretOnLangBoot: fs.readFileSync(path.join(__dirname, "main", "sclang_init.sc")),
 });
 
 const quit = () => {

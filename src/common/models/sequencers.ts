@@ -1,5 +1,5 @@
 import { create_synkopater_sequencer } from "common/models";
-import { getEnvOrError } from "utils";
+import { getEnvOrError } from "common/util";
 
 export const createInitialSequencersState = () => {
   const midiOutDeviceName = getEnvOrError("REACT_APP_SYNKOPATER_MIDI_OUT_DEVICE_NAME");
