@@ -2,6 +2,7 @@ import scale from "./scale";
 import { handleSetKey } from "common/actions/scale";
 
 import { configureStore } from "common/util/mockStore";
+import { createDefaultScaleState } from "common/models/scale";
 
 describe("scale reducer", () => {
   let store;
@@ -16,7 +17,7 @@ describe("scale reducer", () => {
 
     const dispatchedAction = store.getActions()[0];
 
-    const state = scale(undefined, "INIT");
+    const state = createDefaultScaleState();
 
     const newState = scale(state, dispatchedAction);
 
@@ -36,7 +37,7 @@ describe("scale reducer", () => {
 
     const dispatchedAction = store.getActions()[0];
 
-    const state = scale(undefined, "INIT");
+    const state = createDefaultScaleState();
 
     const newState = scale(state, dispatchedAction);
 

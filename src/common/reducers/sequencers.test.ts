@@ -15,7 +15,7 @@ describe("sequencers", () => {
   let state: Sequencers;
   beforeEach(() => {
     state = {
-      [sequencerId]: create_synkopater_sequencer(sequencerId, "One", 0),
+      [sequencerId]: create_synkopater_sequencer(sequencerId, "One", 0, "MidiOutDevice", "MidiOutDevicePort"),
     };
   });
   test("handles transposing up", () => {
