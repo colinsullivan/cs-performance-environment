@@ -1,6 +1,6 @@
 import React from "react";
 
-import { OctatrackPatternValue } from "common/models/api";
+import { OctatrackPatternValue } from "common/models";
 import "./OTPatternNumDisplay.scss";
 
 export type OTPatternNumDisplaySize = "small" | "large";
@@ -10,8 +10,9 @@ interface OTPatternNumDisplayProps {
   size: OTPatternNumDisplaySize;
 }
 
-const formatOctatrackPatternValue = ({ octatrackPatternValue }) =>
-  octatrackPatternValue + 1;
+const formatOctatrackPatternValue = (
+  octatrackPatternValue: OctatrackPatternValue
+) => (octatrackPatternValue ? octatrackPatternValue + 1 : null);
 
 const OTPatternNumDisplay: React.FunctionComponent<OTPatternNumDisplayProps> =
   ({ octatrackPatternValue, active, size = "large" }) => (
