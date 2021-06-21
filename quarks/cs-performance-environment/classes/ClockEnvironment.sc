@@ -39,6 +39,7 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     ArgNameLabel("Clock Latency", layout, labelWidth);
     clockLatencyEditor = NumberBox.new(layout, textRect);
     clockLatencyEditor.value = clock.latency;
+    clockLatencyEditor.decimals = 4;
     layout.startRow();
 
 

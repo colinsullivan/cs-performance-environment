@@ -43,7 +43,8 @@ CSPerformanceEnvironment {
     //clockController.clock.latency = Server.default.latency + 0.2;
     //clockController.clock.latency = Server.default.latency + 0.0426;
     //clockController.clock.latency = Server.default.latency;
-    clockController.clock.latency = 0.46;
+    //clockController.clock.latency = 0.46;
+    clockController.clock.latency = 0.0213 + Server.default.latency;
     //clockController.clock.latency = 0;
 
     sequencerFactory = SCReduxSequencerFactory.getInstance();
