@@ -6,5 +6,5 @@
   version:    0.1,
 //  helpdoc:    "",
   url:      "https://github.com/colinsullivan/cs-performance-environment",
-  dependencies:  #["supercollider-redux-sequencers@tags/0.8.0"]
+  dependencies:  #["supercollider-redux-sequencers@tags/0.9.1"]
 )
