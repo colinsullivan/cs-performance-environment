@@ -28,6 +28,7 @@
     "express-ws": "^4.0.0",
     "inobounce": "^0.1.6",
     "lodash": "^4.17.20",
+    "module-alias": "^2.2.2",
     "nexusui": "^2.1.6",
     "node-osc": "^3.0.1",
     "note-parser": "^2.0.1",
@@ -59,8 +60,9 @@
     "build_react": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start_server_dev": "NODE_ENV=development TS_NODE_PROJECT=electron.tsconfig.json node -r ts-node/register -r tsconfig-paths/register ./src/main/index.js",
-    "build_server": "mkdir -p build/main && cp src/main/sclang_init.sc build/main/ && tsc --build electron.tsconfig.json",
+    "start_server_dev": "NODE_ENV=development TS_NODE_PROJECT=server.tsconfig.json node -r ts-node/register -r tsconfig-paths/register ./src/main.ts",
+    "start_server": "node ./build/main.js",
+    "build_server": "mkdir -p build/main && cp src/main/sclang_init.sc build/main/ && tsc --build server.tsconfig.json",
     "build": "npm run build_react && npm run build_server",
     "build_docs": "plantuml -progress -tpng ./docs/*.puml"
   },
@@ -106,5 +108,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "_moduleAliases": {
+    "common": "./build/common",
+    "main": "./build/main"
   }
 }
