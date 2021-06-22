@@ -8,7 +8,7 @@ ShakerTextureInstrument : PatchEnvironmentComponent {
     arg callback;
 
     bufManager = BufferManager.new((
-      rootDir: "/Users/colin/Samples/Recorded Sounds/Sound Effects"
+      rootDir: "SC_SAMPLES_DIR".getenv() +/+ "Recorded Sounds/Sound Effects"
     ));
 
     bufManager.load_bufs([

@@ -15,7 +15,7 @@ RunningWaterEnvironment : PatchEnvironmentComponent {
   load_samples {
     arg callback;
 
-    var sfxRoot = "/Users/colin/Samples/Recorded Sounds/Sound Effects/",
+    var sfxRoot = "SC_SAMPLES_DIR".getenv() +/+ "Recorded Sounds/Sound Effects/",
       me = this;
 
     Buffer.read(Server.default, sfxRoot ++ "running water stream.aif", action: {
