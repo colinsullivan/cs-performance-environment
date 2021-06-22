@@ -10,6 +10,7 @@ export const durOptions: Array<NumberMenuOption> = [
   { value: 1 / 2, label: "1/2" },
   { value: 2 / 3, label: "2/3" },
   { value: 1 / 3, label: "1/3" },
+  { value: 1 / 4, label: "1/4" },
   { value: 1 / 8, label: "1/8" },
   { value: 1 / 16, label: "1/16" },
   { value: 1 / 32, label: "1/32" },
