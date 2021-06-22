@@ -7,7 +7,13 @@
  *  @copyright  2017 Colin Sullivan
  *  @license    Licensed under the GPLv3 license.
  **/
-require('module-alias/register');
+
+const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC == "1";
+const IS_DEVELOPMENT = process.env.NODE_ENV == "development";
+
+if (!IS_DEVELOPMENT) {
+  require("module-alias/register");
+}
 
 import path from "path";
 import fs from "fs";
@@ -25,14 +31,12 @@ import rootReducer, { create_default_state } from "common/reducers";
 import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 
-const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC == "1";
-
 dotenv.config({ path: ".env" });
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
 var loggerMiddleware = (_store) => (next) => (action) => {
-  //console.log("will dispatch", action);
+  console.log("will dispatch", action);
 
   // Call the next dispatch method in the middleware chain.
   const returnValue = next(action);
@@ -45,7 +49,7 @@ var loggerMiddleware = (_store) => (next) => (action) => {
 };
 var middleware = [thunk, wsServerDispatcher.middleware];
 
-if (process.env.NODE_ENV === "development") {
+if (IS_DEVELOPMENT) {
   middleware.push(loggerMiddleware);
 }
 
@@ -57,7 +61,9 @@ var store = createStore(
 
 console.log("Initializing SCRedux");
 const scReduxController = new SCRedux.SCReduxController(store, {
-  interpretOnLangBoot: fs.readFileSync(path.join(__dirname, "main", "sclang_init.sc")),
+  interpretOnLangBoot: fs.readFileSync(
+    path.join(__dirname, "main", "sclang_init.sc")
+  ),
 });
 
 const quit = () => {
@@ -66,8 +72,7 @@ const quit = () => {
     console.log("Bye!");
     process.exit();
   });
-}
-
+};
 
 process.on("SIGINT", quit);
 
@@ -104,7 +109,6 @@ const startServer = () => {
     wsServerDispatcher.addClient(clientId, ws);
 
     store.dispatch(rehydrate_state());
-
   });
   if (process.env.NODE_ENV !== "development") {
     server.get("/", function (req, res) {
