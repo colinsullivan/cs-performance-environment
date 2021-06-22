@@ -32,7 +32,8 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
     ampProxy,
     cc1Proxy,
     cc74Proxy,
-    proxies;
+    proxies,
+    changesAppliedAt;
 
   initPatch {
     midinoteProxy = PatternProxy.new;
@@ -211,41 +212,10 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
   handleStateChange {
     super.handleStateChange();
 
-    if ((
-      euclideanNumHits != currentState.euclideanNumHits
-    ).or(
-      euclideanTotalNumHits != currentState.euclideanTotalNumHits
-    ).or(
-      secondEuclieanNumHits != currentState.secondEuclieanNumHits
-    ).or(
-      secondEuclieanTotalNumHits != currentState.secondEuclieanTotalNumHits
-    ).or(
-      euclidBounceEnabled != currentState.euclidBounceEnabled
-    ).or(
-      euclidBounceFirstDur != currentState.euclidBounceFirstDur
-    ).or(
-      euclidBounceFirstBeats != currentState.euclidBounceFirstBeats
-    ).or(
-      euclidBounceFirstBeatsMult != currentState.euclidBounceFirstBeatsMult
-    ).or(
-      euclidBounceSecondDur != currentState.euclidBounceSecondDur
-    ).or(
-      euclidBounceSecondBeats != currentState.euclidBounceSecondBeats
-    ).or(
-      euclidBounceSecondBeatsMult != currentState.euclidBounceSecondBeatsMult
-    ).or(
-      dur != currentState.dur
-    ).or(
-      offset != currentState.offset
-    ).or(
-      notes != currentState.notes
-    ).or(
-      velocities != currentState.velocities
-    ).or(
-      cc1 != currentState.cc1
-    ).or(
-      cc74 != currentState.cc74
-    ), {
+    if (changesAppliedAt != currentState.changesAppliedAt, {
+
+      "updating sequencer state".postln();
+      changesAppliedAt = currentState.changesAppliedAt;
       euclideanNumHits = currentState.euclideanNumHits;
       euclideanTotalNumHits = currentState.euclideanTotalNumHits;
       secondEuclieanNumHits = currentState.secondEuclieanNumHits;
