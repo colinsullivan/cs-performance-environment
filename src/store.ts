@@ -11,11 +11,11 @@ export const configureStore = (initialState, websocketDispatcher, debounceAction
     middleware.push(logger);
   }
 
-  if (websocketDispatcher) {
-    middleware.push(websocketDispatcher.middleware);
-  }
   if (debounceActionsMiddleware) {
     middleware.push(debounceActionsMiddleware.middleware);
+  }
+  if (websocketDispatcher) {
+    middleware.push(websocketDispatcher.middleware);
   }
   const store = createStore(
     rootReducer,

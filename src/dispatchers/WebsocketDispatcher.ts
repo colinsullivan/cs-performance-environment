@@ -8,7 +8,7 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 import { Store, Middleware } from "redux";
-import { debounce } from "lodash";
+//import { debounce } from "lodash";
 import { websocketReadyStateChanged } from "common/actions";
 import { WebsocketDispatcherProps } from "./types";
 

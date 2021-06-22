@@ -32,7 +32,7 @@ dotenv.config({ path: ".env" });
 const wsServerDispatcher = new WebsocketServerDispatcher();
 console.log("Creating store...");
 var loggerMiddleware = (_store) => (next) => (action) => {
-  //console.log("will dispatch", action);
+  console.log("will dispatch", action);
 
   // Call the next dispatch method in the middleware chain.
   const returnValue = next(action);
