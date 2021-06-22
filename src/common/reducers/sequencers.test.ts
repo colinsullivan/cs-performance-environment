@@ -6,7 +6,8 @@ import {
   synkopater_transposed,
   sequencer_update_mod,
   sequencer_update_mod_length,
-  sequencerChangesAppliedTimeout
+  sequencerChangesAppliedTimeout,
+  sequencer_toggle_euclid_bounce
 } from "common/actions";
 import { create_default_state } from "common/reducers";
 
@@ -101,4 +102,18 @@ describe("sequencers", () => {
     expect(newState).not.toEqual(state);
     expect(newState[sequencerId].changesAppliedAt).toEqual(action.payload.timestamp);
   });
+
+  test("turning on euclid bounce copies current seq settings", () => {
+    state[sequencerId].dur = 8;
+    const action = sequencer_toggle_euclid_bounce(sequencerId);
+    const newState = sequencers(state, action, allState);
+
+    expect(newState).not.toEqual(state);
+    expect(newState[sequencerId]).toStrictEqual({
+      ...state[sequencerId],
+      euclidBounceEnabled: !state[sequencerId].euclidBounceEnabled,
+      euclidBounceFirstDur: 8,
+      euclidBounceSecondDur: 8
+    })
+  })
 });

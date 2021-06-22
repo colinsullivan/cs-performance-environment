@@ -280,6 +280,8 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
         [sequencerId]: {
           ...sequencer,
           euclidBounceEnabled: !sequencer.euclidBounceEnabled,
+          euclidBounceFirstDur: sequencer.dur,
+          euclidBounceSecondDur: sequencer.dur
         },
       };
     }
