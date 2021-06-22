@@ -25,6 +25,8 @@ import rootReducer, { create_default_state } from "common/reducers";
 import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 
+const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC == "1";
+
 dotenv.config({ path: ".env" });
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
@@ -118,11 +120,20 @@ const startServer = () => {
   console.log(`Listening on port ${PORT}.`);
 };
 
-scReduxController
-  .boot()
-  .then(startServer)
-  .catch(function (err) {
-    console.log("error while starting up...");
-    console.log(err);
-    quit();
-  });
+if (USE_EXTERNAL_SC) {
+  const externalSCWait = 2000;
+  console.log(`
+    USE_EXTERNAL_SC: Not spawning SC...Waiting ${externalSCWait / 1000} seconds instead...
+  `);
+  setTimeout(startServer, externalSCWait);
+} else {
+
+  scReduxController
+    .boot()
+    .then(startServer)
+    .catch(function (err) {
+      console.log("error while starting up...");
+      console.log(err);
+      quit();
+    });
+}
