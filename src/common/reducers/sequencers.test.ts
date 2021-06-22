@@ -105,6 +105,8 @@ describe("sequencers", () => {
 
   test("turning on euclid bounce copies current seq settings", () => {
     state[sequencerId].dur = 8;
+    state[sequencerId].euclideanNumHits = 8;
+    state[sequencerId].euclideanTotalNumHits = 16;
     const action = sequencer_toggle_euclid_bounce(sequencerId);
     const newState = sequencers(state, action, allState);
 
@@ -113,7 +115,9 @@ describe("sequencers", () => {
       ...state[sequencerId],
       euclidBounceEnabled: !state[sequencerId].euclidBounceEnabled,
       euclidBounceFirstDur: 8,
-      euclidBounceSecondDur: 8
+      euclidBounceSecondDur: 8,
+      secondEuclieanNumHits: 8,
+      secondEuclieanTotalNumHits: 16
     })
   })
 });

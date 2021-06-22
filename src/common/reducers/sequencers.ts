@@ -281,7 +281,9 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
           ...sequencer,
           euclidBounceEnabled: !sequencer.euclidBounceEnabled,
           euclidBounceFirstDur: sequencer.dur,
-          euclidBounceSecondDur: sequencer.dur
+          euclidBounceSecondDur: sequencer.dur,
+          secondEuclieanNumHits: sequencer.euclideanNumHits,
+          secondEuclieanTotalNumHits: sequencer.euclideanTotalNumHits
         },
       };
     }
