@@ -7,7 +7,8 @@ import rootReducer from "common/reducers";
 export const configureStore = (
   initialState,
   websocketDispatcher,
-  debounceActionsMiddleware
+  debounceActionsMiddleware,
+  sequencerApplyChangesService
 ) => {
   const middleware = [thunk];
 
@@ -15,6 +16,9 @@ export const configureStore = (
     middleware.push(logger);
   }
 
+  if (sequencerApplyChangesService) {
+    middleware.push(sequencerApplyChangesService.middleware);
+  }
   if (debounceActionsMiddleware) {
     middleware.push(debounceActionsMiddleware.middleware);
   }

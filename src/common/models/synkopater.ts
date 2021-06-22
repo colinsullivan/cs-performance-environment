@@ -9,10 +9,7 @@ import {
   PerformanceComponentPreset,
 } from "./types";
 
-export const sequencerIds = [
-  "synkopaterA",
-  "synkopaterB"
-];
+export const sequencerIds = ["synkopaterA", "synkopaterB"];
 
 export const create_synkopater_sequencer = (
   id: string,
@@ -55,6 +52,7 @@ export const create_synkopater_sequencer = (
   // Delay has not yet been calculated, this is for display-only
   delaySecs: null,
   savedQuants: {},
+  changesAppliedAt: 0,
 });
 
 export const create_synk_delay_component = (
@@ -157,4 +155,5 @@ export const applyPresetToSynkopaterSequencer = (
 ): SynkopaterSequencer => ({
   ...seq,
   ...preset.props.synkopaterSequencerProps,
+  changesAppliedAt: new Date().getTime(),
 });

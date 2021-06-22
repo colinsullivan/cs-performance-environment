@@ -15,7 +15,7 @@ import {
   SequencerGenericParamKeys,
   SequencerGenericParamValue,
   SequencerModSeqParamKey,
-  MidiModSequence
+  MidiModSequence,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
@@ -196,17 +196,18 @@ export interface SequencerUpdateModSequence {
   payload: {
     sequencerId: string;
     modParam: SequencerModSeqParamKey;
-    newValue: MidiModSequence
-  }
+    newValue: MidiModSequence;
+  };
 }
-export const SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH = "SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH";
+export const SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH =
+  "SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH";
 export interface SequencerUpdateModSequenceLength {
   type: typeof SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH;
   payload: {
     sequencerId: string;
     modParam: SequencerModSeqParamKey;
-    newLength: number
-  }
+    newLength: number;
+  };
 }
 
 export const STATE_REHYDRATED = "STATE_REHYDRATED";
@@ -214,6 +215,16 @@ export interface StateRehydrated {
   type: typeof STATE_REHYDRATED;
   payload: {
     serializedState: string;
+  };
+}
+
+export const SEQUENCER_CHANGES_APPLIED_TIMEOUT =
+  "SEQUENCER_CHANGES_APPLIED_TIMEOUT";
+export interface SequencerChangesAppliedTimeout {
+  type: typeof SEQUENCER_CHANGES_APPLIED_TIMEOUT;
+  payload: {
+    sequencerId: string;
+    timestamp: number;
   };
 }
 
@@ -241,7 +252,8 @@ export type AllActionTypes =
   | ReturnType<typeof closeHoldMenu>
   | ReturnType<typeof setKey>
   | SequencerUpdateModSequence
-  | SequencerUpdateModSequenceLength;
+  | SequencerUpdateModSequenceLength
+  | SequencerChangesAppliedTimeout;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

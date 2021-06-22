@@ -18,6 +18,7 @@ import "./index.scss";
 
 import WebsocketDispatcher from "dispatchers/WebsocketDispatcher";
 import DebounceActionsMiddleware from "dispatchers/DebounceActionsMiddleware";
+import SequencerApplyChangesService from "dispatchers/SequencerApplyChangesService";
 import App from "components/App";
 import { PORT } from "common/constants";
 import { configureStore } from "./store";
@@ -31,6 +32,8 @@ const wsDispatcher = new WebsocketDispatcher({
 
 const debounceActionsMiddleware = new DebounceActionsMiddleware();
 
+const sequencerApplyChangesService = new SequencerApplyChangesService();
+
 // get initial state then render
 axios
   .get(
@@ -41,7 +44,8 @@ axios
     const store = configureStore(
       initialState,
       wsDispatcher,
-      debounceActionsMiddleware
+      debounceActionsMiddleware,
+      sequencerApplyChangesService
     );
     wsDispatcher.setStore(store);
     ReactDOM.render(
