@@ -71,7 +71,7 @@ Synkopants : PerformanceEnvironmentComponent {
     //  create the buffer manager that will load the samples we need for this
     //  patch.
     this.bufManager = BufferManager.new().init((
-      rootDir: "/Users/colin/Samples/Recorded Sounds/Sound Effects/"
+      rootDir: "SC_SAMPLES_DIR".getenv() +/+ "Recorded Sounds/Sound Effects/"
     ));
 
     super.init(params);
