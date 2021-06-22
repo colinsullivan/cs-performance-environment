@@ -17,6 +17,7 @@ import uuid from 'uuid/v4';
 import './index.scss';
 
 import WebsocketDispatcher from 'dispatchers/WebsocketDispatcher';
+import DebounceActionsMiddleware from 'dispatchers/DebounceActionsMiddleware';
 import App from 'components/App';
 import { PORT } from 'common/constants';
 import { configureStore } from './store';
@@ -28,12 +29,14 @@ const wsDispatcher = new WebsocketDispatcher({
   clientId
 });
 
+const debounceActionsMiddleware = new DebounceActionsMiddleware();
+
 // get initial state then render
 axios.get(
   `${window.location.protocol}//${window.location.hostname}:${PORT}/getState`
 ).then(function (resp) {
   const initialState = resp.data;
-  const store = configureStore(initialState, wsDispatcher);
+  const store = configureStore(initialState, wsDispatcher, debounceActionsMiddleware);
   wsDispatcher.setStore(store);
   ReactDOM.render((
       <Provider store={store}>

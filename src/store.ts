@@ -4,7 +4,7 @@ import logger from "redux-logger";
 
 import rootReducer from 'common/reducers';
 
-export const configureStore = (initialState, websocketDispatcher) => {
+export const configureStore = (initialState, websocketDispatcher, debounceActionsMiddleware) => {
   const middleware = [thunk];
 
   if (process.env.NODE_ENV === "development") {
@@ -13,6 +13,9 @@ export const configureStore = (initialState, websocketDispatcher) => {
 
   if (websocketDispatcher) {
     middleware.push(websocketDispatcher.middleware);
+  }
+  if (debounceActionsMiddleware) {
+    middleware.push(debounceActionsMiddleware.middleware);
   }
   const store = createStore(
     rootReducer,

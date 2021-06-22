@@ -12,9 +12,9 @@ import { debounce } from "lodash";
 import { websocketReadyStateChanged } from "common/actions";
 import { WebsocketDispatcherProps } from "./types";
 
-const debouncedActionsTypes = [
-  "SEQUENCER_UPDATE_MOD_SEQUENCE"
-];
+//const debouncedActionsTypes = [
+  //"SEQUENCER_UPDATE_MOD_SEQUENCE"
+//];
 
 /**
  *  @class        WebsocketDispatcher
@@ -28,7 +28,7 @@ class WebsocketDispatcher {
   store: Store | null;
   ws: WebSocket | null;
   middleware: Middleware<unknown>;
-  sendActionDebounced: (action) => void;
+  //sendActionDebounced: (action) => void;
 
   constructor(props: WebsocketDispatcherProps) {
     this.props = props;
@@ -42,10 +42,10 @@ class WebsocketDispatcher {
       this.handle_middleware(store, next, action);
     };
 
-    this.sendActionDebounced = debounce(
-      (action) => this.sendAction(action),
-      200
-    );
+    //this.sendActionDebounced = debounce(
+      //(action) => this.sendAction(action),
+      //200
+    //);
   }
   /**
    *  A separate setter for the store instance is needed so instance
@@ -61,11 +61,12 @@ class WebsocketDispatcher {
    *  when it is dispatched from elsewhere.
    **/
   handle_middleware(store, next, action) {
-    if (debouncedActionsTypes.includes(action.type)) {
-      this.sendActionDebounced(action);
-    } else {
-      this.sendAction(action);
-    }
+    //if (debouncedActionsTypes.includes(action.type)) {
+      //this.sendActionDebounced(action);
+    //} else {
+      //this.sendAction(action);
+    //}
+    this.sendAction(action);
     return next(action);
   }
   /**

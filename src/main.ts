@@ -94,8 +94,8 @@ const startServer = () => {
     console.log(`client ${clientId} connected.`);
     ws.on("message", function (msg) {
       const action = JSON.parse(msg);
-      console.log("action");
-      console.log(action);
+      //console.log("action");
+      //console.log(action);
       store.dispatch(action);
     });
     ws.on("close", function () {
