@@ -6,6 +6,7 @@ import {
   synkopater_transposed,
   sequencer_update_mod,
   sequencer_update_mod_length,
+  sequencerChangesAppliedTimeout
 } from "common/actions";
 import { create_default_state } from "common/reducers";
 
@@ -92,5 +93,12 @@ describe("sequencers", () => {
     const newState = sequencers(state, action, allState);
     expect(newState).not.toEqual(state);
     expect(newState[sequencerId].cc1).toEqual([64, 64]);
+  });
+
+  test("sets changesAppliedAt", () => {
+    const action = sequencerChangesAppliedTimeout(sequencerId);
+    const newState = sequencers(state, action, allState);
+    expect(newState).not.toEqual(state);
+    expect(newState[sequencerId].changesAppliedAt).toEqual(action.payload.timestamp);
   });
 });

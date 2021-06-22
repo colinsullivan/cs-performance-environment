@@ -17,13 +17,14 @@ import {
   SEQUENCER_TOGGLE_EUCLID_BOUNCE,
   SEQUENCER_UPDATE_MOD_SEQUENCE,
   SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH,
+  SEQUENCER_CHANGES_APPLIED_TIMEOUT,
 } from "common/actions/types";
 import {
   TRANSPOSE_DIRECTION,
   SynkopaterPerformanceComponent,
   SynkopaterSequencer,
   MidiCCRange,
-  MidiModSequence
+  MidiModSequence,
 } from "common/models/types";
 import { Sequencers } from "./types";
 import {
@@ -46,11 +47,7 @@ const durChoices = [
   8.0,
 ];
 
-const sequencers = (
-  state: Sequencers,
-  action: AllActionTypes,
-  allState
-) => {
+const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
   state = SCReduxSequencers.reducer(state, action);
   let seq: SynkopaterSequencer, sequencerId: string;
   switch (action.type) {
@@ -282,7 +279,7 @@ const sequencers = (
         ...state,
         [sequencerId]: {
           ...sequencer,
-          euclidBounceEnabled: !sequencer.euclidBounceEnabled
+          euclidBounceEnabled: !sequencer.euclidBounceEnabled,
         },
       };
     }
@@ -302,25 +299,25 @@ const sequencers = (
 
       const newSequencer = {
         ...sequencer,
-        [modParam]: newValue
+        [modParam]: newValue,
       };
-      
+
       return {
         ...state,
-        [sequencerId]: newSequencer
+        [sequencerId]: newSequencer,
       };
     }
 
     case SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH: {
       const { sequencerId, modParam, newLength } = action.payload;
-      const newSequencer = {...state[sequencerId]};
+      const newSequencer = { ...state[sequencerId] };
 
       const currentSequence = newSequencer[modParam];
       const currentLength = currentSequence.length;
       let newSequence: MidiModSequence = [];
       if (newLength > currentLength) {
         const lastEl = currentSequence[currentLength - 1];
-        const newEls = (new Array(newLength - currentLength)).fill(lastEl);
+        const newEls = new Array(newLength - currentLength).fill(lastEl);
         newSequence = newSequence.concat(currentSequence, newEls);
       } else {
         newSequence = currentSequence.slice(0, newLength);
@@ -329,7 +326,19 @@ const sequencers = (
 
       return {
         ...state,
-        [sequencerId]: newSequencer
+        [sequencerId]: newSequencer,
+      };
+    }
+
+    case SEQUENCER_CHANGES_APPLIED_TIMEOUT: {
+      const { sequencerId, timestamp } = action.payload;
+      const newSequencer = {
+        ...state[sequencerId],
+        changesAppliedAt: timestamp,
+      };
+      return {
+        ...state,
+        [sequencerId]: newSequencer,
       };
     }
 

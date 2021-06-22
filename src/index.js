@@ -8,36 +8,50 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import axios from 'axios';
-import uuid from 'uuid/v4';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import axios from "axios";
+import uuid from "uuid/v4";
 
-import './index.scss';
+import "./index.scss";
 
-import WebsocketDispatcher from 'dispatchers/WebsocketDispatcher';
-import App from 'components/App';
-import { PORT } from 'common/constants';
-import { configureStore } from './store';
+import WebsocketDispatcher from "dispatchers/WebsocketDispatcher";
+import DebounceActionsMiddleware from "dispatchers/DebounceActionsMiddleware";
+import SequencerApplyChangesService from "dispatchers/SequencerApplyChangesService";
+import App from "components/App";
+import { PORT } from "common/constants";
+import { configureStore } from "./store";
 
 const clientId = uuid();
 
 const wsDispatcher = new WebsocketDispatcher({
   port: PORT,
-  clientId
+  clientId,
 });
 
+const debounceActionsMiddleware = new DebounceActionsMiddleware();
+
+const sequencerApplyChangesService = new SequencerApplyChangesService();
+
 // get initial state then render
-axios.get(
-  `${window.location.protocol}//${window.location.hostname}:${PORT}/getState`
-).then(function (resp) {
-  const initialState = resp.data;
-  const store = configureStore(initialState, wsDispatcher);
-  wsDispatcher.setStore(store);
-  ReactDOM.render((
+axios
+  .get(
+    `${window.location.protocol}//${window.location.hostname}:${PORT}/getState`
+  )
+  .then(function (resp) {
+    const initialState = resp.data;
+    const store = configureStore(
+      initialState,
+      wsDispatcher,
+      debounceActionsMiddleware,
+      sequencerApplyChangesService
+    );
+    wsDispatcher.setStore(store);
+    ReactDOM.render(
       <Provider store={store}>
         <App />
-      </Provider>
-  ), document.getElementById('root'));
-});
+      </Provider>,
+      document.getElementById("root")
+    );
+  });

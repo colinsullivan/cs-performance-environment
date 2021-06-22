@@ -112,4 +112,6 @@ export interface SynkopaterSequencer
   savedQuants: {
     [quantName: string]: Quant;
   };
+  changesAppliedAt: number;
+  lastUpdateId: string;
 }

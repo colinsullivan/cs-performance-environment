@@ -43,7 +43,9 @@ import {
   SequencerUpdateModSequence,
   SEQUENCER_UPDATE_MOD_SEQUENCE,
   SequencerUpdateModSequenceLength,
-  SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH
+  SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH,
+  SequencerChangesAppliedTimeout,
+  SEQUENCER_CHANGES_APPLIED_TIMEOUT,
 } from "./types";
 
 import { synkopaterToPresetProps } from "common/models/synkopater";
@@ -56,7 +58,7 @@ import {
   SequencerGenericParamKeys,
   SequencerGenericParamValue,
   SequencerModSeqParamKey,
-  MidiModSequence
+  MidiModSequence,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
 import { ControllerMappingElements } from "common/models/types";
@@ -327,8 +329,8 @@ export const sequencer_update_mod = (
   payload: {
     sequencerId,
     modParam,
-    newValue
-  }
+    newValue,
+  },
 });
 
 export const sequencer_update_mod_length = (
@@ -340,8 +342,8 @@ export const sequencer_update_mod_length = (
   payload: {
     sequencerId,
     modParam,
-    newLength
-  }
+    newLength,
+  },
 });
 
 const state_rehydrated = (serializedState: string): StateRehydrated => ({
@@ -358,3 +360,13 @@ export const rehydrate_state = (): Thunk => {
     dispatch(state_rehydrated(serializedState));
   };
 };
+
+export const sequencerChangesAppliedTimeout = (
+  sequencerId: string
+): SequencerChangesAppliedTimeout => ({
+  type: SEQUENCER_CHANGES_APPLIED_TIMEOUT,
+  payload: {
+    sequencerId,
+    timestamp: (new Date().getTime())/1000,
+  },
+});
