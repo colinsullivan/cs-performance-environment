@@ -213,8 +213,6 @@ SynkopaterOutboardSequencer : SCReduxSequencer {
     super.handleStateChange();
 
     if (changesAppliedAt != currentState.changesAppliedAt, {
-
-      "updating sequencer state".postln();
       changesAppliedAt = currentState.changesAppliedAt;
       euclideanNumHits = currentState.euclideanNumHits;
       euclideanTotalNumHits = currentState.euclideanTotalNumHits;

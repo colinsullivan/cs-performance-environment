@@ -331,10 +331,10 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
     }
 
     case SEQUENCER_CHANGES_APPLIED_TIMEOUT: {
-      const { sequencerId } = action.payload;
+      const { sequencerId, timestamp } = action.payload;
       const newSequencer = {
         ...state[sequencerId],
-        changesAppliedAt: new Date().getTime(),
+        changesAppliedAt: timestamp,
       };
       return {
         ...state,

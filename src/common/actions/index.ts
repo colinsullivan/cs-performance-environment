@@ -367,6 +367,6 @@ export const sequencerChangesAppliedTimeout = (
   type: SEQUENCER_CHANGES_APPLIED_TIMEOUT,
   payload: {
     sequencerId,
-    timestamp: new Date().getTime(),
+    timestamp: (new Date().getTime())/1000,
   },
 });

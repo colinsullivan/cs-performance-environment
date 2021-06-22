@@ -113,4 +113,5 @@ export interface SynkopaterSequencer
     [quantName: string]: Quant;
   };
   changesAppliedAt: number;
+  lastUpdateId: string;
 }
