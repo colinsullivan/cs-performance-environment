@@ -6,7 +6,8 @@ import {
   synkopater_transposed,
   sequencer_update_mod,
   sequencer_update_mod_length,
-  sequencerChangesAppliedTimeout
+  sequencerChangesAppliedTimeout,
+  sequencer_toggle_euclid_bounce
 } from "common/actions";
 import { create_default_state } from "common/reducers";
 
@@ -101,4 +102,44 @@ describe("sequencers", () => {
     expect(newState).not.toEqual(state);
     expect(newState[sequencerId].changesAppliedAt).toEqual(action.payload.timestamp);
   });
+
+  test("turning on euclid bounce copies current seq settings", () => {
+    state[sequencerId].euclidBounceEnabled = false;
+    state[sequencerId].dur = 8;
+    state[sequencerId].euclideanNumHits = 8;
+    state[sequencerId].euclideanTotalNumHits = 16;
+    state[sequencerId].euclidBounceFirstBeats = 8;
+    state[sequencerId].euclidBounceFirstBeatsMult = 2;
+    const action = sequencer_toggle_euclid_bounce(sequencerId);
+    const newState = sequencers(state, action, allState);
+
+    expect(newState).not.toEqual(state);
+    expect(newState[sequencerId]).toStrictEqual({
+      ...state[sequencerId],
+      euclidBounceEnabled: !state[sequencerId].euclidBounceEnabled,
+      euclidBounceFirstDur: 8,
+      euclidBounceSecondDur: 8,
+      secondEuclieanNumHits: 8,
+      secondEuclieanTotalNumHits: 16,
+      euclidBounceSecondBeats: 8,
+      euclidBounceSecondBeatsMult: 2
+    })
+  });
+ 
+  test("turning off euclid bounce does not change seq settings", () => {
+
+    state[sequencerId].euclidBounceEnabled = true;
+    state[sequencerId].dur = 8;
+    state[sequencerId].euclideanNumHits = 8;
+    state[sequencerId].euclideanTotalNumHits = 16;
+    const action = sequencer_toggle_euclid_bounce(sequencerId);
+    const newState = sequencers(state, action, allState);
+
+    expect(newState).not.toEqual(state);
+    expect(newState[sequencerId]).toStrictEqual({
+      ...state[sequencerId],
+      euclidBounceEnabled: !state[sequencerId].euclidBounceEnabled,
+    });
+  });
+
 });

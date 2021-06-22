@@ -275,12 +275,28 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
     case SEQUENCER_TOGGLE_EUCLID_BOUNCE: {
       const { sequencerId } = action.payload;
       const sequencer = state[sequencerId];
+
+      const euclidBounceEnabled = !sequencer.euclidBounceEnabled;
+
+      let newSequencer = {
+        ...sequencer,
+        euclidBounceEnabled,
+      };
+
+      if (euclidBounceEnabled) {
+        newSequencer = {
+          ...newSequencer,
+          euclidBounceFirstDur: sequencer.dur,
+          euclidBounceSecondDur: sequencer.dur,
+          secondEuclieanNumHits: sequencer.euclideanNumHits,
+          secondEuclieanTotalNumHits: sequencer.euclideanTotalNumHits,
+          euclidBounceSecondBeats: sequencer.euclidBounceFirstBeats,
+          euclidBounceSecondBeatsMult: sequencer.euclidBounceFirstBeatsMult
+        };
+      }
       return {
         ...state,
-        [sequencerId]: {
-          ...sequencer,
-          euclidBounceEnabled: !sequencer.euclidBounceEnabled,
-        },
+        [sequencerId]: newSequencer
       };
     }
 
