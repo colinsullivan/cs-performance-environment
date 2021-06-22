@@ -290,6 +290,8 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
           euclidBounceSecondDur: sequencer.dur,
           secondEuclieanNumHits: sequencer.euclideanNumHits,
           secondEuclieanTotalNumHits: sequencer.euclideanTotalNumHits,
+          euclidBounceSecondBeats: sequencer.euclidBounceFirstBeats,
+          euclidBounceSecondBeatsMult: sequencer.euclidBounceFirstBeatsMult
         };
       }
       return {

@@ -108,6 +108,8 @@ describe("sequencers", () => {
     state[sequencerId].dur = 8;
     state[sequencerId].euclideanNumHits = 8;
     state[sequencerId].euclideanTotalNumHits = 16;
+    state[sequencerId].euclidBounceFirstBeats = 8;
+    state[sequencerId].euclidBounceFirstBeatsMult = 2;
     const action = sequencer_toggle_euclid_bounce(sequencerId);
     const newState = sequencers(state, action, allState);
 
@@ -118,7 +120,9 @@ describe("sequencers", () => {
       euclidBounceFirstDur: 8,
       euclidBounceSecondDur: 8,
       secondEuclieanNumHits: 8,
-      secondEuclieanTotalNumHits: 16
+      secondEuclieanTotalNumHits: 16,
+      euclidBounceSecondBeats: 8,
+      euclidBounceSecondBeatsMult: 2
     })
   });
  
@@ -135,6 +139,7 @@ describe("sequencers", () => {
     expect(newState[sequencerId]).toStrictEqual({
       ...state[sequencerId],
       euclidBounceEnabled: !state[sequencerId].euclidBounceEnabled,
-    })
-  })
+    });
+  });
+
 });
