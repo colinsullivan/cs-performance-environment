@@ -5,7 +5,7 @@ const debouncedActionsTypes = ["SEQUENCER_UPDATE_MOD_SEQUENCE"];
 
 const markAsDebounced = (action) => ({
   ...action,
-  _debounced: true
+  _debounced: true,
 });
 
 const isActionDebounced = (action) => action._debounced;
@@ -20,8 +20,10 @@ class DebounceActionsMiddleware {
       200
     );
     this.middleware = (store) => (next) => (action) => {
-      if (debouncedActionsTypes.includes(action.type) && !isActionDebounced(action)) {
-        
+      if (
+        debouncedActionsTypes.includes(action.type) &&
+        !isActionDebounced(action)
+      ) {
         this.dispatchDebounced(store, action);
         return;
       }
