@@ -11,6 +11,7 @@ import SynkDelayTimeDisplay from "components/SynkDelayTimeDisplay";
 import QuantDropdown from "components/QuantDropdown";
 import OctatrackFollowControl from "components/SynkopaterPiano/PresetControl/OctatrackFollowControl";
 import EuclidBounceControls from "components/EuclidBounceControls";
+import SequencerDurControl from "components/TouchSynkopater/SequencerDurControl";
 
 import { durOptions } from "constants/options";
 
@@ -109,11 +110,7 @@ class TouchSynkopater extends React.Component {
         </div>
         <div className="row">
           <div className="col-2">
-            <SequencerParamTouchSelector
-              sequencerId={sequencerId}
-              param="dur"
-              options={durOptions}
-            />
+            <SequencerDurControl sequencerId={sequencerId} />
           </div>
           <div className="col-2">
             <SequencerParamTouchSelector
