@@ -10,6 +10,16 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     clock,
     clockWatcher;
 
+  dispatch_tempo_update {
+    var tempo = clock.tempo;
+    store.dispatch((
+      type: \SYSTEM_TEMPO_CHANGED,
+      payload: (
+        tempo: tempo
+      )
+    ))
+  }
+
   init_gui {
     arg params;
     var layout = params['layout'],
@@ -19,14 +29,9 @@ ClockEnvironment : PerformanceEnvironmentComponent {
 
     clockWatcher = SimpleController(clock);
     clockWatcher.put(\tempo, {
-      var tempo = clock.tempo;
-      store.dispatch((
-        type: \SYSTEM_TEMPO_CHANGED,
-        payload: (
-          tempo: tempo
-        )
-      ))
+      this.dispatch_tempo_update();
     });
+
 
     ArgNameLabel("Beats per bar", layout, labelWidth);
     meterText = StaticText.new(layout, textRect);
@@ -86,6 +91,8 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     arg params;
     super.on_play(params);
     AppClock.sched(1.0/16, {this.update_transport_text();});
+    // Dispatch initial tempo update on startup
+    this.dispatch_tempo_update();
   }
 
   update_transport_text {
