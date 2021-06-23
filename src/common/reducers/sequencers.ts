@@ -18,6 +18,7 @@ import {
   SEQUENCER_UPDATE_MOD_SEQUENCE,
   SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH,
   SEQUENCER_CHANGES_APPLIED_TIMEOUT,
+  SEQUENCER_RANDOMIZE_NOTES,
 } from "common/actions/types";
 import {
   TRANSPOSE_DIRECTION,
@@ -291,12 +292,12 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
           secondEuclieanNumHits: sequencer.euclideanNumHits,
           secondEuclieanTotalNumHits: sequencer.euclideanTotalNumHits,
           euclidBounceSecondBeats: sequencer.euclidBounceFirstBeats,
-          euclidBounceSecondBeatsMult: sequencer.euclidBounceFirstBeatsMult
+          euclidBounceSecondBeatsMult: sequencer.euclidBounceFirstBeatsMult,
         };
       }
       return {
         ...state,
-        [sequencerId]: newSequencer
+        [sequencerId]: newSequencer,
       };
     }
 
@@ -352,6 +353,15 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
         ...state[sequencerId],
         changesAppliedAt: timestamp,
       };
+      return {
+        ...state,
+        [sequencerId]: newSequencer,
+      };
+    }
+
+    case SEQUENCER_RANDOMIZE_NOTES: {
+      const { sequencerId, newNotes } = action.payload;
+      const newSequencer = { ...state[sequencerId], notes: newNotes };
       return {
         ...state,
         [sequencerId]: newSequencer,

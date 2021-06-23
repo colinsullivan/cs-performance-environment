@@ -16,6 +16,7 @@ import TouchTransposeControl from "./TouchTransposeControl";
 import TouchOctaveControl from "./TouchOctaveControl";
 import { numOctaves } from "./constants";
 import PresetControl from "./PresetControl/PresetControl";
+import RandomizeNotesButton from "./RandomizeNotesButton";
 
 const TransposeControls = styled.div`
   > div {
@@ -42,6 +43,9 @@ const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
                 setStartingOctave={setStartingOctave}
               />
             </TransposeControls>
+          </div>
+          <div className="col">
+            <RandomizeNotesButton sequencerId={sequencerId} />
           </div>
           <div className="col">
             <PresetControl sequencerId={sequencerId} componentId={componentId} />

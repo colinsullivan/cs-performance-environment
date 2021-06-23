@@ -1,5 +1,5 @@
 import SCReduxSequencers from "supercollider-redux-sequencers";
-import { pick } from "lodash";
+import { pick, min, max, shuffle } from "lodash";
 
 import { create_performance_component } from "./performance_component";
 import {
@@ -8,8 +8,12 @@ import {
   SynkopaterSequencer,
   PerformanceComponentPreset,
 } from "./types";
-
-
+import { ScaleState } from "common/models/scale/types";
+import {
+  getNotesFromMidiNoteNumbers,
+  getNotesForScaleOctaveRange,
+  getMidiNoteNumbersFromNotes,
+} from "common/models/scale";
 
 export const sequencerIds = ["synkopaterA", "synkopaterB"];
 
@@ -55,7 +59,7 @@ export const create_synkopater_sequencer = (
   delaySecs: null,
   savedQuants: {},
   changesAppliedAt: 0,
-  lastUpdateId: ""
+  lastUpdateId: "",
 });
 
 export const create_synk_delay_component = (
@@ -160,3 +164,49 @@ export const applyPresetToSynkopaterSequencer = (
   ...preset.props.synkopaterSequencerProps,
   changesAppliedAt: new Date().getTime() / 1000,
 });
+
+export const randomizeSequencerNotes = (
+  seqNotes: number[],
+  scale: ScaleState,
+  maxOctaveShiftUp = 0,
+  maxOctaveShiftDown = 0
+): number[] => {
+  // Calculates range of current notes
+  const notesBounds = [min(seqNotes), max(seqNotes)];
+
+  if (notesBounds[0] === undefined || notesBounds[1] === undefined) {
+    throw new Error(
+      "randomizeSequencerNotes: Could not determine bounds of notes."
+    );
+  }
+  const notesBoundsTonal = getNotesFromMidiNoteNumbers(notesBounds as number[]);
+
+  // Calculates starting and ending octaves for generated notes
+  const startingOctave = notesBoundsTonal[0].oct;
+  const endingOctave = notesBoundsTonal[1].oct;
+  if (startingOctave === undefined || endingOctave === undefined) {
+    throw new Error(
+      "randomizeSequencerNotes: Could not determine current octave range"
+    );
+  }
+
+  const generatedStartingOctave =
+    (startingOctave as number) - maxOctaveShiftDown;
+  const generatedEndingOctave = (endingOctave as number) + maxOctaveShiftUp;
+
+  // Generates a list of possible notes from scale
+  const availableNotes = getNotesForScaleOctaveRange(
+    scale,
+    generatedStartingOctave,
+    generatedEndingOctave - generatedStartingOctave + 1
+  );
+
+  const newNotes = shuffle(availableNotes).slice(0, seqNotes.length);
+  const newNoteNumbers = getMidiNoteNumbersFromNotes(newNotes);
+  for (const noteNumber of newNoteNumbers) {
+    if (noteNumber === null) {
+      throw new Error("randomizeSequencerNotes: Failed to generate new notes");
+    }
+  }
+  return newNoteNumbers as number[];
+};

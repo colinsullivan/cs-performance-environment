@@ -46,9 +46,14 @@ import {
   SEQUENCER_UPDATE_MOD_SEQUENCE_LENGTH,
   SequencerChangesAppliedTimeout,
   SEQUENCER_CHANGES_APPLIED_TIMEOUT,
+  SequencerRandomizeNotes,
+  SEQUENCER_RANDOMIZE_NOTES,
 } from "./types";
 
-import { synkopaterToPresetProps } from "common/models/synkopater";
+import {
+  synkopaterToPresetProps,
+  randomizeSequencerNotes,
+} from "common/models/synkopater";
 import { create_synkopater_preset } from "common/models/performance_component";
 import {
   ARP_MODES,
@@ -67,6 +72,7 @@ import {
   getSequencer,
   getOctatrack,
   getSerializedState,
+  getScale,
 } from "common/selectors";
 import { getPatternValue } from "common/models/octatrack";
 
@@ -367,6 +373,29 @@ export const sequencerChangesAppliedTimeout = (
   type: SEQUENCER_CHANGES_APPLIED_TIMEOUT,
   payload: {
     sequencerId,
-    timestamp: (new Date().getTime())/1000,
+    timestamp: new Date().getTime() / 1000,
   },
 });
+
+export const sequencerRandomizeNotes = (
+  sequencerId: string,
+  newNotes: number[]
+): SequencerRandomizeNotes => ({
+  type: SEQUENCER_RANDOMIZE_NOTES,
+  payload: {
+    sequencerId,
+    newNotes,
+  },
+});
+
+export const handleSequencerRandomizeNotes =
+  (sequencerId: string) => (dispatch, getState) => {
+    const sequencer = getSequencer(getState(), { sequencerId });
+    const scale = getScale(getState());
+    dispatch(
+      sequencerRandomizeNotes(
+        sequencerId,
+        randomizeSequencerNotes(sequencer.notes, scale)
+      )
+    );
+  };
