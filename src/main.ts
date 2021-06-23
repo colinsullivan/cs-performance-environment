@@ -34,8 +34,18 @@ import { rehydrate_state } from "common/actions";
 
 dotenv.config({ path: ".env" });
 
+const CROW_A_SERIAL_PATH = process.env.CROW_A_SERIAL_PATH;
+if (!CROW_A_SERIAL_PATH) {
+  throw new Error("Expected CROW_A_SERIAL_PATH environment variable");
+}
+const CROW_B_SERIAL_PATH = process.env.CROW_B_SERIAL_PATH;
+if (!CROW_B_SERIAL_PATH) {
+  throw new Error("Expected CROW_B_SERIAL_PATH environment variable");
+}
+
 const wsServerDispatcher = new WebsocketServerDispatcher();
-const crowDispatcher = new CrowDispatcherService();
+const crowDispatcherA = new CrowDispatcherService(CROW_A_SERIAL_PATH);
+const crowDispatcherB = new CrowDispatcherService(CROW_B_SERIAL_PATH);
 console.log("Creating store...");
 var loggerMiddleware = (_store) => (next) => (action) => {
   console.log("will dispatch", action);
@@ -49,7 +59,12 @@ var loggerMiddleware = (_store) => (next) => (action) => {
   // a middleware further in chain changed it.
   return returnValue;
 };
-var middleware = [thunk, wsServerDispatcher.middleware, crowDispatcher.middleware];
+var middleware = [
+  thunk,
+  wsServerDispatcher.middleware,
+  crowDispatcherA.middleware,
+  crowDispatcherB.middleware,
+];
 
 if (IS_DEVELOPMENT) {
   middleware.push(loggerMiddleware);
@@ -129,11 +144,12 @@ const startServer = () => {
 if (USE_EXTERNAL_SC) {
   const externalSCWait = 2000;
   console.log(`
-    USE_EXTERNAL_SC: Not spawning SC...Waiting ${externalSCWait / 1000} seconds instead...
+    USE_EXTERNAL_SC: Not spawning SC...Waiting ${
+      externalSCWait / 1000
+    } seconds instead...
   `);
   setTimeout(startServer, externalSCWait);
 } else {
-
   scReduxController
     .boot()
     .then(startServer)

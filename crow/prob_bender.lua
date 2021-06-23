@@ -1,3 +1,11 @@
+tempo = 2
+
+crowIDA = 'a'
+crowIDB = 'b'
+
+-- Defines which Crow is being deployed to
+crowId = crowIDB
+
 function init()
   -- Sweet Sixteen is doing the i2c pullup
   ii.pullup(false)
@@ -38,9 +46,15 @@ end
 
 
 -- Instantiates faders
-probFader = Fader:new(16)
---durFader = Fader:new(15)
-durFader = Fader:new(14)
+probFader = nil
+durFader = nil
+if crowId == crowIDA then
+  probFader = Fader:new(16)
+  durFader = Fader:new(15)
+elseif crowId == crowIDB then
+  probFader = Fader:new(14)
+  durFader = Fader:new(13)
+end
 
 allFaders = {probFader, durFader}
 numFaders = 2
@@ -58,6 +72,23 @@ function requestFaderUpdates()
   end
 end
 
+durOptions = {
+  16,
+  8,
+  4,
+  2,
+  1.5,
+  1,
+  3 / 4,
+  1 / 2,
+  2 / 3,
+  1 / 3,
+  1 / 4,
+  1 / 8,
+  1 / 16,
+  1 / 32,
+};
+numDurOptions = 14
 
 function doPitchBend(durFader, outputNumber)
   -- Decides on direction of bend
@@ -67,9 +98,13 @@ function doPitchBend(durFader, outputNumber)
     direction = "up"
   end
 
-  -- starts pitchbend
-  dur = (durFader:getVolts() / 10.0) * 3.0
+  -- calculates duration of bend
+  --dur = (durFader:getVolts() / 10.0) * 3.0
+  faderValue = (durFader:getVolts() / 10.0)
+  durBeats = durOptions[math.floor(faderValue * (numDurOptions - 1))]
+  dur = durBeats * 1.0/tempo 
 
+  -- starts pitchbend
   if direction == "down" then
     -- starts one octave up
     output[outputNumber].slew = 0.0

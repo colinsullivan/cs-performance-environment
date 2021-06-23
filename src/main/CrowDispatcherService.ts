@@ -3,17 +3,11 @@ import { Middleware } from "redux";
 
 import { SYSTEM_TEMPO_CHANGED, AllActionTypes } from "common/actions";
 
-const CROW_SERIAL_PATH = process.env.CROW_SERIAL_PATH;
-const DEBUG = true;
-
 class CrowDispatcherService {
   crowPort: SerialPort;
   middleware: Middleware<unknown>;
-  constructor() {
-    if (!CROW_SERIAL_PATH) {
-      throw new Error("Expected CROW_SERIAL_PATH environment variable");
-    }
-    this.crowPort = new SerialPort(CROW_SERIAL_PATH as string);
+  constructor(crowSerialPath: string) {
+    this.crowPort = new SerialPort(crowSerialPath);
 
     this.middleware = (store) => (next) => (action) => {
       this.handleMiddleware(store, next, action);
