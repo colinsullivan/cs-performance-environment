@@ -168,7 +168,7 @@ const SynkModSeqSliders = ({ sequencerId, modParam }) => {
       <SliderContainer>
         <Multislider
           id={`${sequencerId}-${modParam}`}
-          size={[sliderWidth * values.length, 100]}
+          size={[sliderWidth * values.length, 200]}
           min={MidiCCRange[0]}
           max={MidiCCRange[1]}
           step={1}
