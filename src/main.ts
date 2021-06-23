@@ -26,6 +26,7 @@ import expressWebsocket from "express-ws";
 import SCRedux from "supercollider-redux";
 
 import WebsocketServerDispatcher from "main/WebsocketServerDispatcher";
+import CrowDispatcherService from "main/CrowDispatcherService";
 
 import rootReducer, { create_default_state } from "common/reducers";
 import { PORT } from "common/constants";
@@ -34,6 +35,7 @@ import { rehydrate_state } from "common/actions";
 dotenv.config({ path: ".env" });
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
+const crowDispatcher = new CrowDispatcherService();
 console.log("Creating store...");
 var loggerMiddleware = (_store) => (next) => (action) => {
   console.log("will dispatch", action);
@@ -47,7 +49,7 @@ var loggerMiddleware = (_store) => (next) => (action) => {
   // a middleware further in chain changed it.
   return returnValue;
 };
-var middleware = [thunk, wsServerDispatcher.middleware];
+var middleware = [thunk, wsServerDispatcher.middleware, crowDispatcher.middleware];
 
 if (IS_DEVELOPMENT) {
   middleware.push(loggerMiddleware);
