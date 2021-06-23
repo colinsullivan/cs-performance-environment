@@ -228,6 +228,15 @@ export interface SequencerChangesAppliedTimeout {
   };
 }
 
+export const SEQUENCER_RANDOMIZE_NOTES = "SEQUENCER_RANDOMIZE_NOTES";
+export interface SequencerRandomizeNotes {
+  type: typeof SEQUENCER_RANDOMIZE_NOTES;
+  payload: {
+    sequencerId: string;
+    newNotes: number[];
+  };
+}
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -253,7 +262,8 @@ export type AllActionTypes =
   | ReturnType<typeof setKey>
   | SequencerUpdateModSequence
   | SequencerUpdateModSequenceLength
-  | SequencerChangesAppliedTimeout;
+  | SequencerChangesAppliedTimeout
+  | SequencerRandomizeNotes;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

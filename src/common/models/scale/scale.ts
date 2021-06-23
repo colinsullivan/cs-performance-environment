@@ -30,3 +30,8 @@ export const getNotesForScaleOctaveRange = (
 export const getMidiNoteNumbersFromNotes = (
   notes: Array<NoteType | NoNote>
 ): Array<number | null> => notes.map((n) => (n.midi ? n.midi : null));
+
+export const getNotesFromMidiNoteNumbers = (
+  noteNumbers: Array<number>
+): Array<NoteType | NoNote> =>
+  noteNumbers.map((noteNumber) => Note.get(Note.fromMidi(noteNumber)));
