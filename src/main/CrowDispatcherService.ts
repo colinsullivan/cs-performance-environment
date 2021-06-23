@@ -1,9 +1,10 @@
 import SerialPort from "serialport";
 import { Middleware } from "redux";
 
-import { SYSTEM_TEMPO_CHANGED } from "common/actions";
+import { SYSTEM_TEMPO_CHANGED, AllActionTypes } from "common/actions";
 
 const CROW_SERIAL_PATH = process.env.CROW_SERIAL_PATH;
+const DEBUG = true;
 
 class CrowDispatcherService {
   crowPort: SerialPort;
@@ -23,10 +24,10 @@ class CrowDispatcherService {
     this.crowPort.write(lua + "\n");
   }
 
-  handleMiddleware(store, next, action) {
+  handleMiddleware(store, next, action: AllActionTypes) {
     switch (action.type) {
       case SYSTEM_TEMPO_CHANGED:
-        this.writeLua(`tempo = ${action.tempo}`);
+        this.writeLua(`tempo = ${action.payload.tempo}`);
         break;
       
       default:
