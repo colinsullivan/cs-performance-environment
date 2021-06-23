@@ -7,7 +7,8 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     quantumText,
     quantumEditor,
     clockLatencyEditor,
-    clock;
+    clock,
+    clockWatcher;
 
   init_gui {
     arg params;
@@ -15,6 +16,17 @@ ClockEnvironment : PerformanceEnvironmentComponent {
       labelWidth = 75,
       textRect = Rect(0, 0, 100, 24);
     super.init_gui(params);
+
+    clockWatcher = SimpleController(clock);
+    clockWatcher.put(\tempo, {
+      var tempo = clock.tempo;
+      store.dispatch((
+        type: \SYSTEM_TEMPO_CHANGED,
+        payload: (
+          tempo: tempo
+        )
+      ))
+    });
 
     ArgNameLabel("Beats per bar", layout, labelWidth);
     meterText = StaticText.new(layout, textRect);
