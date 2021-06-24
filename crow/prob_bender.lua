@@ -49,11 +49,11 @@ end
 probFader = nil
 durFader = nil
 if crowId == crowIDA then
-  probFader = Fader:new(16)
-  durFader = Fader:new(15)
-elseif crowId == crowIDB then
   probFader = Fader:new(14)
   durFader = Fader:new(13)
+elseif crowId == crowIDB then
+  probFader = Fader:new(16)
+  durFader = Fader:new(15)
 end
 
 allFaders = {probFader, durFader}
@@ -73,7 +73,6 @@ function requestFaderUpdates()
 end
 
 durOptions = {
-  16,
   8,
   4,
   2,
@@ -101,7 +100,8 @@ function doPitchBend(durFader, outputNumber)
   -- calculates duration of bend
   --dur = (durFader:getVolts() / 10.0) * 3.0
   faderValue = (durFader:getVolts() / 10.0)
-  durBeats = durOptions[math.floor(faderValue * (numDurOptions - 1))]
+  inverseFaderValue = 1.0 - faderValue
+  durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))]
   dur = durBeats * 1.0/tempo 
 
   -- starts pitchbend
