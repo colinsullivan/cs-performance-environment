@@ -14,9 +14,6 @@ const useStyles = makeStyles(() =>
       fontSize: "12px",
       padding: 0,
     },
-    dropdownLabel: {
-      padding: 0,
-    },
     dropdownIcon: {
       width: "12px",
     },
@@ -44,7 +41,6 @@ const LabeledDropdown = ({
           root: classes.labeledDropdownSelect,
           icon: classes.dropdownIcon,
           nativeInput: classes.dropdownInput,
-          label: classes.dropdownLabel
         }}
         open={open}
         onClose={onClose}
