@@ -90,9 +90,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     currentBeatsPerSecond = clock.tempo;
     if (delayPatch != nil, {
       delayPatch.delaySecs.value = (
-        componentState.parameters.delayFactor * (
-          currentBeatsPerSecond / prevSequencerDur
-        )
+        componentState.parameters.delayFactor / currentBeatsPerSecond
       );
       this.store.dispatch((
         type: 'SYNKOPATER_DELAY_TIME_UPDATE',
