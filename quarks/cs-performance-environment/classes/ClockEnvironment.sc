@@ -7,7 +7,18 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     quantumText,
     quantumEditor,
     clockLatencyEditor,
-    clock;
+    clock,
+    clockWatcher;
+
+  dispatch_tempo_update {
+    var tempo = clock.tempo;
+    store.dispatch((
+      type: \SYSTEM_TEMPO_CHANGED,
+      payload: (
+        tempo: tempo
+      )
+    ))
+  }
 
   init_gui {
     arg params;
@@ -15,6 +26,12 @@ ClockEnvironment : PerformanceEnvironmentComponent {
       labelWidth = 75,
       textRect = Rect(0, 0, 100, 24);
     super.init_gui(params);
+
+    clockWatcher = SimpleController(clock);
+    clockWatcher.put(\tempo, {
+      this.dispatch_tempo_update();
+    });
+
 
     ArgNameLabel("Beats per bar", layout, labelWidth);
     meterText = StaticText.new(layout, textRect);
@@ -74,6 +91,8 @@ ClockEnvironment : PerformanceEnvironmentComponent {
     arg params;
     super.on_play(params);
     AppClock.sched(1.0/16, {this.update_transport_text();});
+    // Dispatch initial tempo update on startup
+    this.dispatch_tempo_update();
   }
 
   update_transport_text {

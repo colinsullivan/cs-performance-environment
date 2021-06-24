@@ -47,6 +47,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "sass": "^1.32.13",
+    "serialport": "^9.2.0",
     "styled-components": "^5.2.1",
     "supercollider-redux": "1.0.0-alpha.3",
     "supercollider-redux-sequencers": "^0.9.0",
@@ -92,6 +93,7 @@
     }
   },
   "devDependencies": {
+    "@types/serialport": "^8.0.1",
     "prettier": "^2.1.2",
     "redux-mock-store": "^1.5.4",
     "ts-node": "^9.1.1",

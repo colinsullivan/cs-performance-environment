@@ -22,6 +22,7 @@ import components from "./components";
 import holdMenus from "./holdMenus";
 import createInitialHoldMenus from "common/models/menus/menus";
 import scale from "./scale";
+import tempo from "./tempo";
 
 export const create_default_state = () => ({
   sequencers: createInitialSequencersState(),
@@ -47,6 +48,7 @@ const combinedReducers = combineReducers({
   octatrack,
   holdMenus,
   scale,
+  tempo
 });
 
 const rootReducer = (state, action) => {

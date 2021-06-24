@@ -237,6 +237,14 @@ export interface SequencerRandomizeNotes {
   };
 }
 
+export const SYSTEM_TEMPO_CHANGED = "SYSTEM_TEMPO_CHANGED";
+export interface SystemTempoChanged {
+  type: typeof SYSTEM_TEMPO_CHANGED;
+  payload: {
+    tempo: number;
+  };
+}
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -263,7 +271,8 @@ export type AllActionTypes =
   | SequencerUpdateModSequence
   | SequencerUpdateModSequenceLength
   | SequencerChangesAppliedTimeout
-  | SequencerRandomizeNotes;
+  | SequencerRandomizeNotes
+  | SystemTempoChanged;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,
