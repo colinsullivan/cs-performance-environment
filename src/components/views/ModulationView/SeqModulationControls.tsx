@@ -25,6 +25,7 @@ const SeqModulationControls = ({
     <ModulationControlsContainer>
       {modParams.map((modParam) => (
         <SeqModParamSliderControl
+          key={`${sequencerId}-${modParam}`}
           sequencerId={sequencerId}
           modParam={modParam}
         />
