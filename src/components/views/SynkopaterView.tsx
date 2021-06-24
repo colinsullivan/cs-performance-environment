@@ -5,7 +5,7 @@ import { sequencerIds } from "common/models";
 const SynkopaterView = () => (
   <div className="col">
     {sequencerIds.map((sequencerId) => (
-      <TouchSynkopater sequencerId={sequencerId} />
+      <TouchSynkopater key={sequencerId} sequencerId={sequencerId} />
     ))}
   </div>
 );
