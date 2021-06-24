@@ -54,7 +54,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
       "synkopaterDelayInput",
       Server.default,
       2, 2,
-      level: 1.0,
+      level: this.ampSlider,
       outbus: this.outputChannel
     );
 
