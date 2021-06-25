@@ -106,7 +106,7 @@ const startServer = () => {
     });
     server.use(express.static("public"));
   } else {
-    server.use(express.static(path.join(__dirname, "..")));
+    server.use(express.static(path.join(__dirname, ".")));
   }
   server.get("/getState", function (req, res) {
     res.json(store.getState());
