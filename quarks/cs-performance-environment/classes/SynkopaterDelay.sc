@@ -9,35 +9,21 @@
  **/
 
 SynkopaterDelay : PerformanceEnvironmentComponent {
-  var <>inputTrack,
-    inputPatch,
-    //<>delayTrack,
-    <>delayPatch,
-    <>delayFactorControl,
-    //<>delayFactorParam,
+  var inputPatch,
     <>delayFeedbackControl,
-    <>ampSlider,
+    <>ampControl,
     prevSequencerDur;
 
   init {
     arg params;
     
-    this.delayFactorControl = KrNumberEditor.new(1, ControlSpec(0, 8, \linear, (1.0 / 16.0)));
     this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
 
-    this.ampSlider = KrNumberEditor.new(1.0, \amp);
+    this.ampControl = KrNumberEditor.new(1.0, \amp);
 
     "SynkopaterDelay.init".postln();
 
     super.init(params);
-    
-    //this.delayFactorParam = InstrumentParameter.new((
-      //store: params['store'],
-      //statePath: this.getComponentStatePath() ++ ".parameters.delayFactor",
-      //numberEditor: this.delayFactorControl,
-      //componentId: this.componentId,
-      //parameterId: 'delayFactor'
-    //));
 
   }
 
@@ -45,60 +31,36 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     ^componentId.asString() ++ " delay";
   }
 
-  init_tracks {
-    arg params;
-    super.init_tracks(params);
-    //"SynkopaterDelay.initTracks".postln();
-
-    this.inputTrack = MixerChannel.new(
-      "synkopaterDelayInput",
-      Server.default,
-      2, 2,
-      level: 1.0,
-      outbus: this.outputChannel
-    );
-
-  }
-
   init_patches {
     arg params;
     super.init_patches(params);
-    //"SynkopaterDelay.initPatches".postln();
 
-    // because of the way MixerChannel works, we need a passthrough so
-    // something gets through to the fx stage.  I tried rewriting the
-    // SynkopaterDelay patch to be the "primary" patch but it was weird...
-    inputPatch = Patch("cs.utility.Passthrough", (
-      inputChannelNums: [componentState.inputBus, componentState.inputBus + 1]
-    ));
-
-    delayPatch = FxPatch("cs.Synkopater.SynkopaterDelay", (
+    inputPatch = Patch("cs.Synkopater.SynkopaterDelayWithInput", (
+      inputChannelNums: [componentState.inputBus, componentState.inputBus + 1],
       numChan: 2,
       delaySecs: KrNumberEditor.new(1.0, ControlSpec(0.0, 8.0)),
-      feedbackCoefficient: this.delayFeedbackControl
+      feedbackCoefficient: this.delayFeedbackControl,
+      amp: this.ampControl
     ));
 
   }
 
   on_play {
-    inputTrack.play(inputPatch);
-    inputTrack.playfx(delayPatch);
+    this.outputChannel.play(inputPatch);
   }
 
   update_delay_time {
     var currentBeatsPerSecond;
     currentBeatsPerSecond = clock.tempo;
-    if (delayPatch != nil, {
-      delayPatch.delaySecs.value = (
-        componentState.parameters.delayFactor * (
-          currentBeatsPerSecond / prevSequencerDur
-        )
+    if (inputPatch != nil, {
+      inputPatch.delaySecs.value = (
+        componentState.parameters.delayFactor / currentBeatsPerSecond
       );
       this.store.dispatch((
         type: 'SYNKOPATER_DELAY_TIME_UPDATE',
         payload: (
           sequencerId: componentState.sequencerId,
-          delaySecs: delayPatch.delaySecs.value
+          delaySecs: inputPatch.delaySecs.value
         )
       ));
     });
@@ -136,12 +98,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     
     super.load_environment(params);
     
-    this.delayFactorControl.action = {
-      arg val;
-      me.update_delay_time();
-    };
   }
-
 
   init_gui {
     arg params;
@@ -153,25 +110,14 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
     layout.flow({
       arg layout;
       
-      //ArgNameLabel("delayFactor", layout, labelWidth);
-      //this.delayFactorControl.gui(layout);
-      //layout.startRow();
-      
       ArgNameLabel("delayFeedback", layout, labelWidth);
       this.delayFeedbackControl.gui(layout);
       layout.startRow();
 
-      ArgNameLabel("amp", layout, labelWidth);
-      this.ampSlider.gui(layout);
+      ArgNameLabel("ampControl", layout, labelWidth);
+      this.ampControl.gui(layout);
       layout.startRow();
 
     });
   }
-  //init_uc33_mappings {
-    ////this.map_uc33_to_property(\knu1, \synkopationControlOne);
-    ////this.map_uc33_to_property(\knm1, \synkopationControlTwo);
-    ////this.map_uc33_to_property(\knl1, \delayFactorControl);
-    ////this.map_uc33_to_property(\knu2, \delayFeedbackControl);
-    ////this.map_uc33_to_property(\sl1, \ampSlider);
-  //}
 }

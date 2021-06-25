@@ -62,6 +62,13 @@ export const create_synkopater_sequencer = (
   lastUpdateId: "",
 });
 
+const synkDelayAMappings = {
+  B10_kn_F_10: "ampControl"
+};
+const synkDelayBMappings = {
+  B10_kn_F_11: "ampControl"
+};
+
 export const create_synk_delay_component = (
   id: string,
   inputBus: number,
@@ -81,6 +88,7 @@ export const create_synk_delay_component = (
     //},
     pc12Controller: {
       B10_kn_C_10: "delayFeedbackControl",
+      ...(id === "synkopaterA" ? synkDelayAMappings : synkDelayBMappings)
     },
   },
   presets: [],
