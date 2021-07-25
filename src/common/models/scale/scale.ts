@@ -27,9 +27,19 @@ export const getNotesForScaleOctaveRange = (
   return notes;
 };
 
+//export const getMidiNoteNumbersFromNotesWithError = (
+  //notes: Array<NoteType>
+//): Array<number> => notes.map((n) => {
+  //if (n.midi !== null && typeof(n.midi) !== undefined) {
+  //return n.midi as number;
+  //}
+//});
+export const getMidiNoteNumberFromNote = (
+  n: NoteType | NoNote
+): number | null => n.midi ? n.midi : null;
 export const getMidiNoteNumbersFromNotes = (
   notes: Array<NoteType | NoNote>
-): Array<number | null> => notes.map((n) => (n.midi ? n.midi : null));
+): Array<number | null> => notes.map(getMidiNoteNumberFromNote);
 
 export const getNotesFromMidiNoteNumbers = (
   noteNumbers: Array<number>

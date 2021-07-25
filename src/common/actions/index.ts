@@ -63,6 +63,7 @@ import {
   SequencerGenericParamKeys,
   SequencerGenericParamValue,
   SequencerModSeqParamKey,
+  SynkopaterSequencer,
   MidiModSequence,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
@@ -378,24 +379,27 @@ export const sequencerChangesAppliedTimeout = (
 });
 
 export const sequencerRandomizeNotes = (
-  sequencerId: string,
-  newNotes: number[]
+  sequencer: SynkopaterSequencer,
+  scale: ReturnType<typeof getScale>,
+  // null means randomize all notes
+  numNotesToRandomize: number | null
 ): SequencerRandomizeNotes => ({
   type: SEQUENCER_RANDOMIZE_NOTES,
   payload: {
-    sequencerId,
-    newNotes,
+    sequencerId: sequencer.sequencerId,
+    newNotes: randomizeSequencerNotes(sequencer.notes, scale, numNotesToRandomize),
   },
 });
 
 export const handleSequencerRandomizeNotes =
-  (sequencerId: string) => (dispatch, getState) => {
+  (sequencerId: string, numNotesToRandomize = null) => (dispatch, getState) => {
     const sequencer = getSequencer(getState(), { sequencerId });
     const scale = getScale(getState());
     dispatch(
       sequencerRandomizeNotes(
-        sequencerId,
-        randomizeSequencerNotes(sequencer.notes, scale)
+        sequencer,
+        scale,
+        numNotesToRandomize
       )
     );
   };

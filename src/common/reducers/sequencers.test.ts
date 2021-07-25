@@ -11,6 +11,8 @@ import {
 } from "common/actions";
 import { create_default_state } from "common/reducers";
 
+jest.mock("common/util");
+
 const allState = create_default_state();
 describe("sequencers", () => {
   const sequencerId = "one";
