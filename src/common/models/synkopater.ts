@@ -1,5 +1,5 @@
 import SCReduxSequencers from "supercollider-redux-sequencers";
-import { pick, min, max, shuffle } from "lodash";
+import { pick, min, max, shuffle, uniq } from "lodash";
 
 import { create_performance_component } from "./performance_component";
 import {
@@ -13,6 +13,7 @@ import {
   getNotesFromMidiNoteNumbers,
   getNotesForScaleOctaveRange,
   getMidiNoteNumbersFromNotes,
+  getMidiNoteNumberFromNote,
 } from "common/models/scale";
 
 export const sequencerIds = ["synkopaterA", "synkopaterB"];
@@ -176,6 +177,7 @@ export const applyPresetToSynkopaterSequencer = (
 export const randomizeSequencerNotes = (
   seqNotes: number[],
   scale: ScaleState,
+  numNotesToRandomize: number | null = null,
   maxOctaveShiftUp = 0,
   maxOctaveShiftDown = 0
 ): number[] => {
@@ -209,12 +211,43 @@ export const randomizeSequencerNotes = (
     generatedEndingOctave - generatedStartingOctave + 1
   );
 
-  const newNotes = shuffle(availableNotes).slice(0, seqNotes.length);
-  const newNoteNumbers = getMidiNoteNumbersFromNotes(newNotes);
-  for (const noteNumber of newNoteNumbers) {
+  let nextNoteNumbers: Array<number | null> = [...seqNotes];
+  let availableNotesShuffled = shuffle(availableNotes);
+  if (numNotesToRandomize === null) {
+    nextNoteNumbers = getMidiNoteNumbersFromNotes(
+      availableNotesShuffled.slice(0, seqNotes.length)
+    );
+  } else {
+    // Creates a unique list of indexes to replace
+    let noteIndexes = Array(numNotesToRandomize).fill(0);
+    let isUnique = false;
+    while (!isUnique) {
+      noteIndexes = noteIndexes.map(() =>
+        Math.floor(Math.random() * nextNoteNumbers.length)
+      );
+      isUnique = uniq(noteIndexes).length === noteIndexes.length;
+    }
+
+    // Replaces those indexes with a unique note
+    for (let i = 0; i < numNotesToRandomize; i++) {
+      const nextNoteNumIndex = noteIndexes[i];
+      let isNoteDifferent = false;
+      let isUnique = false;
+      while (!isNoteDifferent || !isUnique) {
+        nextNoteNumbers[nextNoteNumIndex] = getMidiNoteNumberFromNote(
+          availableNotesShuffled[0]
+        );
+        isNoteDifferent =
+          nextNoteNumbers[nextNoteNumIndex] !== seqNotes[nextNoteNumIndex];
+        availableNotesShuffled = shuffle(availableNotesShuffled);
+        isUnique = uniq(nextNoteNumbers).length === nextNoteNumbers.length;
+      }
+    }
+  }
+  for (const noteNumber of nextNoteNumbers) {
     if (noteNumber === null) {
       throw new Error("randomizeSequencerNotes: Failed to generate new notes");
     }
   }
-  return newNoteNumbers as number[];
+  return nextNoteNumbers as Array<number>;
 };

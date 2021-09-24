@@ -5,14 +5,19 @@ import TouchButton from "components/TouchButton";
 
 import { handleSequencerRandomizeNotes } from "common/actions";
 
-const RandomizeNotesButton = ({ sequencerId }) => {
+import "./RandomizeNotesButton.scss";
+
+const RandomizeNotesButton = ({ sequencerId, numNotesToRandomize }) => {
   const dispatch = useDispatch();
 
   return (
-    <TouchButton
-      icon={<CasinoIcon />}
-      onClick={() => dispatch(handleSequencerRandomizeNotes(sequencerId))}
-    />
+    <div className="randomize-notes-button">
+      {numNotesToRandomize === null ? null : <div className="number">{ numNotesToRandomize }</div>}
+      <TouchButton
+        icon={<CasinoIcon />}
+        onClick={() => dispatch(handleSequencerRandomizeNotes(sequencerId, numNotesToRandomize))}
+      />
+    </div>
   );
 };
 
