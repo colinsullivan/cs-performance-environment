@@ -44,7 +44,8 @@ CSPerformanceEnvironment {
     //clockController.clock.latency = Server.default.latency + 0.0426;
     //clockController.clock.latency = Server.default.latency;
     //clockController.clock.latency = 0.46;
-    clockController.clock.latency = 0.0213 + Server.default.latency;
+    //clockController.clock.latency = 0.0213 + Server.default.latency;
+    clockController.clock.latency = -0.19;
     //clockController.clock.latency = 0;
 
     sequencerFactory = SCReduxSequencerFactory.getInstance();
@@ -57,28 +58,28 @@ CSPerformanceEnvironment {
 
     runningWaterEnvironment = RunningWaterEnvironment.new((
       store: store,
-      outputBus: 18,
+      outputBus: 20,
       origin: [0, -500],
       clock: clockController.clock,
       store: store
     ));
     granularChaosEnvironment = GranularChaosEnvironment.new((
       store: store,
-      outputBus: 20,
+      outputBus: 22,
       origin: [0, -150],
       clock: clockController.clock,
       store: store
     ));
     shakerTextureInstr = ShakerTextureInstrument.new((
       store: store,
-      outputBus: 22,
+      outputBus: 24,
       origin: [0, -750],
       clock: clockController.clock,
       store: store
     ));
     randomHarpEnvironment = RandomHarpSamplerEnvironment.new((
       store: store,
-      outputBus: 24,
+      outputBus: 26,
       origin: [0, -1000],
       clock: clockController.clock,
       store: store
@@ -106,8 +107,13 @@ CSPerformanceEnvironment {
       store: store,
       //midiInDeviceName: "micro lite",
       //midiInPortName: "Port 1",
-      midiInDeviceName: "UltraLite AVB",
-      midiInPortName: "MIDI In",
+
+      //midiInDeviceName: "UltraLite AVB",
+      //midiInPortName: "MIDI In",
+
+      midiInDeviceName: "Faderfox PC12",
+      midiInPortName: "Faderfox PC12",
+
       midiInChannel: 15
     ));
   }
