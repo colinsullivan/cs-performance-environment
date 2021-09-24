@@ -10,6 +10,7 @@ import ModulationView from "components/views/ModulationView";
 
 const HoldMenuViewContainer = styled.div`
   position: absolute;
+  z-index: 1000;
   height: 100%;
   width: 100%;
   top: 0;
