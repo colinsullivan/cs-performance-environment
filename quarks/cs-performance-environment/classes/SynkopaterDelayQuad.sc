@@ -45,17 +45,9 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
 
   }
 
-  create_output_channel {
-    ^MixerChannel.new(
-      this.gui_window_title(),
-      Server.default,
-      2, 4,
-      outbus: this.outputBus
-    );
-  }
-
   on_play {
-    this.outputChannel.play(inputPatch);
+    //this.outputChannel.play(inputPatch);
+    inputPatch.play(bus: this.outputBus);
   }
 
   update_delay_time {
@@ -90,7 +82,7 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
     var sequencerDur,
       prevComponentState = componentState;
     super.handle_state_change();
-    //"SynkopaterDelayQuad.handle_state_change".postln();
+    "SynkopaterDelayQuad.handle_state_change".postln();
     sequencerDur = this.get_sequencer_dur();
 
     if ((sequencerDur != prevSequencerDur).or(componentState.parameters.delayFactor != prevComponentState.parameters.delayFactor), {
@@ -100,14 +92,14 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
 
   }
 
-  load_environment {
-    arg params;
-    var me = this,
-      t = TempoClock.default;
+  //load_environment {
+    //arg params;
+    //var me = this,
+      //t = TempoClock.default;
     
-    super.load_environment(params);
+    //super.load_environment(params);
     
-  }
+  //}
 
   init_gui {
     arg params;
