@@ -75,7 +75,7 @@ export const create_synk_delay_component = (
   inputBus: number,
   outputBus: number
 ): SynkopaterPerformanceComponent => ({
-  ...create_performance_component(id, "SynkopaterDelay"),
+  ...create_performance_component(id, "SynkopaterDelayQuad"),
   sequencerId: id,
   inputBus,
   outputBus,

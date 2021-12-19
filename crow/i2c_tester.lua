@@ -1,16 +1,32 @@
-function init()
-  print("Starting up...")
-  ii.pullup(false)
+function normalized_fader_value(faderValueVolts)
+  return faderValueVolts / 10.0
 end
 
---ii.event_raw = function (addr, cmd, data)
-  --print("event_raw")
---end
+ii.event_raw = function (addr, cmd, data)
+  print("event_raw")
+end
 
 ii.faders.event = function (e, value)
   print("faders.event")
   print(e.name)
   print(value)
+  normValue = normalized_fader_value(value)
+
+  outputValue = normValue * 1.0
+  output[3].volts = outputValue
 end
 
-ii.faders.get(14)
+
+function fetch_fader_values()
+  ii.faders.get(14)
+end
+
+function init()
+  print("Starting up...")
+  ii.pullup(false)
+
+  metro[1].time = 0.01
+  metro[1].event = fetch_fader_values
+  metro[1]:start()
+end
+
