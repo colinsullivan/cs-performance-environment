@@ -10,8 +10,13 @@
 
 import React from "react";
 import { connect } from "react-redux";
+import Pause from "@material-ui/icons/Pause";
+import PlayArrow from "@material-ui/icons/PlayArrow";
+import PlayArrowOutlined from "@material-ui/icons/PlayArrowOutlined";
 
 import SCReduxSequencers from "supercollider-redux-sequencers";
+
+import TouchButton from "components/TouchButton";
 const PLAYING_STATES = SCReduxSequencers.PLAYING_STATES;
 
 /**
@@ -21,16 +26,19 @@ const PLAYING_STATES = SCReduxSequencers.PLAYING_STATES;
  **/
 class QueueSequencerButton extends React.Component {
   render() {
-    let ButtonComponent, onClick;
-    const { playButtonComponent, stopButtonComponent } = this.props;
-    if (this.props.sequencer.playingState === PLAYING_STATES.STOPPED) {
-      ButtonComponent = playButtonComponent;
-      onClick = this.props.queue;
-    } else {
-      ButtonComponent = stopButtonComponent;
-      onClick = this.props.stop;
+    switch (this.props.sequencer.playingState) {
+      case PLAYING_STATES.STOPPED:
+        return <TouchButton onClick={this.props.queue} icon={<PlayArrow />} />;
+
+      case PLAYING_STATES.PLAYING:
+        return <TouchButton onClick={this.props.stop} icon={<Pause />} />;
+
+      case PLAYING_STATES.QUEUED:
+        return <TouchButton icon={<PlayArrowOutlined />} />;
+
+      default:
+        return null;
     }
-    return <ButtonComponent onClick={onClick} />;
   }
 }
 

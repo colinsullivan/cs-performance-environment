@@ -1,7 +1,5 @@
 import React from "react";
 
-import PlayButtonTouch from "components/PlayButtonTouch";
-import StopButtonTouch from "components/StopButtonTouch";
 import QueueSequencerButton from "components/QueueSequencerButton";
 import SequencerParamTouchSelector from "components/SequencerParamTouchSelector";
 import EuclideanTouchControl from "components/EuclideanTouchControl/EuclideanTouchControl";
@@ -98,8 +96,6 @@ class TouchSynkopater extends React.Component {
           <div className="col-2">
             <div className="row">
               <QueueSequencerButton
-                playButtonComponent={PlayButtonTouch}
-                stopButtonComponent={StopButtonTouch}
                 sequencerId={sequencerId}
               />
             </div>
