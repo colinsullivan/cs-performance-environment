@@ -18,12 +18,14 @@ end
 
 
 function fetch_fader_values()
-  ii.faders.get(14)
+  ii.faders.get(11)
 end
 
 function init()
   print("Starting up...")
+  -- Sweet Sixteen is doing the i2c pullup
   ii.pullup(false)
+  
 
   metro[1].time = 0.01
   metro[1].event = fetch_fader_values
