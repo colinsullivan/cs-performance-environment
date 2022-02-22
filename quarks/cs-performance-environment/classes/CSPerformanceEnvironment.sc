@@ -88,10 +88,10 @@ CSPerformanceEnvironment {
       //inChannel: 6,
       //outputBus: 24
     //));
-    //wideBassEnvironment = WideBassVoicerEnvironment.new((
-      //inChannel: 5,
-      //outputBus: 28
-    //));
+    wideBassEnvironment = WideBassVoicerEnvironment.new((
+      inChannel: 0,
+      outputBus: 28
+    ));
     //lazersEnvironment = RandomizedLazersEnvironment.new((
       //inChannel: 7,
       //outputBus: 32
@@ -111,8 +111,11 @@ CSPerformanceEnvironment {
       //midiInDeviceName: "UltraLite AVB",
       //midiInPortName: "MIDI In",
 
-      midiInDeviceName: "Faderfox PC12",
-      midiInPortName: "Faderfox PC12",
+      //midiInDeviceName: "Faderfox PC12",
+      //midiInPortName: "Faderfox PC12",
+
+      midiInDeviceName: "ES-9",
+      midiInPortName: "MIDI In",
 
       midiInChannel: 15
     ));
