@@ -156,13 +156,13 @@ const startServer = () => {
 };
 
 if (USE_EXTERNAL_SC) {
-  const externalSCWait = 2000;
+  const externalSCWait = 10000;
   console.log(`
     USE_EXTERNAL_SC: Not spawning SC...Waiting ${
       externalSCWait / 1000
     } seconds instead...
   `);
-  setTimeout(startServer, externalSCWait);
+  setTimeout(() => scReduxController.scStoreController.init().then(startServer).catch(quit), externalSCWait);
 } else {
   scReduxController
     .boot()

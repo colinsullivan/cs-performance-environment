@@ -17,8 +17,15 @@ s.options.numInputBusChannels = 32;
 
 s.options.memSize = 1024000;
 s.options.blockSize = 8;
+s.options.hardwareBufferSize = 256;
 
 
+API.mountDuplexOSC();
+s.waitForBoot({
+  SCReduxStore.getInstance().dispatch((
+    type: SCRedux.actionTypes['SC_SYNTH_READY']
+  ));
+});
 s.waitForBoot({
   var m = s.meter(),
     mBounds,
