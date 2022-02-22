@@ -4,92 +4,179 @@ crowIDA = 'a'
 crowIDB = 'b'
 
 -- Defines which Crow is being deployed to
-crowId = crowIDB
+crowId = crowIDA
 
-function init()
-  -- Sweet Sixteen is doing the i2c pullup
-  ii.pullup(false)
-
-  -- Initializes all outputs to 0
-  for n=1, 4 do
-    output[n].volts = 0
-  end
-
-  -- Detects noteons
-  for n=1, 2 do
-    input[n].mode('change', 0.1, 0.0, 'rising')
-  end
-end
-
--- Class for tracking state of an individual fader
-Fader = {}
-Fader.__index = Fader
-function Fader:new(inFaderNum)
-  theFader = {
-    faderValue = 0.0,
-    faderNum = inFaderNum
-  }
-  setmetatable(theFader, Fader)
-  return theFader
-end
-function Fader:update(e, value)
-  if e.name == self.faderNum then
-    self.faderValue = value
-  end
-end
-function Fader:getVolts()
-  return self.faderValue
-end
-function Fader:requestUpdate()
-  ii.faders.get(self.faderNum)
-end
-
-
--- Instantiates faders
-probFader = nil
-durFader = nil
-if crowId == crowIDA then
-  probFader = Fader:new(14)
-  durFader = Fader:new(13)
-elseif crowId == crowIDB then
-  probFader = Fader:new(16)
-  durFader = Fader:new(15)
-end
-
-allFaders = {probFader, durFader}
-numFaders = 2
-
--- Updates all faders when an incoming fader update event occurs
-ii.faders.event = function(e, value)
-  for n = 1, numFaders do
-    allFaders[n]:update(e, value)
-  end
-end
-
-function requestFaderUpdates()
-  for n = 1, numFaders do
-    allFaders[n]:requestUpdate()
-  end
-end
-
+-- Defines the possible durations for the pitch benders
 durOptions = {
   8,
   4,
   2,
-  1.5,
   1,
   3 / 4,
-  1 / 2,
   2 / 3,
+  1 / 2,
   1 / 3,
   1 / 4,
   1 / 8,
   1 / 16,
   1 / 32,
+  1 / 64,
 };
-numDurOptions = 14
+numDurOptions = 13
 
-function doPitchBend(durFader, outputNumber)
+--
+-- Class for tracking state of an individual fader
+--
+Fader = {}
+function Fader:new()
+  theFader = {
+    faderValue = 0.0,
+    faderNum = nil,
+    fMin = 0.031,
+    fMax = 9.959
+  }
+  setmetatable(theFader, self)
+  self.__index = self
+  return theFader
+end
+function Fader:faderChanged()
+end
+function Fader:update(e, value)
+  if e.name == self.faderNum then
+    if self.faderValue ~= value then
+      self.faderValue = value
+      self:faderChanged()
+    end
+  end
+end
+function Fader:getVolts()
+  return self.faderValue
+end
+function Fader:getNormalizedValue()
+  return (self.faderValue - self.fMin) / (self.fMax - self.fMin)
+end
+function Fader:requestUpdate()
+  if self.faderNum == nil then
+    return
+  end
+  ii.faders.get(self.faderNum)
+end
+function Fader:setup(inFaderNum, fMin, fMax)
+  self.faderNum = inFaderNum
+  self.fMin = fMin
+  self.fMax = fMax
+end
+
+GXposeF = Fader:new()
+function GXposeF:setOut(inOutputNum)
+  self.outputNum = inOutputNum
+end
+function GXposeF:setXposeSt(inTransposeSemitones)
+  self.transposeSemitones = inTransposeSemitones
+end
+function GXposeF:faderChanged()
+  -- TODO: Snap to zero
+  normalizedValue = self:getNormalizedValue()
+  semitonesOut = self.transposeSemitones * normalizedValue
+  voltsOut = semitonesOut / 12
+  output[self.outputNum].volts = voltsOut
+end
+
+--
+-- Class for managing a collection of faders
+--
+FMan = {}
+function FMan:new()
+  -- Instantiates faders
+  probF = Fader:new()
+  durF = Fader:new()
+  gXposeFa = GXposeF:new()
+  gXposeFb = GXposeF:new()
+  gXposeFc = GXposeF:new()
+  arcDurFader = Fader:new()
+  if crowId == crowIDA then
+    gXposeFa:setup(9, 0.05188, 9.965)
+    gXposeFa:setOut(3)
+    gXposeFa:setXposeSt(24)
+
+    gXposeFb:setup(10, 0.06897, 9.9816)
+    gXposeFb:setOut(3)
+    gXposeFb:setXposeSt(-24)
+
+    gXposeFc:setup(11, 0.0, 9.940)
+    gXposeFc:setOut(3)
+    gXposeFc:setXposeSt(7)
+  end
+  arcDurFader:setup(12, 0.0, 9.922)
+  durF:setup(15, 0.0396, 9.953)
+  probF:setup(16, 0.0201, 9.957)
+
+  allFaders = {probF, durF, gXposeFa, gXposeFb, gXposeFc, arcDurFader}
+  numFaders = 6
+
+  theFaderManager = {
+    probF = probF,
+    durF = durF,
+    arcDurFader = arcDurFader,
+    gXposeFa = gXposeFa,
+    gXposeFb = gXposeFb,
+    gXposeFc = gXposeFc,
+    numFaders = numFaders,
+    allFaders = allFaders
+  }
+  setmetatable(theFaderManager, self)
+  self.__index = self
+  return theFaderManager
+end
+function FMan:handleFaderEvent(e, value)
+-- Sends update event to all faders when an incoming fader update event occurs
+  for n = 1, numFaders do
+    allFaders[n]:update(e, value)
+  end
+end
+function FMan:requestFaderUpdates()
+-- Requests an update for all faders
+  for n = 1, numFaders do
+    allFaders[n]:requestUpdate()
+  end
+end
+function FMan:getProbFader()
+  return self.probF
+end
+function FMan:getDurFader()
+  return self.durF
+end
+function FMan:getArcDurFader()
+  return self.arcDurFader
+end
+function FMan:setup()
+  
+  -- Sends all incoming fader events to the fader manager
+  ii.faders.event = function(e, value)
+    self:handleFaderEvent(e, value)
+  end
+
+  -- Request fader updates repeatedly fast for all faders
+  metro[1].time = 0.01
+  metro[1].event = function() self:requestFaderUpdates() end
+  metro[1]:start()
+end
+
+--
+-- Class for a probabalistic pitch bend of a single voice
+--
+ProbabalisticBender = {}
+function ProbabalisticBender:new(inputNum, faders)
+  theProbabalisticBender = {
+    inputNum = inputNum,
+    faders = faders
+  }
+  setmetatable(theProbabalisticBender, self)
+  self.__index = self
+  return theProbabalisticBender
+end
+function ProbabalisticBender:doPitchBend()
+  outputNumber = self.inputNum
   -- Decides on direction of bend
   chance = math.random()
   direction = "down"
@@ -98,53 +185,152 @@ function doPitchBend(durFader, outputNumber)
   end
 
   -- calculates duration of bend
-  --dur = (durFader:getVolts() / 10.0) * 3.0
-  faderValue = (durFader:getVolts() / 10.0)
+  durF = self.faders:getDurFader()
+  --dur = (durF:getVolts() / 10.0) * 3.0
+  faderValue = durF:getNormalizedValue()
   inverseFaderValue = 1.0 - faderValue
   durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))]
   dur = durBeats * 1.0/tempo 
 
   -- starts pitchbend
+  output[outputNumber].shape = 'logarithmic'
   if direction == "down" then
     -- starts one octave up
     output[outputNumber].slew = 0.0
     output[outputNumber].volts = 1.0
 
     -- bends one octave downward
-    output[outputNumber].shape = 'logarithmic'
     output[outputNumber].slew = dur
     output[outputNumber].volts = 0.0
-
   else
     -- starts one octave down
     output[outputNumber].slew = 0.0
     output[outputNumber].volts = -1.0
 
     -- bends up
-    output[outputNumber].shape = 'logarithmic'
     output[outputNumber].slew = dur
     output[outputNumber].volts = 0.0
   end
-
 end
-
-function handleNoteOn(inputNum, durFader)
-  requestFaderUpdates()
-
+function ProbabalisticBender:handleNoteOn()
   -- decides to do pitchbend or not
   chance = math.random()
-  toss = probFader:getVolts() > chance * 10.0
+  probF = self.faders:getProbFader()
+  durF = self.faders:getDurFader()
+  toss = probF:getVolts() > chance * 10.0
   if toss then
-    doPitchBend(durFader, inputNum)
+    self:doPitchBend()
   end
 end
 
--- Detects noteons and update value of faders
-input[1].change = function(s)
-  handleNoteOn(1, durFader)
+RandomVoltageGenerator = {}
+function RandomVoltageGenerator:new(inputNum, outputNum, faders)
+  theRandomVoltageGenerator = {
+    inputNum = inputNum,
+    outputNum = outputNum,
+    faders = faders
+  }
+  setmetatable(theRandomVoltageGenerator, self)
+  self.__index = self
+  return theRandomVoltageGenerator
 end
-input[2].change = function(s)
-  handleNoteOn(2, durFader)
+function RandomVoltageGenerator:handleNoteOn()
+  randVolts = math.random() * 10.0 - 5.0
+  n = self.outputNum
+  output[n].volts = randVolts
 end
 
-ii.faders.get(probFaderNumber)
+ArcGenerator = {}
+function ArcGenerator:new(inputNum, outputNum, faders)
+  theArcGenerator = {
+    inputNum = inputNum,
+    outputNum = outputNum,
+    faders = faders
+  }
+  setmetatable(theArcGenerator, self)
+  self.__index = self
+  return theArcGenerator
+end
+function ArcGenerator:handleNoteOn()
+  f = self.faders:getArcDurFader()
+  -- https://www.wolframalpha.com/input/?i=x%5E3+x+from+0+to+1.5
+  time = 3.0 * math.pow(1.2 * f:getNormalizedValue(), 3)
+  o = self.outputNum
+  output[o].volts = 0
+  arc = {
+    to( 5, time / 2.0 ),
+    to( 0, time / 2.0 )
+  }
+  output[o](arc)
+end
+
+
+function init()
+  -- Sweet Sixteen is doing the i2c pullup
+  ii.pullup(false)
+  
+  -- Initializes all outputs to 0
+  for n=1, 4 do
+    output[n].volts = 0
+  end
+  
+  -- Creates the fader manager
+  faders = FMan:new()
+  faders:setup()
+
+  -- Creates the benders
+  benders = {}
+  numBenders = 0
+  if crowId == crowIDA then
+    numBenders = 1
+  elseif crowId == crowIDB then
+    numBenders = 2
+  end
+
+  for n = 1, numBenders do
+    benders[n] = ProbabalisticBender:new(n, faders)
+  end
+  
+  -- Creates the random generators
+  randomGenerators = {}
+  numRandomGens = 0
+  if crowId == crowIDA then
+    numRandomGens = 1
+    randomGenerators[1] = RandomVoltageGenerator:new(2, 2, faders)
+  end
+
+  -- Creates the arc generators
+  arcGenerators = {}
+  numArcs = 0
+  if crowId == crowIDA then
+    numArcs = 1
+    arcGenerators[1] = ArcGenerator:new(2, 4, faders)
+  elseif crowId == crowIDB then
+    numArcs = 2
+    arcGenerators[1] = ArcGenerator:new(1, 3, faders)
+    arcGenerators[2] = ArcGenerator:new(2, 4, faders)
+  end
+
+  for n = 1, 2 do
+    input[n].mode('change', .5, 0.0, 'rising')
+    input[n].change = function(s)
+      for i = 1, numBenders do
+        if benders[i].inputNum == n then
+          benders[i]:handleNoteOn()
+        end
+      end
+
+      for i = 1, numRandomGens do
+        if randomGenerators[i].inputNum == n then
+          randomGenerators[i]:handleNoteOn()
+        end
+      end
+
+      for i = 1, numArcs do
+        if arcGenerators[i].inputNum == n then
+          arcGenerators[i]:handleNoteOn()
+        end
+      end
+    end
+  end
+end

@@ -1,0 +1,16 @@
+div.randomize-notes-button {
+  position: relative;
+  display: inline-block;
+  margin-right: 12px;
+  div.number {
+    z-index: 100;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    background-color: white;
+    color: black;
+    font-size: 12px;
+    padding: 2px;
+    border-radius: 4px;
+  }
+}

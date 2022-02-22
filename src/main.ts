@@ -34,18 +34,26 @@ import { rehydrate_state } from "common/actions";
 
 dotenv.config({ path: ".env" });
 
-const CROW_A_SERIAL_PATH = process.env.CROW_A_SERIAL_PATH;
-if (!CROW_A_SERIAL_PATH) {
-  throw new Error("Expected CROW_A_SERIAL_PATH environment variable");
+if (!process.env.CROW_DISABLED) {
+  throw new Error("Expected CROW_DISABLED environment variable");
 }
-const CROW_B_SERIAL_PATH = process.env.CROW_B_SERIAL_PATH;
-if (!CROW_B_SERIAL_PATH) {
-  throw new Error("Expected CROW_B_SERIAL_PATH environment variable");
-}
+const CROW_DISABLED = process.env.CROW_DISABLED === "1";
+
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
-const crowDispatcherA = new CrowDispatcherService(CROW_A_SERIAL_PATH);
-const crowDispatcherB = new CrowDispatcherService(CROW_B_SERIAL_PATH);
+let crowDispatcherA, crowDispatcherB;
+if (!CROW_DISABLED) {
+  const CROW_A_SERIAL_PATH = process.env.CROW_A_SERIAL_PATH;
+  if (!CROW_A_SERIAL_PATH) {
+    throw new Error("Expected CROW_A_SERIAL_PATH environment variable");
+  }
+  const CROW_B_SERIAL_PATH = process.env.CROW_B_SERIAL_PATH;
+  if (!CROW_B_SERIAL_PATH) {
+    throw new Error("Expected CROW_B_SERIAL_PATH environment variable");
+  }
+  crowDispatcherA = new CrowDispatcherService(CROW_A_SERIAL_PATH);
+  crowDispatcherB = new CrowDispatcherService(CROW_B_SERIAL_PATH);
+}
 console.log("Creating store...");
 var loggerMiddleware = (_store) => (next) => (action) => {
   console.log("will dispatch", action);
@@ -62,9 +70,15 @@ var loggerMiddleware = (_store) => (next) => (action) => {
 var middleware = [
   thunk,
   wsServerDispatcher.middleware,
+];
+
+if (!CROW_DISABLED) {
+  middleware = [
+    ...middleware,
   crowDispatcherA.middleware,
   crowDispatcherB.middleware,
-];
+  ]
+}
 
 if (IS_DEVELOPMENT) {
   middleware.push(loggerMiddleware);
@@ -142,13 +156,13 @@ const startServer = () => {
 };
 
 if (USE_EXTERNAL_SC) {
-  const externalSCWait = 2000;
+  const externalSCWait = 10000;
   console.log(`
     USE_EXTERNAL_SC: Not spawning SC...Waiting ${
       externalSCWait / 1000
     } seconds instead...
   `);
-  setTimeout(startServer, externalSCWait);
+  setTimeout(() => scReduxController.scStoreController.init().then(startServer).catch(quit), externalSCWait);
 } else {
   scReduxController
     .boot()

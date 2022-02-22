@@ -18,21 +18,21 @@ WideBassVoicerEnvironment : VoicerEnvironmentComponent {
       value: 0.0,
       spec: specs.at(instr.argsAndIndices().at(\toneModulatorGainMultiplier))
     );
-    this.sock.addControl(15, \toneModulatorGainMultiplier);
+    this.sock.addControl(1, \toneModulatorGainMultiplier);
     
     this.voicer.mapGlobal(
       \toneModulatorLFOAmount,
       value: 0.0,
       spec: specs.at(instr.argsAndIndices().at(\toneModulatorLFOAmount))
     );
-    this.sock.addControl(16, \toneModulatorLFOAmount);
+    this.sock.addControl(74, \toneModulatorLFOAmount);
 
     this.voicer.mapGlobal(
       \toneModulatorLFORate,
       value: 0.0,
       spec: specs.at(instr.argsAndIndices().at(\toneModulatorLFORate))
     );
-    this.sock.addControl(17, \toneModulatorLFORate);
+    this.sock.addControl(75, \toneModulatorLFORate);
     
     this.voicer.portaTime = 0.2;
 

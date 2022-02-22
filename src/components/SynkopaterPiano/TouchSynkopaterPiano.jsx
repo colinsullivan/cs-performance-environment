@@ -45,7 +45,9 @@ const TouchSynkopaterPiano = ({ sequencerId, componentId }) => {
             </TransposeControls>
           </div>
           <div className="col">
-            <RandomizeNotesButton sequencerId={sequencerId} />
+            <RandomizeNotesButton sequencerId={sequencerId} numNotesToRandomize={null} />
+            <RandomizeNotesButton sequencerId={sequencerId} numNotesToRandomize={1} />
+            <RandomizeNotesButton sequencerId={sequencerId} numNotesToRandomize={2} />
           </div>
           <div className="col">
             <PresetControl sequencerId={sequencerId} componentId={componentId} />
