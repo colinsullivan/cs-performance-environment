@@ -50,7 +50,7 @@
     "serialport": "^9.2.0",
     "styled-components": "^5.2.1",
     "supercollider-redux": "1.0.0-alpha.3",
-    "supercollider-redux-sequencers": "^0.9.0",
+    "supercollider-redux-sequencers": "0.9.11",
     "typescript": "^4.1.2",
     "uuid": "^3.4.0",
     "web-vitals": "^1.0.1"
@@ -65,7 +65,8 @@
     "start_server": "node ./build/main.js",
     "build_server": "mkdir -p build/main && cp src/main/sclang_init.sc build/main/ && tsc --build server.tsconfig.json",
     "build": "npm run build_react && npm run build_server",
-    "build_docs": "plantuml -progress -tpng ./docs/*.puml"
+    "build_docs": "plantuml -progress -tpng ./docs/*.puml",
+    "postinstall": "npm run build"
   },
   "eslintConfig": {
     "extends": [
