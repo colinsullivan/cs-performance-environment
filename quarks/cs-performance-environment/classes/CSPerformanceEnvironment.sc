@@ -21,7 +21,8 @@ CSPerformanceEnvironment {
     wideBassEnvironment,
     lazersEnvironment,
     clockEnvironment,
-    octatrackStateDispatcher;
+    octatrackStateDispatcher,
+    supersawVoicerEnvironment;
 
   *new {
     ^super.new.init();
@@ -96,6 +97,10 @@ CSPerformanceEnvironment {
       //inChannel: 7,
       //outputBus: 32
     //));
+    supersawVoicerEnvironment = SuperSawVoicerEnvironment.new((
+      inChannel: 4,
+      outputBus: 30
+    ));
 
     clockEnvironment = ClockEnvironment.new((
       'origin': [0, 0],
