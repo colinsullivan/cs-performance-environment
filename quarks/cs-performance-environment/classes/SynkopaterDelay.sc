@@ -46,7 +46,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   }
 
   on_play {
-    this.outputChannel.play(inputPatch);
+    inputPatch.play(bus: this.outputBus);
   }
 
   update_delay_time {

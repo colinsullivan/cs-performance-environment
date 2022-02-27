@@ -138,7 +138,7 @@ RandomHarpSamplerEnvironment : PerformanceEnvironmentComponent {
         \attackTime, this.attackTime,
         \releaseTime, this.releaseTime
       ],
-      target: this.outputChannel
+      Bus.new('audio', this.outputBus)
     );
 
     this.playerRoutine = Routine.new({
