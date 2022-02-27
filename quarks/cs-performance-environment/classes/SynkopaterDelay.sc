@@ -46,7 +46,7 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
   }
 
   on_play {
-    this.outputChannel.play(inputPatch);
+    inputPatch.play(bus: this.outputBus);
   }
 
   update_delay_time {
@@ -89,15 +89,6 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
       this.update_delay_time();
     });
 
-  }
-
-  load_environment {
-    arg params;
-    var me = this,
-      t = TempoClock.default;
-    
-    super.load_environment(params);
-    
   }
 
   init_gui {

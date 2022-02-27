@@ -128,10 +128,8 @@ RandomHarpSamplerEnvironment : PerformanceEnvironmentComponent {
     });
   }
 
-  load_environment {
+  init_patches {
     var me = this;
-    super.load_environment();
-
     this.voicer = Voicer.new(
       16,
       Instr.at("cs.sfx.PlayBufSegment"),
@@ -140,7 +138,7 @@ RandomHarpSamplerEnvironment : PerformanceEnvironmentComponent {
         \attackTime, this.attackTime,
         \releaseTime, this.releaseTime
       ],
-      target: this.outputChannel
+      Bus.new('audio', this.outputBus)
     );
 
     this.playerRoutine = Routine.new({

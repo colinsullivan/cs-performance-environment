@@ -127,9 +127,6 @@ AbletonPannerEnvironment : PerformanceEnvironmentComponent {
     panner.set('azimuth', params['azimuth']);
   }
 
-  load_environment {
-  }
-
   on_play {
     this.panners.do({
       arg panner, i;

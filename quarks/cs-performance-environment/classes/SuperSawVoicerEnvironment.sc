@@ -1,16 +1,21 @@
 SuperSawVoicerEnvironment : VoicerEnvironmentComponent {
-  var cutoffFreqControl;
+  var cutoffFreqControl,
+    instr,
+    filtInstr,
+    filtPatch,
+    voiceBus,
+    voiceGroup,
+    filterGroup;
 
   init {
     arg params;
 
-    var instr = Instr("cs.synths.SuperSaw.Voice"),
-      filtInstr = Instr("cs.synths.SuperSaw.Filter"),
-      filtPatch,
-      specs = instr.specs,
-      voiceBus = Bus.audio(numChannels: 2),
-      voiceGroup = Group.new(),
-      filterGroup = Group.after(voiceGroup);
+    instr = Instr("cs.synths.SuperSaw.Voice");
+    filtInstr = Instr("cs.synths.SuperSaw.Filter");
+    filtPatch;
+    voiceBus = Bus.audio(numChannels: 2);
+    voiceGroup = Group.new();
+    filterGroup = Group.after(voiceGroup);
 
     params['instr'] = instr;
     params['instrArgs'] = (
@@ -23,6 +28,11 @@ SuperSawVoicerEnvironment : VoicerEnvironmentComponent {
 
     super.init(params);
 
+  }
+
+  init_patches {
+    arg params;
+    super.init_patches(params);
     cutoffFreqControl = this.voicer.mapGlobal(
       \cutoffFreq,
       value: 0.5,
