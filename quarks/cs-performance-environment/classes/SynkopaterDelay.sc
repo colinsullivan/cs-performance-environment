@@ -91,15 +91,6 @@ SynkopaterDelay : PerformanceEnvironmentComponent {
 
   }
 
-  load_environment {
-    arg params;
-    var me = this,
-      t = TempoClock.default;
-    
-    super.load_environment(params);
-    
-  }
-
   init_gui {
     arg params;
     var labelWidth = 75,
