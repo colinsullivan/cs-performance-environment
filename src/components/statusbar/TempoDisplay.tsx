@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useSelector } from "react-redux";
 import { getTempo } from "common/selectors";
 import { tempoToBpm, roundTwoDecimals } from "common/util";

@@ -78,6 +78,9 @@ export const getTempo = (state) => state.tempo;
 
 export const getCrowDeviceReadyStates = createSelector([getCrow], (crow) =>
   crow.map(
-    (d) => d.readyState === READY_STATES.OPEN && d.state.tempo !== undefined
+    (d) => ({
+      name: d.name,
+      isReady: d.readyState === READY_STATES.OPEN && d.state.tempo !== undefined
+    })
   )
 );
