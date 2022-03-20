@@ -28,31 +28,37 @@ import SCRedux from "supercollider-redux";
 import WebsocketServerDispatcher from "main/WebsocketServerDispatcher";
 import CrowDispatcherService from "main/CrowDispatcherService";
 
-import rootReducer, { create_default_state } from "common/reducers";
+import rootReducer from "common/reducers";
 import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
+import {createInitialState} from "common/models/initialState";
 
 dotenv.config({ path: ".env" });
+
+const initialState = createInitialState();
 
 if (!process.env.CROW_DISABLED) {
   throw new Error("Expected CROW_DISABLED environment variable");
 }
 const CROW_DISABLED = process.env.CROW_DISABLED === "1";
 
-
 const wsServerDispatcher = new WebsocketServerDispatcher();
+
+
+let crowDispatcher;
 let crowDispatcherA, crowDispatcherB;
 if (!CROW_DISABLED) {
-  const CROW_A_SERIAL_PATH = process.env.CROW_A_SERIAL_PATH;
-  if (!CROW_A_SERIAL_PATH) {
-    throw new Error("Expected CROW_A_SERIAL_PATH environment variable");
-  }
-  const CROW_B_SERIAL_PATH = process.env.CROW_B_SERIAL_PATH;
-  if (!CROW_B_SERIAL_PATH) {
-    throw new Error("Expected CROW_B_SERIAL_PATH environment variable");
-  }
-  crowDispatcherA = new CrowDispatcherService(CROW_A_SERIAL_PATH);
-  crowDispatcherB = new CrowDispatcherService(CROW_B_SERIAL_PATH);
+  //const CROW_A_SERIAL_PATH = process.env.CROW_A_SERIAL_PATH;
+  //if (!CROW_A_SERIAL_PATH) {
+    //throw new Error("Expected CROW_A_SERIAL_PATH environment variable");
+  //}
+  //const CROW_B_SERIAL_PATH = process.env.CROW_B_SERIAL_PATH;
+  //if (!CROW_B_SERIAL_PATH) {
+    //throw new Error("Expected CROW_B_SERIAL_PATH environment variable");
+  //}
+  //crowDispatcherA = new CrowDispatcherService(CROW_A_SERIAL_PATH);
+  //crowDispatcherB = new CrowDispatcherService(CROW_B_SERIAL_PATH);
+  crowDispatcher = new CrowDispatcherService();
 }
 console.log("Creating store...");
 var loggerMiddleware = (_store) => (next) => (action) => {
@@ -72,11 +78,10 @@ var middleware = [
   wsServerDispatcher.middleware,
 ];
 
-if (!CROW_DISABLED) {
+if (crowDispatcher) {
   middleware = [
     ...middleware,
-  crowDispatcherA.middleware,
-  crowDispatcherB.middleware,
+    crowDispatcher.middleware
   ]
 }
 
@@ -86,9 +91,12 @@ if (IS_DEVELOPMENT) {
 
 var store = createStore(
   rootReducer,
-  create_default_state(),
+  initialState,
   applyMiddleware(...middleware)
 );
+
+crowDispatcher.setStore(store);
+crowDispatcher.initialize();
 
 console.log("Initializing SCRedux");
 const scReduxController = new SCRedux.SCReduxController(store, {
