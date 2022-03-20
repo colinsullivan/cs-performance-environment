@@ -66,7 +66,9 @@
     "build_server": "mkdir -p build/main && cp src/main/sclang_init.sc build/main/ && tsc --build server.tsconfig.json",
     "build": "npm run build_react && npm run build_server",
     "build_docs": "plantuml -progress -tpng ./docs/*.puml",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "read_serial": "TS_NODE_PROJECT=server.tsconfig.json node -r ts-node/register -r tsconfig-paths/register scripts/readSerial.ts",
+    "serialports:list": "TS_NODE_PROJECT=server.tsconfig.json node -r ts-node/register -r tsconfig-paths/register scripts/listSerialDevices.ts"
   },
   "eslintConfig": {
     "extends": [

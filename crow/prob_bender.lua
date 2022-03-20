@@ -1,13 +1,9 @@
-tempo = 2
-
-crowIDA = 'a'
-crowIDB = 'b'
-
--- Defines which Crow is being deployed to
-crowId = crowIDA
+public{tempo = 2}
+public{crowId = 'c'}
 
 -- Defines the possible durations for the pitch benders
 durOptions = {
+  16,
   8,
   4,
   2,
@@ -20,7 +16,7 @@ durOptions = {
   1 / 8,
   1 / 16,
   1 / 32,
-  1 / 64,
+  --1 / 64,
 };
 numDurOptions = 13
 
@@ -94,7 +90,7 @@ function FMan:new()
   gXposeFb = GXposeF:new()
   gXposeFc = GXposeF:new()
   arcDurFader = Fader:new()
-  if crowId == crowIDA then
+  if public.crowId == crowIDA then
     gXposeFa:setup(9, 0.05188, 9.965)
     gXposeFa:setOut(3)
     gXposeFa:setXposeSt(24)
@@ -157,7 +153,7 @@ function FMan:setup()
   end
 
   -- Request fader updates repeatedly fast for all faders
-  metro[1].time = 0.01
+  metro[1].time = 0.1
   metro[1].event = function() self:requestFaderUpdates() end
   metro[1]:start()
 end
@@ -190,7 +186,7 @@ function ProbabalisticBender:doPitchBend()
   faderValue = durF:getNormalizedValue()
   inverseFaderValue = 1.0 - faderValue
   durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))]
-  dur = durBeats * 1.0/tempo 
+  dur = durBeats * 1.0/public.tempo 
 
   -- starts pitchbend
   output[outputNumber].shape = 'logarithmic'
@@ -240,31 +236,6 @@ function RandomVoltageGenerator:handleNoteOn()
   output[n].volts = randVolts
 end
 
-ArcGenerator = {}
-function ArcGenerator:new(inputNum, outputNum, faders)
-  theArcGenerator = {
-    inputNum = inputNum,
-    outputNum = outputNum,
-    faders = faders
-  }
-  setmetatable(theArcGenerator, self)
-  self.__index = self
-  return theArcGenerator
-end
-function ArcGenerator:handleNoteOn()
-  f = self.faders:getArcDurFader()
-  -- https://www.wolframalpha.com/input/?i=x%5E3+x+from+0+to+1.5
-  time = 3.0 * math.pow(1.2 * f:getNormalizedValue(), 3)
-  o = self.outputNum
-  output[o].volts = 0
-  arc = {
-    to( 5, time / 2.0 ),
-    to( 0, time / 2.0 )
-  }
-  output[o](arc)
-end
-
-
 function init()
   -- Sweet Sixteen is doing the i2c pullup
   ii.pullup(false)
@@ -278,12 +249,12 @@ function init()
   faders = FMan:new()
   faders:setup()
 
-  -- Creates the benders
+  ---- Creates the benders
   benders = {}
   numBenders = 0
-  if crowId == crowIDA then
+  if public.crowId == crowIDA then
     numBenders = 1
-  elseif crowId == crowIDB then
+  elseif public.crowId == crowIDB then
     numBenders = 2
   end
 
@@ -294,21 +265,9 @@ function init()
   -- Creates the random generators
   randomGenerators = {}
   numRandomGens = 0
-  if crowId == crowIDA then
+  if public.crowId == crowIDA then
     numRandomGens = 1
     randomGenerators[1] = RandomVoltageGenerator:new(2, 2, faders)
-  end
-
-  -- Creates the arc generators
-  arcGenerators = {}
-  numArcs = 0
-  if crowId == crowIDA then
-    numArcs = 1
-    arcGenerators[1] = ArcGenerator:new(2, 4, faders)
-  elseif crowId == crowIDB then
-    numArcs = 2
-    arcGenerators[1] = ArcGenerator:new(1, 3, faders)
-    arcGenerators[2] = ArcGenerator:new(2, 4, faders)
   end
 
   for n = 1, 2 do
@@ -323,12 +282,6 @@ function init()
       for i = 1, numRandomGens do
         if randomGenerators[i].inputNum == n then
           randomGenerators[i]:handleNoteOn()
-        end
-      end
-
-      for i = 1, numArcs do
-        if arcGenerators[i].inputNum == n then
-          arcGenerators[i]:handleNoteOn()
         end
       end
     end
