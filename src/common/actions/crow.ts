@@ -42,7 +42,7 @@ export const crowStateUpdated = (
   updatedVariableName: string,
   updatedVariableValue: string
 ) => ({
-  type: typeof CROW_STATE_UPDATED,
+  type: CROW_STATE_UPDATED,
   payload: {
     serialPort,
     updatedVariableName,

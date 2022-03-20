@@ -37,29 +37,10 @@ dotenv.config({ path: ".env" });
 
 const initialState = createInitialState();
 
-if (!process.env.CROW_DISABLED) {
-  throw new Error("Expected CROW_DISABLED environment variable");
-}
-const CROW_DISABLED = process.env.CROW_DISABLED === "1";
-
 const wsServerDispatcher = new WebsocketServerDispatcher();
 
+const crowDispatcher = new CrowDispatcherService();
 
-let crowDispatcher;
-let crowDispatcherA, crowDispatcherB;
-if (!CROW_DISABLED) {
-  //const CROW_A_SERIAL_PATH = process.env.CROW_A_SERIAL_PATH;
-  //if (!CROW_A_SERIAL_PATH) {
-    //throw new Error("Expected CROW_A_SERIAL_PATH environment variable");
-  //}
-  //const CROW_B_SERIAL_PATH = process.env.CROW_B_SERIAL_PATH;
-  //if (!CROW_B_SERIAL_PATH) {
-    //throw new Error("Expected CROW_B_SERIAL_PATH environment variable");
-  //}
-  //crowDispatcherA = new CrowDispatcherService(CROW_A_SERIAL_PATH);
-  //crowDispatcherB = new CrowDispatcherService(CROW_B_SERIAL_PATH);
-  crowDispatcher = new CrowDispatcherService();
-}
 console.log("Creating store...");
 var loggerMiddleware = (_store) => (next) => (action) => {
   console.log("will dispatch", action);

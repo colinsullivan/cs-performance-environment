@@ -1,6 +1,11 @@
 import "./StatusDot.scss";
 
-const StatusDot = (isConnected: boolean) => (
+interface StatusDotProps {
+  isConnected: boolean;
+  label?: string;
+}
+
+const StatusDot = ({isConnected, label=""}: StatusDotProps) => (
   <div className={`connection-status-dot ${isConnected ? "connected" : ""}`}>
   </div>
 );

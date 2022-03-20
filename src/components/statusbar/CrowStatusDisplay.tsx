@@ -8,7 +8,11 @@ const CrowStatusDisplay = () => {
     <div>
       <label>Crow:</label>
       {crowReadyStates.map((crowReadyInfo) => (
-        <StatusDot isConnected={crowReadyInfo.isReady} key={crowReadyInfo.name} />
+        <StatusDot
+          isConnected={crowReadyInfo.isReady}
+          key={crowReadyInfo.name}
+          label={crowReadyInfo.name}
+        />
       ))}
     </div>
   );

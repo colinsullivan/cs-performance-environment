@@ -10,6 +10,9 @@ import {
   initializeCrowDevice,
   INITIALIZE_CROW_DEVICE,
 } from "common/actions/crow";
+import {getEnvOrError} from "common/util";
+
+const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
 
 const createReadlineParser = () =>
   new SerialPort.parsers.Readline({
@@ -41,6 +44,9 @@ class CrowDispatcherService {
   }
 
   async initialize() {
+    if (CROW_DISABLED) {
+      return;
+    }
     const store = this.getStore();
     const crowDevices = getCrow(store.getState());
     const serialDevicesList = await SerialPort.list();
@@ -116,6 +122,9 @@ class CrowDispatcherService {
   }
 
   handleMiddleware(store, next, action: AllActionTypes) {
+    if (CROW_DISABLED) {
+      return next(action);
+    }
     switch (action.type) {
       case SYSTEM_TEMPO_CHANGED:
         this.updateCrowTempo(action.payload.tempo);
@@ -136,7 +145,7 @@ class CrowDispatcherService {
       default:
         break;
     }
-    next(action);
+    return next(action);
   }
 }
 
