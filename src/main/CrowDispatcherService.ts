@@ -2,7 +2,7 @@ import SerialPort from "serialport";
 import { Middleware, createStore } from "redux";
 
 import { SYSTEM_TEMPO_CHANGED, AllActionTypes } from "common/actions";
-import { getCrow, getTempo } from "common/selectors";
+import { getCrow, getTempo, sequencersSelector } from "common/selectors";
 import {
   crowDeviceConnected,
   crowStateUpdated,
@@ -10,7 +10,9 @@ import {
   initializeCrowDevice,
   INITIALIZE_CROW_DEVICE,
 } from "common/actions/crow";
-import {getEnvOrError} from "common/util";
+import { getEnvOrError } from "common/util";
+import { findCrowDeviceIndexByName } from "common/models/crow";
+import { CrowState, CrowDevice } from "common/models/crow/api";
 
 const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
 
@@ -25,9 +27,11 @@ const parseStringArg = (arg: string) =>
 class CrowDispatcherService {
   store: ReturnType<typeof createStore> | undefined;
   crowPorts: SerialPort[];
+  crowPortsBySerialPath: Record<string, SerialPort>;
   middleware: Middleware<unknown>;
   constructor() {
     this.crowPorts = [];
+    this.crowPortsBySerialPath = {};
 
     this.middleware = (store) => (next) => (action) => {
       this.handleMiddleware(store, next, action);
@@ -41,6 +45,21 @@ class CrowDispatcherService {
       throw new Error("Store not initialized");
     }
     return this.store;
+  }
+
+  updateCrowState(crowDevice: CrowDevice, newState: CrowState) {
+    if (!crowDevice.serialPort) {
+      console.log("Crow serial port not ready.");
+      return;
+    }
+
+    const port = this.crowPortsBySerialPath[crowDevice.serialPort];
+    if (!port) {
+      throw new Error("Cannot find port");
+    }
+
+    this.writeLuaToPort(`public.legato = ${newState.legato}`, port);
+    this.writeLuaToPort(`public.sustain = ${newState.sustain}`, port);
   }
 
   async initialize() {
@@ -64,6 +83,31 @@ class CrowDispatcherService {
     for (const deviceInfo of crowDeviceInfo) {
       store.dispatch(initializeCrowDevice(deviceInfo.path));
     }
+
+    let sequencersState = sequencersSelector(store.getState());
+    store.subscribe(() => {
+      const newSequencersState = sequencersSelector(store.getState());
+      if (newSequencersState !== sequencersState) {
+        sequencersState = newSequencersState;
+
+        const crowDevices = getCrow(store.getState());
+        for ( const crowDevice of crowDevices ) {
+          const sequencer = sequencersState[crowDevice.state.sequencerName];
+          if (!sequencer) {
+            continue;
+          }
+          // TODO: can handle with a derived state selector
+          // for each crow
+          if (sequencer.event && sequencer.event.sustain) {
+            this.updateCrowState(crowDevice, {
+              ...crowDevice.state,
+              legato: sequencer.legato,
+              sustain: sequencer.event.sustain,
+            });
+          }
+        }
+      }
+    });
   }
 
   writeLuaToPort(lua: string, port: SerialPort) {
@@ -136,6 +180,7 @@ class CrowDispatcherService {
         port.pipe(reader);
         reader.on("data", (d) => this.handleIncomingMessage(d, serialPort));
         this.crowPorts.push(port);
+        this.crowPortsBySerialPath[port.path] = port;
         this.writeLuaToPort("^^init()", port);
         break;
 
