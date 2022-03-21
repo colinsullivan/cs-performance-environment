@@ -1,4 +1,4 @@
-public{crowId = 'A'}
+public{crowId = 'B'}
 public{tempo = 2.0}
 public{legato = 1.0}
 public{sustain = 1.0}
@@ -283,12 +283,12 @@ function init()
 
   ---- Creates the benders
   benders = {}
-  numBenders = 0
-  if public.crowId == "A" then
-    numBenders = 1
-  elseif public.crowId == "B" then
-    numBenders = 2
-  end
+  numBenders = 1
+  --if public.crowId == "A" then
+    --numBenders = 1
+  --elseif public.crowId == "B" then
+    --numBenders = 1
+  --end
 
   for n = 1, numBenders do
     benders[n] = ProbabalisticBender:new(n, faders)

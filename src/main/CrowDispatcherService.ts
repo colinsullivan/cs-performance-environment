@@ -58,8 +58,12 @@ class CrowDispatcherService {
       throw new Error("Cannot find port");
     }
 
-    this.writeLuaToPort(`public.legato = ${newState.legato}`, port);
-    this.writeLuaToPort(`public.sustain = ${newState.sustain}`, port);
+    if (newState.legato) {
+      this.writeLuaToPort(`public.legato = ${newState.legato}`, port);
+    }
+    if (newState.sustain) {
+      this.writeLuaToPort(`public.sustain = ${newState.sustain}`, port);
+    }
   }
 
   async initialize() {
@@ -98,13 +102,14 @@ class CrowDispatcherService {
           }
           // TODO: can handle with a derived state selector
           // for each crow
+          const newState = {
+            ...crowDevice.state,
+            legato: sequencer.legato,
+          };
           if (sequencer.event && sequencer.event.sustain) {
-            this.updateCrowState(crowDevice, {
-              ...crowDevice.state,
-              legato: sequencer.legato,
-              sustain: sequencer.event.sustain,
-            });
+            newState.sustain = sequencer.event.sustain;
           }
+          this.updateCrowState(crowDevice, newState);
         }
       }
     });
