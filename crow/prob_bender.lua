@@ -1,5 +1,5 @@
 public{tempo = 2}
-public{crowId = 'c'}
+public{crowId = 'a'}
 
 -- Defines the possible durations for the pitch benders
 durOptions = {
@@ -28,8 +28,13 @@ function Fader:new()
   theFader = {
     faderValue = 0.0,
     faderNum = nil,
-    fMin = 0.031,
-    fMax = 9.959
+
+    -- When normalized value of fader is near these values, it will snap
+    snapPoints = {0, 1.0},
+    numSnapPoints = 2,
+
+    -- Fader snap threshold in volts
+    snapThreshold = 0.01
   }
   setmetatable(theFader, self)
   self.__index = self
@@ -49,7 +54,23 @@ function Fader:getVolts()
   return self.faderValue
 end
 function Fader:getNormalizedValue()
-  return (self.faderValue - self.fMin) / (self.fMax - self.fMin)
+  raw = self.faderValue / 10.0
+
+  -- For each snap point
+  for i = 1, self.numSnapPoints do
+    snapPoint = self.snapPoints[i]
+
+    -- if within threshold of snap point
+    dist = math.abs(raw - snapPoint)
+    if dist < self.snapThreshold then
+
+      -- snaps value
+      return snapPoint
+    end
+
+  end
+
+  return raw
 end
 function Fader:requestUpdate()
   if self.faderNum == nil then
@@ -57,10 +78,17 @@ function Fader:requestUpdate()
   end
   ii.faders.get(self.faderNum)
 end
-function Fader:setup(inFaderNum, fMin, fMax)
+function Fader:setup(inFaderNum, inSnapPoints, inNumSnapPoints, inSnapThreshold)
   self.faderNum = inFaderNum
-  self.fMin = fMin
-  self.fMax = fMax
+
+  if inSnapPoints and inNumSnapPoints then
+    self.snapPoints = inSnapPoints
+    self.numSnapPoints = inNumSnapPoints
+  end
+
+  if inSnapThreshold then
+    self.snapThreshold = inSnapThreshold
+  end
 end
 
 GXposeF = Fader:new()
@@ -91,21 +119,21 @@ function FMan:new()
   gXposeFc = GXposeF:new()
   arcDurFader = Fader:new()
   if public.crowId == crowIDA then
-    gXposeFa:setup(9, 0.05188, 9.965)
+    gXposeFa:setup(9)
     gXposeFa:setOut(3)
     gXposeFa:setXposeSt(24)
 
-    gXposeFb:setup(10, 0.06897, 9.9816)
+    gXposeFb:setup(10)
     gXposeFb:setOut(3)
     gXposeFb:setXposeSt(-24)
 
-    gXposeFc:setup(11, 0.0, 9.940)
+    gXposeFc:setup(11)
     gXposeFc:setOut(3)
     gXposeFc:setXposeSt(7)
   end
-  arcDurFader:setup(12, 0.0, 9.922)
-  durF:setup(15, 0.0396, 9.953)
-  probF:setup(16, 0.0201, 9.957)
+  arcDurFader:setup(12)
+  durF:setup(15)
+  probF:setup(16)
 
   allFaders = {probF, durF, gXposeFa, gXposeFb, gXposeFc, arcDurFader}
   numFaders = 6
