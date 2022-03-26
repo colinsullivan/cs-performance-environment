@@ -8,4 +8,8 @@ div.status-bar {
   justify-content: flex-end;
 
   width: 100%;
+
+  > div {
+    margin-right: 6px;
+  }
 }

@@ -1,24 +1,26 @@
-public{tempo = 2}
-public{crowId = 'a'}
+public{crowId = 'B'}
+public{tempo = 2.0}
+public{legato = 1.0}
+public{sustain = 1.0}
 
 -- Defines the possible durations for the pitch benders
-durOptions = {
-  16,
-  8,
-  4,
-  2,
-  1,
-  3 / 4,
-  2 / 3,
-  1 / 2,
-  1 / 3,
-  1 / 4,
-  1 / 8,
-  1 / 16,
-  1 / 32,
+--durOptions = {
+  --16,
+  --8,
+  --4,
+  --2,
+  --1,
+  --3 / 4,
+  --2 / 3,
+  --1 / 2,
+  --1 / 3,
+  --1 / 4,
+  --1 / 8,
+  --1 / 16,
+  --1 / 32,
   --1 / 64,
-};
-numDurOptions = 13
+--};
+--numDurOptions = 14
 
 --
 -- Class for tracking state of an individual fader
@@ -99,7 +101,6 @@ function GXposeF:setXposeSt(inTransposeSemitones)
   self.transposeSemitones = inTransposeSemitones
 end
 function GXposeF:faderChanged()
-  -- TODO: Snap to zero
   normalizedValue = self:getNormalizedValue()
   semitonesOut = self.transposeSemitones * normalizedValue
   voltsOut = semitonesOut / 12
@@ -118,7 +119,7 @@ function FMan:new()
   gXposeFb = GXposeF:new()
   gXposeFc = GXposeF:new()
   arcDurFader = Fader:new()
-  if public.crowId == crowIDA then
+  if public.crowId == "A" then
     gXposeFa:setup(9)
     gXposeFa:setOut(3)
     gXposeFa:setXposeSt(24)
@@ -199,6 +200,7 @@ function ProbabalisticBender:new(inputNum, faders)
   self.__index = self
   return theProbabalisticBender
 end
+
 function ProbabalisticBender:doPitchBend()
   outputNumber = self.inputNum
   -- Decides on direction of bend
@@ -210,32 +212,30 @@ function ProbabalisticBender:doPitchBend()
 
   -- calculates duration of bend
   durF = self.faders:getDurFader()
-  --dur = (durF:getVolts() / 10.0) * 3.0
   faderValue = durF:getNormalizedValue()
   inverseFaderValue = 1.0 - faderValue
-  durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))]
-  dur = durBeats * 1.0/public.tempo 
+  --durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))] * public.legato
+  durBeats = public.sustain * faderValue
+  -- tempo is in beats per second
+  dur = durBeats / public.tempo
 
   -- starts pitchbend
-  output[outputNumber].shape = 'logarithmic'
+  startVolts = nil
+  endVolts = 0.0
   if direction == "down" then
-    -- starts one octave up
-    output[outputNumber].slew = 0.0
-    output[outputNumber].volts = 1.0
-
-    -- bends one octave downward
-    output[outputNumber].slew = dur
-    output[outputNumber].volts = 0.0
+    -- starts one octave up, bending one octave down
+    startVolts = 1.0
   else
-    -- starts one octave down
-    output[outputNumber].slew = 0.0
-    output[outputNumber].volts = -1.0
-
-    -- bends up
-    output[outputNumber].slew = dur
-    output[outputNumber].volts = 0.0
+    -- starts one octave down, bending one octave up
+    startVolts = -1.0
   end
+  output[outputNumber].volts = startVolts
+  gesture = {
+    to(endVolts, dur, 'logarithmic')
+  }
+  output[outputNumber]( gesture )
 end
+
 function ProbabalisticBender:handleNoteOn()
   -- decides to do pitchbend or not
   chance = math.random()
@@ -247,6 +247,10 @@ function ProbabalisticBender:handleNoteOn()
   end
 end
 
+
+--
+-- Class for a random voltage generator
+--
 RandomVoltageGenerator = {}
 function RandomVoltageGenerator:new(inputNum, outputNum, faders)
   theRandomVoltageGenerator = {
@@ -279,12 +283,12 @@ function init()
 
   ---- Creates the benders
   benders = {}
-  numBenders = 0
-  if public.crowId == crowIDA then
-    numBenders = 1
-  elseif public.crowId == crowIDB then
-    numBenders = 2
-  end
+  numBenders = 1
+  --if public.crowId == "A" then
+    --numBenders = 1
+  --elseif public.crowId == "B" then
+    --numBenders = 1
+  --end
 
   for n = 1, numBenders do
     benders[n] = ProbabalisticBender:new(n, faders)
@@ -293,10 +297,10 @@ function init()
   -- Creates the random generators
   randomGenerators = {}
   numRandomGens = 0
-  if public.crowId == crowIDA then
-    numRandomGens = 1
-    randomGenerators[1] = RandomVoltageGenerator:new(2, 2, faders)
-  end
+  --if public.crowId == "A" then
+    --numRandomGens = 1
+    --randomGenerators[1] = RandomVoltageGenerator:new(2, 2, faders)
+  --end
 
   for n = 1, 2 do
     input[n].mode('change', .5, 0.0, 'rising')

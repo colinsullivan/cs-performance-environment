@@ -32,7 +32,7 @@ s.waitForBoot({
     performanceEnvironment;
 
 
-  MIDIClient.init();
+  //MIDIClient.init();
 
 
   // move level meter to bottom right of screen

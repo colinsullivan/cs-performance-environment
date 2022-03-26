@@ -22,6 +22,11 @@ import { ControllerMappingElements } from "common/models/types";
 
 import { openHoldMenu, closeHoldMenu } from "common/actions/menus";
 import { setKey } from "common/actions/scale";
+import {
+  CrowDeviceConnected,
+  CrowStateUpdated,
+  InitializeCrowDevice,
+} from "./crow";
 
 export const SYNKOPATER_ARP_ADD_NOTE = "SYNKOPATER_ARP_ADD_NOTE";
 export const SYNKOPATER_ARP_REMOVE_NOTE = "SYNKOPATER_ARP_REMOVE_NOTE";
@@ -272,7 +277,10 @@ export type AllActionTypes =
   | SequencerUpdateModSequenceLength
   | SequencerChangesAppliedTimeout
   | SequencerRandomizeNotes
-  | SystemTempoChanged;
+  | SystemTempoChanged
+  | InitializeCrowDevice
+  | CrowDeviceConnected
+  | CrowStateUpdated;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,
