@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { getIsConnected } from "common/selectors";
 
 import "./ConnectionStatus.scss";
+import StatusDot from "./StatusDot";
 
 const ConnectionStatus = () => {
   const isConnected = useSelector(getIsConnected);
@@ -11,9 +12,7 @@ const ConnectionStatus = () => {
       <label>
         Server:
       </label>
-      <div
-        className={`connection-status-dot ${isConnected ? "connected" : ""}`}
-      ></div>
+      <StatusDot isConnected={isConnected} />
     </div>
   );
 };

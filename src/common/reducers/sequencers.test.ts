@@ -9,11 +9,11 @@ import {
   sequencerChangesAppliedTimeout,
   sequencer_toggle_euclid_bounce
 } from "common/actions";
-import { create_default_state } from "common/reducers";
+import {createInitialState} from "common/models/initialState";
 
 jest.mock("common/util");
 
-const allState = create_default_state();
+const allState = createInitialState();
 describe("sequencers", () => {
   const sequencerId = "one";
   let state: Sequencers;

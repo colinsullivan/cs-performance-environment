@@ -16,19 +16,11 @@ import { READY_STATES } from "common/models/ready_states";
 import { WS_READYSTATE_UPDATE, STATE_REHYDRATED } from "common/actions/types";
 import sequencers from "./sequencers";
 import octatrack from "./octatrack";
-import { createInitialSequencersState } from "common/models/sequencers";
-import { createInitialComponentsState } from "common/models/components";
 import components from "./components";
 import holdMenus from "./holdMenus";
-import createInitialHoldMenus from "common/models/menus/menus";
 import scale from "./scale";
 import tempo from "./tempo";
-
-export const create_default_state = () => ({
-  sequencers: createInitialSequencersState(),
-  components: createInitialComponentsState(),
-  holdMenus: createInitialHoldMenus(),
-});
+import { crowReducer } from "./crow";
 
 export function websocketReadyState(state = READY_STATES.CLOSED, action) {
   switch (action.type) {
@@ -48,7 +40,8 @@ const combinedReducers = combineReducers({
   octatrack,
   holdMenus,
   scale,
-  tempo
+  tempo,
+  crow: crowReducer,
 });
 
 const rootReducer = (state, action) => {
