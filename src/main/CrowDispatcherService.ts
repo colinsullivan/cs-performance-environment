@@ -2,7 +2,7 @@ import SerialPort from "serialport";
 import { Middleware, createStore } from "redux";
 
 import { SYSTEM_TEMPO_CHANGED, AllActionTypes } from "common/actions";
-import { getCrow, getTempo } from "common/selectors";
+import { getCrow, getTempo, sequencersSelector } from "common/selectors";
 import {
   crowDeviceConnected,
   crowStateUpdated,
@@ -10,9 +10,11 @@ import {
   initializeCrowDevice,
   INITIALIZE_CROW_DEVICE,
 } from "common/actions/crow";
-import {getEnvOrError} from "common/util";
+import { getEnvOrError } from "common/util";
+import { CrowState, CrowDevice } from "common/models/crow/api";
 
 const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
+const debug = false;
 
 const createReadlineParser = () =>
   new SerialPort.parsers.Readline({
@@ -25,9 +27,11 @@ const parseStringArg = (arg: string) =>
 class CrowDispatcherService {
   store: ReturnType<typeof createStore> | undefined;
   crowPorts: SerialPort[];
+  crowPortsBySerialPath: Record<string, SerialPort>;
   middleware: Middleware<unknown>;
   constructor() {
     this.crowPorts = [];
+    this.crowPortsBySerialPath = {};
 
     this.middleware = (store) => (next) => (action) => {
       this.handleMiddleware(store, next, action);
@@ -41,6 +45,25 @@ class CrowDispatcherService {
       throw new Error("Store not initialized");
     }
     return this.store;
+  }
+
+  updateCrowState(crowDevice: CrowDevice, newState: CrowState) {
+    if (!crowDevice.serialPort) {
+      console.log("Crow serial port not ready.");
+      return;
+    }
+
+    const port = this.crowPortsBySerialPath[crowDevice.serialPort];
+    if (!port) {
+      throw new Error("Cannot find port");
+    }
+
+    if (newState.legato) {
+      this.writeLuaToPort(`public.legato = ${newState.legato}`, port);
+    }
+    if (newState.sustain) {
+      this.writeLuaToPort(`public.sustain = ${newState.sustain}`, port);
+    }
   }
 
   async initialize() {
@@ -64,6 +87,32 @@ class CrowDispatcherService {
     for (const deviceInfo of crowDeviceInfo) {
       store.dispatch(initializeCrowDevice(deviceInfo.path));
     }
+
+    let sequencersState = sequencersSelector(store.getState());
+    store.subscribe(() => {
+      const newSequencersState = sequencersSelector(store.getState());
+      if (newSequencersState !== sequencersState) {
+        sequencersState = newSequencersState;
+
+        const crowDevices = getCrow(store.getState());
+        for ( const crowDevice of crowDevices ) {
+          const sequencer = sequencersState[crowDevice.state.sequencerName];
+          if (!sequencer) {
+            continue;
+          }
+          // TODO: can handle with a derived state selector
+          // for each crow
+          const newState = {
+            ...crowDevice.state,
+            legato: sequencer.legato,
+          };
+          if (sequencer.event && sequencer.event.sustain) {
+            newState.sustain = sequencer.event.sustain;
+          }
+          this.updateCrowState(crowDevice, newState);
+        }
+      }
+    });
   }
 
   writeLuaToPort(lua: string, port: SerialPort) {
@@ -78,17 +127,22 @@ class CrowDispatcherService {
 
   handleIncomingMessage(msg: string, port: string) {
     const store = this.getStore();
-    const crowCommandDetector = /^\s*\^\^.*$/;
+    // In theory Crow messages should start with ^^
+    // but if Crow is printing junk then the ^^ may not be
+    // the start of a line
+    const crowCommandDetector = /.*\^\^.*$/;
     const crowCommandDetectorMatch = msg.match(crowCommandDetector);
 
     if (!crowCommandDetectorMatch) {
-      console.log(`Received unknown message:`);
-      console.log("msg");
-      console.log(msg);
+      if (debug) {
+        console.log(`Received unknown message:`);
+        console.log("msg");
+        console.log(msg);
+      }
       return;
     }
 
-    const crowCommandParser = /^\s*\^\^(\w+)\((.*)\)\s*$/;
+    const crowCommandParser = /.*\^\^(\w+)\((.*)\)\s*$/;
     const crowCommandParsed = msg.match(crowCommandParser);
     if (!crowCommandParsed) {
       throw new Error(`Error parsing msg: ${msg}`);
@@ -136,6 +190,7 @@ class CrowDispatcherService {
         port.pipe(reader);
         reader.on("data", (d) => this.handleIncomingMessage(d, serialPort));
         this.crowPorts.push(port);
+        this.crowPortsBySerialPath[port.path] = port;
         this.writeLuaToPort("^^init()", port);
         break;
 
