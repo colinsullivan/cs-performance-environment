@@ -33,7 +33,9 @@ import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 import {createInitialState} from "common/models/initialState";
 
-dotenv.config({ path: ".env" });
+const envPath = process.argv[2];
+
+dotenv.config({ path: envPath });
 
 const initialState = createInitialState();
 
