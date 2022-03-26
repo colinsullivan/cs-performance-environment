@@ -13,7 +13,6 @@ import {
 import { getEnvOrError } from "common/util";
 import { CrowState, CrowDevice } from "common/models/crow/api";
 
-const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
 const debug = false;
 
 const createReadlineParser = () =>
@@ -67,6 +66,7 @@ class CrowDispatcherService {
   }
 
   async initialize() {
+    const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
     if (CROW_DISABLED) {
       return;
     }
@@ -176,6 +176,7 @@ class CrowDispatcherService {
   }
 
   handleMiddleware(store, next, action: AllActionTypes) {
+    const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
     if (CROW_DISABLED) {
       return next(action);
     }
