@@ -4,23 +4,23 @@ public{legato = 1.0}
 public{sustain = 1.0}
 
 -- Defines the possible durations for the pitch benders
-durOptions = {
-  16,
-  8,
-  4,
-  2,
-  1,
-  3 / 4,
-  2 / 3,
-  1 / 2,
-  1 / 3,
-  1 / 4,
-  1 / 8,
-  1 / 16,
-  1 / 32,
-  1 / 64,
-};
-numDurOptions = 14
+--durOptions = {
+  --16,
+  --8,
+  --4,
+  --2,
+  --1,
+  --3 / 4,
+  --2 / 3,
+  --1 / 2,
+  --1 / 3,
+  --1 / 4,
+  --1 / 8,
+  --1 / 16,
+  --1 / 32,
+  --1 / 64,
+--};
+--numDurOptions = 14
 
 --
 -- Class for tracking state of an individual fader
