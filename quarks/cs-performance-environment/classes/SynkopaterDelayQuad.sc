@@ -10,8 +10,9 @@
 
 SynkopaterDelayQuad : PerformanceEnvironmentComponent {
   var inputPatch,
-    <>delayFeedbackControl,
-    <>ampControl,
+    <delayFeedbackControl,
+    <pingPongAmountControl,
+    <ampControl,
     prevSequencerDur,
     quadDelayBuffer;
 
@@ -21,9 +22,9 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
   init {
     arg params;
 
-    this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
-
-    this.ampControl = KrNumberEditor.new(1.0, \amp);
+    delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
+    ampControl = KrNumberEditor.new(1.0, \amp);
+    pingPongAmountControl = KrNumberEditor.new(0.0, \unipolar);
 
     "SynkopaterDelayQuad.init".postln();
 
@@ -62,8 +63,9 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
       inputChannelNums: [componentState.inputBus, componentState.inputBus + 1],
       numChan: 2,
       delaySecs: KrNumberEditor.new(1.0, ControlSpec(0.0, 8.0)),
-      feedbackCoefficient: this.delayFeedbackControl,
-      amp: this.ampControl,
+      feedbackCoefficient: delayFeedbackControl,
+      pingPongAmount: pingPongAmountControl,
+      amp: ampControl,
       bufnum: quadDelayBuffer.bufnum
     ));
 
@@ -136,11 +138,15 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
       arg layout;
       
       ArgNameLabel("delayFeedback", layout, labelWidth);
-      this.delayFeedbackControl.gui(layout);
+      delayFeedbackControl.gui(layout);
       layout.startRow();
 
       ArgNameLabel("ampControl", layout, labelWidth);
-      this.ampControl.gui(layout);
+      ampControl.gui(layout);
+      layout.startRow();
+
+      ArgNameLabel("pingPongAmountControl", layout, labelWidth);
+      pingPongAmountControl.gui(layout);
       layout.startRow();
 
     });
