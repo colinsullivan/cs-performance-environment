@@ -11,10 +11,10 @@ import {
   INITIALIZE_CROW_DEVICE,
 } from "common/actions/crow";
 import { getEnvOrError } from "common/util";
-import { findCrowDeviceIndexByName } from "common/models/crow";
 import { CrowState, CrowDevice } from "common/models/crow/api";
 
 const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
+const debug = false;
 
 const createReadlineParser = () =>
   new SerialPort.parsers.Readline({
@@ -127,17 +127,22 @@ class CrowDispatcherService {
 
   handleIncomingMessage(msg: string, port: string) {
     const store = this.getStore();
-    const crowCommandDetector = /^\s*\^\^.*$/;
+    // In theory Crow messages should start with ^^
+    // but if Crow is printing junk then the ^^ may not be
+    // the start of a line
+    const crowCommandDetector = /.*\^\^.*$/;
     const crowCommandDetectorMatch = msg.match(crowCommandDetector);
 
     if (!crowCommandDetectorMatch) {
-      console.log(`Received unknown message:`);
-      console.log("msg");
-      console.log(msg);
+      if (debug) {
+        console.log(`Received unknown message:`);
+        console.log("msg");
+        console.log(msg);
+      }
       return;
     }
 
-    const crowCommandParser = /^\s*\^\^(\w+)\((.*)\)\s*$/;
+    const crowCommandParser = /.*\^\^(\w+)\((.*)\)\s*$/;
     const crowCommandParsed = msg.match(crowCommandParser);
     if (!crowCommandParsed) {
       throw new Error(`Error parsing msg: ${msg}`);
