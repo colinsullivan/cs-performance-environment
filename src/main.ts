@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import express from "express";
-import expressWebsocket from "express-ws";
+import expressWebsocket, { Application } from "express-ws";
 import SCRedux from "supercollider-redux";
 
 import WebsocketServerDispatcher from "main/WebsocketServerDispatcher";
@@ -80,11 +80,11 @@ process.on("SIGINT", quit);
 
 const startServer = () => {
   console.log("startServer");
-  const server = express();
+  const server = express() as unknown as Application;
   expressWebsocket(server);
 
   if (process.env.NODE_ENV === "development") {
-    server.use(function (req, res, next) {
+    server.use(function (_req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "X-Requested-With");
       next();
@@ -93,14 +93,14 @@ const startServer = () => {
   } else {
     server.use(express.static(path.join(__dirname, ".")));
   }
-  server.get("/getState", function (req, res) {
+  server.get("/getState", function (_req, res) {
     res.json(store.getState());
   });
   server.ws("/:clientId", function (ws, req) {
     const clientId = req.params.clientId;
     console.log(`client ${clientId} connected.`);
     ws.on("message", function (msg) {
-      const action = JSON.parse(msg);
+      const action = JSON.parse(msg.toString("utf8"));
       //console.log("action");
       //console.log(action);
       store.dispatch(action);
@@ -113,10 +113,10 @@ const startServer = () => {
     store.dispatch(rehydrate_state());
   });
   if (process.env.NODE_ENV !== "development") {
-    server.get("/", function (req, res) {
+    server.get("/", function (_req, res) {
       res.sendFile(path.join(`${__dirname}/../index.html`));
     });
-    server.get("/laptop", function (req, res) {
+    server.get("/laptop", function (_req, res) {
       res.sendFile(path.join(`${__dirname}/../index.html`));
     });
   }
