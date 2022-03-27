@@ -7,8 +7,14 @@ class MaxDispatcher {
     //super();
 
     max.addHandlers({
-      test: () => {
-        console.log("test");
+      dispatch: (actionType: string, payloadJson: string) => {
+        const payload = JSON.parse(payloadJson);
+        console.log("dispatch");
+        console.log("actionType");
+        console.log(actionType);
+        console.log("payload");
+        console.log(payload);
+
       }
     });
   }
