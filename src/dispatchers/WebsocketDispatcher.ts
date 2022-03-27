@@ -7,10 +7,13 @@
  *  @copyright  2018 Colin Sullivan
  *  @license    Licensed under the GPLv3 license.
  **/
-import { Store, Middleware } from "redux";
+import { Store, Middleware, AnyAction } from "redux";
+import WebSocket from "isomorphic-ws";
+
 import { websocketReadyStateChanged } from "common/actions";
 
 export interface WebsocketDispatcherProps {
+  uri: string;
   port: number;
   clientId: string;
 }
@@ -24,15 +27,12 @@ export interface WebsocketDispatcherProps {
 class WebsocketDispatcher {
   props: WebsocketDispatcherProps;
   url: string;
-  store: Store | null;
-  ws: WebSocket | null;
+  store: Store | undefined;
+  ws: WebSocket | undefined;
   middleware: Middleware<unknown>;
-
   constructor(props: WebsocketDispatcherProps) {
     this.props = props;
-    this.url = `ws://${window.location.hostname}:${props.port}/${props.clientId}`;
-    this.store = null;
-    this.ws = null;
+    this.url = `ws://${props.uri}/${props.clientId}`;
 
     // the actual instance method pulled into the redux middleware, see
     // `handle_middleware` below
@@ -44,16 +44,28 @@ class WebsocketDispatcher {
    *  A separate setter for the store instance is needed so instance
    *  middleware can be used first.
    **/
-  setStore(store) {
+  setStore(store: Store) {
     this.store = store;
     this.connect();
+  }
+  getStore() {
+    if (!this.store) {
+      throw new Error("Store not initialized");
+    }
+    return this.store;
+  }
+  getWs() {
+    if (!this.ws) {
+      throw new Error("WebSocket not yet initialized");
+    }
+    return this.ws;
   }
 
   /**
    *  The actual middleware hook.  Simply forwards the action over the WebSocket
    *  when it is dispatched from elsewhere.
    **/
-  handle_middleware(store, next, action) {
+  handle_middleware(_store, next: (action: AnyAction) => void, action: AnyAction) {
     this.sendAction(action);
     return next(action);
   }
@@ -61,7 +73,7 @@ class WebsocketDispatcher {
    *  Connect a new websocket, bind to event handlers.
    **/
   connect() {
-    this.ws = new window.WebSocket(this.url);
+    this.ws = new WebSocket(this.url);
     this.ws.onerror = () => this.handle_error();
     this.ws.onopen = () => this.handle_opened();
     this.ws.onclose = () => this.handle_closed();
@@ -69,7 +81,7 @@ class WebsocketDispatcher {
   }
 
   // Sends a message if the WebSocket is ready
-  sendAction(action) {
+  sendAction(action: AnyAction) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       // only send actions originating here
       if (!action.clientId && !action.serverId) {
@@ -101,18 +113,11 @@ class WebsocketDispatcher {
   }
 
   update_readystate() {
-    if (!this.store) {
-      throw new Error("WebsocketDispatcher: Store not yet initialized.");
-    }
-    if (!this.ws) {
-      throw new Error("WebsocketDispatcher: WS not yet initialized.");
-    }
-    if (this.store) {
-      this.store.dispatch(
-        websocketReadyStateChanged(this.ws.readyState, this.props.clientId)
-      );
-    } else {
-    }
+    const store = this.getStore();
+    const ws = this.getWs();
+    store.dispatch(
+      websocketReadyStateChanged(ws.readyState, this.props.clientId)
+    );
   }
 
   handle_opened() {

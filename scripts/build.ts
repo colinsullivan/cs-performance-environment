@@ -21,17 +21,28 @@ const main = async () => {
     "build/supercollider-js",
   );
 
-  // Builds the server-side app
-  esbuild.buildSync({
-    entryPoints: ["src/main.ts"],
-    outfile: "build/main.js",
+  const serverOptionsCommon: esbuild.BuildOptions = {
     tsconfig: "server.tsconfig.json",
     platform: "node",
     target: "node15",
     bundle: true,
     sourcemap: true,
-    external: ["max-api"]
+  };
+
+  // Builds the server-side app
+  esbuild.buildSync({
+    ...serverOptionsCommon,
+    entryPoints: ["src/main.ts"],
+    outfile: "build/main.js",
   });
+
+  // Builds the max app
+  esbuild.buildSync({
+    ...serverOptionsCommon,
+    entryPoints: ["src/main_max.ts"],
+    outfile: "build/main_max.js",
+    external: ["max-api"]
+  })
 };
 
 main();
