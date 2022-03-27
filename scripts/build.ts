@@ -1,28 +1,29 @@
-import fs from "fs"
+import fs from "fs";
 
-import esbuild from "esbuild"
+import esbuild from "esbuild";
 
-const handleError = () => {
-  console.log("An error occurred while building");
-  process.exit(1);
+const handleError = (err) => {
+  if (err) {
+    console.log("An error occurred while building");
+    console.log(err);
+    process.exit(1);
+  }
 };
 
 const main = () => {
   // Copies supercollider startup file
-  fs.copyFile("src/main/sclang_init.sc", "build/main/sclang_init.sc", (err) => {
-    if (err) {
-      console.log(err);
-      handleError();
-    }
-  });
+  fs.copyFile(
+    "src/main/sclang_init.sc",
+    "build/main/sclang_init.sc",
+    handleError
+  );
 
   // Copies serialport module bindings
-  fs.copyFile("node_modules/serialport/node_modules/@serialport/bindings/build/Release/bindings.node", "build/main/bindings.node", (err) => {
-    if (err) {
-      console.log(err);
-      handleError();
-    }
-  });
+  fs.copyFile(
+    "node_modules/serialport/node_modules/@serialport/bindings/build/Release/bindings.node",
+    "build/main/bindings.node",
+    handleError
+  );
 
   // Builds the server-side app
   esbuild.buildSync({
@@ -34,6 +35,6 @@ const main = () => {
     bundle: true,
     sourcemap: true,
   });
-}
+};
 
 main();
