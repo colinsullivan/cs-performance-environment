@@ -11,7 +11,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import axios from "axios";
 import uuid from "uuid/v4";
 
 import "./index.scss";
@@ -22,12 +21,14 @@ import SequencerApplyChangesService from "dispatchers/SequencerApplyChangesServi
 import App from "components/App";
 import { PORT } from "common/constants";
 import { configureStore } from "./store";
+import { fetchInitialState } from "common/util/setup";
 
 const clientId = uuid();
 
 const wsDispatcher = new WebsocketDispatcher({
   port: PORT,
   clientId,
+  uri: `${window.location.hostname}:${PORT}`
 });
 
 const debounceActionsMiddleware = new DebounceActionsMiddleware();
@@ -35,23 +36,23 @@ const debounceActionsMiddleware = new DebounceActionsMiddleware();
 const sequencerApplyChangesService = new SequencerApplyChangesService();
 
 // get initial state then render
-axios
-  .get(
-    `${window.location.protocol}//${window.location.hostname}:${PORT}/getState`
-  )
-  .then(function (resp) {
-    const initialState = resp.data;
-    const store = configureStore(
-      initialState,
-      wsDispatcher,
-      debounceActionsMiddleware,
-      sequencerApplyChangesService
-    );
-    wsDispatcher.setStore(store);
-    ReactDOM.render(
-      <Provider store={store}>
-        <App />
-      </Provider>,
-      document.getElementById("root")
-    );
-  });
+const main = async () => {
+  const initialState = await fetchInitialState(
+    `${window.location.protocol}//${window.location.hostname}:${PORT}`
+  );
+  const store = configureStore(
+    initialState,
+    wsDispatcher,
+    debounceActionsMiddleware,
+    sequencerApplyChangesService
+  );
+  wsDispatcher.setStore(store);
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById("root")
+  );
+};
+
+main();
