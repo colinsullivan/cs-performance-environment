@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 1242.0, 871.0, 2606.0, 1120.0 ],
+		"rect" : [ 1200.0, 871.0, 2606.0, 1120.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -39,6 +39,18 @@
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-9",
+					"maxclass" : "button",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 740.0, 530.0, 24.0, 24.0 ]
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-49",
 					"maxclass" : "newobj",
@@ -848,7 +860,7 @@
 					"numoutlets" : 1,
 					"offset" : [ 0.0, 0.0 ],
 					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 1639.5, 151.0, 923.0, 997.0 ],
+					"patching_rect" : [ 1639.5, 151.0, 400.0, 220.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -1279,7 +1291,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-13", 0 ],
+					"destination" : [ "obj-9", 0 ],
 					"source" : [ "obj-49", 0 ]
 				}
 
@@ -1288,6 +1300,13 @@
 				"patchline" : 				{
 					"destination" : [ "obj-48", 0 ],
 					"source" : [ "obj-8", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-13", 0 ],
+					"source" : [ "obj-9", 0 ]
 				}
 
 			}
@@ -1307,7 +1326,7 @@
 , 			{
 				"name" : "main.js",
 				"bootpath" : "~/Projects/cs-performance-environment/build",
-				"patcherrelativepath" : "./build",
+				"patcherrelativepath" : "../build",
 				"type" : "TEXT",
 				"implicit" : 1
 			}

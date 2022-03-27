@@ -1,12 +1,9 @@
-import max from "max-api"
+//import max from "max-api"
 import { Store } from "redux";
 
-// When running the dev server outside of Max/MSP, this file must be commented.
-// Use this skeleton instead:
-//class MaxDispatcher {
-
-//}
-//export default MaxDispatcher;
+// TODO: This must be changed when building for production
+//import max from "../max-api-wrapper";
+import max from "../max-api-wrapper-prod";
 
 class MaxDispatcher {
   store: Store | undefined;

@@ -14,6 +14,10 @@
   "include": [
     "src/common/**/*",
     "src/main.ts",
-    "src/main/**/*"
-  ]
+    "src/main/**/*",
+    "__mocks__/**"
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }
