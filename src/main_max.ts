@@ -39,7 +39,7 @@ const main = async () => {
     uri: `localhost:${PORT}`,
   });
 
-  let middleware = [thunk];
+  let middleware = [thunk, wsDispatcher.middleware];
   if (IS_DEVELOPMENT) {
     middleware.push(loggerMiddleware);
   }
