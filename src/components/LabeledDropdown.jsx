@@ -23,19 +23,35 @@ const useStyles = makeStyles(() =>
   })
 );
 
+//interface MenuOption {
+
+//}
+
+//interface LabeledDropdownProps {
+  //label: string,
+  //options,
+  //value,
+  //onClose: () => void,
+  //onOpen: () => void,
+  //onChange: () => void,
+  //open = false,
+//}
+
+const noop = ((e) => {}); // eslint-disable-line
+
 const LabeledDropdown = ({
-  label = null,
+  label = "",
   options,
   value,
-  onClose = null,
-  onOpen = null,
-  onChange = null,
-  open = null,
+  onClose = noop,
+  onOpen = noop,
+  onChange = noop,
+  open = false,
 }) => {
   const classes = useStyles();
   return (
     <FormControl className={classes.formControl}>
-      {label ? <InputLabel>{label}</InputLabel> : null}
+      {label !== "" ? <InputLabel>{label}</InputLabel> : null}
       <Select
         classes={{
           root: classes.labeledDropdownSelect,
