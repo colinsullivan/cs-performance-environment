@@ -4,7 +4,7 @@
 		"appversion" : 		{
 			"major" : 8,
 			"minor" : 2,
-			"revision" : 2,
+			"revision" : 1,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
@@ -84,7 +84,7 @@
 						"appversion" : 						{
 							"major" : 8,
 							"minor" : 2,
-							"revision" : 2,
+							"revision" : 1,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -220,7 +220,7 @@
 						"appversion" : 						{
 							"major" : 8,
 							"minor" : 2,
-							"revision" : 2,
+							"revision" : 1,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -526,7 +526,7 @@
 						"appversion" : 						{
 							"major" : 8,
 							"minor" : 2,
-							"revision" : 2,
+							"revision" : 1,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -1035,8 +1035,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 188.0, 206.5, 66.0, 22.0 ],
-					"text" : "script start"
+					"patching_rect" : [ 53.0, 77.5, 359.0, 22.0 ],
+					"text" : "script start /Users/colin/Projects/cs-performance-environment/.env"
 				}
 
 			}
@@ -1048,17 +1048,17 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 188.0, 432.0, 1261.0, 22.0 ],
+					"patching_rect" : [ 188.0, 432.0, 1290.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"args" : [ "/Users/colin/Projects/cs-performance-environment/.env" ],
-						"autostart" : 1,
+						"autostart" : 0,
 						"defer" : 0,
 						"node_bin_path" : "/opt/homebrew/bin/node",
 						"npm_bin_path" : "/opt/homebrew/bin/npm",
 						"watch" : 0
 					}
 ,
-					"text" : "node.script /Users/colin/Projects/cs-performance-environment/build/main.js @autostart 1 @node_bin_path /opt/homebrew/bin/node @npm_bin_path /opt/homebrew/bin/npm @args /Users/colin/Projects/cs-performance-environment/.env"
+					"text" : "node.script /Users/colin/Projects/cs-performance-environment/build/main_max.js @autostart 0 @node_bin_path /opt/homebrew/bin/node @npm_bin_path /opt/homebrew/bin/npm @args /Users/colin/Projects/cs-performance-environment/.env"
 				}
 
 			}
@@ -1312,19 +1312,13 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "fit_jweb_to_bounds.js",
-				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
-				"type" : "TEXT",
-				"implicit" : 1
-			}
-, 			{
 				"name" : "helpargs.js",
 				"bootpath" : "C74:/help/resources",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "main.js",
+				"name" : "main_max.js",
 				"bootpath" : "~/Projects/cs-performance-environment/build",
 				"patcherrelativepath" : "../build",
 				"type" : "TEXT",
@@ -1338,6 +1332,12 @@
 			}
 , 			{
 				"name" : "resize_n4m_monitor_patcher.js",
+				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "fit_jweb_to_bounds.js",
 				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
 				"type" : "TEXT",
 				"implicit" : 1

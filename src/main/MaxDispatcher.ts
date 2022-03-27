@@ -3,7 +3,7 @@ import { Store } from "redux";
 
 // TODO: This must be changed when building for production
 //import max from "../max-api-wrapper";
-import max from "../max-api-wrapper-prod";
+import max from "./max-api-wrapper-prod";
 
 class MaxDispatcher {
   store: Store | undefined;
