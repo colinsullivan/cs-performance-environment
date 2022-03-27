@@ -18,11 +18,17 @@ import { rehydrate_state } from "common/actions";
 import { createInitialState } from "common/models/initialState";
 
 
+const envPath = process.argv[2];
+if (envPath) {
+  console.log(`Loading environment from ${envPath}`);
+  dotenv.config({ path: envPath });
+} else {
+  console.log("Loading environment from default location");
+  dotenv.config();
+}
+
 const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC === "1";
 const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
-
-const envPath = process.argv[2];
-dotenv.config({ path: envPath });
 
 const initialState = createInitialState();
 
