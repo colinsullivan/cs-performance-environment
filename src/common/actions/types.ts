@@ -27,6 +27,7 @@ import {
   CrowStateUpdated,
   InitializeCrowDevice,
 } from "./crow";
+import { AbletonSessionStateUpdate } from "./ableton";
 
 export const SYNKOPATER_ARP_ADD_NOTE = "SYNKOPATER_ARP_ADD_NOTE";
 export const SYNKOPATER_ARP_REMOVE_NOTE = "SYNKOPATER_ARP_REMOVE_NOTE";
@@ -280,7 +281,8 @@ export type AllActionTypes =
   | SystemTempoChanged
   | InitializeCrowDevice
   | CrowDeviceConnected
-  | CrowStateUpdated;
+  | CrowStateUpdated
+  | AbletonSessionStateUpdate;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

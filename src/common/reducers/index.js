@@ -1,13 +1,3 @@
-/**
- *  @file       reducers.js
- *
- *
- *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
- *
- *  @copyright  2017 Colin Sullivan
- *  @license    Licensed under the GPLv3 license.
- **/
-
 import { combineReducers } from "redux";
 import SCRedux from "supercollider-redux";
 
@@ -21,6 +11,7 @@ import holdMenus from "./holdMenus";
 import scale from "./scale";
 import tempo from "./tempo";
 import { crowReducer } from "./crow";
+import abletonReducer from "./ableton";
 
 export function websocketReadyState(state = READY_STATES.CLOSED, action) {
   switch (action.type) {
@@ -42,6 +33,7 @@ const combinedReducers = combineReducers({
   scale,
   tempo,
   crow: crowReducer,
+  ableton: abletonReducer
 });
 
 const rootReducer = (state, action) => {

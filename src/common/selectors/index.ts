@@ -13,7 +13,9 @@ import {
   HoldMenusState,
   HoldMenuState,
 } from "common/models/menus";
-import { CrowDevice } from "./models/crow/api";
+import { CrowDevice } from "common/models/crow/api";
+
+export * from "./ableton";
 
 export const sequencersSelector = (state): Sequencers => state.sequencers;
 

@@ -1,23 +1,33 @@
-//import max from "max-api"
-import { Store } from "redux";
+import { AnyAction, Store } from "redux";
+import { abletonSessionStateUpdate } from "common/actions";
 
 // TODO: This must be changed when building for production
 //import max from "../max-api-wrapper";
-import max from "../max-api-wrapper-prod";
+import max from "./max-api-wrapper-prod";
+
+type MaxMessageName = "SessionStateUpdate";
 
 class MaxDispatcher {
   store: Store | undefined;
   constructor() {
 
     max.addHandlers({
-      dispatch: (actionType: string, payloadJson: string) => {
+      dispatch: (messageName: MaxMessageName, payloadJson: string) => {
         const payload = JSON.parse(payloadJson);
-        console.log("dispatch");
-        console.log("actionType");
-        console.log(actionType);
-        console.log("payload");
-        console.log(payload);
+        let action: AnyAction;
 
+        switch (messageName) {
+          case "SessionStateUpdate":
+            action = abletonSessionStateUpdate(payload);
+            break;
+          
+          default:
+            break;
+        }
+
+        if (action) {
+          this.getStore().dispatch(action);
+        }
       }
     });
   }
