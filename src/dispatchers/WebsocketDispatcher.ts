@@ -9,7 +9,11 @@
  **/
 import { Store, Middleware } from "redux";
 import { websocketReadyStateChanged } from "common/actions";
-import { WebsocketDispatcherProps } from "./types";
+
+export interface WebsocketDispatcherProps {
+  port: number;
+  clientId: string;
+}
 
 /**
  *  @class        WebsocketDispatcher
