@@ -12,7 +12,7 @@ const main = async () => {
   // Copies serialport module bindings
   await fs.copy(
     "node_modules/serialport/node_modules/@serialport/bindings/build/Release/bindings.node",
-    "build/main/bindings.node",
+    "build/bindings.node",
   );
 
   // Copies supercollider-js quark
