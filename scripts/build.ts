@@ -1,28 +1,24 @@
-import fs from "fs";
+import fs from "fs-extra";
 
 import esbuild from "esbuild";
 
-const handleError = (err) => {
-  if (err) {
-    console.log("An error occurred while building");
-    console.log(err);
-    process.exit(1);
-  }
-};
-
-const main = () => {
+const main = async () => {
   // Copies supercollider startup file
-  fs.copyFile(
+  await fs.copy(
     "src/main/sclang_init.sc",
     "build/main/sclang_init.sc",
-    handleError
   );
 
   // Copies serialport module bindings
-  fs.copyFile(
+  await fs.copy(
     "node_modules/serialport/node_modules/@serialport/bindings/build/Release/bindings.node",
     "build/main/bindings.node",
-    handleError
+  );
+
+  // Copies supercollider-js quark
+  await fs.copy(
+    "node_modules/@supercollider/lang/lib/supercollider-js",
+    "build/supercollider-js",
   );
 
   // Builds the server-side app
