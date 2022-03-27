@@ -1,10 +1,16 @@
 import max from "max-api"
 import { Store } from "redux";
 
+// When running the dev server outside of Max/MSP, this file must be commented.
+// Use this skeleton instead:
+//class MaxDispatcher {
+
+//}
+//export default MaxDispatcher;
+
 class MaxDispatcher {
   store: Store | undefined;
   constructor() {
-    //super();
 
     max.addHandlers({
       dispatch: (actionType: string, payloadJson: string) => {
