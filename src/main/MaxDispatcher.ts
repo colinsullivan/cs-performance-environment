@@ -13,11 +13,11 @@ class MaxDispatcher {
 
     max.addHandlers({
       dispatch: (messageName: MaxMessageName, payloadJson: string) => {
-        const payload = JSON.parse(payloadJson);
         let action: AnyAction;
 
         switch (messageName) {
           case "SessionStateUpdate":
+            const payload = JSON.parse(payloadJson);
             action = abletonSessionStateUpdate(payload);
             break;
           
