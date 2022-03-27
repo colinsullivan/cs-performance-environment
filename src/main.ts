@@ -1,20 +1,3 @@
-/**
- *  @file       start_electron.js
- *
- *
- *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
- *
- *  @copyright  2017 Colin Sullivan
- *  @license    Licensed under the GPLv3 license.
- **/
-
-const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC == "1";
-const IS_DEVELOPMENT = process.env.NODE_ENV == "development";
-
-if (!IS_DEVELOPMENT) {
-  require("module-alias/register");
-}
-
 import path from "path";
 import fs from "fs";
 import dotenv from "dotenv";
@@ -33,19 +16,22 @@ import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 import { createInitialState } from "common/models/initialState";
 
-const envPath = process.argv[2];
+const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC === "1";
+const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 
+const envPath = process.argv[2];
 dotenv.config({ path: envPath });
 
 const initialState = createInitialState();
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
-
 const crowDispatcher = new CrowDispatcherService();
 
 console.log("Creating store...");
-var loggerMiddleware = (_store) => (next) => (action) => {
-  console.log("will dispatch", action);
+const loggerMiddleware = (_store) => (next) => (action) => {
+  if (IS_DEVELOPMENT) {
+    console.log("will dispatch", action);
+  }
 
   // Call the next dispatch method in the middleware chain.
   const returnValue = next(action);
@@ -56,7 +42,7 @@ var loggerMiddleware = (_store) => (next) => (action) => {
   // a middleware further in chain changed it.
   return returnValue;
 };
-var middleware = [thunk, wsServerDispatcher.middleware];
+let middleware = [thunk, wsServerDispatcher.middleware];
 
 if (crowDispatcher) {
   middleware = [...middleware, crowDispatcher.middleware];
@@ -66,7 +52,7 @@ if (IS_DEVELOPMENT) {
   middleware.push(loggerMiddleware);
 }
 
-var store = createStore(
+const store = createStore(
   rootReducer,
   initialState,
   applyMiddleware(...middleware)
