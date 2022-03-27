@@ -34,6 +34,7 @@ const main = () => {
     target: "node15",
     bundle: true,
     sourcemap: true,
+    external: ["max-api"]
   });
 };
 
