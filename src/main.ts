@@ -31,7 +31,7 @@ import CrowDispatcherService from "main/CrowDispatcherService";
 import rootReducer from "common/reducers";
 import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
-import {createInitialState} from "common/models/initialState";
+import { createInitialState } from "common/models/initialState";
 
 const envPath = process.argv[2];
 
@@ -56,16 +56,10 @@ var loggerMiddleware = (_store) => (next) => (action) => {
   // a middleware further in chain changed it.
   return returnValue;
 };
-var middleware = [
-  thunk,
-  wsServerDispatcher.middleware,
-];
+var middleware = [thunk, wsServerDispatcher.middleware];
 
 if (crowDispatcher) {
-  middleware = [
-    ...middleware,
-    crowDispatcher.middleware
-  ]
+  middleware = [...middleware, crowDispatcher.middleware];
 }
 
 if (IS_DEVELOPMENT) {
@@ -153,7 +147,10 @@ if (USE_EXTERNAL_SC) {
       externalSCWait / 1000
     } seconds instead...
   `);
-  setTimeout(() => scReduxController.scStoreController.init().then(startServer).catch(quit), externalSCWait);
+  setTimeout(() => {
+    scReduxController.scStoreController.init().catch(quit);
+    startServer();
+  }, externalSCWait);
 } else {
   scReduxController
     .boot()
