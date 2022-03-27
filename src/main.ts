@@ -10,11 +10,13 @@ import SCRedux from "supercollider-redux";
 
 import WebsocketServerDispatcher from "main/WebsocketServerDispatcher";
 import CrowDispatcherService from "main/CrowDispatcherService";
+import MaxDispatcher from "main/MaxDispatcher";
 
 import rootReducer from "common/reducers";
 import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 import { createInitialState } from "common/models/initialState";
+
 
 const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC === "1";
 const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
@@ -26,6 +28,10 @@ const initialState = createInitialState();
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
 const crowDispatcher = new CrowDispatcherService();
+let maxDispatcher;
+if (!IS_DEVELOPMENT) {
+  maxDispatcher = new MaxDispatcher();
+}
 
 console.log("Creating store...");
 const loggerMiddleware = (_store) => (next) => (action) => {
@@ -60,6 +66,9 @@ const store = createStore(
 
 crowDispatcher.setStore(store);
 crowDispatcher.initialize();
+if (maxDispatcher) {
+  maxDispatcher.setStore(store);
+}
 
 console.log("Initializing SCRedux");
 const scReduxController = new SCRedux.SCReduxController(store, {

@@ -2,9 +2,17 @@ import max from "max-api"
 
 class MaxDispatcher {
   constructor() {
-    super();
+    //super();
 
-    
+    max.addHandlers({
+      test: () => {
+        console.log("test");
+      }
+    });
+  }
+
+  setStore() {
+    console.log("hello");
   }
 }
 
