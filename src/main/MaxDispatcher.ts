@@ -9,6 +9,7 @@ import {
   ABLETON_LINK_DISABLE,
   ABLETON_TRANSPORT_PLAY,
   ABLETON_TRANSPORT_PAUSE,
+  ABLETON_UPDATE_TEMPO,
 } from "common/actions";
 
 type MaxMessageName = "sessionStateUpdate";
@@ -53,6 +54,15 @@ class MaxDispatcher {
             "live_set",
             "is_playing",
             0
+          );
+          break;
+
+        case ABLETON_UPDATE_TEMPO:
+          maxApi.outlet(
+            "cs/set_property",
+            "live_set",
+            "tempo",
+            action.payload.tempo
           );
           break;
 

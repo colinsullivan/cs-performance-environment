@@ -1,4 +1,5 @@
 import LinkEnableButton from "./AbletonSessionView/LinkEnableButton";
+import TempoControl from "./AbletonSessionView/TempoControl";
 import TransportPlayButton from "./AbletonSessionView/TransportPlayButton";
 import OverlayView from "./OverlayView";
 
@@ -8,6 +9,7 @@ const AbletonSessionView = () => {
       <div>
         <TransportPlayButton />
         <LinkEnableButton />
+        <TempoControl />
       </div>
     </OverlayView>
   );
