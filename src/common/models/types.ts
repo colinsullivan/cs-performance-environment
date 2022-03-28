@@ -3,7 +3,7 @@ import SCRedux from "supercollider-redux";
 import { SCReduxSequencer, Quant } from "supercollider-redux-sequencers";
 import { AbletonState } from "./ableton/api";
 import { CrowDevice } from "./crow/api";
-import { HoldMenusState, HoldMenuState } from "./menus";
+import { HoldMenusState } from "./menus";
 import { READY_STATES } from "./ready_states";
 import { ScaleState } from "./scale";
 export type SequencerGenericParamValue = number;

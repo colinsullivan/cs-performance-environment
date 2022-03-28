@@ -1,5 +1,4 @@
 import { AbletonSession, AbletonTrack } from "common/models/ableton/api";
-import {getAbletonTracksByName} from "common/selectors";
 
 export const ABLETON_SESSION_STATE_UPDATE = "ABLETON_SESSION_STATE_UPDATE";
 export interface AbletonSessionStateUpdate {
@@ -17,39 +16,18 @@ export const abletonSessionStateUpdate = (
 export const ABLETON_TRACK_STATE_UPDATE = "ABLETON_TRACK_STATE_UPDATE";
 export interface AbletonTrackStateUpdate {
   type: typeof ABLETON_TRACK_STATE_UPDATE;
-  payload: AbletonTrack;
+  payload: { track: AbletonTrack; isNew: boolean };
 }
-export const abletonTrackStateUpdate = (payload: AbletonTrack) => ({
+export const abletonTrackStateUpdate = (
+  track: AbletonTrack,
+  tracksByName: Record<string, AbletonTrack>
+) => ({
   type: ABLETON_TRACK_STATE_UPDATE,
-  payload,
+  payload: {
+    track,
+    tracksByName,
+  },
 });
-
-export const ABLETON_TRACK_INIT = "ABLETON_TRACK_INIT";
-export interface AbletonTrackInit {
-  type: typeof ABLETON_TRACK_INIT;
-  payload: AbletonTrack;
-}
-export const abletonTrackInit = (payload: AbletonTrack) => ({
-  type: ABLETON_TRACK_INIT,
-  payload
-});
-
-export const handleAbletonTrackStateUpdate = (payload: AbletonTrack) => (dispatch, getState) => {
-  const state = getState();
-
-  const tracksByName = getAbletonTracksByName(state);
-
-  const trackName = payload.name;
-  const trackIsNew = !(trackName in tracksByName);
-
-  // If the track is being created, dispatches an init for the track,
-  // otherwise dispatches an update.
-  if (trackIsNew) {
-    dispatch(abletonTrackInit(payload));
-    return;
-  }
-  dispatch(abletonTrackStateUpdate(payload));
-};
 
 export const ABLETON_TRANSPORT_PAUSE = "ABLETON_TRANSPORT_PAUSE";
 export interface AbletonTransportPause {

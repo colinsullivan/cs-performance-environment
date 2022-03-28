@@ -259,6 +259,11 @@ export interface SystemTempoChanged {
   };
 }
 
+export type Thunk = (
+  dispatch: (action: AllActionTypes) => void,
+  getState
+) => void;
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -297,8 +302,3 @@ export type AllActionTypes =
   | AbletonLinkDisable
   | AbletonUpdateTempo
   | AbletonTrackStateUpdate;
-
-export type Thunk = (
-  dispatch: (action: AllActionTypes) => void,
-  getState
-) => void;

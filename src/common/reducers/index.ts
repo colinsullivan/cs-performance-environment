@@ -3,7 +3,11 @@ import SCRedux from "supercollider-redux";
 
 import { READY_STATES } from "common/models/ready_states";
 
-import { WS_READYSTATE_UPDATE, STATE_REHYDRATED } from "common/actions/types";
+import {
+  WS_READYSTATE_UPDATE,
+  STATE_REHYDRATED,
+  AllActionTypes,
+} from "common/actions/types";
 import sequencers from "./sequencers";
 import octatrack from "./octatrack";
 import components from "./components";
@@ -12,7 +16,7 @@ import scale from "./scale";
 import tempo from "./tempo";
 import { crowReducer } from "./crow";
 import abletonReducer from "./ableton";
-import { AppState } from "common/models";
+import { AppState, createAbletonState } from "common/models";
 
 export function websocketReadyState(
   state = READY_STATES.CLOSED,
@@ -26,10 +30,10 @@ export function websocketReadyState(
   }
 }
 
-const combinedReducers = combineReducers<AppState>({
+const combinedReducers = combineReducers<AppState, AllActionTypes>({
   // @ts-ignore
   [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
-  ableton: abletonReducer,
+  ableton: (state = createAbletonState()) => state,
   components,
   crow: crowReducer,
   holdMenus,
@@ -40,15 +44,25 @@ const combinedReducers = combineReducers<AppState>({
   websocketReadyState,
 });
 
-const rootReducer = (state: AppState, action: AnyAction) => {
+const rootReducer = (state: AppState | undefined, action: AllActionTypes) => {
   let newState = combinedReducers(state, action);
 
-  const newSequencers = sequencers(state.sequencers, action, newState);
-  if (newSequencers !== state.sequencers) {
-    newState = {
-      ...newState,
-      sequencers: newSequencers,
-    };
+  if (state) {
+    const newSequencers = sequencers(state.sequencers, action, newState);
+    if (newSequencers !== state.sequencers) {
+      newState = {
+        ...newState,
+        sequencers: newSequencers,
+      };
+    }
+
+    const newAbleton = abletonReducer(state.ableton, action, newState);
+    if (newAbleton !== state.ableton) {
+      newState = {
+        ...newState,
+        ableton: newAbleton,
+      };
+    }
   }
 
   switch (action.type) {

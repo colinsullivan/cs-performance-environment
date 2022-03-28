@@ -11,7 +11,7 @@ import {
   AbletonSessionStateUpdate,
   AbletonTrackStateUpdate,
   abletonSessionStateUpdate,
-  handleAbletonTrackStateUpdate,
+  abletonTrackStateUpdate,
 } from "common/actions";
 
 type MaxMessageName = "sessionStateUpdate" | "trackStateUpdate";
@@ -91,7 +91,7 @@ class MaxDispatcher {
             if (!payload) {
               return;
             }
-            action = handleAbletonTrackStateUpdate(payload);
+            action = abletonTrackStateUpdate(payload);
             break;
 
           default:

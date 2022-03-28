@@ -1,8 +1,7 @@
 import path from "path";
 import fs from "fs";
+import { configureStore } from "@reduxjs/toolkit";
 
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
 import express from "express";
 import expressWebsocket, { Application } from "express-ws";
 import SCRedux from "supercollider-redux";
@@ -46,7 +45,7 @@ const loggerMiddleware = (_store) => (next) => (action) => {
   // a middleware further in chain changed it.
   return returnValue;
 };
-let middleware = [thunk, wsServerDispatcher.middleware];
+let middleware = [wsServerDispatcher.middleware];
 
 if (crowDispatcher) {
   middleware = [...middleware, crowDispatcher.middleware];
@@ -56,11 +55,11 @@ if (IS_DEVELOPMENT) {
   middleware.push(loggerMiddleware);
 }
 
-const store = createStore(
-  rootReducer,
-  initialState,
-  applyMiddleware(...middleware)
-);
+const store = configureStore({
+  reducer: rootReducer,
+  preloadedState: initialState,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
+});
 
 crowDispatcher.setStore(store);
 crowDispatcher.initialize();

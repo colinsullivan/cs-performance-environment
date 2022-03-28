@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
+    "@reduxjs/toolkit": "^1.8.0",
     "@serialport/bindings": "^9.0.1",
     "@supercollider/lang": "^1.0.1",
     "@testing-library/dom": "^7.31.0",

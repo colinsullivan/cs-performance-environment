@@ -3,9 +3,10 @@ import thunk from "redux-thunk";
 import logger from "redux-logger";
 
 import rootReducer from "common/reducers";
+import {AppState} from "common/models";
 
 export const configureStore = (
-  initialState,
+  initialState: AppState,
   websocketDispatcher,
   debounceActionsMiddleware,
   sequencerApplyChangesService
@@ -25,10 +26,11 @@ export const configureStore = (
   if (websocketDispatcher) {
     middleware.push(websocketDispatcher.middleware);
   }
+  const middlewareApplied = applyMiddleware(...middleware);
   const store = createStore(
     rootReducer,
     initialState,
-    applyMiddleware(...middleware)
+    middlewareApplied
   );
 
   return store;
