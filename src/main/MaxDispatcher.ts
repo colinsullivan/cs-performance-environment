@@ -8,11 +8,13 @@ import {
   ABLETON_TRANSPORT_PAUSE,
   ABLETON_TRANSPORT_PLAY,
   ABLETON_UPDATE_TEMPO,
+  ABLETON_UPDATE_TRACK,
   AbletonSessionStateUpdate,
   AbletonTrackStateUpdate,
   abletonSessionStateUpdate,
   abletonTrackStateUpdate,
 } from "common/actions";
+import { AbletonTrack } from "common/models";
 
 type MaxMessageName = "sessionStateUpdate" | "trackStateUpdate";
 
@@ -56,6 +58,12 @@ class MaxDispatcher {
             "tempo",
             action.payload.tempo
           );
+          break;
+
+        case ABLETON_UPDATE_TRACK:
+          const track: AbletonTrack = action.payload.track;
+
+          maxApi.outlet("cs/set_property_by_id", track.volume.id, "value", track.volume.value);
           break;
 
         default:

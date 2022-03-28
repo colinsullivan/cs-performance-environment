@@ -5,6 +5,7 @@ export interface AbletonSession {
 }
 
 export interface AbletonDeviceParameter {
+  id: string;
   max: number;
   min: number;
   value: number;

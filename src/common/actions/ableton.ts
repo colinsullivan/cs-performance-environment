@@ -75,10 +75,28 @@ export const abletonLinkDisable = () => ({
   type: ABLETON_LINK_DISABLE,
 });
 
-//export const ABLETON_UPDATE_TRACK_DEVICE_PARAMETER = "ABLETON_UPDATE_TRACK_DEVICE_PARAMETER";
-//export interface AbletonUpdateTrackDeviceParameter {
-  //type: typeof ABLETON_UPDATE_TRACK_DEVICE_PARAMETER;
-  //payload: {
-    ////trackName: 
-  //}
-//}
+export const ABLETON_UPDATE_TRACK = "ABLETON_UPDATE_TRACK";
+export interface AbletonUpdateTrack {
+  type: typeof ABLETON_UPDATE_TRACK;
+  payload: {
+    track: AbletonTrack;
+  };
+}
+export const abletonTrackUpdate = (track: AbletonTrack) => ({
+  type: ABLETON_UPDATE_TRACK,
+  payload: {
+    track,
+  },
+});
+
+export const handleTrackVolumeChanged =
+  (track: AbletonTrack, value: number) => (dispatch) => {
+    const updatedTrack = {
+      ...track,
+      volume: {
+        ...track.volume,
+        value,
+      },
+    };
+    dispatch(abletonTrackUpdate(updatedTrack));
+  };
