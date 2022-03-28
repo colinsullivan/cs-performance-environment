@@ -13,6 +13,7 @@ export interface AbletonDeviceParameter {
 }
 
 export interface AbletonTrack {
+  id: string;
   mute: boolean;
   name: string;
   panning: AbletonDeviceParameter;

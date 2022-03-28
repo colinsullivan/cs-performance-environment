@@ -74,3 +74,11 @@ export interface AbletonLinkDisable {
 export const abletonLinkDisable = () => ({
   type: ABLETON_LINK_DISABLE,
 });
+
+//export const ABLETON_UPDATE_TRACK_DEVICE_PARAMETER = "ABLETON_UPDATE_TRACK_DEVICE_PARAMETER";
+//export interface AbletonUpdateTrackDeviceParameter {
+  //type: typeof ABLETON_UPDATE_TRACK_DEVICE_PARAMETER;
+  //payload: {
+    ////trackName: 
+  //}
+//}
