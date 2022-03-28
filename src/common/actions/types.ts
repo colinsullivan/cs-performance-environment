@@ -31,6 +31,7 @@ import {
   AbletonLinkDisable,
   AbletonLinkEnable,
   AbletonSessionStateUpdate,
+  AbletonTrackStateUpdate,
   AbletonTransportPause,
   AbletonTransportPlay,
   AbletonUpdateTempo,
@@ -294,7 +295,8 @@ export type AllActionTypes =
   | AbletonTransportPause
   | AbletonLinkEnable
   | AbletonLinkDisable
-  | AbletonUpdateTempo;
+  | AbletonUpdateTempo
+  | AbletonTrackStateUpdate;
 
 export type Thunk = (
   dispatch: (action: AllActionTypes) => void,

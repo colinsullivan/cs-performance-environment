@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import { AnyAction, combineReducers } from "redux";
 import SCRedux from "supercollider-redux";
 
 import { READY_STATES } from "common/models/ready_states";
@@ -12,8 +12,12 @@ import scale from "./scale";
 import tempo from "./tempo";
 import { crowReducer } from "./crow";
 import abletonReducer from "./ableton";
+import { AppState } from "common/models";
 
-export function websocketReadyState(state = READY_STATES.CLOSED, action) {
+export function websocketReadyState(
+  state = READY_STATES.CLOSED,
+  action: AnyAction
+) {
   switch (action.type) {
     case WS_READYSTATE_UPDATE:
       return action.payload.readyState;
@@ -22,21 +26,21 @@ export function websocketReadyState(state = READY_STATES.CLOSED, action) {
   }
 }
 
-const combinedReducers = combineReducers({
+const combinedReducers = combineReducers<AppState>({
+  // @ts-ignore
   [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
-  //controllers,
-  sequencers: (state = {}) => state,
+  ableton: abletonReducer,
   components,
-  websocketReadyState,
-  octatrack,
-  holdMenus,
-  scale,
-  tempo,
   crow: crowReducer,
-  ableton: abletonReducer
+  holdMenus,
+  octatrack,
+  scale,
+  sequencers: (state = {}) => state,
+  tempo,
+  websocketReadyState,
 });
 
-const rootReducer = (state, action) => {
+const rootReducer = (state: AppState, action: AnyAction) => {
   let newState = combinedReducers(state, action);
 
   const newSequencers = sequencers(state.sequencers, action, newState);

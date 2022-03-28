@@ -4,6 +4,26 @@ export interface AbletonSession {
   tempo: number;
 }
 
+export interface AbletonDeviceParameter {
+  max: number;
+  min: number;
+  value: number;
+  name: number;
+  originalName: number;
+}
+
+export interface AbletonTrack {
+  mute: boolean;
+  name: string;
+  panning: AbletonDeviceParameter;
+  volume: AbletonDeviceParameter;
+  sendA: AbletonDeviceParameter;
+  sendB: AbletonDeviceParameter;
+  //sendC: AbletonDeviceParameter;
+  //sendD: AbletonDeviceParameter;
+}
+
 export interface AbletonState {
   session: AbletonSession; 
+  tracks: AbletonTrack[];
 }

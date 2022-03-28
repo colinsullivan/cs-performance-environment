@@ -1,18 +1,20 @@
 import { AnyAction, Middleware, Store } from "redux";
 import maxApi from "max-api";
 
-import { parseJsonOrError } from "common/util/parsing";
+import { parseJsonOrNull } from "common/util/parsing";
 import {
-  abletonSessionStateUpdate,
-  AbletonSessionStateUpdate,
-  ABLETON_LINK_ENABLE,
   ABLETON_LINK_DISABLE,
-  ABLETON_TRANSPORT_PLAY,
+  ABLETON_LINK_ENABLE,
   ABLETON_TRANSPORT_PAUSE,
+  ABLETON_TRANSPORT_PLAY,
   ABLETON_UPDATE_TEMPO,
+  AbletonSessionStateUpdate,
+  AbletonTrackStateUpdate,
+  abletonSessionStateUpdate,
+  handleAbletonTrackStateUpdate,
 } from "common/actions";
 
-type MaxMessageName = "sessionStateUpdate";
+type MaxMessageName = "sessionStateUpdate" | "trackStateUpdate";
 
 class MaxDispatcher {
   store: Store | undefined;
@@ -40,21 +42,11 @@ class MaxDispatcher {
           break;
 
         case ABLETON_TRANSPORT_PLAY:
-          maxApi.outlet(
-            "cs/set_property",
-            "live_set",
-            "is_playing",
-            1
-          );
+          maxApi.outlet("cs/set_property", "live_set", "is_playing", 1);
           break;
 
         case ABLETON_TRANSPORT_PAUSE:
-          maxApi.outlet(
-            "cs/set_property",
-            "live_set",
-            "is_playing",
-            0
-          );
+          maxApi.outlet("cs/set_property", "live_set", "is_playing", 0);
           break;
 
         case ABLETON_UPDATE_TEMPO:
@@ -79,14 +71,27 @@ class MaxDispatcher {
       dispatch: (messageName: string, payloadJson: string) => {
         const maxMessageName = messageName.trim() as MaxMessageName;
         let action: AnyAction;
+        let payload: unknown;
 
         switch (maxMessageName) {
           case "sessionStateUpdate":
-            const payload =
-              parseJsonOrError<AbletonSessionStateUpdate["payload"]>(
+            payload =
+              parseJsonOrNull<AbletonSessionStateUpdate["payload"]>(
                 payloadJson
               );
+            if (!payload) {
+              return;
+            }
             action = abletonSessionStateUpdate(payload);
+            break;
+
+          case "trackStateUpdate":
+            payload =
+              parseJsonOrNull<AbletonTrackStateUpdate["payload"]>(payloadJson);
+            if (!payload) {
+              return;
+            }
+            action = handleAbletonTrackStateUpdate(payload);
             break;
 
           default:

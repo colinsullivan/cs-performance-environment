@@ -1,5 +1,11 @@
+import {Sequencers} from "common/reducers/types";
+import SCRedux from "supercollider-redux";
 import { SCReduxSequencer, Quant } from "supercollider-redux-sequencers";
-
+import { AbletonState } from "./ableton/api";
+import { CrowDevice } from "./crow/api";
+import { HoldMenusState, HoldMenuState } from "./menus";
+import { READY_STATES } from "./ready_states";
+import { ScaleState } from "./scale";
 export type SequencerGenericParamValue = number;
 export const MidiCCRange = [0, 127];
 export type MidiModSequence = number[];
@@ -100,11 +106,7 @@ export type SequencerGenericParamKeys =
   | "secondEuclieanTotalNumHits";
 
 // Defines which keys represent modulation sequences
-export type SequencerModSeqParamKey = 
-  | "velocities"
-  | "cc1"
-  | "cc74";
-
+export type SequencerModSeqParamKey = "velocities" | "cc1" | "cc74";
 
 export interface SynkopaterSequencer
   extends SynkopaterPresetProps,
@@ -116,4 +118,17 @@ export interface SynkopaterSequencer
   };
   changesAppliedAt: number;
   lastUpdateId: string;
+}
+
+export interface AppState {
+  [SCRedux.DEFAULT_MOUNT_POINT]: ReturnType<typeof SCRedux.reducer>;
+  ableton: AbletonState;
+  components: Record<string, SynkopaterPerformanceComponent>;
+  crow: CrowDevice[];
+  holdMenus: HoldMenusState;
+  octatrack: OctatrackState;
+  scale: ScaleState;
+  sequencers: Sequencers;
+  tempo: number;
+  websocketReadyState: READY_STATES;
 }

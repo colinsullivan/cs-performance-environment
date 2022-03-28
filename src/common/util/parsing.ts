@@ -1,9 +1,10 @@
-export const parseJsonOrError = <T>(payloadJson: string): T => {
+export const parseJsonOrNull = <T>(payloadJson: string): T | null => {
   try {
     const payload = JSON.parse(payloadJson) as T;
     return payload;
   } catch (e) {
     console.log(`Error parsing payload: ${payloadJson}`);
-    throw e;
+    console.log(e);
+    return null;
   }
 };
