@@ -11,3 +11,4 @@ export const getAbletonTempo = createSelector([getAbleton], (ableton) => ableton
 
 export const getAbletonTracks = createSelector([getAbleton], (ableton) => ableton.tracks);
 export const getAbletonTracksByName = createSelector([getAbletonTracks], (tracks) => keyBy(tracks, "name"));
+export const getAbletonTracksById = createSelector([getAbletonTracks], (tracks) => keyBy(tracks, "id"));

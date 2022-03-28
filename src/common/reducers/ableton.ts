@@ -6,7 +6,7 @@ import {
 import { AppState } from "common/models/types";
 import { createAbletonState } from "common/models/ableton";
 import { AbletonState } from "common/models/ableton/api";
-import { getAbletonTracksByName } from "common/selectors";
+import { getAbletonTracksById } from "common/selectors";
 
 const abletonReducer = (
   state: AbletonState = createAbletonState(),
@@ -21,8 +21,8 @@ const abletonReducer = (
       };
     case ABLETON_TRACK_STATE_UPDATE:
       {
-        const tracksByName = getAbletonTracksByName(allState);
-        const existingTrack = tracksByName[action.payload.track.name];
+        const tracksByName = getAbletonTracksById(allState);
+        const existingTrack = tracksByName[action.payload.track.id];
         const isNew = !existingTrack;
         if (isNew) {
           return {
@@ -33,7 +33,7 @@ const abletonReducer = (
         return {
           ...state,
           tracks: state.tracks.map((t) => {
-            if (t.name === action.payload.track.name) {
+            if (t.id === action.payload.track.id) {
               return action.payload.track;
             }
             return t;
