@@ -23,16 +23,18 @@ export const setMenuIsOpen = (
 export const scaleMenuId = "scaleMenu";
 export const modulationMenuId = "modulationMenu";
 export const abletonMenuId = "abletonMenu";
+export const mixMenuId = "mixMenu";
 
 const createInitialHoldMenus = (): HoldMenusState => {
   const allHoldMenus = [
     createHoldMenu(scaleMenuId, "key"),
     createHoldMenu(modulationMenuId, "mod"),
-    createHoldMenu(abletonMenuId, "live")
+    createHoldMenu(abletonMenuId, "live"),
+    createHoldMenu(mixMenuId, "mix"),
   ];
   const initialState = keyBy(allHoldMenus, "menuId");
 
-  initialState[abletonMenuId].isOpen = true;
+  initialState[mixMenuId].isOpen = true;
 
   return initialState;
 };
