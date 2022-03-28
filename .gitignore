@@ -24,3 +24,4 @@ yarn-error.log*
 *.log
 yarn.lock
 .env
+test_sessions/*/Backup/*
