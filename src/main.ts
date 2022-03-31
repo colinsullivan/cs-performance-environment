@@ -1,31 +1,35 @@
 import path from "path";
 import fs from "fs";
-import dotenv from "dotenv";
 
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import express from "express";
-import expressWebsocket from "express-ws";
+import expressWebsocket, { Application } from "express-ws";
 import SCRedux from "supercollider-redux";
 
 import WebsocketServerDispatcher from "main/WebsocketServerDispatcher";
 import CrowDispatcherService from "main/CrowDispatcherService";
+//import MaxDispatcher from "main/MaxDispatcher";
 
 import rootReducer from "common/reducers";
 import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 import { createInitialState } from "common/models/initialState";
+import { loadEnv } from "common/util/environment";
+
+loadEnv();
 
 const USE_EXTERNAL_SC = process.env.USE_EXTERNAL_SC === "1";
 const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
-
-const envPath = process.argv[2];
-dotenv.config({ path: envPath });
 
 const initialState = createInitialState();
 
 const wsServerDispatcher = new WebsocketServerDispatcher();
 const crowDispatcher = new CrowDispatcherService();
+//let maxDispatcher;
+//if (!IS_DEVELOPMENT) {
+  //maxDispatcher = new MaxDispatcher();
+//}
 
 console.log("Creating store...");
 const loggerMiddleware = (_store) => (next) => (action) => {
@@ -60,6 +64,9 @@ const store = createStore(
 
 crowDispatcher.setStore(store);
 crowDispatcher.initialize();
+//if (maxDispatcher) {
+  //maxDispatcher.setStore(store);
+//}
 
 console.log("Initializing SCRedux");
 const scReduxController = new SCRedux.SCReduxController(store, {
@@ -80,11 +87,11 @@ process.on("SIGINT", quit);
 
 const startServer = () => {
   console.log("startServer");
-  const server = express();
+  const server = express() as unknown as Application;
   expressWebsocket(server);
 
   if (process.env.NODE_ENV === "development") {
-    server.use(function (req, res, next) {
+    server.use(function (_req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "X-Requested-With");
       next();
@@ -93,14 +100,14 @@ const startServer = () => {
   } else {
     server.use(express.static(path.join(__dirname, ".")));
   }
-  server.get("/getState", function (req, res) {
+  server.get("/getState", function (_req, res) {
     res.json(store.getState());
   });
   server.ws("/:clientId", function (ws, req) {
     const clientId = req.params.clientId;
     console.log(`client ${clientId} connected.`);
     ws.on("message", function (msg) {
-      const action = JSON.parse(msg);
+      const action = JSON.parse(msg.toString("utf8"));
       //console.log("action");
       //console.log(action);
       store.dispatch(action);
@@ -113,10 +120,10 @@ const startServer = () => {
     store.dispatch(rehydrate_state());
   });
   if (process.env.NODE_ENV !== "development") {
-    server.get("/", function (req, res) {
+    server.get("/", function (_req, res) {
       res.sendFile(path.join(`${__dirname}/../index.html`));
     });
-    server.get("/laptop", function (req, res) {
+    server.get("/laptop", function (_req, res) {
       res.sendFile(path.join(`${__dirname}/../index.html`));
     });
   }

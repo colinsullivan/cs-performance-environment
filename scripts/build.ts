@@ -1,40 +1,48 @@
-import fs from "fs";
+import fs from "fs-extra";
 
 import esbuild from "esbuild";
 
-const handleError = (err) => {
-  if (err) {
-    console.log("An error occurred while building");
-    console.log(err);
-    process.exit(1);
-  }
-};
-
-const main = () => {
+const main = async () => {
   // Copies supercollider startup file
-  fs.copyFile(
+  await fs.copy(
     "src/main/sclang_init.sc",
     "build/main/sclang_init.sc",
-    handleError
   );
 
   // Copies serialport module bindings
-  fs.copyFile(
+  await fs.copy(
     "node_modules/serialport/node_modules/@serialport/bindings/build/Release/bindings.node",
-    "build/main/bindings.node",
-    handleError
+    "build/bindings.node",
   );
 
-  // Builds the server-side app
-  esbuild.buildSync({
-    entryPoints: ["src/main.ts"],
-    outfile: "build/main.js",
+  // Copies supercollider-js quark
+  await fs.copy(
+    "node_modules/@supercollider/lang/lib/supercollider-js",
+    "build/supercollider-js",
+  );
+
+  const serverOptionsCommon: esbuild.BuildOptions = {
     tsconfig: "server.tsconfig.json",
     platform: "node",
     target: "node15",
     bundle: true,
     sourcemap: true,
+  };
+
+  // Builds the server-side app
+  esbuild.buildSync({
+    ...serverOptionsCommon,
+    entryPoints: ["src/main.ts"],
+    outfile: "build/main.js",
   });
+
+  // Builds the max app
+  esbuild.buildSync({
+    ...serverOptionsCommon,
+    entryPoints: ["src/main_max.ts"],
+    outfile: "build/main_max.js",
+    external: ["max-api"]
+  })
 };
 
 main();

@@ -7,12 +7,17 @@
     "moduleResolution": "node",
     "outDir": "build/",
     "sourceMap": true,
-    "target": "es6"
+    "target": "es6",
+    "types": ["node"]
   },
   "lib": ["es2019"],
   "include": [
     "src/common/**/*",
     "src/main.ts",
-    "src/main/**/*"
-  ]
+    "src/main/**/*",
+    "__mocks__/**"
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

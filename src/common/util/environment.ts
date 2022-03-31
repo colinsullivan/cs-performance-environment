@@ -8,6 +8,8 @@
  *  @license    Licensed under the GPLv3 license.
  **/
 
+import dotenv from "dotenv";
+
 /**
  *  List available midi ports given a midi.input or midi.output instance.
  **/
@@ -30,4 +32,16 @@ export function getEnvOrError (envName: string): string {
     throw new Error(`Expected environment variable ${envName} to be defined.`);
   }
   return process.env[envName] as string;
+}
+
+export function loadEnv () {
+  const envPath = process.argv[2];
+  if (envPath) {
+    console.log(`Loading environment from ${envPath}`);
+    dotenv.config({ path: envPath });
+  } else {
+    console.log("Loading environment from default location");
+    dotenv.config();
+  }
+
 }
