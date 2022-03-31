@@ -8,12 +8,10 @@ import {
   SynkopaterPerformanceComponent,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
-import {
-  scaleMenuId,
-  HoldMenusState,
-  HoldMenuState,
-} from "common/models/menus";
-import { CrowDevice } from "./models/crow/api";
+import { CrowDevice } from "common/models/crow/api";
+
+export * from "./ableton";
+export * from "./menus";
 
 export const sequencersSelector = (state): Sequencers => state.sequencers;
 
@@ -39,27 +37,6 @@ export const getWebsocketReadyState = (state): READY_STATES =>
 export const getIsConnected = createSelector(
   [getWebsocketReadyState],
   (websocketReadyState) => websocketReadyState === READY_STATES.OPEN
-);
-
-// TODO: remove this type definition when state tree is typed
-const getHoldMenus = (state): HoldMenusState => state.holdMenus;
-
-export const getScaleHoldMenuIsOpen = createSelector(
-  [getHoldMenus],
-  (holdMenus) => holdMenus[scaleMenuId].isOpen
-);
-
-export const getOpenHoldMenu = createSelector(
-  [getHoldMenus],
-  (holdMenus): HoldMenuState | null => {
-    for (const holdMenuId of Object.keys(holdMenus)) {
-      const holdMenu = holdMenus[holdMenuId];
-      if (holdMenu.isOpen) {
-        return holdMenu;
-      }
-    }
-    return null;
-  }
 );
 
 export const getScale = (state) => state.scale;

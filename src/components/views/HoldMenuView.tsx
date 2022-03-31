@@ -5,8 +5,13 @@ import styled from "styled-components";
 import { getOpenHoldMenu } from "common/selectors";
 import ScaleView from "components/views/ScaleView";
 import { offDarkColor, getRGBAString } from "constants/colors";
-import { scaleMenuId, modulationMenuId } from "common/models/menus";
+import {
+  scaleMenuId,
+  modulationMenuId,
+  abletonMenuId,
+} from "common/models/menus";
 import ModulationView from "components/views/ModulationView";
+import AbletonSessionView from "./AbletonSessionView";
 
 const HoldMenuViewContainer = styled.div`
   position: absolute;
@@ -18,27 +23,32 @@ const HoldMenuViewContainer = styled.div`
   background-color: ${getRGBAString(offDarkColor)};
 `;
 
+const getViewForHoldMenu = (menuId: string) => {
+  switch (menuId) {
+    case scaleMenuId:
+      return <ScaleView />;
+
+    case modulationMenuId:
+      return <ModulationView />;
+
+    case abletonMenuId:
+      return <AbletonSessionView />;
+
+    default:
+      return null;
+  }
+};
+
 const HoldMenuView = () => {
   const openHoldMenu = useSelector(getOpenHoldMenu);
   let overlayView: React.ReactNode = null;
 
   if (openHoldMenu) {
-    switch (openHoldMenu.menuId) {
-      case scaleMenuId:
-        overlayView = <ScaleView />;
-        break;
-
-      case modulationMenuId:
-        overlayView = <ModulationView />;
-        break;
-
-      default:
-        throw new Error(
-          `Cannot render menu with menuId ${openHoldMenu.menuId}`
-        );
-    }
+    overlayView = getViewForHoldMenu(openHoldMenu.menuId);
   }
-  return openHoldMenu ? <HoldMenuViewContainer>{overlayView}</HoldMenuViewContainer> : null;
+  return openHoldMenu ? (
+    <HoldMenuViewContainer>{overlayView}</HoldMenuViewContainer>
+  ) : null;
 };
 
 export default HoldMenuView;

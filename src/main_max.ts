@@ -1,42 +1,42 @@
-import maxApi from "max-api";
 import uuid from "uuid/v4";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, AnyAction, Store } from "redux";
 import thunk from "redux-thunk";
 
 import { loadEnv } from "common/util/environment";
 import { PORT } from "common/constants";
 import rootReducer from "common/reducers";
 import WebsocketDispatcher from "dispatchers/WebsocketDispatcher";
-import {fetchInitialState} from "common/util/setup";
+import { fetchInitialState } from "common/util/setup";
+import { getAbleton } from "common/selectors";
+import MaxDispatcher from "./main/MaxDispatcher";
+import {max} from "lodash";
 
 loadEnv();
+const IS_DEVELOPMENT = true;
+const loggerMiddleware = (store: Store) => (next) => (action: AnyAction) => {
+  console.log("will dispatch", action);
+
+  // Call the next dispatch method in the middleware chain.
+  const returnValue = next(action);
+
+  //console.log("state after dispatch", JSON.stringify(store.getState(), null, 4));
+  console.log(
+    "ableton state after dispatch",
+    JSON.stringify(getAbleton(store.getState()), null, 4)
+  );
+
+  // This will likely be the action itself, unless
+  // a middleware further in chain changed it.
+  return returnValue;
+};
+
 const clientId = uuid();
 
-
-const main = async () => {
-
-  maxApi.addHandlers({
-    dispatch: (actionType: string, payloadJson: string) => {
-      const payload = JSON.parse(payloadJson);
-      console.log("dispatch");
-      console.log("actionType");
-      console.log(actionType);
-      console.log("payload");
-      console.log(payload);
-    },
-  });
-
-  console.log("Hello max!");
-
-  const wsDispatcher = new WebsocketDispatcher({
-    port: PORT,
-    clientId,
-    uri: `localhost:${PORT}`
-  });
-
-  const middleware = [thunk];
-
-  const initialState = await fetchInitialState(`http://localhost:${PORT}`);
+const configureStore = (wsDispatcher: WebsocketDispatcher, maxDispatcher: MaxDispatcher, initialState: unknown) => {
+  const middleware = [thunk, wsDispatcher.middleware, maxDispatcher.middleware];
+  if (IS_DEVELOPMENT) {
+    middleware.push(loggerMiddleware);
+  }
 
   const store = createStore(
     rootReducer,
@@ -44,29 +44,37 @@ const main = async () => {
     applyMiddleware(...middleware)
   );
 
-  const handleStateChange = async () => {
-    const state = store.getState();
-
-    try {
-      await maxApi.setDict("cs/state", state);
-    } catch (e) {
-      console.log("Error setting cs/state");
-      console.log("e");
-      console.log(e);
-    }
-    try {
-      await maxApi.outlet("cs/state_changed");
-    } catch (e) {
-      console.log("Error sending change notification");
-      console.log("e");
-      console.log(e);
-    }
-  };
-
-  store.subscribe(handleStateChange);
-
   wsDispatcher.setStore(store);
-  
+  maxDispatcher.setStore(store);
+};
+
+const startup = async (wsDispatcher: WebsocketDispatcher, maxDispatcher: MaxDispatcher) => {
+  let initialState: unknown;
+  try {
+    initialState = await fetchInitialState(`http://localhost:${PORT}`);
+  } catch (e) {
+    console.log("Error fetching initial state, trying again in 1 seconds...");
+    setTimeout(() => startup(wsDispatcher, maxDispatcher), 1000);
+    return;
+  }
+
+  configureStore(wsDispatcher, maxDispatcher, initialState)
+
+}
+
+const main = async () => {
+  console.log("Hello max!");
+
+  const wsDispatcher = new WebsocketDispatcher({
+    port: PORT,
+    clientId,
+    uri: `localhost:${PORT}`,
+  });
+
+  const maxDispatcher = new MaxDispatcher();
+
+  startup(wsDispatcher, maxDispatcher);
+
 };
 
 main();
