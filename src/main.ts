@@ -14,7 +14,7 @@ import rootReducer from "common/reducers";
 import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 import { createInitialState } from "common/models/initialState";
-import { loadEnv } from "common/util/environment";
+import { loadEnv } from "main/util/environment";
 
 loadEnv();
 

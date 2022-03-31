@@ -146,6 +146,9 @@ class MaxDispatcher {
 
     this.addHandlers();
     this.store.subscribe(() => this.handleStateChange());
+  }
+
+  sendInit () {
     maxApi.outlet("cs/init");
   }
 }
