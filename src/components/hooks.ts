@@ -1,6 +1,11 @@
 import { useCallback, useRef, useState } from "react";
 
-export const useLocalStateWhileAdjusting = (): [() => void, boolean] => {
+interface UseLocalStateWhileAdjustingResult {
+  handleControlIsBeingAdjusted: () => void;
+  isAdjusting: boolean;
+  handleControlIsDoneAdjusting: () => void;
+}
+export const useLocalStateWhileAdjusting = (): UseLocalStateWhileAdjustingResult => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isAdjusting, setIsAdjusting] = useState(false);
 
@@ -13,8 +18,15 @@ export const useLocalStateWhileAdjusting = (): [() => void, boolean] => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    timeoutRef.current = setTimeout(handleTimeoutFinished, 500);
   }, [setIsAdjusting, timeoutRef]);
 
-  return [handleControlIsBeingAdjusted, isAdjusting];
+  const handleControlIsDoneAdjusting = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(handleTimeoutFinished, 500);
+  }, [timeoutRef]);
+
+
+  return {handleControlIsBeingAdjusted, isAdjusting, handleControlIsDoneAdjusting};
 };

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocalStateWhileAdjusting } from "components/hooks";
 
 const TempoControl = () => {
-  const [handleControlIsBeingAdjusted, isAdjusting] =
+  const { handleControlIsBeingAdjusted, isAdjusting } =
     useLocalStateWhileAdjusting();
   const dispatch = useDispatch();
   const bpm = useSelector(getAbletonTempo);
