@@ -5,6 +5,7 @@ import { TrackProps } from "./types";
 import VolumeSlider from "./VolumeSlider";
 
 import { mixerChannelWidth, mixerChannelMargin } from "constants/ui";
+import QuadPanner from "./QuadPanner";
 
 const useStyles = createUseStyles({
   mixerTrack: {
@@ -31,7 +32,11 @@ const MixerTrack = ({ track }: TrackProps) => {
   const styles = useStyles();
   return (
     <div className={styles.mixerTrack}>
-      <div>{track.name}</div>
+      <div>
+        <label>{track.name}</label>
+        <QuadPanner track={track} />
+      </div>
+
       <div className={styles.channelControls}>
         <div className={styles.channelControlsLeft}>
           <VolumeSlider track={track} />

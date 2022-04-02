@@ -6,13 +6,13 @@ import {
   AbletonDeviceParamName,
   AbletonTrack,
 } from "common/models/ableton/api";
-import {
-  turquoiseLightHalf,
-  turquoiseLightFull,
-  turquoiseLightTen,
-} from "constants/colors";
+import { turquoiseLightFull, turquoiseLightTen } from "constants/colors";
 import { useLocalStateWhileAdjusting } from "components/hooks";
 import { handleTrackDeviceParamValueChanged } from "common/actions";
+import {
+  touchControlBorderWidth,
+  transparentBackgroundTouchControl,
+} from "components/styles";
 
 interface DeviceParamSliderProps {
   track: AbletonTrack;
@@ -22,15 +22,12 @@ interface DeviceParamSliderProps {
   height: number;
 }
 
-const sliderBorderWidth = 2;
-
 const useStyles = createUseStyles<
   "slider" | "sliderFiller",
   DeviceParamSliderProps
 >({
   slider: {
-    background: "transparent",
-    border: `${sliderBorderWidth}px solid ${turquoiseLightHalf}`,
+    ...transparentBackgroundTouchControl,
     position: "relative",
     boxSizing: "border-box",
     width: (props) => props.width,
@@ -41,7 +38,7 @@ const useStyles = createUseStyles<
     boxSizing: "border-box",
     position: "absolute",
     bottom: 0,
-    width: (props) => props.width - 2*sliderBorderWidth,
+    width: (props) => props.width - 2 * touchControlBorderWidth,
   },
 });
 
@@ -55,7 +52,10 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
   const [touchStartPosition, setTouchStartPosition] = useState(0.0);
   const [adjustmentStartValue, setAdjustmentStartValue] = useState(0.0);
   const [localValue, setLocalValue] = useState(deviceParam.value);
-  const resetLocalValue = useCallback(() => setLocalValue(deviceParam.value), [setLocalValue, deviceParam]);
+  const resetLocalValue = useCallback(
+    () => setLocalValue(deviceParam.value),
+    [setLocalValue, deviceParam]
+  );
   const {
     handleControlIsBeingAdjusted,
     isAdjusting,

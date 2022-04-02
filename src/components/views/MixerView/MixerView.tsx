@@ -16,6 +16,7 @@ const useStyles = createUseStyles({
 const MixerView = () => {
   const tracks = useSelector(getAbletonTracksOrdered);
   const styles = useStyles();
+
   return (
     <OverlayView>
       <div className={styles.mixer}>

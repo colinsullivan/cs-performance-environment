@@ -19,9 +19,9 @@ const findChannelIndex = (orderedChannelNames: string[], track: AbletonTrack) =>
   orderedChannelNames.findIndex(createFindByName(track));
 
 export const getAbletonTracksOrdered = createSelector(
-  [getAbletonTracks, getOrderedChannelNames],
-  (abletonTracks, orderedChannelNames) =>
-    abletonTracks.sort(
+  [getAbletonTracks, getMixerConfiguration],
+  (abletonTracks, { orderedChannelNames, maxChannels }) =>
+    [...abletonTracks].sort(
       // Sort channels in the ordered list first, all others after
       (a, b) => {
         const aIndex = findChannelIndex(orderedChannelNames, a);
@@ -35,5 +35,5 @@ export const getAbletonTracksOrdered = createSelector(
         }
         return (aIndex - bIndex);
       }
-    )
+    ).slice(0, maxChannels)
 );
