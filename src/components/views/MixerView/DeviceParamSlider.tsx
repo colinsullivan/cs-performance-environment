@@ -22,23 +22,26 @@ interface DeviceParamSliderProps {
   height: number;
 }
 
+const sliderBorderWidth = 2;
+
 const useStyles = createUseStyles<
   "slider" | "sliderFiller",
   DeviceParamSliderProps
 >({
   slider: {
     background: "transparent",
-    border: `2px solid ${turquoiseLightHalf}`,
+    border: `${sliderBorderWidth}px solid ${turquoiseLightHalf}`,
     position: "relative",
-    boxSizing: "content-box",
+    boxSizing: "border-box",
     width: (props) => props.width,
   },
   sliderFiller: {
     background: turquoiseLightTen,
     borderTop: `4px solid ${turquoiseLightFull}`,
+    boxSizing: "border-box",
     position: "absolute",
     bottom: 0,
-    width: (props) => props.width,
+    width: (props) => props.width - 2*sliderBorderWidth,
   },
 });
 
