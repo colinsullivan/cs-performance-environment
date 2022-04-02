@@ -2,8 +2,10 @@ import { createUseStyles } from "react-jss";
 
 import { AbletonTrack } from "common/models/ableton/api";
 import { mixerChannelWidth, mixerChannelMargin } from "constants/ui";
-import {transparentBackgroundTouchControl} from "components/styles";
-import {turquoiseLightFull} from "constants/colors";
+import { transparentBackgroundTouchControl } from "components/styles";
+import { turquoiseLightFull } from "constants/colors";
+import { useSelector } from "react-redux";
+import { getMixerConfiguration } from "common/selectors";
 
 interface QuadPannerProps {
   track: AbletonTrack;
@@ -27,16 +29,25 @@ const useStyles = createUseStyles({
     shapeOutside: "circle()",
     position: "absolute",
 
-    left: .5*mixerChannelWidth,
-    bottom: .5*mixerChannelWidth,
-  }
+    left: 0.5 * mixerChannelWidth,
+    bottom: 0.5 * mixerChannelWidth,
+  },
 });
 
 const QuadPanner = (props: QuadPannerProps) => {
+  const { pannerSends } = useSelector(getMixerConfiguration);
   const styles = useStyles();
-  return (<div className={styles.panner}>
-    <div className={styles.pannerPositionDot}></div>
-  </div>);
+
+  const { track } = props;
+
+  const frontDeviceParam = track[pannerSends.frontSendName];
+  const rearDeviceParam = track[pannerSends.rearSendName];
+
+  return (
+    <div className={styles.panner}>
+      <div className={styles.pannerPositionDot}></div>
+    </div>
+  );
 };
 
 export default QuadPanner;

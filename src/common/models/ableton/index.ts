@@ -5,6 +5,8 @@ export const allAbletonDeviceParamNames: AbletonDeviceParamName[] = [
   "volume",
   "sendA",
   "sendB",
+  "sendC",
+  "sendD",
 ];
 
 export const createAbletonSession = (): AbletonSession => ({

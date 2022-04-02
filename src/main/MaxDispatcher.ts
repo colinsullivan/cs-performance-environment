@@ -1,7 +1,10 @@
 import { AnyAction, Middleware, Store } from "redux";
 import maxApi from "max-api";
 
-import { parseJsonOrNull } from "common/util/parsing";
+import {
+  parseJsonOrNull,
+  parseAbletonTrackStateUpdatePayload,
+} from "common/util/parsing";
 import {
   ABLETON_LINK_DISABLE,
   ABLETON_LINK_ENABLE,
@@ -10,7 +13,6 @@ import {
   ABLETON_UPDATE_TEMPO,
   ABLETON_UPDATE_TRACK,
   AbletonSessionStateUpdate,
-  AbletonTrackStateUpdate,
   abletonSessionStateUpdate,
   abletonTrackStateUpdate,
 } from "common/actions";
@@ -68,7 +70,8 @@ class MaxDispatcher {
         case ABLETON_UPDATE_TRACK:
           const track: AbletonTrack = action.payload.track;
 
-          const deviceParamsToUpdate: AbletonDeviceParamNames[] = allAbletonDeviceParamNames;
+          const deviceParamsToUpdate: AbletonDeviceParamNames[] =
+            allAbletonDeviceParamNames;
           for (const deviceParamName of deviceParamsToUpdate) {
             const deviceParam: AbletonDeviceParameter = track[deviceParamName];
             maxApi.outlet(
@@ -111,8 +114,7 @@ class MaxDispatcher {
             break;
 
           case "trackStateUpdate":
-            payload =
-              parseJsonOrNull<AbletonTrackStateUpdate["payload"]>(payloadJson);
+            payload = parseAbletonTrackStateUpdatePayload(payloadJson);
             if (!payload) {
               return;
             }

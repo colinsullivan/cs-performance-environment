@@ -17,6 +17,7 @@
     "bjorklund-js": "^0.1.2",
     "bootstrap": "^4.5.2",
     "csstype": "^3.0.11",
+    "d3-scale": "^4.0.2",
     "dotenv": "^16.0.0",
     "easymidi": "^1.1.2",
     "express": "^4.17.1",
@@ -59,9 +60,9 @@
     "build_react": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start_server_dev": "NODE_ENV=development TS_NODE_PROJECT=server.tsconfig.json node -r ts-node/register ./src/main.ts",
+    "start_server_dev": "npm run build_server && NODE_ENV=development node ./build/main.js",
     "start_server": "node ./build/main.js",
-    "build_server": "mkdir -p build/main && TS_NODE_PROJECT=server.tsconfig.json node -r ts-node/register ./scripts/build.ts",
+    "build_server": "mkdir -p build/main && TS_NODE_PROJECT=server.tsconfig.json ts-node ./scripts/build.ts",
     "build": "npm run build_react && npm run build_server",
     "build_docs": "plantuml -progress -tpng ./docs/*.puml",
     "postinstall": "npm run build",
@@ -112,7 +113,7 @@
     "fs-extra": "^10.0.1",
     "prettier": "^2.1.2",
     "redux-mock-store": "^1.5.4",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.7.0",
     "tsconfig-paths": "^3.14.1"
   },
   "browserslist": {

@@ -21,19 +21,21 @@ const findChannelIndex = (orderedChannelNames: string[], track: AbletonTrack) =>
 export const getAbletonTracksOrdered = createSelector(
   [getAbletonTracks, getMixerConfiguration],
   (abletonTracks, { orderedChannelNames, maxChannels }) =>
-    [...abletonTracks].sort(
-      // Sort channels in the ordered list first, all others after
-      (a, b) => {
-        const aIndex = findChannelIndex(orderedChannelNames, a);
-        const bIndex = findChannelIndex(orderedChannelNames, b);
-        if (aIndex === -1 && bIndex === -1) {
-          return 0;
-        } else if (aIndex === -1 && bIndex !== -1) {
-          return 1;
-        } else if (aIndex !== -1 && bIndex === -1) {
-          return -1;
+    [...abletonTracks]
+      .sort(
+        // Sort channels in the ordered list first, all others after
+        (a, b) => {
+          const aIndex = findChannelIndex(orderedChannelNames, a);
+          const bIndex = findChannelIndex(orderedChannelNames, b);
+          if (aIndex === -1 && bIndex === -1) {
+            return 0;
+          } else if (aIndex === -1 && bIndex !== -1) {
+            return 1;
+          } else if (aIndex !== -1 && bIndex === -1) {
+            return -1;
+          }
+          return aIndex - bIndex;
         }
-        return (aIndex - bIndex);
-      }
-    ).slice(0, maxChannels)
+      )
+      .slice(0, maxChannels)
 );

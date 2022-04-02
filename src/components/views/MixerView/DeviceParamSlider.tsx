@@ -13,6 +13,7 @@ import {
   touchControlBorderWidth,
   transparentBackgroundTouchControl,
 } from "components/styles";
+import {createLinearScale} from "common/util";
 
 interface DeviceParamSliderProps {
   track: AbletonTrack;
@@ -48,6 +49,7 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
 
   const { track, deviceParamName, height, label } = props;
   const deviceParam = track[deviceParamName];
+  const deviceParamToNormalizedScale = createLinearScale(deviceParam.min, deviceParam.max, 0, 1);
 
   const [touchStartPosition, setTouchStartPosition] = useState(0.0);
   const [adjustmentStartValue, setAdjustmentStartValue] = useState(0.0);
@@ -104,7 +106,7 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
 
   const currentValue = isAdjusting ? localValue : deviceParam.value;
 
-  const currentPercent = currentValue / (deviceParam.max - deviceParam.min);
+  const currentPercent = deviceParamToNormalizedScale(currentValue);
 
   const sliderFillerStyle = {
     height: currentPercent * height,
