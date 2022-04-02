@@ -12,6 +12,7 @@ import { CrowDevice } from "common/models/crow/api";
 
 export * from "./ableton";
 export * from "./menus";
+export * from "./mixer";
 
 export const sequencersSelector = (state): Sequencers => state.sequencers;
 

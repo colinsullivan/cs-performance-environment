@@ -24,6 +24,9 @@ export const createInitialState = (): AppState => ({
     //createCrowDevice('0x005000283238510d36353235', 'C')
   ],
   holdMenus: createInitialHoldMenus(),
+  mixerConfiguration: {
+    orderedChannelNames: ["1-Audio", "2-Audio", "3-Audio", "4-Audio"],
+  },
   octatrack: createOctatrackState(),
   scale: createDefaultScaleState(),
   sequencers: createInitialSequencersState(),

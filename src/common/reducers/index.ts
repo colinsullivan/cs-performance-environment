@@ -16,7 +16,11 @@ import scale from "./scale";
 import tempo from "./tempo";
 import { crowReducer } from "./crow";
 import abletonReducer from "./ableton";
-import { AppState, createAbletonState } from "common/models";
+import {
+  AppState,
+  createAbletonState,
+  createEmptyMixerConfiguration,
+} from "common/models";
 
 export function websocketReadyState(
   state = READY_STATES.CLOSED,
@@ -37,6 +41,7 @@ const combinedReducers = combineReducers<AppState, AllActionTypes>({
   components,
   crow: crowReducer,
   holdMenus,
+  mixerConfiguration: (state = createEmptyMixerConfiguration()) => state,
   octatrack,
   scale,
   sequencers: (state = {}) => state,

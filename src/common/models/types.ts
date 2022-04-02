@@ -4,6 +4,7 @@ import { SCReduxSequencer, Quant } from "supercollider-redux-sequencers";
 import { AbletonState } from "./ableton/api";
 import { CrowDevice } from "./crow/api";
 import { HoldMenusState } from "./menus";
+import {MixerConfiguration} from "./mixer/types";
 import { READY_STATES } from "./ready_states";
 import { ScaleState } from "./scale";
 export type SequencerGenericParamValue = number;
@@ -126,6 +127,7 @@ export interface AppState {
   components: Record<string, SynkopaterPerformanceComponent>;
   crow: CrowDevice[];
   holdMenus: HoldMenusState;
+  mixerConfiguration: MixerConfiguration;
   octatrack: OctatrackState;
   scale: ScaleState;
   sequencers: Sequencers;

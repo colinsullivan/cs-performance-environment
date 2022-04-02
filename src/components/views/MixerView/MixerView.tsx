@@ -1,5 +1,4 @@
-import { getAbletonTracks } from "common/selectors";
-import React from "react";
+import { getAbletonTracksOrdered } from "common/selectors";
 import {createUseStyles} from "react-jss";
 import { useSelector } from "react-redux";
 import OverlayView from "../OverlayView";
@@ -15,7 +14,7 @@ const useStyles = createUseStyles({
 });
 
 const MixerView = () => {
-  const tracks = useSelector(getAbletonTracks);
+  const tracks = useSelector(getAbletonTracksOrdered);
   const styles = useStyles();
   return (
     <OverlayView>
