@@ -1,4 +1,8 @@
-import { AbletonSession, AbletonTrack } from "common/models/ableton/api";
+import {
+  AbletonDeviceParamNames,
+  AbletonSession,
+  AbletonTrack,
+} from "common/models/ableton/api";
 
 export const ABLETON_SESSION_STATE_UPDATE = "ABLETON_SESSION_STATE_UPDATE";
 export interface AbletonSessionStateUpdate {
@@ -89,14 +93,20 @@ export const abletonTrackUpdate = (track: AbletonTrack) => ({
   },
 });
 
-export const handleTrackVolumeChanged =
-  (track: AbletonTrack, value: number) => (dispatch) => {
+export const handleTrackDeviceParamValueChanged =
+  (
+    track: AbletonTrack,
+    deviceParamName: AbletonDeviceParamNames,
+    value: number
+  ) =>
+  (dispatch) => {
+    const updatedDeviceParam = {
+      ...track[deviceParamName],
+      value,
+    };
     const updatedTrack = {
       ...track,
-      volume: {
-        ...track.volume,
-        value,
-      },
+      [deviceParamName]: updatedDeviceParam,
     };
     dispatch(abletonTrackUpdate(updatedTrack));
   };

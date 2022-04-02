@@ -13,6 +13,9 @@ export interface AbletonDeviceParameter {
   originalName: number;
 }
 
+export type AbletonSendName = "sendA" | "sendB";
+export type AbletonDeviceParamNames = "panning" | "volume" | "sendA" | "sendB";
+
 export interface AbletonTrack {
   id: string;
   mute: boolean;

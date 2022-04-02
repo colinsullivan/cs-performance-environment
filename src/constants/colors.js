@@ -7,6 +7,9 @@ export const midToneColor = PexColor.fromRGBBytes([59, 66, 71, 255]);
 
 export const turquoise = 0x068587;
 export const turquoiseLightColor = PexColor.fromRGBBytes([161, 203, 196, 255]);
+export const turquoiseLightHalf = "rgba(161, 203, 196, 0.5)";
+export const turquoiseLightFull = "rgba(161, 203, 196, 1.0)";
+export const turquoiseLightTen = "rgba(161, 203, 196, 0.1)";
 export const turquoiseTransparentColor = PexColor.create(
   turquoiseLightColor[0],
   turquoiseLightColor[1],

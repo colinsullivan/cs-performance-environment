@@ -14,7 +14,11 @@ import {
   abletonSessionStateUpdate,
   abletonTrackStateUpdate,
 } from "common/actions";
-import { AbletonTrack } from "common/models";
+import {
+  AbletonTrack,
+  AbletonDeviceParameter,
+  AbletonDeviceParamNames,
+} from "common/models";
 
 type MaxMessageName = "sessionStateUpdate" | "trackStateUpdate";
 
@@ -63,7 +67,19 @@ class MaxDispatcher {
         case ABLETON_UPDATE_TRACK:
           const track: AbletonTrack = action.payload.track;
 
-          maxApi.outlet("cs/set_property_by_id", track.volume.id, "value", track.volume.value);
+          const deviceParamsToUpdate: AbletonDeviceParamNames[] = [
+            "volume",
+            "sendA",
+          ];
+          for (const deviceParamName of deviceParamsToUpdate) {
+            const deviceParam: AbletonDeviceParameter = track[deviceParamName];
+            maxApi.outlet(
+              "cs/set_property_by_id",
+              deviceParam.id,
+              "value",
+              deviceParam.value
+            );
+          }
           break;
 
         default:
@@ -148,7 +164,7 @@ class MaxDispatcher {
     this.store.subscribe(() => this.handleStateChange());
   }
 
-  sendInit () {
+  sendInit() {
     maxApi.outlet("cs/init");
   }
 }
