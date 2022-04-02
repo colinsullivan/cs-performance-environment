@@ -1,5 +1,7 @@
 import { AbletonSession, AbletonState, AbletonDeviceParamName } from "./api";
 
+export * from "./api";
+
 export const allAbletonDeviceParamNames: AbletonDeviceParamName[] = [
   "panning",
   "volume",

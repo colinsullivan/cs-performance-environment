@@ -1,4 +1,4 @@
-import { AbletonTrackStateUpdate } from "common/actions";
+import { AbletonTrack } from "common/models";
 
 export const parseJsonOrNull = <T>(payloadJson: string): T | null => {
   try {
@@ -11,23 +11,36 @@ export const parseJsonOrNull = <T>(payloadJson: string): T | null => {
   }
 };
 
+const areAnyValuesAsterisk = (obj: Record<string, unknown>) => {
+    for (const val of Object.values(obj)) {
+      if (val === "*") {
+        return true;
+      }
+    }
+  return false;
+}
+
 export const parseAbletonTrackStateUpdatePayload = (
   payloadJson: string
-): AbletonTrackStateUpdate["payload"] | null => {
-  const payload =
-    parseJsonOrNull<AbletonTrackStateUpdate["payload"]>(payloadJson);
+): AbletonTrack | null => {
+  const track = parseJsonOrNull<AbletonTrack>(payloadJson);
 
-  if (payload) {
+  if (track) {
     // If any track parameters are uninitialized ('*'), ignore event
-    const track = payload.track;
-
-    for (const key of Object.keys(track)) {
-      if (track[key] === "*") {
-        return null;
+    if (areAnyValuesAsterisk(track as unknown as Record<string, unknown>)) {
+      return null;
+    }
+    for (const val of Object.values(track)) {
+      if (typeof val === "object") {
+        if (areAnyValuesAsterisk(val)) {
+          return null;
+        }
       }
     }
 
-    return payload;
+    // If any of the track's device parameters are uninitialized, ignore event
+
+    return track;
   }
   return null;
 };

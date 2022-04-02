@@ -20,16 +20,14 @@ export const abletonSessionStateUpdate = (
 export const ABLETON_TRACK_STATE_UPDATE = "ABLETON_TRACK_STATE_UPDATE";
 export interface AbletonTrackStateUpdate {
   type: typeof ABLETON_TRACK_STATE_UPDATE;
-  payload: { track: AbletonTrack; isNew: boolean };
+  payload: { track: AbletonTrack };
 }
 export const abletonTrackStateUpdate = (
-  track: AbletonTrack,
-  tracksByName: Record<string, AbletonTrack>
-) => ({
+  track: AbletonTrack
+): AbletonTrackStateUpdate => ({
   type: ABLETON_TRACK_STATE_UPDATE,
   payload: {
     track,
-    tracksByName,
   },
 });
 
@@ -37,7 +35,7 @@ export const ABLETON_TRANSPORT_PAUSE = "ABLETON_TRANSPORT_PAUSE";
 export interface AbletonTransportPause {
   type: typeof ABLETON_TRANSPORT_PAUSE;
 }
-export const abletonTransportPause = () => ({
+export const abletonTransportPause = (): AbletonTransportPause => ({
   type: ABLETON_TRANSPORT_PAUSE,
 });
 
@@ -45,7 +43,7 @@ export const ABLETON_TRANSPORT_PLAY = "ABLETON_TRANSPORT_PLAY";
 export interface AbletonTransportPlay {
   type: typeof ABLETON_TRANSPORT_PLAY;
 }
-export const abletonTransportPlay = () => ({
+export const abletonTransportPlay = (): AbletonTransportPlay => ({
   type: ABLETON_TRANSPORT_PLAY,
 });
 
@@ -56,7 +54,7 @@ export interface AbletonUpdateTempo {
     tempo: number;
   };
 }
-export const abletonUpdateTempo = (tempo: number) => ({
+export const abletonUpdateTempo = (tempo: number): AbletonUpdateTempo => ({
   type: ABLETON_UPDATE_TEMPO,
   payload: {
     tempo,
@@ -67,7 +65,7 @@ export const ABLETON_LINK_ENABLE = "ABLETON_LINK_ENABLE";
 export interface AbletonLinkEnable {
   type: typeof ABLETON_LINK_ENABLE;
 }
-export const abletonLinkEnable = () => ({
+export const abletonLinkEnable = (): AbletonLinkEnable => ({
   type: ABLETON_LINK_ENABLE,
 });
 
@@ -75,7 +73,7 @@ export const ABLETON_LINK_DISABLE = "ABLETON_LINK_DISABLE";
 export interface AbletonLinkDisable {
   type: typeof ABLETON_LINK_DISABLE;
 }
-export const abletonLinkDisable = () => ({
+export const abletonLinkDisable = (): AbletonLinkDisable => ({
   type: ABLETON_LINK_DISABLE,
 });
 
@@ -86,7 +84,9 @@ export interface AbletonUpdateTrack {
     track: AbletonTrack;
   };
 }
-export const abletonTrackUpdate = (track: AbletonTrack) => ({
+export const abletonTrackUpdate = (
+  track: AbletonTrack
+): AbletonUpdateTrack => ({
   type: ABLETON_UPDATE_TRACK,
   payload: {
     track,

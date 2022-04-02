@@ -107,18 +107,18 @@ class MaxDispatcher {
               parseJsonOrNull<AbletonSessionStateUpdate["payload"]>(
                 payloadJson
               );
-            if (!payload) {
-              return;
+            if (payload) {
+              action = abletonSessionStateUpdate(payload);
             }
-            action = abletonSessionStateUpdate(payload);
             break;
 
           case "trackStateUpdate":
-            payload = parseAbletonTrackStateUpdatePayload(payloadJson);
-            if (!payload) {
-              return;
+            {
+              const track = parseAbletonTrackStateUpdatePayload(payloadJson);
+              if (track) {
+                action = abletonTrackStateUpdate(track);
+              }
             }
-            action = abletonTrackStateUpdate(payload);
             break;
 
           default:
