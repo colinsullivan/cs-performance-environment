@@ -14,7 +14,7 @@ export interface AbletonDeviceParameter {
 }
 
 export type AbletonSendName = "sendA" | "sendB";
-export type AbletonDeviceParamNames = "panning" | "volume" | "sendA" | "sendB";
+export type AbletonDeviceParamName = "panning" | "volume" | "sendA" | "sendB";
 
 export interface AbletonTrack {
   id: string;
@@ -29,6 +29,6 @@ export interface AbletonTrack {
 }
 
 export interface AbletonState {
-  session: AbletonSession; 
+  session: AbletonSession;
   tracks: AbletonTrack[];
 }

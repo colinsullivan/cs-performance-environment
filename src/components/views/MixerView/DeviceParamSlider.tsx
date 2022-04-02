@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { createUseStyles } from "react-jss";
 
 import {
-  AbletonDeviceParamNames,
+  AbletonDeviceParamName,
   AbletonTrack,
 } from "common/models/ableton/api";
 import {
@@ -16,8 +16,8 @@ import { handleTrackDeviceParamValueChanged } from "common/actions";
 
 interface DeviceParamSliderProps {
   track: AbletonTrack;
-  deviceParamName: AbletonDeviceParamNames;
-  label: string;
+  deviceParamName: AbletonDeviceParamName;
+  label?: string;
   width: number;
   height: number;
 }
@@ -52,14 +52,16 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
   const [touchStartPosition, setTouchStartPosition] = useState(0.0);
   const [adjustmentStartValue, setAdjustmentStartValue] = useState(0.0);
   const [localValue, setLocalValue] = useState(deviceParam.value);
+  const resetLocalValue = useCallback(() => setLocalValue(deviceParam.value), [setLocalValue, deviceParam]);
   const {
     handleControlIsBeingAdjusted,
     isAdjusting,
     handleControlIsDoneAdjusting,
-  } = useLocalStateWhileAdjusting();
+  } = useLocalStateWhileAdjusting(resetLocalValue);
+
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
-      const pos = e.touches[0].pageY;
+      const pos = e.targetTouches[0].pageY;
       setTouchStartPosition(pos);
       setAdjustmentStartValue(deviceParam.value);
       handleControlIsBeingAdjusted();
@@ -68,7 +70,7 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
   );
   const handleTouchMove = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
-      const pos = e.touches[0].pageY;
+      const pos = e.targetTouches[0].pageY;
       const movedAmount = touchStartPosition - pos;
       const movedPercent = movedAmount / height;
 
@@ -116,7 +118,7 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
       >
         <div style={sliderFillerStyle} className={styles.sliderFiller}></div>
       </div>
-      <div>{label}</div>
+      {label ? <div>{label}</div> : null}
     </div>
   );
 };

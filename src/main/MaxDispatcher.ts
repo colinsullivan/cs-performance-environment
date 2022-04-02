@@ -18,6 +18,7 @@ import {
   AbletonTrack,
   AbletonDeviceParameter,
   AbletonDeviceParamNames,
+  allAbletonDeviceParamNames,
 } from "common/models";
 
 type MaxMessageName = "sessionStateUpdate" | "trackStateUpdate";
@@ -67,10 +68,7 @@ class MaxDispatcher {
         case ABLETON_UPDATE_TRACK:
           const track: AbletonTrack = action.payload.track;
 
-          const deviceParamsToUpdate: AbletonDeviceParamNames[] = [
-            "volume",
-            "sendA",
-          ];
+          const deviceParamsToUpdate: AbletonDeviceParamNames[] = allAbletonDeviceParamNames;
           for (const deviceParamName of deviceParamsToUpdate) {
             const deviceParam: AbletonDeviceParameter = track[deviceParamName];
             maxApi.outlet(
@@ -80,6 +78,9 @@ class MaxDispatcher {
               deviceParam.value
             );
           }
+
+          maxApi.outlet("cs/set_property_by_id", track.id, "mute", track.mute);
+
           break;
 
         default:

@@ -5,13 +5,16 @@ interface UseLocalStateWhileAdjustingResult {
   isAdjusting: boolean;
   handleControlIsDoneAdjusting: () => void;
 }
-export const useLocalStateWhileAdjusting = (): UseLocalStateWhileAdjustingResult => {
+export const useLocalStateWhileAdjusting = (
+  timeoutFinishedCallback: () => void
+): UseLocalStateWhileAdjustingResult => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isAdjusting, setIsAdjusting] = useState(false);
 
-  const handleTimeoutFinished = () => {
+  const handleTimeoutFinished = useCallback(() => {
     setIsAdjusting(false);
-  };
+    timeoutFinishedCallback();
+  }, [setIsAdjusting, timeoutFinishedCallback]);
 
   const handleControlIsBeingAdjusted = useCallback(() => {
     setIsAdjusting(true);
@@ -25,8 +28,11 @@ export const useLocalStateWhileAdjusting = (): UseLocalStateWhileAdjustingResult
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(handleTimeoutFinished, 500);
-  }, [timeoutRef]);
+  }, [timeoutRef, handleTimeoutFinished]);
 
-
-  return {handleControlIsBeingAdjusted, isAdjusting, handleControlIsDoneAdjusting};
+  return {
+    handleControlIsBeingAdjusted,
+    isAdjusting,
+    handleControlIsDoneAdjusting,
+  };
 };

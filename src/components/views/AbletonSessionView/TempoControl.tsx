@@ -7,11 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocalStateWhileAdjusting } from "components/hooks";
 
 const TempoControl = () => {
-  const { handleControlIsBeingAdjusted, isAdjusting } =
-    useLocalStateWhileAdjusting();
   const dispatch = useDispatch();
   const bpm = useSelector(getAbletonTempo);
   const [localBpm, setLocalBpm] = useState(bpm);
+  const resetLocalValue = useCallback(() => setLocalBpm(bpm), [setLocalBpm, bpm]);
+  const { handleControlIsBeingAdjusted, isAdjusting } =
+    useLocalStateWhileAdjusting(resetLocalValue);
 
   const handleChange = useCallback(
     (newValue: number) => {

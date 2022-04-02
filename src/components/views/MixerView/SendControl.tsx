@@ -1,6 +1,6 @@
 import { AbletonSendName, AbletonTrack } from "common/models/ableton/api";
 import DeviceParamSlider from "./DeviceParamSlider";
-import { MIXER_COLUMN_WIDTH } from "constants/ui";
+import { mixerChannelHalfWidth } from "constants/ui";
 
 interface SendControlProps {
   track: AbletonTrack;
@@ -12,8 +12,8 @@ const SendControl = ({ track, sendName, label }: SendControlProps) => {
   return (
     <DeviceParamSlider
       track={track}
-      height={MIXER_COLUMN_WIDTH}
-      width={MIXER_COLUMN_WIDTH}
+      height={mixerChannelHalfWidth}
+      width={mixerChannelHalfWidth}
       deviceParamName={sendName}
       label={label}
     />

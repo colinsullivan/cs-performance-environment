@@ -1,5 +1,5 @@
 import {
-  AbletonDeviceParamNames,
+  AbletonDeviceParamName,
   AbletonSession,
   AbletonTrack,
 } from "common/models/ableton/api";
@@ -96,7 +96,7 @@ export const abletonTrackUpdate = (track: AbletonTrack) => ({
 export const handleTrackDeviceParamValueChanged =
   (
     track: AbletonTrack,
-    deviceParamName: AbletonDeviceParamNames,
+    deviceParamName: AbletonDeviceParamName,
     value: number
   ) =>
   (dispatch) => {
@@ -110,3 +110,19 @@ export const handleTrackDeviceParamValueChanged =
     };
     dispatch(abletonTrackUpdate(updatedTrack));
   };
+
+export const handleTrackMuted = (track: AbletonTrack) => (dispatch) => {
+  const updatedTrack = {
+    ...track,
+    mute: true,
+  };
+  dispatch(abletonTrackUpdate(updatedTrack));
+};
+
+export const handleTrackUnmuted = (track: AbletonTrack) => (dispatch) => {
+  const updatedTrack = {
+    ...track,
+    mute: false,
+  };
+  dispatch(abletonTrackUpdate(updatedTrack));
+};
