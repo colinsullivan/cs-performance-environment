@@ -4,7 +4,7 @@ import SendControl from "./SendControl";
 import { TrackProps } from "./types";
 import VolumeSlider from "./VolumeSlider";
 
-import { mixerChannelWidth } from "constants/ui";
+import { mixerChannelWidth, mixerChannelMargin } from "constants/ui";
 
 const useStyles = createUseStyles({
   mixerTrack: {
@@ -13,11 +13,17 @@ const useStyles = createUseStyles({
 
     display: "flex",
     flexDirection: "column",
+
+    marginRight: mixerChannelMargin,
   },
 
   channelControls: {
     display: "flex",
     flexDirection: "row",
+  },
+
+  channelControlsLeft: {
+    marginRight: mixerChannelMargin,
   },
 });
 
@@ -27,7 +33,7 @@ const MixerTrack = ({ track }: TrackProps) => {
     <div className={styles.mixerTrack}>
       <div>{track.name}</div>
       <div className={styles.channelControls}>
-        <div>
+        <div className={styles.channelControlsLeft}>
           <VolumeSlider track={track} />
           <MuteButton track={track} />
         </div>
