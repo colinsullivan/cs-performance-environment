@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { useDispatch, useSelector } from "react-redux";
 
-import { abletonUpdateTempo } from "common/actions";
+import { handleTempoUpdated } from "common/actions";
 import { getAbletonTempo } from "common/selectors";
 import { useLocalStateWhileAdjusting } from "components/hooks";
 import { createLinearScale } from "common/util";
@@ -45,7 +45,7 @@ const TempoControl = () => {
     const changeAmount = pxToTempoChangeScale(diff);
     const newValue = startingValue + changeAmount;
     setLocalValue(newValue);
-    dispatch(abletonUpdateTempo(newValue));
+    dispatch(handleTempoUpdated(newValue));
   };
 
   const { isAdjusting, handleTouchStart, handleTouchMove, handleTouchEnd } =

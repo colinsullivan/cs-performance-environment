@@ -6,6 +6,7 @@ import {
   QuadPannerValue,
 } from "common/models/ableton/api";
 import { getMixerConfiguration } from "common/selectors";
+import { debounce } from "lodash";
 
 export const ABLETON_SESSION_STATE_UPDATE = "ABLETON_SESSION_STATE_UPDATE";
 export interface AbletonSessionStateUpdate {
@@ -63,6 +64,14 @@ export const abletonUpdateTempo = (tempo: number): AbletonUpdateTempo => ({
     tempo,
   },
 });
+
+const handleTempoUpdatedDebounced = debounce((dispatch, tempo: number) => {
+  dispatch(abletonUpdateTempo(tempo));
+}, 50, { trailing: true });
+
+export const handleTempoUpdated = (tempo: number) => (dispatch) => {
+  handleTempoUpdatedDebounced(dispatch, tempo);
+};
 
 export const ABLETON_LINK_ENABLE = "ABLETON_LINK_ENABLE";
 export interface AbletonLinkEnable {
