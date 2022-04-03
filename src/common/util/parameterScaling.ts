@@ -6,10 +6,7 @@ export const createLinearScale = (
   minOut: number,
   maxOut: number,
   clamp = true
-) => {
-  const scale = scaleLinear()
-    .domain([minIn, maxIn])
-    .range([minOut, maxOut])
-    .clamp(clamp);
-  return (x: number) => scale(x);
-};
+) => scaleLinear().domain([minIn, maxIn]).range([minOut, maxOut]).clamp(clamp);
+
+export const clamp = (x: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, x));

@@ -2,7 +2,9 @@ import {
   AbletonDeviceParamName,
   AbletonSession,
   AbletonTrack,
+  QuadPannerValue,
 } from "common/models/ableton/api";
+import { getMixerConfiguration } from "common/selectors";
 
 export const ABLETON_SESSION_STATE_UPDATE = "ABLETON_SESSION_STATE_UPDATE";
 export interface AbletonSessionStateUpdate {
@@ -126,3 +128,28 @@ export const handleTrackUnmuted = (track: AbletonTrack) => (dispatch) => {
   };
   dispatch(abletonTrackUpdate(updatedTrack));
 };
+
+export const handleTrackPannerValueChanged =
+  (track: AbletonTrack, value: QuadPannerValue) => (dispatch, getState) => {
+    const mixerConfiguration = getMixerConfiguration(getState());
+
+    const updatedPan = {
+      ...track.panning,
+      value: value.pannerValue,
+    };
+    const updatedFrontSend = {
+      ...track[mixerConfiguration.pannerSends.frontSendName],
+      value: value.frontSendValue,
+    };
+    const updatedRearSend = {
+      ...track[mixerConfiguration.pannerSends.rearSendName],
+      value: value.rearSendValue,
+    };
+    const updatedTrack = {
+      ...track,
+      panning: updatedPan,
+      [mixerConfiguration.pannerSends.frontSendName]: updatedFrontSend,
+      [mixerConfiguration.pannerSends.rearSendName]: updatedRearSend,
+    };
+    dispatch(abletonTrackUpdate(updatedTrack));
+  };

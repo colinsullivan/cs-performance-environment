@@ -13,7 +13,8 @@ import {
   touchControlBorderWidth,
   transparentBackgroundTouchControl,
 } from "components/styles";
-import {createLinearScale} from "common/util";
+import { clamp, createLinearScale } from "common/util";
+import {createPoint} from "common/models/geometry";
 
 interface DeviceParamSliderProps {
   track: AbletonTrack;
@@ -32,6 +33,7 @@ const useStyles = createUseStyles<
     position: "relative",
     boxSizing: "border-box",
     width: (props) => props.width,
+    height: (props) => props.height,
   },
   sliderFiller: {
     background: turquoiseLightTen,
@@ -49,10 +51,15 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
 
   const { track, deviceParamName, height, label } = props;
   const deviceParam = track[deviceParamName];
-  const deviceParamToNormalizedScale = createLinearScale(deviceParam.min, deviceParam.max, 0, 1);
+  const deviceParamToHeightScale = createLinearScale(
+    deviceParam.min,
+    deviceParam.max,
+    0,
+    height
+  );
 
-  const [touchStartPosition, setTouchStartPosition] = useState(0.0);
-  const [adjustmentStartValue, setAdjustmentStartValue] = useState(0.0);
+  const [touchStartPosition, setTouchStartPosition] = useState(createPoint());
+  const [adjustmentStartValue, setAdjustmentStartValue] = useState(deviceParam.min);
   const [localValue, setLocalValue] = useState(deviceParam.value);
   const resetLocalValue = useCallback(
     () => setLocalValue(deviceParam.value),
@@ -66,24 +73,26 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
-      const pos = e.targetTouches[0].pageY;
-      setTouchStartPosition(pos);
+      setTouchStartPosition(createPoint(
+        e.targetTouches[0].pageX,
+        e.targetTouches[0].pageY
+      ));
       setAdjustmentStartValue(deviceParam.value);
       handleControlIsBeingAdjusted();
     },
     [setTouchStartPosition, handleControlIsBeingAdjusted, deviceParam]
   );
+
   const handleTouchMove = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
-      const pos = e.targetTouches[0].pageY;
-      const movedAmount = touchStartPosition - pos;
+      const movedAmount = touchStartPosition.y - e.targetTouches[0].pageY;
       const movedPercent = movedAmount / height;
 
       let newValue =
         adjustmentStartValue +
         (deviceParam.max - deviceParam.min) * movedPercent;
-      newValue = Math.max(newValue, deviceParam.min);
-      newValue = Math.min(newValue, deviceParam.max);
+
+      newValue = clamp(newValue, deviceParam.min, deviceParam.max);
       setLocalValue(newValue);
       dispatch(
         handleTrackDeviceParamValueChanged(track, deviceParamName, newValue)
@@ -100,22 +109,15 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
     ]
   );
 
-  const sliderStyle = {
-    height: height,
-  };
-
   const currentValue = isAdjusting ? localValue : deviceParam.value;
 
-  const currentPercent = deviceParamToNormalizedScale(currentValue);
-
   const sliderFillerStyle = {
-    height: currentPercent * height,
+    height: deviceParamToHeightScale(currentValue),
   };
 
   return (
     <div>
       <div
-        style={sliderStyle}
         className={styles.slider}
         onTouchMove={handleTouchMove}
         onTouchStart={handleTouchStart}

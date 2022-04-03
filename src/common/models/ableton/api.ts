@@ -32,3 +32,10 @@ export interface AbletonState {
   session: AbletonSession;
   tracks: AbletonTrack[];
 }
+
+export interface QuadPannerValue {
+  frontSendValue: number;
+  rearSendValue: number;
+  pannerValue: number;
+}
+
