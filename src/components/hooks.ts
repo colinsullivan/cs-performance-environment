@@ -14,11 +14,12 @@ interface UseLocalStateWhileAdjustingResult {
 }
 
 export const useLocalStateWhileAdjusting = (
-  handleValueUpdated: (touchPos: Point) => void,
+  handleValueUpdated: (touchPos: Point, touchStartPos: Point) => void,
   timeoutFinishedCallback?: () => void
 ): UseLocalStateWhileAdjustingResult => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isAdjusting, setIsAdjusting] = useState(false);
+  const [touchStartPos, setTouchStartPos] = useState<Point>(createPoint());
   const [currentTouchPosition, setCurrentTouchPosition] = useState<Point>(
     createPoint()
   );
@@ -51,11 +52,17 @@ export const useLocalStateWhileAdjusting = (
         x: e.targetTouches[0].clientX - rect.x,
         y: e.targetTouches[0].clientY - rect.y,
       };
+      setTouchStartPos(touchPos);
       setCurrentTouchPosition(touchPos);
       handleControlIsBeingAdjusted();
-      handleValueUpdated(touchPos);
+      handleValueUpdated(touchPos, touchPos);
     },
-    [handleControlIsBeingAdjusted, setCurrentTouchPosition, handleValueUpdated]
+    [
+      handleControlIsBeingAdjusted,
+      setCurrentTouchPosition,
+      handleValueUpdated,
+      setTouchStartPos,
+    ]
   );
 
   const handleTouchMove = useCallback(
@@ -66,9 +73,9 @@ export const useLocalStateWhileAdjusting = (
         y: e.targetTouches[0].clientY - rect.y,
       };
       setCurrentTouchPosition(touchPos);
-      handleValueUpdated(touchPos);
+      handleValueUpdated(touchPos, touchStartPos);
     },
-    [setCurrentTouchPosition, handleValueUpdated]
+    [setCurrentTouchPosition, handleValueUpdated, touchStartPos]
   );
 
   const handleTouchEnd = handleControlIsDoneAdjusting;

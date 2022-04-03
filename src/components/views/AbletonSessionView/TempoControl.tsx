@@ -1,43 +1,65 @@
-import { useCallback, useState } from "react";
-import { Number } from "react-nexusui";
+import { useState } from "react";
+import { createUseStyles } from "react-jss";
+import { useDispatch, useSelector } from "react-redux";
 
 import { abletonUpdateTempo } from "common/actions";
 import { getAbletonTempo } from "common/selectors";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocalStateWhileAdjusting } from "components/hooks";
+import { createLinearScale } from "common/util";
+import { Point } from "common/models";
+import { turquoiseLightHalf } from "constants/colors";
+import { roundTwoDecimals } from "common/util";
+const labelHeight = 50;
+const width = 100;
+
+const height = 500;
+
+const useStyles = createUseStyles({
+  tempoControl: {
+    height,
+    width,
+    border: `1px solid ${turquoiseLightHalf}`,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  tempoLabel: {
+    height: labelHeight,
+    fontSize: "24px",
+  },
+});
 
 const TempoControl = () => {
   const dispatch = useDispatch();
   const bpm = useSelector(getAbletonTempo);
-  const [localBpm, setLocalBpm] = useState(bpm);
-  const resetLocalValue = useCallback(() => setLocalBpm(bpm), [setLocalBpm, bpm]);
-  //const { handleControlIsBeingAdjusted, isAdjusting } =
-    //useLocalStateWhileAdjusting(resetLocalValue);
-  const isAdjusting = false;
+  const styles = useStyles();
 
-  const handleChange = useCallback(
-    (newValue: number) => {
-      setLocalBpm(newValue);
-      dispatch(abletonUpdateTempo(newValue));
+  const [localValue, setLocalValue] = useState(bpm);
+  const pxToTempoChangeScale = createLinearScale(0, height, 0, 200, false);
 
-      // TODO: determining that the control is being moved based on value
-      // changes works but is based on the limitations of NexusUI.
-      //
-      // It should be based on touch events instead.
-      //handleControlIsBeingAdjusted();
-    },
-    [dispatch, setLocalBpm]
-  );
+  const handleValueUpdated = (touchPos: Point, touchStartPos: Point) => {
+    const diff = -1.0 * (touchPos.y - touchStartPos.y);
+    const changeAmount = pxToTempoChangeScale(diff);
+    const newValue = bpm + changeAmount;
+    setLocalValue(newValue);
+    dispatch(abletonUpdateTempo(newValue));
+  };
+
+  const { isAdjusting, handleTouchStart, handleTouchMove, handleTouchEnd } =
+    useLocalStateWhileAdjusting(handleValueUpdated);
+
+  const currentValue = roundTwoDecimals(isAdjusting ? localValue : bpm);
 
   return (
-    <Number
-      size={[100, 50]}
-      min={20}
-      max={999}
-      step={1}
-      onChange={handleChange}
-      value={isAdjusting ? localBpm : bpm}
-    />
+    <div
+      className={styles.tempoControl}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <label className={styles.tempoLabel}>{currentValue}</label>
+    </div>
   );
 };
 
