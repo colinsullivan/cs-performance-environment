@@ -24,7 +24,7 @@ const main = async () => {
   const serverOptionsCommon: esbuild.BuildOptions = {
     tsconfig: "server.tsconfig.json",
     platform: "node",
-    target: "node15",
+    target: "node16",
     bundle: true,
     sourcemap: true,
   };

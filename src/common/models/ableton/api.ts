@@ -13,8 +13,8 @@ export interface AbletonDeviceParameter {
   originalName: number;
 }
 
-export type AbletonSendName = "sendA" | "sendB";
-export type AbletonDeviceParamName = "panning" | "volume" | "sendA" | "sendB";
+export type AbletonSendName = "sendA" | "sendB" | "sendC" | "sendD";
+export type AbletonDeviceParamName = "panning" | "volume" | AbletonSendName;
 
 export interface AbletonTrack {
   id: string;
@@ -24,11 +24,18 @@ export interface AbletonTrack {
   volume: AbletonDeviceParameter;
   sendA: AbletonDeviceParameter;
   sendB: AbletonDeviceParameter;
-  //sendC: AbletonDeviceParameter;
-  //sendD: AbletonDeviceParameter;
+  sendC: AbletonDeviceParameter;
+  sendD: AbletonDeviceParameter;
 }
 
 export interface AbletonState {
   session: AbletonSession;
   tracks: AbletonTrack[];
 }
+
+export interface QuadPannerValue {
+  frontSendValue: number;
+  rearSendValue: number;
+  pannerValue: number;
+}
+

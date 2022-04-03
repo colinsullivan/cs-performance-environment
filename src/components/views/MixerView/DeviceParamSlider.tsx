@@ -6,13 +6,15 @@ import {
   AbletonDeviceParamName,
   AbletonTrack,
 } from "common/models/ableton/api";
-import {
-  turquoiseLightHalf,
-  turquoiseLightFull,
-  turquoiseLightTen,
-} from "constants/colors";
+import { turquoiseLightFull, turquoiseLightTen } from "constants/colors";
 import { useLocalStateWhileAdjusting } from "components/hooks";
 import { handleTrackDeviceParamValueChanged } from "common/actions";
+import {
+  touchControlBorderWidth,
+  transparentBackgroundTouchControl,
+} from "components/styles";
+import { clamp, createLinearScale } from "common/util";
+import {createPoint} from "common/models/geometry";
 
 interface DeviceParamSliderProps {
   track: AbletonTrack;
@@ -22,18 +24,16 @@ interface DeviceParamSliderProps {
   height: number;
 }
 
-const sliderBorderWidth = 2;
-
 const useStyles = createUseStyles<
   "slider" | "sliderFiller",
   DeviceParamSliderProps
 >({
   slider: {
-    background: "transparent",
-    border: `${sliderBorderWidth}px solid ${turquoiseLightHalf}`,
+    ...transparentBackgroundTouchControl,
     position: "relative",
     boxSizing: "border-box",
     width: (props) => props.width,
+    height: (props) => props.height,
   },
   sliderFiller: {
     background: turquoiseLightTen,
@@ -41,7 +41,7 @@ const useStyles = createUseStyles<
     boxSizing: "border-box",
     position: "absolute",
     bottom: 0,
-    width: (props) => props.width - 2*sliderBorderWidth,
+    width: (props) => props.width - 2 * touchControlBorderWidth,
   },
 });
 
@@ -51,11 +51,20 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
 
   const { track, deviceParamName, height, label } = props;
   const deviceParam = track[deviceParamName];
+  const deviceParamToHeightScale = createLinearScale(
+    deviceParam.min,
+    deviceParam.max,
+    0,
+    height
+  );
 
-  const [touchStartPosition, setTouchStartPosition] = useState(0.0);
-  const [adjustmentStartValue, setAdjustmentStartValue] = useState(0.0);
+  const [touchStartPosition, setTouchStartPosition] = useState(createPoint());
+  const [adjustmentStartValue, setAdjustmentStartValue] = useState(deviceParam.min);
   const [localValue, setLocalValue] = useState(deviceParam.value);
-  const resetLocalValue = useCallback(() => setLocalValue(deviceParam.value), [setLocalValue, deviceParam]);
+  const resetLocalValue = useCallback(
+    () => setLocalValue(deviceParam.value),
+    [setLocalValue, deviceParam]
+  );
   const {
     handleControlIsBeingAdjusted,
     isAdjusting,
@@ -64,24 +73,26 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
-      const pos = e.targetTouches[0].pageY;
-      setTouchStartPosition(pos);
+      setTouchStartPosition(createPoint(
+        e.targetTouches[0].pageX,
+        e.targetTouches[0].pageY
+      ));
       setAdjustmentStartValue(deviceParam.value);
       handleControlIsBeingAdjusted();
     },
     [setTouchStartPosition, handleControlIsBeingAdjusted, deviceParam]
   );
+
   const handleTouchMove = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
-      const pos = e.targetTouches[0].pageY;
-      const movedAmount = touchStartPosition - pos;
+      const movedAmount = touchStartPosition.y - e.targetTouches[0].pageY;
       const movedPercent = movedAmount / height;
 
       let newValue =
         adjustmentStartValue +
         (deviceParam.max - deviceParam.min) * movedPercent;
-      newValue = Math.max(newValue, deviceParam.min);
-      newValue = Math.min(newValue, deviceParam.max);
+
+      newValue = clamp(newValue, deviceParam.min, deviceParam.max);
       setLocalValue(newValue);
       dispatch(
         handleTrackDeviceParamValueChanged(track, deviceParamName, newValue)
@@ -98,22 +109,15 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
     ]
   );
 
-  const sliderStyle = {
-    height: height,
-  };
-
   const currentValue = isAdjusting ? localValue : deviceParam.value;
 
-  const currentPercent = currentValue / (deviceParam.max - deviceParam.min);
-
   const sliderFillerStyle = {
-    height: currentPercent * height,
+    height: deviceParamToHeightScale(currentValue),
   };
 
   return (
     <div>
       <div
-        style={sliderStyle}
         className={styles.slider}
         onTouchMove={handleTouchMove}
         onTouchStart={handleTouchStart}

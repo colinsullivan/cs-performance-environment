@@ -1,4 +1,5 @@
 export * from "./ableton";
+export * from "./geometry";
 export * from "./menus";
 export * from "./mixer";
 export * from "./octatrack";
