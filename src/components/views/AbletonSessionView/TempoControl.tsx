@@ -11,8 +11,9 @@ const TempoControl = () => {
   const bpm = useSelector(getAbletonTempo);
   const [localBpm, setLocalBpm] = useState(bpm);
   const resetLocalValue = useCallback(() => setLocalBpm(bpm), [setLocalBpm, bpm]);
-  const { handleControlIsBeingAdjusted, isAdjusting } =
-    useLocalStateWhileAdjusting(resetLocalValue);
+  //const { handleControlIsBeingAdjusted, isAdjusting } =
+    //useLocalStateWhileAdjusting(resetLocalValue);
+  const isAdjusting = false;
 
   const handleChange = useCallback(
     (newValue: number) => {
@@ -23,9 +24,9 @@ const TempoControl = () => {
       // changes works but is based on the limitations of NexusUI.
       //
       // It should be based on touch events instead.
-      handleControlIsBeingAdjusted();
+      //handleControlIsBeingAdjusted();
     },
-    [dispatch, handleControlIsBeingAdjusted, setLocalBpm]
+    [dispatch, setLocalBpm]
   );
 
   return (

@@ -69,20 +69,20 @@ class MaxDispatcher {
 
         case ABLETON_UPDATE_TRACK:
           const track: AbletonTrack = action.payload.track;
+          const messageArgs: Array<string | number> = [
+            "cs/update_track_state",
+            track.id,
+            track.mute,
+          ];
 
           const deviceParamsToUpdate: AbletonDeviceParamNames[] =
             allAbletonDeviceParamNames;
           for (const deviceParamName of deviceParamsToUpdate) {
             const deviceParam: AbletonDeviceParameter = track[deviceParamName];
-            maxApi.outlet(
-              "cs/set_property_by_id",
-              deviceParam.id,
-              "value",
-              deviceParam.value
-            );
+            messageArgs.push(deviceParam.id, deviceParam.value);
           }
 
-          maxApi.outlet("cs/set_property_by_id", track.id, "mute", track.mute);
+          maxApi.outlet(...messageArgs);
 
           break;
 
