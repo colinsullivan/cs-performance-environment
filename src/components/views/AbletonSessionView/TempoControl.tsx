@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -36,18 +36,24 @@ const TempoControl = () => {
   const styles = useStyles();
 
   const [localValue, setLocalValue] = useState(bpm);
+  // Since this is a relative control, captures the value when dragging starts
+  const [startingValue, setStartingValue] = useState(bpm);
   const pxToTempoChangeScale = createLinearScale(0, height, 0, 200, false);
 
   const handleValueUpdated = (touchPos: Point, touchStartPos: Point) => {
     const diff = -1.0 * (touchPos.y - touchStartPos.y);
     const changeAmount = pxToTempoChangeScale(diff);
-    const newValue = bpm + changeAmount;
+    const newValue = startingValue + changeAmount;
     setLocalValue(newValue);
     dispatch(abletonUpdateTempo(newValue));
   };
 
   const { isAdjusting, handleTouchStart, handleTouchMove, handleTouchEnd } =
-    useLocalStateWhileAdjusting(handleValueUpdated);
+    useLocalStateWhileAdjusting(
+      handleValueUpdated,
+      undefined,
+      useCallback(() => setStartingValue(bpm), [setStartingValue, bpm])
+    );
 
   const currentValue = roundTwoDecimals(isAdjusting ? localValue : bpm);
 

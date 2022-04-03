@@ -15,7 +15,8 @@ interface UseLocalStateWhileAdjustingResult {
 
 export const useLocalStateWhileAdjusting = (
   handleValueUpdated: (touchPos: Point, touchStartPos: Point) => void,
-  timeoutFinishedCallback?: () => void
+  timeoutFinishedCallback?: () => void,
+  onTouchStartCallback?: () => void,
 ): UseLocalStateWhileAdjustingResult => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isAdjusting, setIsAdjusting] = useState(false);
