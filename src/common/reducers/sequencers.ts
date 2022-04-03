@@ -228,10 +228,9 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState: AppStat
                   propQuant: state[sequencerId].propQuant,
                   stopQuant: state[sequencerId].stopQuant,
                 },
-                // TODO: what was this doing?
-                //playQuant: null,
-                //propQuant: null,
-                //stopQuant: null,
+                playQuant: null,
+                propQuant: null,
+                stopQuant: null,
               },
             };
           }
