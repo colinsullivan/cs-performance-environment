@@ -1,4 +1,9 @@
-import { AbletonSession, AbletonState, AbletonDeviceParamName } from "./api";
+import {
+  AbletonSession,
+  AbletonState,
+  AbletonDeviceParamName,
+  AbletonDeviceParameter,
+} from "./api";
 
 export * from "./api";
 
@@ -20,4 +25,12 @@ export const createAbletonSession = (): AbletonSession => ({
 export const createAbletonState = (): AbletonState => ({
   session: createAbletonSession(),
   tracks: [],
+});
+
+export const updateDeviceParamValue = (
+  param: AbletonDeviceParameter,
+  value: number
+): AbletonDeviceParameter => ({
+  ...param,
+  value,
 });

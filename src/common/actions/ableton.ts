@@ -1,3 +1,4 @@
+import { updateDeviceParamValue } from "common/models";
 import {
   AbletonDeviceParamName,
   AbletonSession,
@@ -102,13 +103,9 @@ export const handleTrackDeviceParamValueChanged =
     value: number
   ) =>
   (dispatch) => {
-    const updatedDeviceParam = {
-      ...track[deviceParamName],
-      value,
-    };
     const updatedTrack = {
       ...track,
-      [deviceParamName]: updatedDeviceParam,
+      [deviceParamName]: updateDeviceParamValue(track[deviceParamName], value),
     };
     dispatch(abletonTrackUpdate(updatedTrack));
   };
@@ -133,18 +130,15 @@ export const handleTrackPannerValueChanged =
   (track: AbletonTrack, value: QuadPannerValue) => (dispatch, getState) => {
     const mixerConfiguration = getMixerConfiguration(getState());
 
-    const updatedPan = {
-      ...track.panning,
-      value: value.pannerValue,
-    };
-    const updatedFrontSend = {
-      ...track[mixerConfiguration.pannerSends.frontSendName],
-      value: value.frontSendValue,
-    };
-    const updatedRearSend = {
-      ...track[mixerConfiguration.pannerSends.rearSendName],
-      value: value.rearSendValue,
-    };
+    const updatedPan = updateDeviceParamValue(track.panning, value.pannerValue);
+    const updatedFrontSend = updateDeviceParamValue(
+      track[mixerConfiguration.pannerSends.frontSendName],
+      value.frontSendValue
+    );
+    const updatedRearSend = updateDeviceParamValue(
+      track[mixerConfiguration.pannerSends.rearSendName],
+      value.rearSendValue
+    );
     const updatedTrack = {
       ...track,
       panning: updatedPan,
