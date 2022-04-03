@@ -19,12 +19,6 @@
     "__mocks__/**"
   ],
   "ts-node": {
-    "require": ["tsconfig-paths/register"],
-    "compilerOptions": {
-      "module": "commonjs"
-    },
-    "moduleTypes": {
-      "d3-scale": "cjs"
-    }
+    "require": ["tsconfig-paths/register"]
   }
 }
