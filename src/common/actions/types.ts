@@ -31,6 +31,7 @@ import {
   AbletonLinkDisable,
   AbletonLinkEnable,
   AbletonSessionStateUpdate,
+  AbletonTrackStateUpdate,
   AbletonTransportPause,
   AbletonTransportPlay,
   AbletonUpdateTempo,
@@ -258,6 +259,11 @@ export interface SystemTempoChanged {
   };
 }
 
+export type Thunk = (
+  dispatch: (action: AllActionTypes) => void,
+  getState
+) => void;
+
 export type AllActionTypes =
   | SynkopaterAddNote
   | SynkopaterRemoveNote
@@ -294,9 +300,5 @@ export type AllActionTypes =
   | AbletonTransportPause
   | AbletonLinkEnable
   | AbletonLinkDisable
-  | AbletonUpdateTempo;
-
-export type Thunk = (
-  dispatch: (action: AllActionTypes) => void,
-  getState
-) => void;
+  | AbletonUpdateTempo
+  | AbletonTrackStateUpdate;

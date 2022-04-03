@@ -1,5 +1,5 @@
 import _ from "lodash";
-import SCReduxSequencers from "supercollider-redux-sequencers";
+import SCReduxSequencers, {Quant} from "supercollider-redux-sequencers";
 
 import {
   AllActionTypes,
@@ -26,6 +26,7 @@ import {
   SynkopaterSequencer,
   MidiCCRange,
   MidiModSequence,
+  AppState,
 } from "common/models/types";
 import { Sequencers } from "./types";
 import {
@@ -48,7 +49,7 @@ const durChoices = [
   8.0,
 ];
 
-const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
+const sequencers = (state: Sequencers, action: AllActionTypes, allState: AppState) => {
   state = SCReduxSequencers.reducer(state, action);
   let seq: SynkopaterSequencer, sequencerId: string;
   switch (action.type) {
@@ -180,9 +181,9 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
         ...state,
         [sequencerId]: {
           ...state[sequencerId],
-          playQuant: [newQuant, 0],
-          stopQuant: [newQuant, 0],
-          propQuant: [newQuant, 0],
+          playQuant: [newQuant, 0] as Quant,
+          stopQuant: [newQuant, 0] as Quant,
+          propQuant: [newQuant, 0] as Quant,
         },
       };
 
@@ -227,9 +228,10 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState) => {
                   propQuant: state[sequencerId].propQuant,
                   stopQuant: state[sequencerId].stopQuant,
                 },
-                playQuant: null,
-                propQuant: null,
-                stopQuant: null,
+                // TODO: what was this doing?
+                //playQuant: null,
+                //propQuant: null,
+                //stopQuant: null,
               },
             };
           }

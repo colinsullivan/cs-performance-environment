@@ -1,4 +1,8 @@
-import { AbletonSession } from "common/models/ableton/api";
+import {
+  AbletonDeviceParamName,
+  AbletonSession,
+  AbletonTrack,
+} from "common/models/ableton/api";
 
 export const ABLETON_SESSION_STATE_UPDATE = "ABLETON_SESSION_STATE_UPDATE";
 export interface AbletonSessionStateUpdate {
@@ -11,6 +15,22 @@ export const abletonSessionStateUpdate = (
 ): AbletonSessionStateUpdate => ({
   type: ABLETON_SESSION_STATE_UPDATE,
   payload,
+});
+
+export const ABLETON_TRACK_STATE_UPDATE = "ABLETON_TRACK_STATE_UPDATE";
+export interface AbletonTrackStateUpdate {
+  type: typeof ABLETON_TRACK_STATE_UPDATE;
+  payload: { track: AbletonTrack; isNew: boolean };
+}
+export const abletonTrackStateUpdate = (
+  track: AbletonTrack,
+  tracksByName: Record<string, AbletonTrack>
+) => ({
+  type: ABLETON_TRACK_STATE_UPDATE,
+  payload: {
+    track,
+    tracksByName,
+  },
 });
 
 export const ABLETON_TRANSPORT_PAUSE = "ABLETON_TRANSPORT_PAUSE";
@@ -58,3 +78,51 @@ export interface AbletonLinkDisable {
 export const abletonLinkDisable = () => ({
   type: ABLETON_LINK_DISABLE,
 });
+
+export const ABLETON_UPDATE_TRACK = "ABLETON_UPDATE_TRACK";
+export interface AbletonUpdateTrack {
+  type: typeof ABLETON_UPDATE_TRACK;
+  payload: {
+    track: AbletonTrack;
+  };
+}
+export const abletonTrackUpdate = (track: AbletonTrack) => ({
+  type: ABLETON_UPDATE_TRACK,
+  payload: {
+    track,
+  },
+});
+
+export const handleTrackDeviceParamValueChanged =
+  (
+    track: AbletonTrack,
+    deviceParamName: AbletonDeviceParamName,
+    value: number
+  ) =>
+  (dispatch) => {
+    const updatedDeviceParam = {
+      ...track[deviceParamName],
+      value,
+    };
+    const updatedTrack = {
+      ...track,
+      [deviceParamName]: updatedDeviceParam,
+    };
+    dispatch(abletonTrackUpdate(updatedTrack));
+  };
+
+export const handleTrackMuted = (track: AbletonTrack) => (dispatch) => {
+  const updatedTrack = {
+    ...track,
+    mute: true,
+  };
+  dispatch(abletonTrackUpdate(updatedTrack));
+};
+
+export const handleTrackUnmuted = (track: AbletonTrack) => (dispatch) => {
+  const updatedTrack = {
+    ...track,
+    mute: false,
+  };
+  dispatch(abletonTrackUpdate(updatedTrack));
+};

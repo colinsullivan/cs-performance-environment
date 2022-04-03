@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
+    "@reduxjs/toolkit": "^1.8.0",
     "@serialport/bindings": "^9.0.1",
     "@supercollider/lang": "^1.0.1",
     "@testing-library/dom": "^7.31.0",
@@ -13,7 +14,6 @@
     "@testing-library/user-event": "^12.1.10",
     "@tonaljs/tonal": "^4.6.0",
     "axios": "^0.21.1",
-    "beautiful-react-hooks": "^1.2.0",
     "bjorklund-js": "^0.1.2",
     "bootstrap": "^4.5.2",
     "dotenv": "^16.0.0",
@@ -22,6 +22,7 @@
     "express-ws": "^4.0.0",
     "inobounce": "^0.1.6",
     "isomorphic-ws": "^4.0.1",
+    "jss": "^10.9.0",
     "lodash": "^4.17.20",
     "nexusui": "^2.1.6",
     "node-osc": "^3.0.1",
@@ -31,11 +32,12 @@
     "pluralize": "^8.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-jss": "^10.9.0",
     "react-nexusui": "^0.1.7",
     "react-redux": "^7.2.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
@@ -87,7 +89,8 @@
       "no-use-before-define": "off",
       "@typescript-eslint/no-use-before-define": [
         "error"
-      ]
+      ],
+      "@typescript-eslint/ban-ts-comment": "off"
     }
   },
   "devDependencies": {

@@ -9,9 +9,11 @@ import {
   scaleMenuId,
   modulationMenuId,
   abletonMenuId,
+  mixMenuId,
 } from "common/models/menus";
 import ModulationView from "components/views/ModulationView";
 import AbletonSessionView from "./AbletonSessionView";
+import MixerView from "./MixerView/MixerView";
 
 const HoldMenuViewContainer = styled.div`
   position: absolute;
@@ -33,6 +35,9 @@ const getViewForHoldMenu = (menuId: string) => {
 
     case abletonMenuId:
       return <AbletonSessionView />;
+
+    case mixMenuId:
+      return <MixerView />;
 
     default:
       return null;

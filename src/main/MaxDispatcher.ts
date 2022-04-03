@@ -1,18 +1,27 @@
 import { AnyAction, Middleware, Store } from "redux";
 import maxApi from "max-api";
 
-import { parseJsonOrError } from "common/util/parsing";
+import { parseJsonOrNull } from "common/util/parsing";
 import {
-  abletonSessionStateUpdate,
-  AbletonSessionStateUpdate,
-  ABLETON_LINK_ENABLE,
   ABLETON_LINK_DISABLE,
-  ABLETON_TRANSPORT_PLAY,
+  ABLETON_LINK_ENABLE,
   ABLETON_TRANSPORT_PAUSE,
+  ABLETON_TRANSPORT_PLAY,
   ABLETON_UPDATE_TEMPO,
+  ABLETON_UPDATE_TRACK,
+  AbletonSessionStateUpdate,
+  AbletonTrackStateUpdate,
+  abletonSessionStateUpdate,
+  abletonTrackStateUpdate,
 } from "common/actions";
+import {
+  AbletonTrack,
+  AbletonDeviceParameter,
+  AbletonDeviceParamNames,
+  allAbletonDeviceParamNames,
+} from "common/models";
 
-type MaxMessageName = "sessionStateUpdate";
+type MaxMessageName = "sessionStateUpdate" | "trackStateUpdate";
 
 class MaxDispatcher {
   store: Store | undefined;
@@ -40,21 +49,11 @@ class MaxDispatcher {
           break;
 
         case ABLETON_TRANSPORT_PLAY:
-          maxApi.outlet(
-            "cs/set_property",
-            "live_set",
-            "is_playing",
-            1
-          );
+          maxApi.outlet("cs/set_property", "live_set", "is_playing", 1);
           break;
 
         case ABLETON_TRANSPORT_PAUSE:
-          maxApi.outlet(
-            "cs/set_property",
-            "live_set",
-            "is_playing",
-            0
-          );
+          maxApi.outlet("cs/set_property", "live_set", "is_playing", 0);
           break;
 
         case ABLETON_UPDATE_TEMPO:
@@ -64,6 +63,24 @@ class MaxDispatcher {
             "tempo",
             action.payload.tempo
           );
+          break;
+
+        case ABLETON_UPDATE_TRACK:
+          const track: AbletonTrack = action.payload.track;
+
+          const deviceParamsToUpdate: AbletonDeviceParamNames[] = allAbletonDeviceParamNames;
+          for (const deviceParamName of deviceParamsToUpdate) {
+            const deviceParam: AbletonDeviceParameter = track[deviceParamName];
+            maxApi.outlet(
+              "cs/set_property_by_id",
+              deviceParam.id,
+              "value",
+              deviceParam.value
+            );
+          }
+
+          maxApi.outlet("cs/set_property_by_id", track.id, "mute", track.mute);
+
           break;
 
         default:
@@ -79,14 +96,27 @@ class MaxDispatcher {
       dispatch: (messageName: string, payloadJson: string) => {
         const maxMessageName = messageName.trim() as MaxMessageName;
         let action: AnyAction;
+        let payload: unknown;
 
         switch (maxMessageName) {
           case "sessionStateUpdate":
-            const payload =
-              parseJsonOrError<AbletonSessionStateUpdate["payload"]>(
+            payload =
+              parseJsonOrNull<AbletonSessionStateUpdate["payload"]>(
                 payloadJson
               );
+            if (!payload) {
+              return;
+            }
             action = abletonSessionStateUpdate(payload);
+            break;
+
+          case "trackStateUpdate":
+            payload =
+              parseJsonOrNull<AbletonTrackStateUpdate["payload"]>(payloadJson);
+            if (!payload) {
+              return;
+            }
+            action = abletonTrackStateUpdate(payload);
             break;
 
           default:
@@ -133,6 +163,9 @@ class MaxDispatcher {
 
     this.addHandlers();
     this.store.subscribe(() => this.handleStateChange());
+  }
+
+  sendInit() {
     maxApi.outlet("cs/init");
   }
 }
