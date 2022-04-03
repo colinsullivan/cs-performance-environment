@@ -33,7 +33,6 @@ const MixerTrack = ({ track }: TrackProps) => {
   return (
     <div className={styles.mixerTrack}>
       <div>
-        <label>{track.name}</label>
         <QuadPanner track={track} />
       </div>
 
@@ -46,6 +45,10 @@ const MixerTrack = ({ track }: TrackProps) => {
           <SendControl track={track} sendName={"sendB"} label={"B"} />
           <SendControl track={track} sendName={"sendA"} label={"A"} />
         </div>
+      </div>
+
+      <div>
+        <label>{track.name}</label>
       </div>
     </div>
   );

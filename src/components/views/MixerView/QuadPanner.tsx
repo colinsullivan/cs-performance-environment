@@ -8,7 +8,7 @@ import { mixerChannelWidth, mixerChannelMargin } from "constants/ui";
 import { transparentBackgroundTouchControl } from "components/styles";
 import { turquoiseLightFull } from "constants/colors";
 import { getMixerConfiguration } from "common/selectors";
-import { createPoint, Point, QuadPannerValue } from "common/models";
+import { createPoint, Point } from "common/models";
 import { useLocalStateWhileAdjusting } from "components/hooks";
 import { createLinearScale } from "common/util";
 import { handleTrackPannerValueChanged } from "common/actions";
@@ -51,7 +51,7 @@ const QuadPanner = (props: QuadPannerProps) => {
   const styles = useStyles();
 
   const { track } = props;
-  const frontDeviceParam = track[pannerSends.frontSendName];
+  //const frontDeviceParam = track[pannerSends.frontSendName];
   const rearDeviceParam = track[pannerSends.rearSendName];
   const pannerDeviceParam = track.panning;
 
