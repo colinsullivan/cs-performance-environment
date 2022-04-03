@@ -119,11 +119,11 @@ CSPerformanceEnvironment {
       //midiInDeviceName: "Faderfox PC12",
       //midiInPortName: "Faderfox PC12",
 
-      //midiInDeviceName: "ES-9",
-      //midiInPortName: "MIDI In",
+      midiInDeviceName: "ES-9",
+      midiInPortName: "MIDI In",
 
-      midiInDeviceName: "IAC Driver",
-      midiInPortName: "Bus 1",
+      //midiInDeviceName: "IAC Driver",
+      //midiInPortName: "Bus 1",
 
       midiInChannel: 15
     ));
