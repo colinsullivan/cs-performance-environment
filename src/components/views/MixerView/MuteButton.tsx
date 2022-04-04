@@ -1,12 +1,11 @@
 import CSS from "csstype";
 import { useDispatch } from "react-redux";
 
-import { AbletonTrack } from "common/models/ableton/api";
 import { mixerChannelHalfWidth } from "constants/ui";
 import TouchSquareButton from "components/TouchSquareButton/TouchSquareButton";
-import {handleTrackMuted, handleTrackUnmuted} from "common/actions";
-import {getRGBAString, orangeColor} from "constants/colors";
-import {getCanonicalTrack, TrackViewModel} from "common/models";
+import { handleTrackMuted, handleTrackUnmuted } from "common/actions";
+import { getRGBAString, orangeColor } from "constants/colors";
+import { getCanonicalTrack, TrackViewModel } from "common/models";
 
 interface MuteButtonProps {
   trackView: TrackViewModel;
@@ -31,11 +30,13 @@ const MuteButton = (props: MuteButtonProps) => {
     styles.backgroundColor = getRGBAString(orangeColor);
   }
 
-  return <TouchSquareButton 
-    onTouchStart={handleTouchStart}
-    size={mixerChannelHalfWidth}
-    styles={styles}
-  />;
+  return (
+    <TouchSquareButton
+      onTouchStart={handleTouchStart}
+      size={mixerChannelHalfWidth}
+      styles={styles}
+    />
+  );
 };
 
 export default MuteButton;

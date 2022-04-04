@@ -1,12 +1,11 @@
 import { createUseStyles } from "react-jss";
 import MuteButton from "./MuteButton";
 import SendControl from "./SendControl";
-import { TrackProps } from "./types";
 import VolumeSlider from "./VolumeSlider";
 
 import { mixerChannelWidth, mixerChannelMargin } from "constants/ui";
 import QuadPanner from "./QuadPanner";
-import {QuadTrackViewModel, StereoTrackViewModel, TrackViewModel, TrackViewModelBase} from "common/models";
+import { TrackViewModel } from "common/models";
 
 interface MixerTrackProps {
   trackView: TrackViewModel;
@@ -40,7 +39,9 @@ const MixerTrack = ({ trackView }: MixerTrackProps) => {
   return (
     <div className={styles.mixerTrack}>
       <div>
-        {trackView.trackType === "stereo" ? <QuadPanner track={trackView.track} /> : null}
+        {trackView.trackType === "stereo" ? (
+          <QuadPanner track={trackView.track} />
+        ) : null}
       </div>
 
       <div className={styles.channelControls}>
@@ -49,9 +50,17 @@ const MixerTrack = ({ trackView }: MixerTrackProps) => {
           <MuteButton trackView={trackView} />
         </div>
         <div>
-          <SendControl trackView={trackView} sendName={"sendA"} label={"verb"} />
+          <SendControl
+            trackView={trackView}
+            sendName={"sendA"}
+            label={"verb"}
+          />
           <SendControl trackView={trackView} sendName={"sendD"} label={"OT"} />
-          <SendControl trackView={trackView} sendName={"sendE"} label={"spring"} />
+          <SendControl
+            trackView={trackView}
+            sendName={"sendE"}
+            label={"spring"}
+          />
           <SendControl trackView={trackView} sendName={"sendF"} label={"FX"} />
         </div>
       </div>

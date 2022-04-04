@@ -1,10 +1,7 @@
 import { useDispatch } from "react-redux";
 import { createUseStyles } from "react-jss";
 
-import {
-  AbletonDeviceParamName,
-  AbletonTrack,
-} from "common/models/ableton/api";
+import { AbletonDeviceParamName } from "common/models/ableton/api";
 import { turquoiseLightFull, turquoiseLightTen } from "constants/colors";
 import { useLocalStateWhileAdjusting } from "components/hooks";
 import { handleTrackDeviceParamValueChanged } from "common/actions";
