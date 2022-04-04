@@ -26,7 +26,7 @@ export const createInitialState = (): AppState => ({
   ],
   holdMenus: createInitialHoldMenus(),
   mixerConfiguration: {
-    orderedChannelNames: ["v1 bass", "v2 s1", "v3 s2", "v4", "v5 chords"],
+    orderedChannelNames: ["v1 bass", "v2 s1", "v3 s2", "v4", "v5 chords", "OT"],
     maxChannels: 16,
     pannerSends: {
       frontSendName: "sendG",
