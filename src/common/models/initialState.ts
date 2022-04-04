@@ -25,11 +25,11 @@ export const createInitialState = (): AppState => ({
   ],
   holdMenus: createInitialHoldMenus(),
   mixerConfiguration: {
-    orderedChannelNames: ["1-Audio", "2-Audio", "3-Audio", "4-Audio"],
+    orderedChannelNames: ["v1 bass", "v2 s1", "v3 s2", "v4", "v5 chords"],
     maxChannels: 16,
     pannerSends: {
-      frontSendName: "sendC",
-      rearSendName: "sendD",
+      frontSendName: "sendG",
+      rearSendName: "sendH",
     },
   },
   octatrack: createOctatrackState(),

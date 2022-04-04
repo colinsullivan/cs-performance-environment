@@ -13,7 +13,7 @@ export interface AbletonDeviceParameter {
   originalName: number;
 }
 
-export type AbletonSendName = "sendA" | "sendB" | "sendC" | "sendD";
+export type AbletonSendName = "sendA" | "sendB" | "sendC" | "sendD" | "sendE" | "sendF" | "sendG" | "sendH";
 export type AbletonDeviceParamName = "panning" | "volume" | AbletonSendName;
 
 export interface AbletonTrack {
@@ -26,6 +26,10 @@ export interface AbletonTrack {
   sendB: AbletonDeviceParameter;
   sendC: AbletonDeviceParameter;
   sendD: AbletonDeviceParameter;
+  sendE: AbletonDeviceParameter;
+  sendF: AbletonDeviceParameter;
+  sendG: AbletonDeviceParameter;
+  sendH: AbletonDeviceParameter;
 }
 
 export interface AbletonState {

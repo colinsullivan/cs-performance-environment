@@ -34,7 +34,7 @@ const createInitialHoldMenus = (): HoldMenusState => {
   ];
   const initialState = keyBy(allHoldMenus, "menuId");
 
-  initialState[abletonMenuId].isOpen = true;
+  //initialState[abletonMenuId].isOpen = true;
 
   return initialState;
 };

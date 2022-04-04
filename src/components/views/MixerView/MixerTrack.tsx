@@ -42,8 +42,10 @@ const MixerTrack = ({ track }: TrackProps) => {
           <MuteButton track={track} />
         </div>
         <div>
-          <SendControl track={track} sendName={"sendB"} label={"B"} />
-          <SendControl track={track} sendName={"sendA"} label={"A"} />
+          <SendControl track={track} sendName={"sendA"} label={"verb"} />
+          <SendControl track={track} sendName={"sendD"} label={"OT"} />
+          <SendControl track={track} sendName={"sendE"} label={"spring"} />
+          <SendControl track={track} sendName={"sendF"} label={"FX"} />
         </div>
       </div>
 
