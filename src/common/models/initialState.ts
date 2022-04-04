@@ -4,6 +4,7 @@ import { createAbletonState } from "./ableton";
 import { createInitialComponentsState } from "./components";
 import { createCrowDevice } from "./crow";
 import createInitialHoldMenus from "./menus/menus";
+import { createQuadTrackConfig } from "./mixer";
 import { createOctatrackState } from "./octatrack";
 import { READY_STATES } from "./ready_states";
 import { createDefaultScaleState } from "./scale";
@@ -31,6 +32,7 @@ export const createInitialState = (): AppState => ({
       frontSendName: "sendG",
       rearSendName: "sendH",
     },
+    quadTrackConfigs: [createQuadTrackConfig("OT", "OT front", "OT rear")],
   },
   octatrack: createOctatrackState(),
   scale: createDefaultScaleState(),

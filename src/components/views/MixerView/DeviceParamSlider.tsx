@@ -13,10 +13,10 @@ import {
   transparentBackgroundTouchControl,
 } from "components/styles";
 import { createLinearScale } from "common/util";
-import { Point } from "common/models";
+import { getCanonicalTrack, Point, TrackViewModel } from "common/models";
 
 interface DeviceParamSliderProps {
-  track: AbletonTrack;
+  trackView: TrackViewModel;
   deviceParamName: AbletonDeviceParamName;
   label?: string;
   width: number;
@@ -48,7 +48,8 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
   const dispatch = useDispatch();
   const styles = useStyles(props);
 
-  const { track, deviceParamName, height, label } = props;
+  const { trackView, deviceParamName, height, label } = props;
+  const track = getCanonicalTrack(trackView);
   const deviceParam = track[deviceParamName];
   const deviceParamToYScale = createLinearScale(
     deviceParam.min,
@@ -66,7 +67,7 @@ const DeviceParamSlider = (props: DeviceParamSliderProps) => {
   const handleValueUpdated = (touchPos: Point) => {
     const newValue = deviceParamToYScale.invert(touchPos.y);
     dispatch(
-      handleTrackDeviceParamValueChanged(track, deviceParamName, newValue)
+      handleTrackDeviceParamValueChanged(trackView, deviceParamName, newValue)
     );
   };
 

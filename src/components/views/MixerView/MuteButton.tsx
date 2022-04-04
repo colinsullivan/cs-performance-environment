@@ -6,20 +6,23 @@ import { mixerChannelHalfWidth } from "constants/ui";
 import TouchSquareButton from "components/TouchSquareButton/TouchSquareButton";
 import {handleTrackMuted, handleTrackUnmuted} from "common/actions";
 import {getRGBAString, orangeColor} from "constants/colors";
+import {getCanonicalTrack, TrackViewModel} from "common/models";
 
 interface MuteButtonProps {
-  track: AbletonTrack;
+  trackView: TrackViewModel;
 }
 
 const MuteButton = (props: MuteButtonProps) => {
   const dispatch = useDispatch();
-  const { track } = props;
+  const { trackView } = props;
+
+  const track = getCanonicalTrack(trackView);
 
   const handleTouchStart = () => {
     if (track.mute) {
-      dispatch(handleTrackUnmuted(track));
+      dispatch(handleTrackUnmuted(trackView));
     } else {
-      dispatch(handleTrackMuted(track));
+      dispatch(handleTrackMuted(trackView));
     }
   };
 
