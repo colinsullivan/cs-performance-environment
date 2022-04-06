@@ -12,12 +12,14 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
   var inputPatch,
     <>delayFeedbackControl,
     <>ampControl,
+    <>pingPongAmountControl,
     prevSequencerDur;
 
   init {
     arg params;
     
     this.delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
+    this.pingPongAmountControl = KrNumberEditor.new(0.0, \unipolar);
 
     this.ampControl = KrNumberEditor.new(1.0, \amp);
 
@@ -40,6 +42,7 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
       numChan: 2,
       delaySecs: KrNumberEditor.new(1.0, ControlSpec(0.0, 8.0)),
       feedbackCoefficient: this.delayFeedbackControl,
+      pingPongAmount: this.pingPongAmountControl,
       amp: this.ampControl
     ));
 
@@ -113,6 +116,10 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
       
       ArgNameLabel("delayFeedback", layout, labelWidth);
       this.delayFeedbackControl.gui(layout);
+      layout.startRow();
+
+      ArgNameLabel("pingPongAmount", layout, labelWidth);
+      this.pingPongAmountControl.gui(layout);
       layout.startRow();
 
       ArgNameLabel("ampControl", layout, labelWidth);
