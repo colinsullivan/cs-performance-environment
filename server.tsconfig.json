@@ -3,14 +3,15 @@
     "allowJs": true,
     "baseUrl": "src/",
     "esModuleInterop": true,
+    "isolatedModules": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "build/",
     "sourceMap": true,
-    "target": "es6",
+    "target": "es2020",
     "types": ["node"]
   },
-  "lib": ["es2019"],
+  "lib": ["es2020"],
   "include": [
     "src/common/**/*",
     "src/main.ts",

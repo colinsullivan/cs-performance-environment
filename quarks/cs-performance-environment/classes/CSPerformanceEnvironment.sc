@@ -89,18 +89,18 @@ CSPerformanceEnvironment {
       //inChannel: 6,
       //outputBus: 24
     //));
-    wideBassEnvironment = WideBassVoicerEnvironment.new((
-      inChannel: 0,
-      outputBus: 28
-    ));
+    //wideBassEnvironment = WideBassVoicerEnvironment.new((
+      //inChannel: 0,
+      //outputBus: 28
+    //));
     //lazersEnvironment = RandomizedLazersEnvironment.new((
       //inChannel: 7,
       //outputBus: 32
     //));
-    supersawVoicerEnvironment = SuperSawVoicerEnvironment.new((
-      inChannel: 4,
-      outputBus: 30
-    ));
+    //supersawVoicerEnvironment = SuperSawVoicerEnvironment.new((
+      //inChannel: 4,
+      //outputBus: 30
+    //));
 
     clockEnvironment = ClockEnvironment.new((
       'origin': [0, 0],
@@ -121,6 +121,9 @@ CSPerformanceEnvironment {
 
       midiInDeviceName: "ES-9",
       midiInPortName: "MIDI In",
+
+      //midiInDeviceName: "IAC Driver",
+      //midiInPortName: "Bus 1",
 
       midiInChannel: 15
     ));

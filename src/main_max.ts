@@ -2,7 +2,7 @@ import uuid from "uuid/v4";
 import { createStore, applyMiddleware, AnyAction, Store } from "redux";
 import thunk from "redux-thunk";
 
-import { loadEnv } from "common/util/environment";
+import { loadEnv } from "main/util/environment";
 import { PORT } from "common/constants";
 import rootReducer from "common/reducers";
 import WebsocketDispatcher from "dispatchers/WebsocketDispatcher";
@@ -73,7 +73,9 @@ const main = async () => {
 
   const maxDispatcher = new MaxDispatcher();
 
-  startup(wsDispatcher, maxDispatcher);
+  await startup(wsDispatcher, maxDispatcher);
+
+  maxDispatcher.sendInit();
 
 };
 
