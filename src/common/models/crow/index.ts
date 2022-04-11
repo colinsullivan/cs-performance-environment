@@ -1,18 +1,17 @@
 import { READY_STATES } from "../ready_states";
 import { CrowDevice, CrowState } from "./api";
 
-const createCrowState = (sequencerName: string): CrowState => ({
+const createCrowState = (): CrowState => ({
   tempo: undefined,
-  legato: undefined,
-  sustain: undefined,
-  sequencerName,
+  sustainSynkA: undefined,
+  sustainSynkB: undefined,
 });
 
-export const createCrowDevice = (id: string, name: string, sequencerName: string): CrowDevice => ({
+export const createCrowDevice = (id: string, name: string): CrowDevice => ({
   id,
   name,
   readyState: READY_STATES.CONNECTING,
-  state: createCrowState(sequencerName),
+  state: createCrowState(),
   serialPort: undefined,
 });
 

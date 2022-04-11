@@ -1,26 +1,40 @@
-public{crowId = 'B'}
+public{crowId = 'A'}
 public{tempo = 2.0}
-public{legato = 1.0}
-public{sustain = 1.0}
+--public{legato = 1.0}
+public{sustainSynkA = 1.0}
 
--- Defines the possible durations for the pitch benders
---durOptions = {
-  --16,
-  --8,
-  --4,
-  --2,
-  --1,
-  --3 / 4,
-  --2 / 3,
-  --1 / 2,
-  --1 / 3,
-  --1 / 4,
-  --1 / 8,
-  --1 / 16,
-  --1 / 32,
-  --1 / 64,
---};
---numDurOptions = 14
+-- Defines the possible durations for the fixed pitch benders
+durOptions = {
+  -- 1
+  16,
+  -- 2
+  8,
+  -- 3
+  4,
+  -- 4
+  2,
+  -- 5
+  1,
+  -- 6
+  3 / 4,
+  -- 7
+  2 / 3,
+  -- 8
+  1 / 2,
+  -- 9
+  1 / 3,
+  -- 10
+  1 / 4,
+  -- 11
+  1 / 8,
+  -- 12
+  1 / 16,
+  -- 13
+  1 / 32,
+  -- 14
+  1 / 64,
+};
+numDurOptions = 14
 
 --
 -- Class for tracking state of an individual fader
@@ -115,37 +129,37 @@ function FMan:new()
   -- Instantiates faders
   probF = Fader:new()
   durF = Fader:new()
-  gXposeFa = GXposeF:new()
-  gXposeFb = GXposeF:new()
-  gXposeFc = GXposeF:new()
+  gXposeF = GXposeF:new()
+  --gXposeFb = GXposeF:new()
+  --gXposeFc = GXposeF:new()
   arcDurFader = Fader:new()
   if public.crowId == "A" then
-    gXposeFa:setup(9)
-    gXposeFa:setOut(3)
-    gXposeFa:setXposeSt(24)
+    gXposeF:setup(9)
+    gXposeF:setOut(3)
+    gXposeF:setXposeSt(24)
 
-    gXposeFb:setup(10)
-    gXposeFb:setOut(3)
-    gXposeFb:setXposeSt(-24)
+    --gXposeFb:setup(10)
+    --gXposeFb:setOut(3)
+    --gXposeFb:setXposeSt(-24)
 
-    gXposeFc:setup(11)
-    gXposeFc:setOut(3)
-    gXposeFc:setXposeSt(7)
+    --gXposeFc:setup(11)
+    --gXposeFc:setOut(3)
+    --gXposeFc:setXposeSt(7)
   end
   arcDurFader:setup(12)
   durF:setup(15)
   probF:setup(16)
 
-  allFaders = {probF, durF, gXposeFa, gXposeFb, gXposeFc, arcDurFader}
-  numFaders = 6
+  allFaders = {probF, durF, gXposeF, arcDurFader}
+  numFaders = 4
 
   theFaderManager = {
     probF = probF,
     durF = durF,
     arcDurFader = arcDurFader,
-    gXposeFa = gXposeFa,
-    gXposeFb = gXposeFb,
-    gXposeFc = gXposeFc,
+    gXposeF = gXposeF,
+    --gXposeFb = gXposeFb,
+    --gXposeFc = gXposeFc,
     numFaders = numFaders,
     allFaders = allFaders
   }
@@ -190,18 +204,25 @@ end
 --
 -- Class for a probabalistic pitch bend of a single voice
 --
-ProbabalisticBender = {}
-function ProbabalisticBender:new(inputNum, faders)
-  theProbabalisticBender = {
+ProbBender = {}
+function ProbBender:new(inputNum, faders)
+  theProbBender = {
     inputNum = inputNum,
     faders = faders
   }
-  setmetatable(theProbabalisticBender, self)
+  setmetatable(theProbBender, self)
   self.__index = self
-  return theProbabalisticBender
+  return theProbBender
 end
 
-function ProbabalisticBender:doPitchBend()
+function ProbBender:getBendDur()
+  --durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))] * public.legato
+  durBeats = public.sustainSynkA * faderValue
+  -- tempo is in beats per second
+  return durBeats / public.tempo
+end
+
+function ProbBender:doPitchBend()
   outputNumber = self.inputNum
   -- Decides on direction of bend
   chance = math.random()
@@ -214,10 +235,7 @@ function ProbabalisticBender:doPitchBend()
   durF = self.faders:getDurFader()
   faderValue = durF:getNormalizedValue()
   inverseFaderValue = 1.0 - faderValue
-  --durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))] * public.legato
-  durBeats = public.sustain * faderValue
-  -- tempo is in beats per second
-  dur = durBeats / public.tempo
+  dur = self:getBendDur()
 
   -- starts pitchbend
   startVolts = nil
@@ -236,7 +254,7 @@ function ProbabalisticBender:doPitchBend()
   output[outputNumber]( gesture )
 end
 
-function ProbabalisticBender:handleNoteOn()
+function ProbBender:handleNoteOn()
   -- decides to do pitchbend or not
   chance = math.random()
   probF = self.faders:getProbFader()
@@ -283,17 +301,13 @@ function init()
 
   ---- Creates the benders
   benders = {}
-  numBenders = 1
-  --if public.crowId == "A" then
-    --numBenders = 1
-  --elseif public.crowId == "B" then
-    --numBenders = 1
-  --end
-
-  for n = 1, numBenders do
-    benders[n] = ProbabalisticBender:new(n, faders)
+  numBenders = 0
+  if public.crowId == "A" then
+    numBenders = 0
+    benders[1] = ProbBender:new(n, faders, "useDur")
+  elseif public.crowId == "B" then
   end
-  
+
   -- Creates the random generators
   randomGenerators = {}
   numRandomGens = 0

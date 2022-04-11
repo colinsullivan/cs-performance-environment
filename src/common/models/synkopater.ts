@@ -65,11 +65,11 @@ export const create_synkopater_sequencer = (
 
 const synkDelayAMappings = {
   //B10_kn_F_10: "ampControl"
-  //B9_kn_8: "ampControl"
+  B9_kn_7: "ampControl",
 };
 const synkDelayBMappings = {
   //B10_kn_F_11: "ampControl"
-  //B9_kn_8: "ampControl"
+  B9_kn_8: "ampControl",
 };
 
 export const create_synk_delay_component = (
@@ -96,7 +96,6 @@ export const create_synk_delay_component = (
     pc4Controller: {
       B9_kn_5: "delayFeedbackControl",
       B9_kn_6: "pingPongAmountControl",
-      B9_kn_8: "ampControl",
       ...(id === "synkopaterA" ? synkDelayAMappings : synkDelayBMappings)
     },
   },

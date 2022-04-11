@@ -8,9 +8,9 @@ import {
   SynkopaterPerformanceComponent,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
-import { CrowDevice } from "common/models/crow/api";
 
 export * from "./ableton";
+export * from "./crow";
 export * from "./menus";
 export * from "./mixer";
 
@@ -49,16 +49,5 @@ export const getSerializedState = (state) => ({
   octatrack: state.octatrack,
   scale: state.scale,
 });
-
-export const getCrow = (state): CrowDevice[] => state.crow;
-
 export const getTempo = (state) => state.tempo;
 
-export const getCrowDeviceReadyStates = createSelector([getCrow], (crow) =>
-  crow.map(
-    (d) => ({
-      name: d.name,
-      isReady: d.readyState === READY_STATES.OPEN && d.state.tempo !== undefined
-    })
-  )
-);

@@ -2,9 +2,8 @@ import { READY_STATES } from "../ready_states";
 
 export interface CrowState {
   tempo: number | undefined;
-  legato: number | undefined;
-  sequencerName: string;
-  sustain: number | undefined;
+  sustainSynkA: number | undefined;
+  sustainSynkB: number | undefined;
 }
 
 export interface CrowDevice {

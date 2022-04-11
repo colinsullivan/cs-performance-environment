@@ -2,7 +2,11 @@ import SerialPort from "serialport";
 import { Middleware, createStore } from "redux";
 
 import { SYSTEM_TEMPO_CHANGED, AllActionTypes } from "common/actions";
-import { getCrow, getTempo, sequencersSelector } from "common/selectors";
+import {
+  getCrow,
+  getTempo,
+  getCrowState,
+} from "common/selectors";
 import {
   crowDeviceConnected,
   crowStateUpdated,
@@ -57,11 +61,10 @@ class CrowDispatcherService {
       throw new Error("Cannot find port");
     }
 
-    if (newState.legato) {
-      this.writeLuaToPort(`public.legato = ${newState.legato}`, port);
-    }
-    if (newState.sustain) {
-      this.writeLuaToPort(`public.sustain = ${newState.sustain}`, port);
+    for (const key of Object.keys(newState)) {
+      if (newState[key]) {
+        this.writeLuaToPort(`public.${key} = ${newState[key]}`, port);
+      }
     }
   }
 
@@ -88,29 +91,11 @@ class CrowDispatcherService {
       store.dispatch(initializeCrowDevice(deviceInfo.path));
     }
 
-    let sequencersState = sequencersSelector(store.getState());
     store.subscribe(() => {
-      const newSequencersState = sequencersSelector(store.getState());
-      if (newSequencersState !== sequencersState) {
-        sequencersState = newSequencersState;
-
-        const crowDevices = getCrow(store.getState());
-        for ( const crowDevice of crowDevices ) {
-          const sequencer = sequencersState[crowDevice.state.sequencerName];
-          if (!sequencer) {
-            continue;
-          }
-          // TODO: can handle with a derived state selector
-          // for each crow
-          const newState = {
-            ...crowDevice.state,
-            legato: sequencer.legato,
-          };
-          if (sequencer.event && sequencer.event.sustain) {
-            newState.sustain = sequencer.event.sustain;
-          }
-          this.updateCrowState(crowDevice, newState);
-        }
+      const crowDevices = getCrow(store.getState());
+      for (const crowDevice of crowDevices) {
+        const newState = getCrowState(store.getState());
+        this.updateCrowState(crowDevice, newState);
       }
     });
   }
