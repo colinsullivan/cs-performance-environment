@@ -1,7 +1,7 @@
-public{crowId = 'A'}
+public{crowId = 'B'}
 public{tempo = 2.0}
---public{legato = 1.0}
 public{sustainSynkA = 1.0}
+public{sustainSynkB = 1.0}
 
 -- Defines the possible durations for the fixed pitch benders
 durOptions = {
@@ -216,8 +216,20 @@ function ProbBender:new(inputNum, faders)
 end
 
 function ProbBender:getBendDur()
-  --durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))] * public.legato
-  durBeats = public.sustainSynkA * faderValue
+  durBeats = 0
+
+  -- Crow A does bends synchronized to the sustain value
+  -- of the either synkopater sequencer
+  if crowId == "A" then
+    if self.inputNum == 1 then
+      durBeats = public.sustainSynkA * faderValue
+    else
+      durBeats = public.sustainSynkB * faderValue
+    end
+  else
+    -- Crow B does bends based on the lookup table above
+    durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))]
+  end
   -- tempo is in beats per second
   return durBeats / public.tempo
 end
@@ -303,8 +315,9 @@ function init()
   benders = {}
   numBenders = 0
   if public.crowId == "A" then
-    numBenders = 0
-    benders[1] = ProbBender:new(n, faders, "useDur")
+    numBenders = 2
+    benders[1] = ProbBender:new(n, faders)
+    benders[2] = ProbBender:new(n, faders)
   elseif public.crowId == "B" then
   end
 

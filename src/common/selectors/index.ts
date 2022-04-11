@@ -1,9 +1,7 @@
 import { createSelector } from "reselect";
 import SCRedux from "supercollider-redux";
 
-import { Sequencers } from "common/reducers/types";
 import {
-  SynkopaterSequencer,
   OctatrackState,
   SynkopaterPerformanceComponent,
 } from "common/models/types";
@@ -13,19 +11,8 @@ export * from "./ableton";
 export * from "./crow";
 export * from "./menus";
 export * from "./mixer";
-
-export const sequencersSelector = (state): Sequencers => state.sequencers;
-
-export const getSequencerIdFromProps = (
-  _state,
-  props: { sequencerId: string }
-): string => props.sequencerId;
-
-export const getSequencer = createSelector(
-  [sequencersSelector, getSequencerIdFromProps],
-  (sequencers: Sequencers, sequencerId: string): SynkopaterSequencer =>
-    sequencers[sequencerId]
-);
+export * from "./sequencers";
+export * from "./tempo";
 
 export const getPerformanceComponents = (
   state
@@ -49,5 +36,4 @@ export const getSerializedState = (state) => ({
   octatrack: state.octatrack,
   scale: state.scale,
 });
-export const getTempo = (state) => state.tempo;
 
