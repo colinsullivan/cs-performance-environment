@@ -2,11 +2,7 @@ import SerialPort from "serialport";
 import { Middleware, createStore } from "redux";
 
 import { SYSTEM_TEMPO_CHANGED, AllActionTypes } from "common/actions";
-import {
-  getCrow,
-  getTempo,
-  getCrowState,
-} from "common/selectors";
+import { getCrow, getTempo, getCrowState } from "common/selectors";
 import {
   crowDeviceConnected,
   crowStateUpdated,
@@ -62,7 +58,7 @@ class CrowDispatcherService {
     }
 
     for (const key of Object.keys(newState)) {
-      if (newState[key]) {
+      if (newState[key] && `${newState[key]}` !== `${crowDevice.state[key]}`) {
         this.writeLuaToPort(`public.${key} = ${newState[key]}`, port);
       }
     }
@@ -101,6 +97,9 @@ class CrowDispatcherService {
   }
 
   writeLuaToPort(lua: string, port: SerialPort) {
+    if (debug) {
+      console.log("writing", lua);
+    }
     port.write(lua + "\n");
   }
 
@@ -160,6 +159,11 @@ class CrowDispatcherService {
     this.writeLuaToAllPorts(`public.tempo = ${tempo}`);
   }
 
+  private beginCrowInitialization(serialPortPath: string) {
+    const port = this.crowPortsBySerialPath[serialPortPath];
+    this.writeLuaToPort("^^init()", port);
+  }
+
   handleMiddleware(store, next, action: AllActionTypes) {
     const CROW_DISABLED = getEnvOrError("CROW_DISABLED") === "1";
     if (CROW_DISABLED) {
@@ -177,7 +181,7 @@ class CrowDispatcherService {
         reader.on("data", (d) => this.handleIncomingMessage(d, serialPort));
         this.crowPorts.push(port);
         this.crowPortsBySerialPath[port.path] = port;
-        this.writeLuaToPort("^^init()", port);
+        this.beginCrowInitialization(port.path);
         break;
 
       case CROW_DEVICE_CONNECTED:
