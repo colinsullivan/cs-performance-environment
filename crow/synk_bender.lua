@@ -203,13 +203,14 @@ function FMan:setup()
 end
 
 --
--- Class for a probabalistic pitch bend of a single voice
+-- Class for a probabalistic pitch bend & modulation sweep of a single voice
 --
 ProbBender = {}
 function ProbBender:new(inputNum, outputNum, durF, probF, bendAmtF)
   theProbBender = {
     inputNum = inputNum,
     outputNum = outputNum,
+    modOutputNum = outputNum + 1,
     durF = durF,
     probF = probF,
     bendAmtF = bendAmtF,
@@ -249,6 +250,7 @@ end
 
 function ProbBender:doPitchBend()
   outputNumber = self.outputNum
+  modOutputNum = self.modOutputNum
   -- Decides on direction of bend
   chance = math.random()
   direction = "down"
@@ -259,20 +261,31 @@ function ProbBender:doPitchBend()
   dur = self:getBendDur()
 
   -- starts pitchbend
-  startVolts = math.floor(1.0 + self.bendAmtF:getNormalizedValue() * 3)
-  endVolts = 0.0
-  if direction == "down" then
-    -- starts N octaves up, bending N octaves down
-    startVolts = startVolts
-  else
+  bendAmtValue = self.bendAmtF:getNormalizedValue()
+
+  modStartVolts = 5
+  modEndVolts = 0
+
+  -- starts N octaves up, bending N octaves down
+  bendStartVolts = math.floor(1.0 + bendAmtValue * 3)
+  bendEndVolts = 0.0
+
+  if direction == "up" then
     -- starts N octaves down, bending N octaves up
-    startVolts = -1.0 * startVolts
+    bendStartVolts = -1.0 * bendStartVolts
+    modStartVolts = -1.0 * modStartVolts
   end
-  output[outputNumber].volts = startVolts
-  gesture = {
-    to(endVolts, dur, 'linear')
-  }
-  output[outputNumber]( gesture )
+
+  output[outputNumber].volts = bendStartVolts
+  output[outputNumber]({
+    to(bendEndVolts, dur, 'linear')
+  })
+
+  output[modOutputNum].volts = modStartVolts
+  output[modOutputNum]({
+    to(modEndVolts, dur, 'logarithmic')
+  })
+
 end
 
 function ProbBender:handleNoteOn()
