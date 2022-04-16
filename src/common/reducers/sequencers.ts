@@ -1,5 +1,5 @@
 import _ from "lodash";
-import SCReduxSequencers, {Quant} from "supercollider-redux-sequencers";
+import SCReduxSequencers, { Quant } from "supercollider-redux-sequencers";
 
 import {
   AllActionTypes,
@@ -49,7 +49,11 @@ const durChoices = [
   8.0,
 ];
 
-const sequencers = (state: Sequencers, action: AllActionTypes, allState: AppState) => {
+const sequencers = (
+  state: Sequencers,
+  action: AllActionTypes,
+  allState: AppState
+) => {
   state = SCReduxSequencers.reducer(state, action);
   let seq: SynkopaterSequencer, sequencerId: string;
   switch (action.type) {
@@ -123,12 +127,16 @@ const sequencers = (state: Sequencers, action: AllActionTypes, allState: AppStat
 
     //break;
 
-    case SEQUENCER_STATE_UPDATED:
-      seq = Object.assign({}, state[action.payload.sequencerId]);
-      seq[action.payload.param] = action.payload.value;
-      state[action.payload.sequencerId] = seq;
-      state = Object.assign({}, state);
-      break;
+    case SEQUENCER_STATE_UPDATED: {
+      const seq = {
+        ...state[action.payload.sequencerId],
+        [action.payload.param]: action.payload.value,
+      };
+      return {
+        ...state,
+        [action.payload.sequencerId]: seq,
+      };
+    }
 
     case MIDI_CONTROLLER_CC:
       if (action.payload.controllerId === "launchcontrol") {
