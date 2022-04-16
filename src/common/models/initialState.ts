@@ -4,6 +4,7 @@ import { createAbletonState } from "./ableton";
 import { createInitialComponentsState } from "./components";
 import { createCrowDevice } from "./crow";
 import createInitialHoldMenus from "./menus/menus";
+import { createQuadTrackConfig } from "./mixer";
 import { createOctatrackState } from "./octatrack";
 import { READY_STATES } from "./ready_states";
 import { createDefaultScaleState } from "./scale";
@@ -25,12 +26,13 @@ export const createInitialState = (): AppState => ({
   ],
   holdMenus: createInitialHoldMenus(),
   mixerConfiguration: {
-    orderedChannelNames: ["v1 bass", "v2 s1", "v3 s2", "v4", "v5 chords"],
+    orderedChannelNames: ["v1 bass", "v2 s1", "v3 s2", "v4", "v5 chords", "OT"],
     maxChannels: 16,
     pannerSends: {
       frontSendName: "sendG",
       rearSendName: "sendH",
     },
+    quadTrackConfigs: [createQuadTrackConfig("OT", "OT front", "OT rear")],
   },
   octatrack: createOctatrackState(),
   scale: createDefaultScaleState(),

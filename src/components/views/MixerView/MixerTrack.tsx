@@ -1,11 +1,15 @@
 import { createUseStyles } from "react-jss";
 import MuteButton from "./MuteButton";
 import SendControl from "./SendControl";
-import { TrackProps } from "./types";
 import VolumeSlider from "./VolumeSlider";
 
 import { mixerChannelWidth, mixerChannelMargin } from "constants/ui";
 import QuadPanner from "./QuadPanner";
+import { TrackViewModel } from "common/models";
+
+interface MixerTrackProps {
+  trackView: TrackViewModel;
+}
 
 const useStyles = createUseStyles({
   mixerTrack: {
@@ -14,6 +18,7 @@ const useStyles = createUseStyles({
 
     display: "flex",
     flexDirection: "column",
+    justifyContent: "flex-end",
 
     marginRight: mixerChannelMargin,
   },
@@ -28,29 +33,40 @@ const useStyles = createUseStyles({
   },
 });
 
-const MixerTrack = ({ track }: TrackProps) => {
+const MixerTrack = ({ trackView }: MixerTrackProps) => {
   const styles = useStyles();
+
   return (
     <div className={styles.mixerTrack}>
       <div>
-        <QuadPanner track={track} />
+        {trackView.trackType === "stereo" ? (
+          <QuadPanner track={trackView.track} />
+        ) : null}
       </div>
 
       <div className={styles.channelControls}>
         <div className={styles.channelControlsLeft}>
-          <VolumeSlider track={track} />
-          <MuteButton track={track} />
+          <VolumeSlider trackView={trackView} />
+          <MuteButton trackView={trackView} />
         </div>
         <div>
-          <SendControl track={track} sendName={"sendA"} label={"verb"} />
-          <SendControl track={track} sendName={"sendD"} label={"OT"} />
-          <SendControl track={track} sendName={"sendE"} label={"spring"} />
-          <SendControl track={track} sendName={"sendF"} label={"FX"} />
+          <SendControl
+            trackView={trackView}
+            sendName={"sendA"}
+            label={"verb"}
+          />
+          <SendControl trackView={trackView} sendName={"sendD"} label={"OT"} />
+          <SendControl
+            trackView={trackView}
+            sendName={"sendE"}
+            label={"spring"}
+          />
+          <SendControl trackView={trackView} sendName={"sendF"} label={"FX"} />
         </div>
       </div>
 
       <div>
-        <label>{track.name}</label>
+        <label>{trackView.name}</label>
       </div>
     </div>
   );

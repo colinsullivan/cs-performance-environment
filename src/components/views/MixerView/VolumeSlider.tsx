@@ -1,13 +1,17 @@
-import { TrackProps } from "./types";
 import DeviceParamSlider from "./DeviceParamSlider";
 import { mixerChannelHalfWidth } from "constants/ui";
+import { TrackViewModel } from "common/models";
+
+interface VolumeSliderProps {
+  trackView: TrackViewModel;
+}
 
 const height = 150;
 
-const VolumeSlider = ({ track }: TrackProps) => {
+const VolumeSlider = ({ trackView }: VolumeSliderProps) => {
   return (
     <DeviceParamSlider
-      track={track}
+      trackView={trackView}
       height={height}
       width={mixerChannelHalfWidth}
       deviceParamName={"volume"}

@@ -1,4 +1,8 @@
-import { updateDeviceParamValue } from "common/models";
+import {
+  getTracksToUpdate,
+  TrackViewModel,
+  updateDeviceParamValue,
+} from "common/models";
 import {
   AbletonDeviceParamName,
   AbletonSession,
@@ -102,32 +106,45 @@ export const abletonTrackUpdate = (
 
 export const handleTrackDeviceParamValueChanged =
   (
-    track: AbletonTrack,
+    trackView: TrackViewModel,
     deviceParamName: AbletonDeviceParamName,
     value: number
   ) =>
   (dispatch) => {
+    const tracksToUpdate: AbletonTrack[] = getTracksToUpdate(trackView);
+
+    for (const track of tracksToUpdate) {
+      const updatedTrack = {
+        ...track,
+        [deviceParamName]: updateDeviceParamValue(
+          track[deviceParamName],
+          value
+        ),
+      };
+      dispatch(abletonTrackUpdate(updatedTrack));
+    }
+  };
+
+export const handleTrackMuted = (trackView: TrackViewModel) => (dispatch) => {
+  const tracksToUpdate = getTracksToUpdate(trackView);
+  for (const track of tracksToUpdate) {
     const updatedTrack = {
       ...track,
-      [deviceParamName]: updateDeviceParamValue(track[deviceParamName], value),
+      mute: true,
     };
     dispatch(abletonTrackUpdate(updatedTrack));
-  };
-
-export const handleTrackMuted = (track: AbletonTrack) => (dispatch) => {
-  const updatedTrack = {
-    ...track,
-    mute: true,
-  };
-  dispatch(abletonTrackUpdate(updatedTrack));
+  }
 };
 
-export const handleTrackUnmuted = (track: AbletonTrack) => (dispatch) => {
-  const updatedTrack = {
-    ...track,
-    mute: false,
-  };
-  dispatch(abletonTrackUpdate(updatedTrack));
+export const handleTrackUnmuted = (trackView: TrackViewModel) => (dispatch) => {
+  const tracksToUpdate = getTracksToUpdate(trackView);
+  for (const track of tracksToUpdate) {
+    const updatedTrack = {
+      ...track,
+      mute: false,
+    };
+    dispatch(abletonTrackUpdate(updatedTrack));
+  }
 };
 
 export const handleTrackPannerValueChanged =

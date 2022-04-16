@@ -1,5 +1,5 @@
-import { getAbletonTracksOrdered } from "common/selectors";
-import {createUseStyles} from "react-jss";
+import { getMixerViewModel } from "common/selectors";
+import { createUseStyles } from "react-jss";
 import { useSelector } from "react-redux";
 import OverlayView from "../OverlayView";
 import MixerTrack from "./MixerTrack";
@@ -10,17 +10,19 @@ const useStyles = createUseStyles({
     flexDirection: "row",
     height: "100%",
     flexWrap: "wrap",
-  }
+  },
 });
 
 const MixerView = () => {
-  const tracks = useSelector(getAbletonTracksOrdered);
+  const { sortedTracks } = useSelector(getMixerViewModel);
   const styles = useStyles();
 
   return (
     <OverlayView>
       <div className={styles.mixer}>
-        {tracks.map(t => <MixerTrack key={t.name} track={t} />)}
+        {sortedTracks.map((t) => (
+          <MixerTrack key={t.name} trackView={t} />
+        ))}
       </div>
     </OverlayView>
   );
