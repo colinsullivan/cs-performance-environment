@@ -1,5 +1,5 @@
 -- Synkopater Bender
-public{crowId = 'B'}
+public{crowId = 'A'}
 public{tempo = 2.0}
 public{sustainSynkA = 1.0}
 public{sustainSynkB = 1.0}
@@ -281,8 +281,8 @@ function ProbBender:doPitchBend()
     to(bendEndVolts, dur, 'linear')
   })
 
-  output[modOutputNum].volts = modStartVolts
   output[modOutputNum]({
+    to(modStartVolts, 0.01, 'linear'),
     to(modEndVolts, dur, 'logarithmic')
   })
 
