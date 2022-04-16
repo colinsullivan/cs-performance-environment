@@ -1,31 +1,18 @@
 import { createSelector } from "reselect";
 import SCRedux from "supercollider-redux";
 
-import { Sequencers } from "common/reducers/types";
 import {
-  SynkopaterSequencer,
   OctatrackState,
   SynkopaterPerformanceComponent,
 } from "common/models/types";
 import { READY_STATES } from "common/models/ready_states";
-import { CrowDevice } from "common/models/crow/api";
 
 export * from "./ableton";
+export * from "./crow";
 export * from "./menus";
 export * from "./mixer";
-
-export const sequencersSelector = (state): Sequencers => state.sequencers;
-
-export const getSequencerIdFromProps = (
-  _state,
-  props: { sequencerId: string }
-): string => props.sequencerId;
-
-export const getSequencer = createSelector(
-  [sequencersSelector, getSequencerIdFromProps],
-  (sequencers: Sequencers, sequencerId: string): SynkopaterSequencer =>
-    sequencers[sequencerId]
-);
+export * from "./sequencers";
+export * from "./tempo";
 
 export const getPerformanceComponents = (
   state
@@ -50,15 +37,3 @@ export const getSerializedState = (state) => ({
   scale: state.scale,
 });
 
-export const getCrow = (state): CrowDevice[] => state.crow;
-
-export const getTempo = (state) => state.tempo;
-
-export const getCrowDeviceReadyStates = createSelector([getCrow], (crow) =>
-  crow.map(
-    (d) => ({
-      name: d.name,
-      isReady: d.readyState === READY_STATES.OPEN && d.state.tempo !== undefined
-    })
-  )
-);

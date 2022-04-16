@@ -1,26 +1,41 @@
-public{crowId = 'B'}
+-- Synkopater Bender
+public{crowId = 'A'}
 public{tempo = 2.0}
-public{legato = 1.0}
-public{sustain = 1.0}
+public{sustainSynkA = 1.0}
+public{sustainSynkB = 1.0}
 
--- Defines the possible durations for the pitch benders
---durOptions = {
-  --16,
-  --8,
-  --4,
-  --2,
-  --1,
-  --3 / 4,
-  --2 / 3,
-  --1 / 2,
-  --1 / 3,
-  --1 / 4,
-  --1 / 8,
-  --1 / 16,
-  --1 / 32,
-  --1 / 64,
---};
---numDurOptions = 14
+-- Defines the possible durations for the fixed pitch benders
+durOptions = {
+  -- 1
+  16,
+  -- 2
+  8,
+  -- 3
+  4,
+  -- 4
+  2,
+  -- 5
+  1,
+  -- 6
+  3 / 4,
+  -- 7
+  2 / 3,
+  -- 8
+  1 / 2,
+  -- 9
+  1 / 3,
+  -- 10
+  1 / 4,
+  -- 11
+  1 / 8,
+  -- 12
+  1 / 16,
+  -- 13
+  1 / 32,
+  -- 14
+  1 / 64,
+};
+numDurOptions = 14
 
 --
 -- Class for tracking state of an individual fader
@@ -36,7 +51,7 @@ function Fader:new()
     numSnapPoints = 2,
 
     -- Fader snap threshold in volts
-    snapThreshold = 0.01
+    snapThreshold = 0.08
   }
   setmetatable(theFader, self)
   self.__index = self
@@ -97,12 +112,14 @@ GXposeF = Fader:new()
 function GXposeF:setOut(inOutputNum)
   self.outputNum = inOutputNum
 end
-function GXposeF:setXposeSt(inTransposeSemitones)
-  self.transposeSemitones = inTransposeSemitones
+function GXposeF:setXposeSt(inTransposeSemitonesDown, inTransposeSemitonesUp)
+  self.transposeSemitonesDown = inTransposeSemitonesDown
+  self.transposeSemitonesUp = inTransposeSemitonesUp
 end
 function GXposeF:faderChanged()
+  range = self.transposeSemitonesUp - self.transposeSemitonesDown
   normalizedValue = self:getNormalizedValue()
-  semitonesOut = self.transposeSemitones * normalizedValue
+  semitonesOut = range * normalizedValue + self.transposeSemitonesDown
   voltsOut = semitonesOut / 12
   output[self.outputNum].volts = voltsOut
 end
@@ -113,39 +130,37 @@ end
 FMan = {}
 function FMan:new()
   -- Instantiates faders
-  probF = Fader:new()
-  durF = Fader:new()
-  gXposeFa = GXposeF:new()
-  gXposeFb = GXposeF:new()
-  gXposeFc = GXposeF:new()
-  arcDurFader = Fader:new()
-  if public.crowId == "A" then
-    gXposeFa:setup(9)
-    gXposeFa:setOut(3)
-    gXposeFa:setXposeSt(24)
+  bendAmtF = Fader:new()
+  bendAmtF:setup(12)
 
-    gXposeFb:setup(10)
-    gXposeFb:setOut(3)
-    gXposeFb:setXposeSt(-24)
+  v1DurF = Fader:new()
+  v1DurF:setup(15)
+  v1ProbF = Fader:new()
+  v1ProbF:setup(16)
 
-    gXposeFc:setup(11)
-    gXposeFc:setOut(3)
-    gXposeFc:setXposeSt(7)
+  synkDurF = Fader:new()
+  synkDurF:setup(13)
+  synkProbF = Fader:new()
+  synkProbF:setup(14)
+
+  gXposeF = GXposeF:new()
+  if public.crowId == "B" then
+    gXposeF:setup(9, {0, 0.5, 1.0}, 3)
+    gXposeF:setOut(3)
+    gXposeF:setXposeSt(-24, 24)
   end
-  arcDurFader:setup(12)
-  durF:setup(15)
-  probF:setup(16)
 
-  allFaders = {probF, durF, gXposeFa, gXposeFb, gXposeFc, arcDurFader}
+
+  allFaders = {bendAmtF, synkProbF, synkDurF, gXposeF, v1ProbF, v1DurF}
   numFaders = 6
 
   theFaderManager = {
-    probF = probF,
-    durF = durF,
-    arcDurFader = arcDurFader,
-    gXposeFa = gXposeFa,
-    gXposeFb = gXposeFb,
-    gXposeFc = gXposeFc,
+    bendAmtF = bendAmtF,
+    synkProbF = synkProbF,
+    synkDurF = synkDurF,
+    gXposeF = gXposeF,
+    v1DurF = v1DurF,
+    v1ProbF = v1ProbF,
     numFaders = numFaders,
     allFaders = allFaders
   }
@@ -165,14 +180,14 @@ function FMan:requestFaderUpdates()
     allFaders[n]:requestUpdate()
   end
 end
-function FMan:getProbFader()
-  return self.probF
+function FMan:getBendAmtFader()
+  return self.bendAmtF
 end
-function FMan:getDurFader()
-  return self.durF
+function FMan:getSynkProbFader()
+  return self.synkProbF
 end
-function FMan:getArcDurFader()
-  return self.arcDurFader
+function FMan:getSynkDurFader()
+  return self.synkDurF
 end
 function FMan:setup()
   
@@ -188,21 +203,54 @@ function FMan:setup()
 end
 
 --
--- Class for a probabalistic pitch bend of a single voice
+-- Class for a probabalistic pitch bend & modulation sweep of a single voice
 --
-ProbabalisticBender = {}
-function ProbabalisticBender:new(inputNum, faders)
-  theProbabalisticBender = {
+ProbBender = {}
+function ProbBender:new(inputNum, outputNum, durF, probF, bendAmtF)
+  theProbBender = {
     inputNum = inputNum,
-    faders = faders
+    outputNum = outputNum,
+    modOutputNum = outputNum + 1,
+    durF = durF,
+    probF = probF,
+    bendAmtF = bendAmtF,
   }
-  setmetatable(theProbabalisticBender, self)
+  setmetatable(theProbBender, self)
   self.__index = self
-  return theProbabalisticBender
+  return theProbBender
 end
 
-function ProbabalisticBender:doPitchBend()
-  outputNumber = self.inputNum
+function ProbBender:getBendDur()
+  -- calculates duration of bend
+  durBeats = 0
+  durF = self.durF
+  faderValue = durF:getNormalizedValue()
+  inverseFaderValue = 1.0 - faderValue
+
+  -- Crow A does bends synchronized to the sustain value
+  -- of the either synkopater sequencer
+  if public.crowId == "A" then
+    if self.inputNum == 1 then
+      -- Don't understand the 0.5 here but it is working
+      durBeats = public.sustainSynkA * 0.5*faderValue
+    else
+      durBeats = public.sustainSynkB * 0.5*faderValue
+    end
+  elseif public.crowId == "B" then
+    -- Crow B does bends based on the lookup table above
+    durBeats = durOptions[
+      1 + math.ceil(
+        inverseFaderValue * (numDurOptions - 1)
+      )
+    ]
+  end
+  -- tempo is in beats per second
+  return durBeats / public.tempo
+end
+
+function ProbBender:doPitchBend()
+  outputNumber = self.outputNum
+  modOutputNum = self.modOutputNum
   -- Decides on direction of bend
   chance = math.random()
   direction = "down"
@@ -210,37 +258,40 @@ function ProbabalisticBender:doPitchBend()
     direction = "up"
   end
 
-  -- calculates duration of bend
-  durF = self.faders:getDurFader()
-  faderValue = durF:getNormalizedValue()
-  inverseFaderValue = 1.0 - faderValue
-  --durBeats = durOptions[math.floor(inverseFaderValue * (numDurOptions - 1))] * public.legato
-  durBeats = public.sustain * faderValue
-  -- tempo is in beats per second
-  dur = durBeats / public.tempo
+  dur = self:getBendDur()
 
   -- starts pitchbend
-  startVolts = nil
-  endVolts = 0.0
-  if direction == "down" then
-    -- starts one octave up, bending one octave down
-    startVolts = 1.0
-  else
-    -- starts one octave down, bending one octave up
-    startVolts = -1.0
+  bendAmtValue = self.bendAmtF:getNormalizedValue()
+
+  modStartVolts = 5
+  modEndVolts = 0
+
+  -- starts N octaves up, bending N octaves down
+  bendStartVolts = math.floor(1.0 + bendAmtValue * 3)
+  bendEndVolts = 0.0
+
+  if direction == "up" then
+    -- starts N octaves down, bending N octaves up
+    bendStartVolts = -1.0 * bendStartVolts
+    modStartVolts = -1.0 * modStartVolts
   end
-  output[outputNumber].volts = startVolts
-  gesture = {
-    to(endVolts, dur, 'logarithmic')
-  }
-  output[outputNumber]( gesture )
+
+  output[outputNumber].volts = bendStartVolts
+  output[outputNumber]({
+    to(bendEndVolts, dur, 'linear')
+  })
+
+  output[modOutputNum]({
+    to(modStartVolts, 0.01, 'linear'),
+    to(modEndVolts, dur, 'logarithmic')
+  })
+
 end
 
-function ProbabalisticBender:handleNoteOn()
+function ProbBender:handleNoteOn()
   -- decides to do pitchbend or not
   chance = math.random()
-  probF = self.faders:getProbFader()
-  durF = self.faders:getDurFader()
+  probF = self.probF
   toss = probF:getVolts() > chance * 10.0
   if toss then
     self:doPitchBend()
@@ -283,17 +334,16 @@ function init()
 
   ---- Creates the benders
   benders = {}
-  numBenders = 1
-  --if public.crowId == "A" then
-    --numBenders = 1
-  --elseif public.crowId == "B" then
-    --numBenders = 1
-  --end
-
-  for n = 1, numBenders do
-    benders[n] = ProbabalisticBender:new(n, faders)
+  numBenders = 0
+  if public.crowId == "A" then
+    numBenders = 2
+    benders[1] = ProbBender:new(1, 1, faders:getSynkDurFader(), faders:getSynkProbFader(), faders:getBendAmtFader())
+    benders[2] = ProbBender:new(2, 1, faders:getSynkDurFader(), faders:getSynkProbFader(), faders:getBendAmtFader())
+  elseif public.crowId == "B" then
+    numBenders = 1
+    benders[1] = ProbBender:new(1, 1, faders.v1DurF, faders.v1ProbF, faders:getBendAmtFader())
   end
-  
+
   -- Creates the random generators
   randomGenerators = {}
   numRandomGens = 0

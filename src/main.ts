@@ -15,6 +15,7 @@ import { PORT } from "common/constants";
 import { rehydrate_state } from "common/actions";
 import { createInitialState } from "common/models/initialState";
 import { loadEnv } from "main/util/environment";
+import { getCrow, sequencersSelector } from "common/selectors";
 
 loadEnv();
 
@@ -40,6 +41,8 @@ const loggerMiddleware = (_store) => (next) => (action) => {
   const returnValue = next(action);
 
   //console.log("state after dispatch", JSON.stringify(store.getState(), null, 4));
+  console.log("crow", JSON.stringify(getCrow(store.getState()), null, 4));
+  //console.log("sequencers", JSON.stringify(sequencersSelector(store.getState()), null, 4));
 
   // This will likely be the action itself, unless
   // a middleware further in chain changed it.

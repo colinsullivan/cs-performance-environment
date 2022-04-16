@@ -1,5 +1,5 @@
 import { AllActionTypes } from "common/actions";
-import { CROW_DEVICE_CONNECTED, CROW_STATE_UPDATED } from "common/actions/crow";
+import { CROW_DEVICE_CONNECTED, CROW_STATE_UPDATED, INITIALIZE_CROW_DEVICE } from "common/actions/crow";
 import {
   findCrowDeviceIndexById,
   findCrowDeviceIndexByPort,
