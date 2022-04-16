@@ -10,9 +10,9 @@
 
 SynkopaterDelayQuad : PerformanceEnvironmentComponent {
   var inputPatch,
-    <delayFeedbackControl,
-    <pingPongAmountControl,
-    <ampControl,
+    <>delayFeedbackControl,
+    <>pingPongAmountControl,
+    <>ampControl,
     prevSequencerDur,
     quadDelayBuffer;
 
@@ -29,7 +29,7 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
     ampControl = KrNumberEditor.new(1.0, \amp);
     pingPongAmountControl = KrNumberEditor.new(0.0, \unipolar);
 
-    "SynkopaterDelayQuad.init".postln();
+    //"SynkopaterDelayQuad.init".postln();
 
     super.init(params);
 
@@ -60,8 +60,6 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
     arg params;
     super.init_patches(params);
 
-    "quadDelayBuffer:".postln;
-    quadDelayBuffer.postln;
     inputPatch = Patch("cs.Synkopater.SynkopaterDelayQuadWithInput", (
       inputChannelNums: [componentState.inputBus, componentState.inputBus + 1],
       numChan: 2,
@@ -111,7 +109,6 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
     var sequencerDur,
       prevComponentState = componentState;
     super.handle_state_change();
-    "SynkopaterDelayQuad.handle_state_change".postln();
     sequencerDur = this.get_sequencer_dur();
 
     if ((sequencerDur != prevSequencerDur).or(componentState.parameters.delayFactor != prevComponentState.parameters.delayFactor), {
@@ -145,15 +142,11 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
       layout.startRow();
 
       ArgNameLabel("pingPongAmount", layout, labelWidth);
-      this.pingPongAmountControl.gui(layout);
+      pingPongAmountControl.gui(layout);
       layout.startRow();
 
       ArgNameLabel("ampControl", layout, labelWidth);
       ampControl.gui(layout);
-      layout.startRow();
-
-      ArgNameLabel("pingPongAmountControl", layout, labelWidth);
-      pingPongAmountControl.gui(layout);
       layout.startRow();
 
     });
