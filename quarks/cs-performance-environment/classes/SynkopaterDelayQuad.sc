@@ -13,6 +13,7 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
     <>delayFeedbackControl,
     <>pingPongAmountControl,
     <>ampControl,
+    <>mainAmpControl,
     prevSequencerDur,
     quadDelayBuffer;
 
@@ -27,6 +28,7 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
 
     delayFeedbackControl = KrNumberEditor.new(0.5, ControlSpec(0.0, 0.999999, \linear));
     ampControl = KrNumberEditor.new(1.0, \amp);
+    mainAmpControl = KrNumberEditor.new(1.0, \amp);
     pingPongAmountControl = KrNumberEditor.new(0.0, \unipolar);
 
     //"SynkopaterDelayQuad.init".postln();
@@ -67,6 +69,7 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
       feedbackCoefficient: delayFeedbackControl,
       pingPongAmount: pingPongAmountControl,
       amp: ampControl,
+      mainAmp: mainAmpControl,
       bufnum: quadDelayBuffer.bufnum
     ));
 
@@ -145,8 +148,12 @@ SynkopaterDelayQuad : PerformanceEnvironmentComponent {
       pingPongAmountControl.gui(layout);
       layout.startRow();
 
-      ArgNameLabel("ampControl", layout, labelWidth);
+      ArgNameLabel("amp", layout, labelWidth);
       ampControl.gui(layout);
+      layout.startRow();
+
+      ArgNameLabel("mainAmp", layout, labelWidth);
+      mainAmpControl.gui(layout);
       layout.startRow();
 
     });

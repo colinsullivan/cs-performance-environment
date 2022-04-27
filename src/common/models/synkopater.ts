@@ -96,6 +96,7 @@ export const create_synk_delay_component = (
     pc4Controller: {
       B9_kn_5: "delayFeedbackControl",
       B9_kn_6: "pingPongAmountControl",
+      B9_kn_24: "mainAmpControl",
       ...(id === "synkopaterA" ? synkDelayAMappings : synkDelayBMappings)
     },
   },
