@@ -1,5 +1,5 @@
 -- Synkopater Bender
-public{crowId = 'A'}
+public{crowId = 'B'}
 public{tempo = 2.0}
 public{sustainSynkA = 1.0}
 public{sustainSynkB = 1.0}
@@ -283,7 +283,7 @@ function ProbBender:doPitchBend()
 
   output[modOutputNum]({
     to(modStartVolts, 0.01, 'linear'),
-    to(modEndVolts, dur, 'logarithmic')
+    to(modEndVolts, dur - 0.01, 'logarithmic')
   })
 
 end
@@ -338,7 +338,7 @@ function init()
   if public.crowId == "A" then
     numBenders = 2
     benders[1] = ProbBender:new(1, 1, faders:getSynkDurFader(), faders:getSynkProbFader(), faders:getBendAmtFader())
-    benders[2] = ProbBender:new(2, 1, faders:getSynkDurFader(), faders:getSynkProbFader(), faders:getBendAmtFader())
+    benders[2] = ProbBender:new(2, 3, faders:getSynkDurFader(), faders:getSynkProbFader(), faders:getBendAmtFader())
   elseif public.crowId == "B" then
     numBenders = 1
     benders[1] = ProbBender:new(1, 1, faders.v1DurF, faders.v1ProbF, faders:getBendAmtFader())

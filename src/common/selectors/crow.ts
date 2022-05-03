@@ -22,9 +22,15 @@ export const getCrowState = createSelector(
       sustainSynkA: undefined,
       sustainSynkB: undefined,
     };
+
     const synkopaterA = sequencers.synkopaterA;
     if (synkopaterA.event && !synkopaterA.event.midicmd) {
       newCrowState.sustainSynkA = synkopaterA.event.sustain;
+    }
+
+    const synkopaterB = sequencers.synkopaterB;
+    if (synkopaterB.event && !synkopaterB.event.midicmd) {
+      newCrowState.sustainSynkB = synkopaterB.event.sustain;
     }
 
     return newCrowState;
