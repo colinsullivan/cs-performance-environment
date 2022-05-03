@@ -1,25 +1,25 @@
-function normalized_fader_value(faderValueVolts)
-  return faderValueVolts / 10.0
-end
+--function normalized_fader_value(faderValueVolts)
+  --return faderValueVolts / 10.0
+--end
 
 --ii.event_raw = function (addr, cmd, data)
   --print("event_raw")
 --end
 
---ii.faders.event = function (e, value)
-  --print("faders.event")
-  --print(e.name)
-  --print(value)
-  --normValue = normalized_fader_value(value)
+ii.faders.event = function (e, value)
+  print("faders.event")
+  print(e.name)
+  print(value)
+  --normvalue = normalized_fader_value(value)
 
-  --outputValue = normValue * 1.0
-  --output[3].volts = outputValue
---end
+  --outputvalue = normvalue * 1.0
+  --output[3].volts = outputvalue
+end
 
 
---function fetch_fader_values()
-  --ii.faders.get(11)
---end
+function fetch_fader_values()
+  ii.faders.get(11)
+end
 
 function init()
   print("Starting up...")
