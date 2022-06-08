@@ -34,8 +34,6 @@ const createInitialHoldMenus = (): HoldMenusState => {
   ];
   const initialState = keyBy(allHoldMenus, "menuId");
 
-  initialState[mixMenuId].isOpen = true;
-
   return initialState;
 };
 

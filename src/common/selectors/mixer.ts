@@ -63,14 +63,16 @@ export const getMixerViewModel = createSelector(
       createStereoTrackVM(t)
     );
 
-    const quadTrackVMs: QuadTrackViewModel[] = quadTrackConfigs.map(
-      (quadTrackConf) =>
-        createQuadTrackVM(
+    const quadTrackVMs: QuadTrackViewModel[] = [];
+    for (const quadTrackConf of quadTrackConfigs) {
+      if (quadTrackConf.frontChannelName in abletonTracksByName && quadTrackConf.rearChannelName in abletonTracksByName) {
+        quadTrackVMs.push(createQuadTrackVM(
           quadTrackConf,
           abletonTracksByName[quadTrackConf.frontChannelName],
           abletonTracksByName[quadTrackConf.rearChannelName]
-        )
-    );
+        ));
+      }
+    }
 
     const sortedTracks: Array<StereoTrackViewModel | QuadTrackViewModel> = [...stereoTrackVMs, ...quadTrackVMs]
       .sort(
