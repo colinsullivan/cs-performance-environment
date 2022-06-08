@@ -1,5 +1,5 @@
 import PexColor from "pex-color";
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
 
 export const offWhiteColor = PexColor.create(200, 200, 200, 1.0);
 export const offDarkColor = PexColor.fromRGBBytes([40, 44, 48, 255]);
@@ -38,7 +38,7 @@ export function asHexNumber(color) {
   return c[2] | (c[1] << 8) | (c[0] << 16) | (1 << 24);
 }
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
   palette: {
     type: "dark",
     primary: {
