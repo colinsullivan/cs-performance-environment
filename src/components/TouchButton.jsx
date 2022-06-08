@@ -1,4 +1,3 @@
-import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 
@@ -25,7 +24,7 @@ const LabelContainer = styled.div`
 `;
 
 const TouchButton = ({ icon, onClick, classes, labelText = null }) => (
-    <IconButton onClick={onClick} className={classes.button} variant="outlined">
+    <IconButton onTouchEnd={onClick} className={classes.button} variant="outlined">
       {icon}
       {labelText ? (
         <LabelContainer>
