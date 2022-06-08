@@ -14,7 +14,7 @@ const TransportPlayButton = () => {
     } else {
       dispatch(abletonTransportPlay());
     }
-  };
+  }
 
   const icon = isPlaying ? <Pause /> : <PlayArrow />;
 
