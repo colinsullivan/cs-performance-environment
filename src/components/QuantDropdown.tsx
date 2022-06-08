@@ -1,4 +1,4 @@
-import { useCallback, ChangeEvent } from "react";
+import { useCallback, ChangeEvent, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import LabeledDropdown from "components/LabeledDropdown";
@@ -31,22 +31,32 @@ const options = [
 ];
 
 const QuantDropdown = (props: { sequencerId: string }) => {
+  // Whether the select is open
+  const [open, setOpen] = useState(false);
+  const handleOpened = () => setOpen(true);
+  const handleClosed = () => setOpen(false);
   const dispatch = useDispatch();
   const seq: SynkopaterSequencer = useSelector((state) =>
     getSequencer(state, props)
   );
   const globalQuant = getGlobalQuant(seq);
-  const handleChanged = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(e.currentTarget.value);
-    dispatch(synkopater_global_quant_updated(props.sequencerId, newValue));
-  }, [props.sequencerId, dispatch]);
+  const handleChanged = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const newValue = Number(e.target.value);
+      dispatch(synkopater_global_quant_updated(props.sequencerId, newValue));
+    },
+    [props.sequencerId, dispatch]
+  );
   return globalQuant ? (
-    <LabeledDropdown
-      label="quant"
-      options={options}
-      value={globalQuant}
-      onChange={handleChanged}
-    />
+      <LabeledDropdown
+        open={open}
+        label="quant"
+        options={options}
+        value={globalQuant}
+        onChange={handleChanged}
+        onOpen={handleOpened}
+        onClose={handleClosed}
+      />
   ) : null;
 };
 
