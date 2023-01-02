@@ -39,7 +39,7 @@
     "react-redux": "^7.2.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^4.0.3",
+    "react-scripts": "^5.0.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
@@ -115,7 +115,7 @@
     "prettier": "^2.1.2",
     "redux-mock-store": "^1.5.4",
     "ts-node": "^10.7.0",
-    "tsconfig-paths": "^3.14.1"
+    "tsconfig-paths": "^4.1.2"
   },
   "browserslist": {
     "production": [
